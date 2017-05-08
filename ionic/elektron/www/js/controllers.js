@@ -19,14 +19,14 @@ angular.module('starter.controllers', [])
 			$scope.showAlert('Completá el usuario y contraseña, por favor.');
 			return false;
 		}
-
-		if(user.username=='tomson' && user.password=='tomson'){
+    $location.path('/app/dashboard');
+		/*if(user.username=='tomson' && user.password=='tomson'){
 			$location.path('/app/dashboard');
 
 
 		}else{
 			$scope.showAlert('Error de Usuario o contraseña.');
-		}
+		}*/
 
 	};
   //--------------------------------------------
