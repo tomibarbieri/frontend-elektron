@@ -1,0 +1,43 @@
+<ion-view view-title="Inicio" hide-back-button="true">
+
+    <ion-content ng-controller="ExampleController">
+      <div class="card">
+          <div class="item item-divider">
+              {{labels}}
+              A line chart
+          </div>
+          <div class="item item-text-wrap">
+              <canvas id="line" class="chart chart-line" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>
+          </div>
+      </div>
+      <div class="card">
+          <div class="item item-divider">
+              A bar chart
+          </div>
+          <div class="item item-text-wrap">
+              <canvas id="bar" class="chart chart-bar" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>
+          </div>
+      </div>
+    </ion-content><!--
+    <ion-list>
+      <div class="card">
+        <div class="item item-divider">Consumo actual</div>
+  		  <div class="item item-text-wrap">
+          <div class="x_title">
+            <h2>Potencia medida en el día</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+
+          </div>
+        </div>
+      </div>
+	  </ion-list>
+    <ion-list>
+      <div class="card" ng-repeat="profilelist in profiles" >
+        <div class="item item-divider">{{profilelist.name}}</div>
+        <div class="item item-text-wrap">{{profilelist.deseg}}</div>
+      </div>
+    </ion-list>
+  </ion-content>-->
+</ion-view>

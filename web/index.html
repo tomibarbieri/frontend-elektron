@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Control de Consumo Eléctrico Libre</title>
+
+    <!-- Bootstrap -->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="build/css/custom.min.css" rel="stylesheet">
+
+    <!-- Green IT Theme Style-->
+    <link href="build/css/green_it.css" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  </head>
+
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h1>Control de Consumo Eléctrico Libre</h1>
+              </div>
+
+            </div>
+            <br>
+            <div class="clearfix"></div>
+
+            <div class="row">
+
+              <div class="col-md-4 col-sm-8 col-xs-12 ancho100">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Medición del Último Consumo</h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div id="gauge" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+                    <form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+                        <h3 id="minmaxtitle">Defina el Rango de Apagado Automático</h3>
+                        <div id="minmax" class="form-group">
+                          <label class="control-label col-md-6 col-sm-3 col-xs-12" for="maximo">Máximo(Ampere)</span>
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="number" min="1" max="30" id="maximo" class="form-control col-md-7 col-xs-12">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div id="control" class="btn-group" data-toggle="buttons">
+                              <label id="acceptbtn" class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                <input id="rangobtn" type="radio" name="rango" value="on" data-parsley-multiple="gender"> &nbsp; Establecer &nbsp;
+                              </label>
+                              <br>
+                              <br>
+                              <label id="onbtn" class="btn btn-success" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                <input type="radio" name="on" value="on" data-parsley-multiple="gender"> &nbsp; On &nbsp;
+                              </label>
+                              <label id="offbtn" class="btn btn-danger" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                <input type="radio" name="off" value="off" data-parsley-multiple="gender"> Off
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-8 col-sm-8 col-xs-12 ancho100">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Potencia medida en el día</h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div id="potencia_chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                  </div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                      <h2>Corriente medida en el día</h2>
+                      <div class="clearfix"></div>
+                    </div>
+                      <div class="x_content">
+                        <div id="corriente_chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /page content -->
+        </div>
+      </div>
+
+    <!-- jQuery -->
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="build/js/custom.min.js"></script>
+
+    <script src="build/Highcharts-4.2.6/js/highcharts.js"></script>
+    <script src="build/Highcharts-4.2.6/js/highcharts-more.js"></script>
+
+    <script>
+
+    var json;
+    var gaugechart;
+    var pot;
+    var curr;
+    var time;
+    var state = "on";
+    var tension = 215; //La tensión puede variar
+    var consumo = [];
+
+    //Web Socket comunication
+    //Connect to server
+    var ws = new WebSocket("ws://localhost:8888/websocket");
+    //console.log(ws);
+
+    //Open the socket and say hi
+    ws.onopen = function() {
+      ws.send("Hello, world");
+    };
+
+    //Receive message form server
+    ws.onmessage = function (evt) {
+      console.log("puto")
+      json = JSON.parse(evt.data);
+      console.log(json);
+
+      //set the variables of the object to global variables
+      pot = json.potencia;
+      curr = json.corriente;
+      timestamp = json.timestamp;
+      state = json.estado;
+
+      var date = new Date(timestamp*1000);
+      // Hours part from the timestamp
+      var hours = date.getHours();
+      // Minutes part from the timestamp
+      var minutes = date.getMinutes();
+      // Seconds part from the timestamp
+      var seconds = date.getSeconds();
+      // Format Time
+      time=hours + ":" + minutes + ":" + seconds;
+
+    };
+
+
+    $(function () {
+        $(document).ready(function () {
+            Highcharts.setOptions({
+                global: {
+                    useUTC: false
+                }
+            });
+
+
+            $('#onbtn').click(function () {
+               ws.send(JSON.stringify({"relay1":1}));
+            });
+
+            $('#offbtn').click(function () {
+               ws.send(JSON.stringify({"relay1":0}));
+            });
+
+            $('#acceptbtn').click(function () {
+               var max = $("#maximo").val();
+               ws.send(JSON.stringify({"max1":parseInt(max)}));
+            });
+
+            $('#potencia_chart').highcharts({
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10,
+                    events: {
+                        load: function () {
+
+                            // set up the updating of the chart each second
+                            var series = this.series[0];
+                            setInterval(function () {
+                                var x = (new Date()).getTime(), // current time
+                                    y = pot;
+                                series.addPoint([x, y], true, true);
+                            }, 1000);
+                        }
+                    }
+                },
+                title: {
+                    text: 'Potencia sensada por segundo'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 150
+                },
+                yAxis: {
+                    title: {
+                        text: 'Watt'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.series.name + '</b><br/>' +
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                            Highcharts.numberFormat(this.y, 2);
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Potencia Medida por Segundo',
+                    data: (function () {
+                        // generate an array of random data
+                        var data = [],
+                            time = (new Date()).getTime(),
+                            i;
+
+                        for (i = -19; i <= 0; i += 1) {
+                            data.push({
+                                x: time + i * 1000,
+                                y: pot
+                            });
+                        }
+                        return data;
+                    }())
+                }],
+                credits: {
+                  enabled: false
+                },
+            });
+
+            $('#corriente_chart').highcharts({
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10,
+                    events: {
+                        load: function () {
+
+                            // set up the updating of the chart each second
+                            var series = this.series[0];
+                            setInterval(function () {
+                                var x = (new Date()).getTime(), // current time
+                                    y = curr;
+                                series.addPoint([x, y], true, true);
+                            }, 1000);
+                        }
+                    }
+                },
+                title: {
+                    text: 'Corriente sensada por segundo'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 150
+                },
+                yAxis: {
+                    title: {
+                        text: 'Ampére'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.series.name + '</b><br/>' +
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                            Highcharts.numberFormat(this.y, 2);
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Potencia Medida por Segundo',
+                    data: (function () {
+                        // generate an array of random data
+                        var data = [],
+                            time = (new Date()).getTime(),
+                            i;
+
+                        for (i = -19; i <= 0; i += 1) {
+                            data.push({
+                                x: time + i * 1000,
+                                y: pot
+                            });
+                        }
+                        return data;
+                    }())
+                }],
+                credits: {
+                  enabled: false
+               },
+            });
+        });
+    });
+
+
+  //Last Data Gauge Chart
+  $(function () {
+
+      $('#gauge').highcharts({
+
+          chart: {
+              type: 'gauge',
+              plotBackgroundColor: null,
+              plotBackgroundImage: null,
+              plotBorderWidth: 0,
+              plotShadow: false
+          },
+
+          title: {
+              text: 'Corriente'
+          },
+
+          pane: {
+              startAngle: -150,
+              endAngle: 150,
+              background: [{
+                  backgroundColor: {
+                      linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                      stops: [
+                          [0, '#FFF'],
+                          [1, '#333']
+                      ]
+                  },
+                  borderWidth: 0,
+                  outerRadius: '109%'
+              }, {
+                  backgroundColor: {
+                      linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                      stops: [
+                          [0, '#333'],
+                          [1, '#FFF']
+                      ]
+                  },
+                  borderWidth: 1,
+                  outerRadius: '107%'
+              }, {
+                  // default background
+              }, {
+                  backgroundColor: '#DDD',
+                  borderWidth: 0,
+                  outerRadius: '105%',
+                  innerRadius: '103%'
+              }]
+          },
+
+          // the value axis
+          yAxis: {
+              min: 0,
+              max: 30,
+
+              minorTickInterval: 'auto',
+              minorTickWidth: 1,
+              minorTickLength: 10,
+              minorTickPosition: 'inside',
+              minorTickColor: '#666',
+
+              tickPixelInterval: 30,
+              tickWidth: 2,
+              tickPosition: 'inside',
+              tickLength: 10,
+              tickColor: '#666',
+              labels: {
+                  step: 1,
+                  rotation: 'auto'
+              },
+              title: {
+                  text: 'Watt/h'
+              },
+              plotBands: [{
+                  from: 0,
+                  to: 10,
+                  color: '#55BF3B' // green
+              }, {
+                  from: 10,
+                  to: 20,
+                  color: '#DDDF0D' // yellow
+              }, {
+                  from: 20,
+                  to: 30,
+                  color: '#DF5353' // red
+              }]
+          },
+
+          series: [{
+              name: 'Corriente',
+              data: [0],
+              tooltip: {
+                  valueSuffix: ' Ampére/h'
+              }
+            }],
+            credits: {
+              enabled: false
+           },
+      },
+      // Add some life
+      function (chart) {
+          if (!chart.renderer.forExport) {
+              setInterval(function () {
+                  var point = chart.series[0].points[0];
+
+                  point.update(curr);
+
+              }, 3000);
+          }
+      });
+  });
+  //End of Last Data Gauge Chart
+
+    </script>
+  </body>
+</html>
