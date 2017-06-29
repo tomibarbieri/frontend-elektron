@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en" class=" "><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Motas | Dispositivo de control</title>
+
+    <!-- Bootstrap -->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="css/custom.css" rel="stylesheet">
+  <style type="text/css">.jqstooltip { position: absolute;left: 0px;top: 0px;visibility: hidden;background: rgb(0, 0, 0) transparent;background-color: rgba(0,0,0,0.6);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";color: white;font: 10px arial, san serif;text-align: left;white-space: nowrap;padding: 5px;border: 1px solid white;box-sizing: content-box;z-index: 10000;}.jqsfield { color: white;font: 10px arial, san serif;text-align: left;}</style><style type="text/css"></style></head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="principal_admin.html" class="site_title"><i class="fa fa-leaf
+"></i> <span>Control de motas</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile" style="margin-bottom: 5em;">
+              <div class="profile_pic">
+                <img src="images/nestor.png" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Bienvenido,</span>
+                <h2>Néstor Castro</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br>
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-home"></i> Inicio <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="principal_admin.html">Motas General</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-bar-chart-o"></i> Estadísticas <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="estadisticas_anio.html">Por Año</a>
+                      </li>
+                      <li><a href="estadisticas_mes.html">Por Mes</a>
+                      </li>
+                      <li><a href="estadisticas_dia.html">Por Día</a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <div class="sidebar-footer hidden-small">
+              <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Configuración">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Pantalla completa">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Bloquear">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Salir">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+
+          <div class="nav_menu">
+            <nav class="" role="navigation">
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="images/nestor.png" alt="">Néstor Castro
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="javascript:;">  Perfil</a>
+                    </li>
+                    <li>
+                      <a href="javascript:;">
+                        <span class="badge bg-red pull-right">50%</span>
+                        <span>Configuración</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:;">Ayuda</a>
+                    </li>
+                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Salir</a>
+                    </li>
+                  </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="badge bg-green">6</span>
+                  </a>
+                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li>
+                      <a>
+                        <span class="image">
+                                          <img src="images/nestor.png" alt="Profile Image">
+                                      </span>
+                        <span>
+                                          <span>Nestor Castro</span>
+                        <span class="time">hace 1 minutos</span>
+                        </span>
+                        <span class="message">
+                                          Se esta hirviendo la pava...
+                                      </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image">
+                                          <img src="images/nestor.png" alt="Profile Image">
+                                      </span>
+                        <span>
+                                          <span>Nestor Castro</span>
+                        <span class="time">hace 3 minutos</span>
+                        </span>
+                        <span class="message">
+                                          Se estan quemando las tostadas...
+                                      </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image">
+                                          <img src="images/nestor.png" alt="Profile Image">
+                                      </span>
+                        <span>
+                                          <span>Nestor Castro</span>
+                        <span class="time">hace 6 minutos</span>
+                        </span>
+                        <span class="message">
+                                          Se esta rompiendo el microondas...
+                                      </span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="text-center">
+                        <a>
+                          <strong>Ver notificaciones</strong>
+                          <i class="fa fa-angle-right"></i>
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+
+
+        <!-- page content -->
+        <div class="right_col" role="main" style="min-height: 896px;">
+          <div class="">
+
+          <div class="col-md-12">
+            <div class="row top_tiles" style="margin: 10px 0;">
+              <div class="col-md-8">
+                <div class="x_panel">
+
+                  <div class="x_title animated flipInY">
+                    <span id="mota" style="color: #1abb9c;font-size: 2em;font-weight: bold;" >Mota 1</span>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h3>Ubicación: <span id="aula"> Aula 5</span></h3>
+                        <h3>Estado: <span id="estado"> Encendido</span></h3>
+                      </div>
+                      <div class="col-md-6 pull-right">
+                        <h3>Última Actualización:<span id="ultima_actualizacion"> 12:35</span></h3>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <button type="button" class="btn btn-success">Encender</button>
+                      <a href="mota_programar_tiempo.html"><button type="button" class="btn btn-warning">Programar por Tiempo</button></a>
+                      <a href="mota_programar_consumo.html"><button type="button" class="btn btn-warning">Programar por Consumo</button></a>
+                      <button type="button" class="btn btn-danger pull-right">Apagar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="x_panel" style="min-width: 351px;">
+                  <div class="x_title animated flipInY">
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <!-- Grafico Gauge Caja Mota -->
+                    <div style="text-align: center; margin-bottom: 17px">
+                      <h3>Última Medición Eléctrica</h3>
+                        <div class="col-md-8 col-md-offset-2">
+                          <div class="sidebar-widget">
+                            <canvas width="150" height="95" id="foo" class="" style="width: 160px; min-height: 110px;"></canvas>
+                            <div class="goal-wrapper">
+                              <span id="gauge-text" class="gauge-value pull-left">320kw</span>
+                              <span class="gauge-value pull-left">kw</span>
+                              <span id="goal-text" class="goal-value pull-right">500kw</span>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                  <div class="row x_title">
+                    <div class="col-md-6">
+                      <h3>Medición Consumo Período<small><br> Medición de consumo eléctrico según período</small></h3>
+                    </div>
+                    <div class="col-md-6">
+                      <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        <span>April 16, 2016 - May 15, 2016</span> <b class="caret"></b>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="x_content">
+                    <div class="demo-container" style="height:250px">
+                      <div id="placeholder3xx3" class="demo-placeholder" style="width: 100%; height: 250px; padding: 0px; position: relative;"><canvas class="flot-base" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 1043px; height: 250px;" width="1043" height="250"></canvas><div class="flot-text" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; font-size: smaller; color: rgb(84, 84, 84);"><div class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;"><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 115px; top: 234px; left: 15px; text-align: center;">0</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 115px; top: 234px; left: 142px; text-align: center;">2</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 115px; top: 234px; left: 269px; text-align: center;">4</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 115px; top: 234px; left: 396px; text-align: center;">6</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 115px; top: 234px; left: 524px; text-align: center;">8</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 115px; top: 234px; left: 648px; text-align: center;">10</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 115px; top: 234px; left: 775px; text-align: center;">12</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 115px; top: 234px; left: 902px; text-align: center;">14</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 115px; top: 234px; left: 1029px; text-align: center;">16</div></div><div class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;"><div class="flot-tick-label tickLabel" style="position: absolute; top: 222px; left: 7px; text-align: right;">0</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 194px; left: 7px; text-align: right;">5</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 166px; left: 1px; text-align: right;">10</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 139px; left: 1px; text-align: right;">15</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 111px; left: 1px; text-align: right;">20</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 83px; left: 1px; text-align: right;">25</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 56px; left: 1px; text-align: right;">30</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 28px; left: 1px; text-align: right;">35</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 1px; left: 1px; text-align: right;">40</div></div></div><canvas class="flot-overlay" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 1043px; height: 250px;" width="1043" height="250"></canvas><div class="legend"><div style="position: absolute; width: 78px; height: 15px; top: 13px; right: 13px; opacity: 0.85; background-color: rgb(255, 255, 255);"> </div><table style="position:absolute;top:13px;right:13px;;font-size:smaller;color:#545454"><tbody><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(38,185,154);overflow:hidden"></div></div></td><td class="legendLabel">Registrations</td></tr></tbody></table></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- /page content -->
+      </div>
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            <span style="display:none">
+            Sistema de Control de Consumo Eléctrico Distribuido <a href="http://agustinparmisano.github.io/">iotmotas</a>
+            </span>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+  </div>
+
+
+    <!-- jQuery -->
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- jQuery Sparklines -->
+    <script src="vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- morris.js -->
+    <script src="vendors/raphael/raphael.min.js"></script>
+    <script src="vendors/morris.js/morris.min.js"></script>
+    <!-- gauge.js -->
+    <script src="vendors/bernii/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- Skycons -->
+    <script src="vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="vendors/Flot/jquery.flot.js"></script>
+    <script src="vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="vendors/Flot/jquery.flot.time.js"></script>
+    <script src="vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="js/flot/jquery.flot.orderBars.js"></script>
+    <script src="js/flot/date.js"></script>
+    <script src="js/flot/jquery.flot.spline.js"></script>
+    <script src="js/flot/curvedLines.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="js/moment/moment.min.js"></script>
+    <script src="js/datepicker/daterangepicker.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="js/custom.js"></script>
+
+
+    <script>
+          var opts = {
+              lines: 12,
+              angle: 0,
+              lineWidth: 0.4,
+              pointer: {
+                  length: 0.75,
+                  strokeWidth: 0.042,
+                  color: '#1D212A'
+              },
+              limitMax: 'false',
+              colorStart: '#1ABC9C',
+              colorStop: '#1ABC9C',
+              strokeColor: '#F0F3F3',
+              generateGradient: true
+          };
+          //Gauge 1
+          var target = document.getElementById('foo'),
+              gauge = new Gauge(target).setOptions(opts);
+
+          gauge.maxValue = 600;
+          gauge.animationSpeed = 32;
+          gauge.set(320);
+          gauge.setTextField(document.getElementById("gauge-text"));
+
+        </script>
+    <!-- Flot -->
+    <script>
+      $(document).ready(function() {
+        //random data
+        var d1 = [
+          [0, 1],
+          [1, 9],
+          [2, 6],
+          [3, 10],
+          [4, 5],
+          [5, 17],
+          [6, 6],
+          [7, 10],
+          [8, 7],
+          [9, 11],
+          [10, 35],
+          [11, 9],
+          [12, 12],
+          [13, 5],
+          [14, 3],
+          [15, 4],
+          [16, 9]
+        ];
+
+        //flot options
+        var options = {
+          series: {
+            curvedLines: {
+              apply: true,
+              active: true,
+              monotonicFit: true
+            }
+          },
+          colors: ["#26B99A"],
+          grid: {
+            borderWidth: {
+              top: 0,
+              right: 0,
+              bottom: 1,
+              left: 1
+            },
+            borderColor: {
+              bottom: "#7F8790",
+              left: "#7F8790"
+            }
+          }
+        };
+        var plot = $.plot($("#placeholder3xx3"), [{
+          label: "Registrations",
+          data: d1,
+          lines: {
+            fillColor: "rgba(150, 202, 89, 0.12)"
+          }, //#96CA59 rgba(150, 202, 89, 0.42)
+          points: {
+            fillColor: "#fff"
+          }
+        }], options);
+      });
+    </script>
+    <!-- /Flot -->
+
+
+
+    <!-- bootstrap-daterangepicker -->
+    <script type="text/javascript">
+      $(document).ready(function() {
+
+        var cb = function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        };
+
+        var optionSet1 = {
+          startDate: moment().subtract(29, 'days'),
+          endDate: moment(),
+          minDate: '01/01/2012',
+          maxDate: '12/31/2015',
+          dateLimit: {
+            days: 60
+          },
+          showDropdowns: true,
+          showWeekNumbers: true,
+          timePicker: false,
+          timePickerIncrement: 1,
+          timePicker12Hour: true,
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          },
+          opens: 'left',
+          buttonClasses: ['btn btn-default'],
+          applyClass: 'btn-small btn-primary',
+          cancelClass: 'btn-small',
+          format: 'MM/DD/YYYY',
+          separator: ' to ',
+          locale: {
+            applyLabel: 'Submit',
+            cancelLabel: 'Clear',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: 'Custom',
+            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            firstDay: 1
+          }
+        };
+        $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+        $('#reportrange').daterangepicker(optionSet1, cb);
+        $('#reportrange').on('show.daterangepicker', function() {
+          console.log("show event fired");
+        });
+        $('#reportrange').on('hide.daterangepicker', function() {
+          console.log("hide event fired");
+        });
+        $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+          console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+        });
+        $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
+          console.log("cancel event fired");
+        });
+        $('#options1').click(function() {
+          $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
+        });
+        $('#options2').click(function() {
+          $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
+        });
+        $('#destroy').click(function() {
+          $('#reportrange').data('daterangepicker').remove();
+        });
+      });
+    </script>
+    <!-- /bootstrap-daterangepicker -->
+
+
+<div class="daterangepicker dropdown-menu opensleft show-calendar" style="top: 240px; right: 35.8906px; left: auto;"><div class="calendar first left"><div class="calendar-date"><table class="table-condensed"><thead><tr><th></th><th class="prev available"><i class="fa fa-arrow-left icon icon-arrow-left glyphicon glyphicon-arrow-left"></i></th><th colspan="5" class="month"><select class="monthselect"><option value="0">January</option><option value="1">February</option><option value="2">March</option><option value="3" selected="selected">April</option><option value="4">May</option><option value="5">June</option><option value="6">July</option><option value="7">August</option><option value="8">September</option><option value="9">October</option><option value="10">November</option><option value="11">December</option></select><select class="yearselect"><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option></select></th><th></th></tr><tr><th class="week">W</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th></tr></thead><tbody><tr><td class="week">14</td><td class="off disabled" data-title="r0c0">28</td><td class="off disabled" data-title="r0c1">29</td><td class="off disabled" data-title="r0c2">30</td><td class="off disabled" data-title="r0c3">31</td><td class="off disabled" data-title="r0c4">1</td><td class="off disabled" data-title="r0c5">2</td><td class="off disabled" data-title="r0c6">3</td></tr><tr><td class="week">15</td><td class="off disabled" data-title="r1c0">4</td><td class="off disabled" data-title="r1c1">5</td><td class="off disabled" data-title="r1c2">6</td><td class="off disabled" data-title="r1c3">7</td><td class="off disabled" data-title="r1c4">8</td><td class="off disabled" data-title="r1c5">9</td><td class="off disabled" data-title="r1c6">10</td></tr><tr><td class="week">16</td><td class="off disabled" data-title="r2c0">11</td><td class="off disabled" data-title="r2c1">12</td><td class="off disabled" data-title="r2c2">13</td><td class="off disabled" data-title="r2c3">14</td><td class="off disabled" data-title="r2c4">15</td><td class="off disabled" data-title="r2c5">16</td><td class="off disabled" data-title="r2c6">17</td></tr><tr><td class="week">17</td><td class="off disabled" data-title="r3c0">18</td><td class="off disabled" data-title="r3c1">19</td><td class="off disabled" data-title="r3c2">20</td><td class="off disabled" data-title="r3c3">21</td><td class="off disabled" data-title="r3c4">22</td><td class="off disabled" data-title="r3c5">23</td><td class="off disabled" data-title="r3c6">24</td></tr><tr><td class="week">18</td><td class="off disabled" data-title="r4c0">25</td><td class="off disabled" data-title="r4c1">26</td><td class="off disabled" data-title="r4c2">27</td><td class="off disabled" data-title="r4c3">28</td><td class="off disabled" data-title="r4c4">29</td><td class="off disabled" data-title="r4c5">30</td><td class="off disabled" data-title="r4c6">1</td></tr><tr><td class="week">19</td><td class="off disabled" data-title="r5c0">2</td><td class="off disabled" data-title="r5c1">3</td><td class="off disabled" data-title="r5c2">4</td><td class="off disabled" data-title="r5c3">5</td><td class="off disabled" data-title="r5c4">6</td><td class="off disabled" data-title="r5c5">7</td><td class="off disabled" data-title="r5c6">8</td></tr></tbody></table></div></div><div class="calendar second right"><div class="calendar-date"><table class="table-condensed"><thead><tr><th></th><th class="prev available"><i class="fa fa-arrow-left icon icon-arrow-left glyphicon glyphicon-arrow-left"></i></th><th colspan="5" class="month"><select class="monthselect"><option value="3">April</option><option value="4" selected="selected">May</option><option value="5">June</option><option value="6">July</option><option value="7">August</option><option value="8">September</option><option value="9">October</option><option value="10">November</option><option value="11">December</option></select><select class="yearselect"></select></th><th></th></tr><tr><th class="week">W</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th></tr></thead><tbody><tr><td class="week">18</td><td class="off disabled" data-title="r0c0">25</td><td class="off disabled" data-title="r0c1">26</td><td class="off disabled" data-title="r0c2">27</td><td class="off disabled" data-title="r0c3">28</td><td class="off disabled" data-title="r0c4">29</td><td class="off disabled" data-title="r0c5">30</td><td class="off disabled" data-title="r0c6">1</td></tr><tr><td class="week">19</td><td class="off disabled" data-title="r1c0">2</td><td class="off disabled" data-title="r1c1">3</td><td class="off disabled" data-title="r1c2">4</td><td class="off disabled" data-title="r1c3">5</td><td class="off disabled" data-title="r1c4">6</td><td class="off disabled" data-title="r1c5">7</td><td class="off disabled" data-title="r1c6">8</td></tr><tr><td class="week">20</td><td class="off disabled" data-title="r2c0">9</td><td class="off disabled" data-title="r2c1">10</td><td class="off disabled" data-title="r2c2">11</td><td class="off disabled" data-title="r2c3">12</td><td class="off disabled" data-title="r2c4">13</td><td class="off disabled" data-title="r2c5">14</td><td class="off disabled" data-title="r2c6">15</td></tr><tr><td class="week">21</td><td class="off disabled" data-title="r3c0">16</td><td class="off disabled" data-title="r3c1">17</td><td class="off disabled" data-title="r3c2">18</td><td class="off disabled" data-title="r3c3">19</td><td class="off disabled" data-title="r3c4">20</td><td class="off disabled" data-title="r3c5">21</td><td class="off disabled" data-title="r3c6">22</td></tr><tr><td class="week">22</td><td class="off disabled" data-title="r4c0">23</td><td class="off disabled" data-title="r4c1">24</td><td class="off disabled" data-title="r4c2">25</td><td class="off disabled" data-title="r4c3">26</td><td class="off disabled" data-title="r4c4">27</td><td class="off disabled" data-title="r4c5">28</td><td class="off disabled" data-title="r4c6">29</td></tr><tr><td class="week">23</td><td class="off disabled" data-title="r5c0">30</td><td class="off disabled" data-title="r5c1">31</td><td class="off disabled" data-title="r5c2">1</td><td class="off disabled" data-title="r5c3">2</td><td class="off disabled" data-title="r5c4">3</td><td class="off disabled" data-title="r5c5">4</td><td class="off disabled" data-title="r5c6">5</td></tr></tbody></table></div></div><div class="ranges"><ul><li class="active">Custom</li></ul><div class="range_inputs"><div class="daterangepicker_start_input"><label for="daterangepicker_start">From</label><input class="input-mini" type="text" name="daterangepicker_start" value=""></div><div class="daterangepicker_end_input"><label for="daterangepicker_end">To</label><input class="input-mini" type="text" name="daterangepicker_end" value=""></div><button class="applyBtn btn btn-default btn-small btn-primary">Submit</button>&nbsp;<button class="cancelBtn btn btn-default btn-small">Clear</button>
+</div></div></div>
+</body>
+</html>

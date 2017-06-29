@@ -22,17 +22,14 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   });
 
-     $rootScope.authStatus = false;
-	 //stateChange event
-	  $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-		  $rootScope.authStatus = toState.authStatus;
-		  if($rootScope.authStatus){
-
-
-		  }
+  $rootScope.authStatus = false;
+  //stateChange event
+  $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
+    $rootScope.authStatus = toState.authStatus;
+    if($rootScope.authStatus){}
     });
 
-	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
 		console.log("URL : "+toState.url);
 		if(toState.url=='/dashboard'){
 			console.log("match : "+toState.url);
@@ -44,60 +41,70 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
 
 })
 
+
 .config(function($stateProvider, $urlRouterProvider) {
+
   $stateProvider
 
-    .state('app', {
+  .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
 
-//--------------------------------------
-
- .state('app.login', {
+  .state('app.login', {
     url: '/login',
     views: {
       'menuContent': {
-        templateUrl: 'templates/tab-signin.html'
+        templateUrl: 'templates/tab-signin.html',
+        controller: 'LoginCtrl'
       }
     },
 	authStatus: false
   })
- .state('app.signup', {
+
+  .state('app.signup', {
     url: '/signup',
     views: {
       'menuContent': {
         templateUrl: 'templates/tab-signup.html',
+        controller: 'RegisterCtrl'
       }
-   },
-	authStatus: false
+    },
+    authStatus: false
   })
-//--------------------------------------
-
 
   .state('app.dashboard', {
     url: '/dashboard',
     views: {
       'menuContent': {
         templateUrl: 'templates/dashboard.html',
-		controller: 'DashCtrl'
+        controller: 'DashCtrl'
       }
-     },
-	 authStatus: true
+    },
+    authStatus: true
   })
 
-
-    .state('app.profiles', {
-      url: '/profiles',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/profiles.html',
-          controller: 'ProfilesCtrl'
-        }
+  .state('app.profiles', {
+    url: '/profiles',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/profiles.html',
+        controller: 'ProfilesCtrl'
       }
-    })
+    }
+  })
+
+  .state('app.components', {
+    url: '/components',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/components.html',
+        controller: 'ComponentsCtrl'
+      }
+    }
+  })
 
   .state('app.profile', {
     url: '/profile/:profileId',
@@ -108,6 +115,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
       }
     }
   });
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/login');
+
 });

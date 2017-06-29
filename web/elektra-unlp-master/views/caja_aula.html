@@ -1,0 +1,49 @@
+                      <!-- Caja Aula 1-->
+                      <div class="col-md-3 col-xs-12 widget widget_tally_box">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <a ng-href="/pepe"><button type="button" class="btn btn-info" id="botones_aulas">Aula {{ mota.aula }}</button></a>
+                            <!-- Barra Superior Configuracion Caja Mota -->
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+
+                              <!-- Dropdown Menu configuracion Caja Mota-->
+                              <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                  <li><a href="#">Settings 1</a>
+                                  </li>
+                                  <li><a href="#">Settings 2</a>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+
+                          <!-- Contenido Caja Mota-->
+                          <div class="x_content">
+                            <div>
+                              <!-- Atributos Caja Mota -->
+                              <div class="col-md-12 col-sm-4 tile_stats_count alert alert-danger alert-dismissible fade in" id="sensores">
+                                <span class="count_top"><i class="glyphicon glyphicon-fire"></i></span>
+                                <span class="count"> {{mota.temp}} C°</span>
+                              </div>
+                              <div class="col-md-12 col-sm-4 col-xs-6 tile_stats_count alert alert-success alert-dismissible fade in" id="sensores">
+                                <span class="count_top"><i class="fa fa-flash"></i></span>
+                                <span class="count"> {{mota.consumo}} kwh</span>
+                              </div>
+                              <div class="col-md-12 col-sm-4 col-xs-6 tile_stats_count alert alert-info alert-dismissible fade in" id="sensores">
+                                <span class="count_top"><i class="fa fa-tint"></i></span>
+                                <span class="count"> {{mota.hume}} %</span>
+                              </div>
+                              <div class="col-md-12 col-sm-4 col-xs-6 tile_stats_count" id="sensores">
+                                <span class="count_top"><i class="fa fa-clock-o"></i></span>
+                                <span class="count"> {{mota.hora}} </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Caja Aula 1-->

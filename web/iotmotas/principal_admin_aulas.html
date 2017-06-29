@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en" class=" "><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Motas | Dispositivo de control</title>
+
+    <!-- Bootstrap -->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="css/custom.css" rel="stylesheet">
+  <style type="text/css">.jqstooltip { position: absolute;left: 0px;top: 0px;visibility: hidden;background: rgb(0, 0, 0) transparent;background-color: rgba(0,0,0,0.6);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";color: white;font: 10px arial, san serif;text-align: left;white-space: nowrap;padding: 5px;border: 1px solid white;box-sizing: content-box;z-index: 10000;}.jqsfield { color: white;font: 10px arial, san serif;text-align: left;}</style><style type="text/css"></style></head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="principal_admin.html" class="site_title"><i class="fa fa-leaf
+"></i> <span>Control de motas</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile" style="margin-bottom: 5em;">
+              <div class="profile_pic">
+                <img src="images/nestor.png" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Bienvenido,</span>
+                <h2>Néstor Castro</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br>
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-home"></i> Inicio <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="principal_admin.html">Motas General</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-bar-chart-o"></i> Estadísticas <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="estadisticas_anio.html">Por Año</a>
+                      </li>
+                      <li><a href="estadisticas_mes.html">Por Mes</a>
+                      </li>
+                      <li><a href="estadisticas_dia.html">Por Día</a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <div class="sidebar-footer hidden-small">
+              <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Configuración">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Pantalla completa">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Bloquear">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Salir">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+
+          <div class="nav_menu">
+            <nav class="" role="navigation">
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="images/nestor.png" alt="">Néstor Castro
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="javascript:;">  Perfil</a>
+                    </li>
+                    <li>
+                      <a href="javascript:;">
+                        <span class="badge bg-red pull-right">50%</span>
+                        <span>Configuración</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:;">Ayuda</a>
+                    </li>
+                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Salir</a>
+                    </li>
+                  </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="badge bg-green">6</span>
+                  </a>
+                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li>
+                      <a>
+                        <span class="image">
+                                          <img src="images/nestor.png" alt="Profile Image">
+                                      </span>
+                        <span>
+                                          <span>Nestor Castro</span>
+                        <span class="time">hace 1 minutos</span>
+                        </span>
+                        <span class="message">
+                                          Se esta hirviendo la pava...
+                                      </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image">
+                                          <img src="images/nestor.png" alt="Profile Image">
+                                      </span>
+                        <span>
+                                          <span>Nestor Castro</span>
+                        <span class="time">hace 3 minutos</span>
+                        </span>
+                        <span class="message">
+                                          Se estan quemando las tostadas...
+                                      </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image">
+                                          <img src="images/nestor.png" alt="Profile Image">
+                                      </span>
+                        <span>
+                                          <span>Nestor Castro</span>
+                        <span class="time">hace 6 minutos</span>
+                        </span>
+                        <span class="message">
+                                          Se esta rompiendo el microondas...
+                                      </span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="text-center">
+                        <a>
+                          <strong>Ver notificaciones</strong>
+                          <i class="fa fa-angle-right"></i>
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Panel General de Aulas</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar...">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Buscar</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="">
+                  <div class="x_content">
+                    <br>
+                    <div class="row">
+
+                      <!-- Caja Aula 1-->
+                      <div class="col-md-3 col-xs-12 widget widget_tally_box">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <a href="mota1.html"><button type="button" class="btn btn-info">Aula 1</button></a>
+                            <!-- Barra Superior Configuracion Caja Mota -->
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+
+                              <!-- Dropdown Menu configuracion Caja Mota-->
+                              <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                  <li><a href="#">Settings 1</a>
+                                  </li>
+                                  <li><a href="#">Settings 2</a>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+
+                          <!-- Contenido Caja Mota-->
+                          <div class="x_content">
+                            <div>
+                              <!-- Atributos Caja Mota -->
+                              <ul class="list-inline widget_tally">
+                                <li>
+                                  <p>
+                                    <span class="month">Cantidad de Motas </span>
+                                    <span class="count">3</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="month">Consumo total mes </span>
+                                    <span class="count">458kw </span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="month">Última Actualización </span>
+                                    <span class="count">12:35</span>
+                                  </p>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Caja Aula 1-->
+
+                      <!-- Caja Aula 2-->
+                      <div class="col-md-3 col-xs-12 widget widget_tally_box">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <a href="mota1.html"><button type="button" class="btn btn-info">Aula 2</button></a>
+                            <!-- Barra Superior Configuracion Caja Mota -->
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+
+                              <!-- Dropdown Menu configuracion Caja Mota-->
+                              <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                  <li><a href="#">Settings 1</a>
+                                  </li>
+                                  <li><a href="#">Settings 2</a>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+
+                          <!-- Contenido Caja Mota-->
+                          <div class="x_content">
+                            <div>
+                              <!-- Atributos Caja Mota -->
+                              <ul class="list-inline widget_tally">
+                                <li>
+                                  <p>
+                                    <span class="month">Cantidad de Motas </span>
+                                    <span class="count">3</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="month">Consumo total mes </span>
+                                    <span class="count">458kw </span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="month">Última Actualización </span>
+                                    <span class="count">12:35</span>
+                                  </p>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Caja Aula 2-->
+
+                      <!-- Caja Aula 3-->
+                      <div class="col-md-3 col-xs-12 widget widget_tally_box">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <a href="mota1.html"><button type="button" class="btn btn-info">Aula 3</button></a>
+                            <!-- Barra Superior Configuracion Caja Mota -->
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+
+                              <!-- Dropdown Menu configuracion Caja Mota-->
+                              <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                  <li><a href="#">Settings 1</a>
+                                  </li>
+                                  <li><a href="#">Settings 2</a>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+
+                          <!-- Contenido Caja Mota-->
+                          <div class="x_content">
+                            <div>
+                              <!-- Atributos Caja Mota -->
+                              <ul class="list-inline widget_tally">
+                                <li>
+                                  <p>
+                                    <span class="month">Cantidad de Motas </span>
+                                    <span class="count">3</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="month">Consumo total mes </span>
+                                    <span class="count">458kw </span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="month">Última Actualización </span>
+                                    <span class="count">12:35</span>
+                                  </p>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Caja Aula 3-->
+
+                      <!-- Caja Aula 4-->
+                      <div class="col-md-3 col-xs-12 widget widget_tally_box">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <a href="mota1.html"><button type="button" class="btn btn-info">Aula 4</button></a>
+                            <!-- Barra Superior Configuracion Caja Mota -->
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+
+                              <!-- Dropdown Menu configuracion Caja Mota-->
+                              <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                  <li><a href="#">Settings 1</a>
+                                  </li>
+                                  <li><a href="#">Settings 2</a>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+
+                          <!-- Contenido Caja Mota-->
+                          <div class="x_content">
+                            <div>
+                              <!-- Atributos Caja Mota -->
+                              <ul class="list-inline widget_tally">
+                                <li>
+                                  <p>
+                                    <span class="month">Cantidad de Motas </span>
+                                    <span class="count">3</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="month">Consumo total mes </span>
+                                    <span class="count">458kw </span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="month">Última Actualización </span>
+                                    <span class="count">12:35</span>
+                                  </p>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Caja Aula 4-->
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            <span style="display:none">
+            Sistema de Control de Consumo Eléctrico Distribuido <a href="http://agustinparmisano.github.io/">iotmotas</a>
+            </span>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- jQuery Sparklines -->
+    <script src="vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- easy-pie-chart -->
+    <script src="vendors/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="js/custom.js"></script>
+
+    <!-- gauge.js -->
+    <script src="vendors/bernii/gauge.js/dist/gauge.min.js"></script>
+
+    <!-- chart js -->
+    <!-- <script type="text/javascript" src="js/moment/moment.min.js"></script> -->
+    <!-- <script src="js/chartjs/chart.min.js"></script> -->
+    <!-- bootstrap progress js -->
+    <!-- <script src="js/progressbar/bootstrap-progressbar.min.js"></script> -->
+    <!-- icheck -->
+    <!-- <script src="js/icheck/icheck.min.js"></script> -->
+
+    <!-- <script src="js/custom.js"></script> -->
+
+    <!-- pace -->
+    <!-- <script src="js/pace/pace.min.js"></script> -->
+
+    <!-- sparkline -->
+    <!-- <script src="js/sparkline/jquery.sparkline.min.js"></script> -->
+    <!-- easypie -->
+    <!-- <script src="js/easypie/jquery.easypiechart.min.js"></script> -->
+
+    <!-- Script Control Grafico Gauge -->
+    <script>
+          var opts = {
+              lines: 12,
+              angle: 0,
+              lineWidth: 0.4,
+              pointer: {
+                  length: 0.75,
+                  strokeWidth: 0.042,
+                  color: '#1D212A'
+              },
+              limitMax: 'false',
+              colorStart: '#1ABC9C',
+              colorStop: '#1ABC9C',
+              strokeColor: '#F0F3F3',
+              generateGradient: true
+          };
+          //Gauge 1
+          var target = document.getElementById('foo'),
+              gauge = new Gauge(target).setOptions(opts);
+
+          gauge.maxValue = 600;
+          gauge.animationSpeed = 32;
+          gauge.set(320);
+          gauge.setTextField(document.getElementById("gauge-text"));
+
+          //Gauge 2
+          var target = document.getElementById('foo1'),
+              gauge = new Gauge(target).setOptions(opts);
+
+          gauge.maxValue = 600;
+          gauge.animationSpeed = 32;
+          gauge.set(120);
+          gauge.setTextField(document.getElementById("gauge-text1"));
+
+          //Gauge 3
+          var target = document.getElementById('foo2'),
+              gauge = new Gauge(target).setOptions(opts);
+
+          gauge.maxValue = 600;
+          gauge.animationSpeed = 32;
+          gauge.set(420);
+          gauge.setTextField(document.getElementById("gauge-text2"));
+
+          //Gauge 3
+          var target = document.getElementById('foo3'),
+              gauge = new Gauge(target).setOptions(opts);
+
+          gauge.maxValue = 600;
+          gauge.animationSpeed = 32;
+          gauge.set(490);
+          gauge.setTextField(document.getElementById("gauge-text3"));
+        </script>
+
+
+    <!-- Script Control Grafico Dona -->
+    <script>
+      $(function() {
+        $('.chart').easyPieChart({
+          easing: 'easeOutElastic',
+          delay: 3000,
+          barColor: '#26B99A',
+          trackColor: '#fff',
+          scaleColor: false,
+          lineWidth: 20,
+          trackWidth: 16,
+          lineCap: 'butt',
+          onStep: function(from, to, percent) {
+            $(this.el).find('.percent').text(Math.round(percent));
+          }
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function() {
+        Chart.defaults.global.legend = {
+          enabled: false
+        };
+
+        new Chart(document.getElementById("canvas_line"), {
+          type: 'line',
+          data: {
+            labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
+            datasets: [{
+              label: "My First dataset",
+              backgroundColor: "rgba(38, 185, 154, 0.31)",
+              borderColor: "rgba(38, 185, 154, 0.7)",
+              pointBorderColor: "rgba(38, 185, 154, 0.7)",
+              pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "rgba(220,220,220,1)",
+              pointBorderWidth: 1,
+              data: [31, 74, 6, 39, 20, 85, 7]
+            }, {
+              label: "My Second dataset",
+              backgroundColor: "rgba(3, 88, 106, 0.3)",
+              borderColor: "rgba(3, 88, 106, 0.70)",
+              pointBorderColor: "rgba(3, 88, 106, 0.70)",
+              pointBackgroundColor: "rgba(3, 88, 106, 0.70)",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "rgba(151,187,205,1)",
+              pointBorderWidth: 1,
+              data: [82, 23, 66, 9, 99, 4, 2]
+            }]
+          },
+        });
+
+        new Chart(document.getElementById("canvas_line1"), {
+          type: 'line',
+          data: {
+            labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
+            datasets: [{
+              label: "My First dataset",
+              backgroundColor: "rgba(38, 185, 154, 0.31)",
+              borderColor: "rgba(38, 185, 154, 0.7)",
+              pointHoverBorderColor: "rgba(220,220,220,1)",
+              pointBorderWidth: 1,
+              data: [11, 24, 36, 49, 30, 25, 17]
+            }, {
+              label: "My Second dataset",
+              backgroundColor: "rgba(3, 88, 106, 0.3)",
+              borderColor: "rgba(3, 88, 106, 0.70)",
+              pointBorderColor: "rgba(3, 88, 106, 0.70)",
+              pointBackgroundColor: "rgba(3, 88, 106, 0.70)",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "rgba(151,187,205,1)",
+              pointBorderWidth: 1,
+              data: [82, 23, 66, 9, 99, 4, 2]
+            }]
+          },
+        });
+
+        new Chart(document.getElementById("canvas_line2"), {
+          type: 'line',
+          data: {
+            labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
+            datasets: [{
+              label: "Consumo Eléctrico Efectivo",
+              backgroundColor: "rgba(38, 185, 154, 0.31)",
+              borderColor: "rgba(38, 185, 154, 0.7)",
+              pointBorderColor: "rgba(38, 185, 154, 0.7)",
+              pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "rgba(220,220,220,1)",
+              pointBorderWidth: 1,
+              data: [11, 84, 16, 29, 60, 25, 45]
+            }, {
+              label: "Consumo Eléctrico Estimado",
+              backgroundColor: "rgba(3, 88, 106, 0.3)",
+              borderColor: "rgba(3, 88, 106, 0.70)",
+              pointBorderColor: "rgba(3, 88, 106, 0.70)",
+              pointBackgroundColor: "rgba(3, 88, 106, 0.70)",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "rgba(151,187,205,1)",
+              pointBorderWidth: 1,
+              data: [32, 43, 86, 90, 59, 40, 20]
+            }]
+          },
+        });
+
+        new Chart(document.getElementById("canvas_line3"), {
+          type: 'line',
+          data: {
+            labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
+            datasets: [{
+              label: "My First dataset",
+              backgroundColor: "rgba(38, 185, 154, 0.31)",
+              borderColor: "rgba(38, 185, 154, 0.7)",
+              pointBorderColor: "rgba(38, 185, 154, 0.7)",
+              pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "rgba(220,220,220,1)",
+              pointBorderWidth: 1,
+              data: [31, 74, 6, 39, 20, 85, 7]
+            }, {
+              label: "My Second dataset",
+              backgroundColor: "rgba(3, 88, 106, 0.3)",
+              borderColor: "rgba(3, 88, 106, 0.70)",
+              pointBorderColor: "rgba(3, 88, 106, 0.70)",
+              pointBackgroundColor: "rgba(3, 88, 106, 0.70)",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "rgba(151,187,205,1)",
+              pointBorderWidth: 1,
+              data: [82, 23, 66, 9, 99, 4, 2]
+            }]
+          },
+        });
+      });
+    </script>
+</body>
+</html>
