@@ -1,15 +1,76 @@
-<ion-view view-title="Inicio" hide-back-button="true">
+<ion-view view-title="Eletron" hide-back-button="true">
 
     <ion-content ng-controller="ExampleController">
       <div class="card">
-          <div class="item item-divider">
-              {{labels}}
-              A line chart
+          <div class="item item-toggle">
+              <span>Consumo en tiempo real</span>
+              <label class="toggle toggle-small">
+                <input type="checkbox">
+                <div class="track">
+                  <div class="handle"></div>
+                </div>
+              </label>
           </div>
           <div class="item item-text-wrap">
-              <canvas id="line" class="chart chart-line" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>
+            <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+              <!--<canvas id="line" class="chart chart-line" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>-->
           </div>
       </div>
+      <div class="card">
+        <div class="item item-divider">
+            Componentes
+        </div>
+          <div class="list">
+              <div class="item item-button-right">
+                <span class="">Heladera</span>
+                <span class="badge badge-calm">33</span>
+                <button class="button button-positive">
+                  <i class="icon ion-compose"></i>
+                </button>
+              </div>
+              <div class="item item-button-right">
+
+                Lavarropas
+                <span class="badge badge-energized">0</span>
+                <button class="button button-positive">
+                  <i class="icon ion-compose"></i>
+                </button>
+              </div>
+              <div class="item item-button-right">
+
+                Aire accondicionado
+                <span class="badge badge-assertive">146</span>
+                <button class="button button-positive">
+                  <i class="icon ion-compose"></i>
+                </button>
+              </div>
+              <div class="item item-button-right">
+
+                Luces
+                <span class="badge badge-calm">56</span>
+                <button class="button button-positive">
+                  <i class="icon ion-compose"></i>
+                </button>
+              </div>
+              <div class="item item-button-right">
+
+                Televisión
+                <span class="badge badge-calm">22</span>
+                <button class="button button-positive">
+                  <i class="icon ion-compose"></i>
+                </button>
+              </div>
+          </div>
+      </div>
+      <!-- Toogle button
+      <label class="toggle toggle-small">
+        <input type="checkbox">
+        <div class="track">
+          <div class="handle"></div>
+        </div>
+      </label>
+      -->
+      <!--
       <div class="card">
           <div class="item item-divider">
               A bar chart
@@ -18,6 +79,7 @@
               <canvas id="bar" class="chart chart-bar" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>
           </div>
       </div>
+      -->
     </ion-content><!--
     <ion-list>
       <div class="card">

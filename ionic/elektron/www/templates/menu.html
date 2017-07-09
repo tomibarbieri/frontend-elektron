@@ -15,15 +15,16 @@
 
   <ion-side-menu side="left" class="loginBg" >
     <ion-header-bar class="bar-stable bar-positive">
-      <h1 class="title">Menu</h1>
+      <h1 class="title"><i class="icon ion-leaf"></i> Elektron</h1>
     </ion-header-bar>
     <ion-content >
       <ion-list id="menuLinks">
-        <ion-item menu-close href="#/app/dashboard"> Inicio </ion-item>
-        <ion-item menu-close href="#/app/components"> Componentes </ion-item>
-        <ion-item menu-close href="#/app/profiles"> Tareas </ion-item>
-        <ion-item menu-close href="#/app/profiles"> Estadísticas </ion-item>
-        <ion-item menu-close href="#" ng-click="logout()"> Cerrar sesion </ion-item>
+        <ion-item menu-close href="#/app/dashboard"><i class="icon ion-home"></i> Inicio</ion-item>
+        <ion-item menu-close href="#/app/components"><i class="icon ion-cube"></i> Componentes </ion-item>
+        <ion-item menu-close href="#/app/tasks"><i class="icon ion-clipboard"></i> Tareas </ion-item>
+        <ion-item menu-close href="#/app/profiles"><i class="icon ion-arrow-graph-up-right"></i> Estadísticas </ion-item>
+        <ion-item menu-close href="#/app/profiles"><i class="icon ion-gear-a"></i> Configuración </ion-item>
+        <ion-item menu-close href="#" ng-click="logout()"><i class="icon ion-log-out"></i> Cerrar sesion </ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

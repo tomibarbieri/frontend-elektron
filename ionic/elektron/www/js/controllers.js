@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['angular-websocket'])
+angular.module('starter.controllers', ['angular-websocket','chart.js'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout,  $location, $ionicPopup) {
 
@@ -28,12 +28,12 @@ angular.module('starter.controllers', ['angular-websocket'])
 
 .controller('LoginCtrl', function($scope, $location, $http, $websocket) {
 
-    var dataStream = $websocket('ws://192.168.43.125:8888/websocket');
-    console.log("Dale pepe");
+    //var dataStream = $websocket('ws://localhost:8888/websocket');
+    console.log("Log");
 
     $scope.login = function(user) {
 
-      dataStream.onMessage(function(message) {
+      /*dataStream.onMessage(function(message) {
 
         console.log("puto000000");
         console.log(message.data);
@@ -43,6 +43,7 @@ angular.module('starter.controllers', ['angular-websocket'])
         }else{
           console.log("So malisimooooo");
         };
+        */
 
         /*
         json = JSON.parse(message.data);
@@ -60,16 +61,16 @@ angular.module('starter.controllers', ['angular-websocket'])
 
         console.log(json);*/
         //collection.push(JSON.parse(message.data));
-      });
+      //});
 
-      dataStream.send({username:user.username, password:user.password});
+      //dataStream.send({username:user.username, password:user.password});
 
       console.log("Press Login");
       console.log(user);
       if(typeof(user)=='undefined'){
       	$scope.showAlert('Completá el usuario y contraseña, por favor.');
       	return false;
-        }
+      };
       //Ajax al servidor para validar usuario y contraseña
       /*data = { username:'Evita', password:'Montonera'};
       $http({
@@ -105,12 +106,13 @@ angular.module('starter.controllers', ['angular-websocket'])
         console.log("Entré, eameo.");
       });*/
 
-      /*if(user.username=='tomson' && user.password=='tomson'){
+      // Hace una validacion hardcodeada del usuario y contraseña
+      if(user.username=='tomson' && user.password=='tomson'){
  			  $location.path('/app/dashboard');
       }else{
         console.log("Failed in password or username");
  			  $scope.showAlert('Error de Usuario o contraseña.');
- 		  }*/
+ 		  };
 
     };
 })
@@ -126,34 +128,82 @@ angular.module('starter.controllers', ['angular-websocket'])
 
 })
 
-.controller('ProfilesCtrl', function($scope , Profiles, Sensado, Sensores) {
-    $scope.profiles = Profiles.all();
+.controller('ProfilesCtrl', function($scope) {
+    //$scope.profiles = Profiles.all();
     /*Sensado.all().then(function(response){
         $scope.sensado = response;
     });*/
-    $scope.sensado = Sensado.all();
-    console.log($scope.sensado);
-    console.log("hola");
-
-    $scope.sensores = Sensores.all()
+    //$scope.sensado = Sensado.all();
     //console.log($scope.sensado);
+    //console.log("hola");
+
+    //$scope.sensores = Sensores.all()
+    //console.log($scope.sensado);
+
 })
 
 .controller('ProfileCtrl', function($scope, $stateParams , Profiles) {
 	$scope.profile = Profiles.get($stateParams.profileId);
 })
 
-.controller('DashCtrl', function($scope, $stateParams , Profiles) {
-	$scope.profiles = Profiles.all();
+.controller('DashCtrl', function($scope, $websocket) {
+	//$scope.profiles = Profiles.all();
+
+      var dataStream = $websocket('ws://163.10.52.40:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+      console.log(dataStream);
+      var collection = [];
+
+      dataStream.onMessage(function(message) {
+        //console.log("puto")
+        //console.log(message.data)
+        json = JSON.parse(message.data);
+
+        console.log(json.data);
+
+        $scope.line.data[0].shift();
+        $scope.line.data[0].push(json.data);
+
+        //$scope.line.data[1].shift();
+        //$scope.line.data[1].push(json.corriente);
+
+        //var date = new Date(json.timestamp*1000);
+        //date = date.toTimeString().split(' ')[0];
+        //$scope.line.labels.shift();
+        //$scope.line.labels.push(date);
+
+        //console.log(json);
+        //collection.push(JSON.parse(message.data));
+      });
+
+      // Aca los datos para el grafico lineal
+
+     /*  $scope.bar = {};
+      $scope.bar.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+      $scope.bar.series = ['Series A', 'Series B'];
+
+      $scope.bar.data = [
+        [65, 59, 80, 81, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90]
+      ];*/
+
+      // Aca los datos para el grafico lineal
+
+      $scope.line = {};
+      $scope.line.labels = ["E", "L", "E", "K", "T", "R", "O", "N", "0", "7"];
+      $scope.line.series = ['Potencia'];//, 'Corriente'];
+      $scope.line.data = [
+        [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
+        //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
+      ];
 })
 
 .controller("ExampleController", function($scope) {
 
-    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+/*    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
     $scope.series = ['Series A', 'Series B'];
     $scope.data = [
         [65, 59, 80, 81, 56, 55, 40],
         [28, 48, 40, 19, 86, 27, 90]
     ];
-
+*/
 });

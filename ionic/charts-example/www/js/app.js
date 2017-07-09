@@ -27,7 +27,7 @@ angular.module('ionicApp', ['ionic','chart.js','angular-websocket'])
 
   // Acá los datos para el grafico de barras
 
-  var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+  var dataStream = $websocket('ws://192.168.43.125:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
   console.log(dataStream);
   var collection = [];
 
@@ -37,10 +37,10 @@ angular.module('ionicApp', ['ionic','chart.js','angular-websocket'])
     json = JSON.parse(message.data);
 
     $scope.line.data[0].shift();
-    $scope.line.data[0].push(json.potencia);
+    $scope.line.data[0].push(json.data);
 
-    $scope.line.data[1].shift();
-    $scope.line.data[1].push(json.corriente);
+    //$scope.line.data[1].shift();
+    //$scope.line.data[1].push(json.corriente);
 
     var date = new Date(json.timestamp*1000);
     date = date.toTimeString().split(' ')[0];
