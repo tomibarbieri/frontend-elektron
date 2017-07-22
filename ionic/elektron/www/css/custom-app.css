@@ -26,3 +26,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#499bea', end
 
 #menuLinks .list .item{ border-color:#479CF7;}
 #menuLinks .list .item a{ background:#387EF5; color:#fff;}
+
+/*
+  Aca van todas las clases personalizadas
+*/
+
+.title-components{
+  margin-top: 2%;
+  margin-left: 2%;
+}

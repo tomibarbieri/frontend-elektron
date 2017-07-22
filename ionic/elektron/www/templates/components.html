@@ -8,54 +8,20 @@
   		  <p>({{profilelist.deseg}})</p>
       </ion-item>
     </ion-list>-->
-
     <div class="card">
       <div class="item item-divider">
           Componentes
       </div>
-        <div class="list">
-            <div class="item item-button-right">
-              <span class="">Heladera</span>
-              <span class="badge badge-calm">33</span>
-              <button class="button button-positive">
-                <i class="icon ion-compose"></i>
-              </button>
-            </div>
-            <div class="item item-button-right">
-
-              Lavarropas
-              <span class="badge badge-energized">0</span>
-              <button class="button button-positive">
-                <i class="icon ion-compose"></i>
-              </button>
-            </div>
-            <div class="item item-button-right">
-
-              Aire accondicionado
-              <span class="badge badge-assertive">146</span>
-              <button class="button button-positive">
-                <i class="icon ion-compose"></i>
-              </button>
-            </div>
-            <div class="item item-button-right">
-
-              Luces
-              <span class="badge badge-calm">56</span>
-              <button class="button button-positive">
-                <i class="icon ion-compose"></i>
-              </button>
-            </div>
-            <div class="item item-button-right">
-
-              Televisión
-              <span class="badge badge-calm">22</span>
-              <button class="button button-positive">
-                <i class="icon ion-compose"></i>
-              </button>
-            </div>
-        </div>
+      <div class="list">
+          <div class="item item-button-right" ng-repeat="component in components">
+            <span>{{component.label}}</span>
+            <span class="badge badge-calm">{{component.data}}</span>
+            <a ui-sref="app.component({ componentId: {{component.id}} })" class="button button-positive">
+              <i class="icon ion-compose"></i>
+            </a>
+          </div>
+      </div>
     </div>
-
     <!--<ion-list>
       <ion-item ng-repeat="sense in sensado" class="item item-avatar">
         <p>{{sense.sensor_id}}</p>

@@ -1,4 +1,4 @@
-<ion-view view-title="Eletron" hide-back-button="true">
+<ion-view view-title="Elektron" hide-back-button="true">
 
     <ion-content ng-controller="ExampleController">
       <div class="card">
@@ -17,50 +17,27 @@
           </div>
       </div>
       <div class="card">
-        <div class="item item-divider">
-            Componentes
-        </div>
-          <div class="list">
-              <div class="item item-button-right">
-                <span class="">Heladera</span>
-                <span class="badge badge-calm">33</span>
-                <button class="button button-positive">
-                  <i class="icon ion-compose"></i>
-                </button>
-              </div>
-              <div class="item item-button-right">
 
+        <div class="list">
+              <div class="row item item-divider">
+                <div class="col col-50 title-components"><b>Componentes</b></div>
+                <div class="col"></div>
+                <div class="col"><a ui-sref="app.components" class="button button-small button-positive">Ver todos</a>
+                </div>
+              </div>
+              <div class="item">
+                Heladera
+                <span class="badge badge-calm">{{heladera}}</span>
+              </div>
+              <div class="item">
                 Lavarropas
-                <span class="badge badge-energized">0</span>
-                <button class="button button-positive">
-                  <i class="icon ion-compose"></i>
-                </button>
+                <span class="badge badge-energized">{{lavarropas}}</span>
               </div>
-              <div class="item item-button-right">
-
+              <div class="item">
                 Aire accondicionado
-                <span class="badge badge-assertive">146</span>
-                <button class="button button-positive">
-                  <i class="icon ion-compose"></i>
-                </button>
+                <span class="badge badge-assertive">{{aire}}</span>
               </div>
-              <div class="item item-button-right">
-
-                Luces
-                <span class="badge badge-calm">56</span>
-                <button class="button button-positive">
-                  <i class="icon ion-compose"></i>
-                </button>
-              </div>
-              <div class="item item-button-right">
-
-                Televisión
-                <span class="badge badge-calm">22</span>
-                <button class="button button-positive">
-                  <i class="icon ion-compose"></i>
-                </button>
-              </div>
-          </div>
+        </div>
       </div>
       <!-- Toogle button
       <label class="toggle toggle-small">

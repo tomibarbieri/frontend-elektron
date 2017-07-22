@@ -124,7 +124,102 @@ angular.module('starter.controllers', ['angular-websocket','chart.js'])
 
 .controller('ComponentsCtrl', function($scope) {
 
-    $scope.components = "Todos los componentes";
+    $scope.components = [{
+      id: 1,
+      label: "Heladera",
+      ip: "192.168.0.1",
+      data: 34
+    },{
+      id: 2,
+      label: "Lavarropas",
+      ip: "192.168.0.2",
+      data: 66
+    },{
+      id: 3,
+      label: "Microondas",
+      ip: "192.168.0.3",
+      data: 43
+    },{
+      id: 4,
+      label: "Computadora",
+      ip: "192.168.0.4",
+      data: 56
+    },{
+      id: 5,
+      label: "Termotanque",
+      ip: "192.168.0.5",
+      data: 99
+    },{
+      id: 6,
+      label: "Luces",
+      ip: "192.168.0.6",
+      data: 134
+    }];
+
+})
+
+.controller('ComponentCtrl', function($scope, $stateParams, $websocket) {
+
+    var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+    console.log(dataStream);
+    var collection = [];
+    $scope.data = 0;
+
+    dataStream.onMessage(function(message) {
+      //console.log("puto")
+      //console.log(message.data)
+      json = JSON.parse(message.data);
+
+      console.log(json.data);
+
+      $scope.line.data[0].shift();
+      $scope.line.data[0].push(json.data);
+      $scope.data = json.data;
+
+
+    });
+    var components = [{
+      id: 1,
+      label: "Heladera",
+      ip: "192.168.0.1",
+      data: 34
+    },{
+      id: 2,
+      label: "Lavarropas",
+      ip: "192.168.0.2",
+      data: 66
+    },{
+      id: 3,
+      label: "Microondas",
+      ip: "192.168.0.3",
+      data: 43
+    },{
+      id: 4,
+      label: "Computadora",
+      ip: "192.168.0.4",
+      data: 56
+    },{
+      id: 5,
+      label: "Termotanque",
+      ip: "192.168.0.5",
+      data: 99
+    },{
+      id: 6,
+      label: "Luces",
+      ip: "192.168.0.6",
+      data: 134
+    }];
+    $scope.line = {};
+    $scope.line.labels = ["E", "L", "E", "K", "T", "R", "O", "N", "0", "7"];
+    $scope.line.series = ['Potencia'];//, 'Corriente'];
+    $scope.line.data = [
+      [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
+      //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
+    ];
+
+    $scope.componentId = $stateParams.componentId;
+    $scope.component = components[$scope.componentId-1];
+
 
 })
 
@@ -149,9 +244,12 @@ angular.module('starter.controllers', ['angular-websocket','chart.js'])
 .controller('DashCtrl', function($scope, $websocket) {
 	//$scope.profiles = Profiles.all();
 
-      var dataStream = $websocket('ws://163.10.52.40:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+      var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
       console.log(dataStream);
       var collection = [];
+      $scope.heladera = 33;
+      $scope.lavarropas = 0;
+      $scope.aire = 146;
 
       dataStream.onMessage(function(message) {
         //console.log("puto")
@@ -162,6 +260,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js'])
 
         $scope.line.data[0].shift();
         $scope.line.data[0].push(json.data);
+        $scope.heladera = json.data;
+        $scope.lavarropas = json.data;
+        $scope.aire = json.data;
 
         //$scope.line.data[1].shift();
         //$scope.line.data[1].push(json.corriente);
@@ -193,6 +294,37 @@ angular.module('starter.controllers', ['angular-websocket','chart.js'])
       $scope.line.series = ['Potencia'];//, 'Corriente'];
       $scope.line.data = [
         [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
+        //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
+      ];
+})
+
+.controller('StaticsCtrl', function($scope, $websocket) {
+	//$scope.profiles = Profiles.all();
+
+  /*
+      var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+      console.log(dataStream);
+      var collection = [];
+
+
+      dataStream.onMessage(function(message) {
+        //console.log("puto")
+        //console.log(message.data)
+        json = JSON.parse(message.data);
+
+        console.log(json.data);
+
+        $scope.line.data[0].shift();
+        $scope.line.data[0].push(json.data);
+
+      });
+      */
+
+      $scope.line = {};
+      $scope.line.labels = ["E", "L", "E", "K", "T", "R", "O", "N", "0", "7"];
+      $scope.line.series = ['Potencia'];//, 'Corriente'];
+      $scope.line.data = [
+        [40, 40, 45, 45, 50, 60, 60, 55, 44, 40]//,
         //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
       ];
 })

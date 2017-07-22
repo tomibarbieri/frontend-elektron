@@ -106,6 +106,26 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   })
 
+  .state('app.component', {
+    url: '/component/:componentId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/component.html',
+        controller: 'ComponentCtrl'
+      }
+    }
+  })
+
+  .state('app.statics', {
+    url: '/statics',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/statics.html',
+        controller: 'StaticsCtrl'
+      }
+    }
+  })
+
   .state('app.tasks', {
     url: '/tasks',
     views: {
