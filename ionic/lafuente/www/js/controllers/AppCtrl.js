@@ -9,18 +9,18 @@
         });
     }
 
-    var fab = document.getElementById('fab');
+/*    var fab = document.getElementById('fab');
     fab.addEventListener('click', function () {
         //location.href = 'https://twitter.com/satish_vr2011';
         window.open('https://twitter.com/satish_vr2011', '_blank');
     });
-
+*/
     // .fromTemplate() method
     var template = '<ion-popover-view>' +
                     '   <ion-header-bar>' +
                     '       <h1 class="title">My Popover Title</h1>' +
                     '   </ion-header-bar>' +
-                    '   <ion-content class="padding">' +
+                    '   <ion-content class="content-lafuente padding">' +
                     '       My Popover Contents' +
                     '   </ion-content>' +
                     '</ion-popover-view>';

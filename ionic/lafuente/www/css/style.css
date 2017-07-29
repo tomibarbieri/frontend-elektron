@@ -1,6 +1,34 @@
 /* Empty. Add your own CSS if you like */
 /* Utilities */
 
+/* Empieza CSS de La Fuente */
+
+.bar-lafuente {
+  background-color: #FF9800;
+  color: white;
+}
+
+.card-lafuente {
+  background-color: #FF9800;
+  color: white;
+}
+
+.h2-lafuente {
+  color: #FFECB3;
+  margin: 0 0 2px 0;
+  font-weight: bold;
+}
+
+.p-lafuente {
+  color: white;
+}
+.content-lafuente {
+  background-color: #FFE082;
+}
+
+/* Termina CSS de La Fuente */
+
+
 .link {
     color: #116262;
     font-weight: bold;
@@ -23,7 +51,7 @@ h4:first-child {
 }
 
 p {
-    color: #555;
+    color: #FFE082;
     margin: 0 0 25px;
 }
 
@@ -51,7 +79,7 @@ p {
 /* Menu */
 
 .menu .bar.bar-header.expanded {
-    background-image: url('../img/material-graphite.jpg');
+    background-image: url('../img/lafuente-fondonaranja.jpg');
     background-size: 120%;
     background-position: 0%;
     transition: all .5s ease-in-out;

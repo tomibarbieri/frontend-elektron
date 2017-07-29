@@ -160,7 +160,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js'])
 
 .controller('ComponentCtrl', function($scope, $stateParams, $websocket) {
 
-    var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+    var dataStream = $websocket('ws://192.168.0.82:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
     console.log(dataStream);
     var collection = [];
     $scope.data = 0;
@@ -244,7 +244,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js'])
 .controller('DashCtrl', function($scope, $websocket) {
 	//$scope.profiles = Profiles.all();
 
-      var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+      var dataStream = $websocket('ws://192.168.0.82:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
       console.log(dataStream);
       var collection = [];
       $scope.heladera = 33;
@@ -290,7 +290,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js'])
       // Aca los datos para el grafico lineal
 
       $scope.line = {};
-      $scope.line.labels = ["E", "L", "E", "K", "T", "R", "O", "N", "0", "7"];
+      $scope.line.labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
       $scope.line.series = ['Potencia'];//, 'Corriente'];
       $scope.line.data = [
         [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,

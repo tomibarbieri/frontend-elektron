@@ -1,50 +1,51 @@
 <ion-view view-title="Tareas">
-  <ion-content>
-    <div class="card">
-      <div class="item item-divider">
-          Tareas
-      </div>
-        <div class="list">
-            <div class="item item-button-right">
-              <span class="">Heladera</span>
-              <span class="badge badge-calm">33</span>
-              <button class="button button-positive">
-                <i class="icon ion-compose"></i>
-              </button>
-            </div>
-            <div class="item item-button-right">
-
-              Lavarropas
-              <span class="badge badge-energized">0</span>
-              <button class="button button-positive">
-                <i class="icon ion-compose"></i>
-              </button>
-            </div>
-            <div class="item item-button-right">
-
-              Aire accondicionado
-              <span class="badge badge-assertive">146</span>
-              <button class="button button-positive">
-                <i class="icon ion-compose"></i>
-              </button>
-            </div>
-            <div class="item item-button-right">
-
-              Luces
-              <span class="badge badge-calm">56</span>
-              <button class="button button-positive">
-                <i class="icon ion-compose"></i>
-              </button>
-            </div>
-            <div class="item item-button-right">
-
-              Televisión
-              <span class="badge badge-calm">22</span>
-              <button class="button button-positive">
-                <i class="icon ion-compose"></i>
-              </button>
-            </div>
-        </div>
+  <ion-content >
+    <div class="tabs tabs-icon-left">
+      <a class="tab-item">
+        <i class="icon ion-home"></i>
+        Home
+      </a>
+      <a class="tab-item">
+        <i class="icon ion-star"></i>
+        Favorites
+      </a>
+      <a class="tab-item">
+        <i class="icon ion-gear-a"></i>
+        Settings
+      </a>
     </div>
+    <div class="card">
+        <div class="item item-divider">
+            <span>Elegir consumo</span>
+        </div>
+        <label class="item item-input">
+          <span class="input-label">Desde</span>
+          <input type="date">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Hasta</span>
+          <input type="date">
+        </label>
+        <div class="item item-divider">
+            <span>Elegir componente</span>
+        </div>
+          <label class="item item-input item-select">
+            <div class="input-label">
+              Componente
+            </div>
+            <select>
+              <option selected>Todos</option>
+              <option>Aire acondicionado</option>
+              <option>Lavarropas</option>
+              <option>Heladera</option>
+            </select>
+          </label>
+        <div class="item item-text-wrap">
+          <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+            <!--<canvas id="line" class="chart chart-line" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>-->
+        </div>
+
+    </div>
+
   </ion-content>
 </ion-view>
