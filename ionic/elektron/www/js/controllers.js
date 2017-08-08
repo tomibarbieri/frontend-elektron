@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['angular-websocket','chart.js'])
+angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datetime-picker'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout,  $location, $ionicPopup) {
 
@@ -160,7 +160,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js'])
 
 .controller('ComponentCtrl', function($scope, $stateParams, $websocket) {
 
-    var dataStream = $websocket('ws://192.168.0.82:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+    var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
     console.log(dataStream);
     var collection = [];
     $scope.data = 0;
@@ -244,7 +244,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js'])
 .controller('DashCtrl', function($scope, $websocket) {
 	//$scope.profiles = Profiles.all();
 
-      var dataStream = $websocket('ws://192.168.0.82:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+      var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
       console.log(dataStream);
       var collection = [];
       $scope.heladera = 33;
@@ -298,35 +298,22 @@ angular.module('starter.controllers', ['angular-websocket','chart.js'])
       ];
 })
 
-.controller('StaticsCtrl', function($scope, $websocket) {
-	//$scope.profiles = Profiles.all();
+.controller('StatisticsCtrl', function($scope) {
+    $scope.datagraphic = 'pepe';
+})
 
-  /*
-      var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
-      console.log(dataStream);
-      var collection = [];
+.controller('GraphicStatisticsCtrl', function($scope, $stateParams) {
 
+    $scope.componentId = $stateParams.componentId;
+    console.log($scope.componentId);
 
-      dataStream.onMessage(function(message) {
-        //console.log("puto")
-        //console.log(message.data)
-        json = JSON.parse(message.data);
-
-        console.log(json.data);
-
-        $scope.line.data[0].shift();
-        $scope.line.data[0].push(json.data);
-
-      });
-      */
-
-      $scope.line = {};
-      $scope.line.labels = ["E", "L", "E", "K", "T", "R", "O", "N", "0", "7"];
-      $scope.line.series = ['Potencia'];//, 'Corriente'];
-      $scope.line.data = [
-        [40, 40, 45, 45, 50, 60, 60, 55, 44, 40]//,
-        //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
-      ];
+    $scope.line = {};
+    $scope.line.labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
+    $scope.line.series = ['Potencia'];//, 'Corriente'];
+    $scope.line.data = [
+      [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
+      //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
+    ];
 })
 
 .controller("ExampleController", function($scope) {

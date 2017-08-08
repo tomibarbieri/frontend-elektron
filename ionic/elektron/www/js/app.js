@@ -116,12 +116,22 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   })
 
-  .state('app.statics', {
-    url: '/statics',
+  .state('app.statistics', {
+    url: '/statistics',
     views: {
       'menuContent': {
-        templateUrl: 'templates/statics.html',
-        controller: 'StaticsCtrl'
+        templateUrl: 'templates/statistics.html',
+        controller: 'StatisticsCtrl'
+      }
+    }
+  })
+
+  .state('app.graphic-statistics', {
+    url: '/graphic-statistics/{componentId}?fromdate&fromhour$dateto&hourto',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/graphic-statistics.html',
+        controller: 'GraphicStatisticsCtrl'
       }
     }
   })

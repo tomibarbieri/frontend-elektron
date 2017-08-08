@@ -1,0 +1,54 @@
+<ion-view view-title="Estadísticas">
+
+    <ion-content >
+      <div class="card">
+          <div class="item item-divider">
+              <span>Elegir consumo</span>
+          </div>
+          <div "">
+            <div class="item item-icon-left" ion-datetime-picker date ng-model="dateValue">
+                <i class="icon ion-ios-calendar positive"></i>
+                Desde
+                <strong>{{dateValue| date: "yyyy-MM-dd"}}</strong>
+            </div>
+            <div class="item item-icon-left" ion-datetime-picker time ng-model="timeValue">
+                <i class="icon ion-ios-clock positive"></i>
+                Hora
+                <strong>{{timeValue| date: "H:mm"}}</strong>
+            </div>
+            <div class="item item-icon-left" ion-datetime-picker date ng-model="dateValue">
+                <i class="icon ion-ios-calendar-outline positive"></i>
+                Hasta
+                <strong>{{dateValue| date: "yyyy-MM-dd"}}</strong>
+            </div>
+            <div class="item item-icon-left" ion-datetime-picker time ng-model="timeValue">
+                <i class="icon ion-ios-clock positive"></i>
+                Hora
+                <strong>{{timeValue| date: "H:mm"}}</strong>
+            </div>
+          </div>
+          <div class="item item-divider">
+              <span>Elegir componente</span>
+          </div>
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Componente
+              </div>
+              <select>
+                <option selected>Todos</option>
+                <option>Aire acondicionado</option>
+                <option>Lavarropas</option>
+                <option>Heladera</option>
+              </select>
+            </label>
+            <div class="item">
+              <div class="button-bar">
+                <a ui-sref="app.graphic-statistics({ componentId: 2, from:1, to:2 })" class="button button-positive icon ion-stats-bars">
+                  Ver estadísticas
+                </a>
+              </div>
+            </div>
+      </div>
+
+    </ion-content>
+</ion-view>
