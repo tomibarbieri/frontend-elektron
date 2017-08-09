@@ -126,8 +126,18 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   })
 
+  .state('app.configuration', {
+    url: '/configuration',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/configuration.html',
+        controller: 'ConfigurationCtrl'
+      }
+    }
+  })
+
   .state('app.graphic-statistics', {
-    url: '/graphic-statistics/{componentId}?fromdate&fromhour$dateto&hourto',
+    url: '/graphic-statistics/{componentId}?dateFrom&timeFrom$dateTo&timeTo',
     views: {
       'menuContent': {
         templateUrl: 'templates/graphic-statistics.html',

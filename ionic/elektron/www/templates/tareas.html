@@ -1,48 +1,62 @@
 <ion-view view-title="Tareas">
   <ion-content >
-    <div class="tabs tabs-icon-left">
-      <a class="tab-item">
-        <i class="icon ion-home"></i>
-        Home
-      </a>
-      <a class="tab-item">
-        <i class="icon ion-star"></i>
-        Favorites
-      </a>
-      <a class="tab-item">
-        <i class="icon ion-gear-a"></i>
-        Settings
-      </a>
-    </div>
     <div class="card">
         <div class="item item-divider">
-            <span>Elegir consumo</span>
+            <span>Programar tareas de componentes</span>
         </div>
-        <label class="item item-input">
-          <span class="input-label">Desde</span>
-          <input type="date">
+        <label class="item item-input item-select">
+          <div class="input-label ">
+            Componente
+          </div>
+          <select>
+            <option selected>Todos</option>
+            <option>Aire acondicionado</option>
+            <option>Lavarropas</option>
+            <option>Heladera</option>
+          </select>
         </label>
-        <label class="item item-input">
-          <span class="input-label">Hasta</span>
-          <input type="date">
+        <label class="item item-input item-divider">
+          <span class="input-label">Por consumo</span>
         </label>
+        <div class="list">
+          <div class="item range range-positive">
+            <i class="icon ion-ios-bolt-outline"></i>
+            <input type="range" name="volume" min="0" max="100" value="33">
+            <i class="icon ion-ios-bolt"></i>
+          </div>
+        </div>
+        <label class="item item-input item-divider">
+          <span class="input-label">Por fecha</span>
+        </label>
+        <div>
+          <div class="item item-icon-left" ion-datetime-picker date ng-model="dateFrom">
+              <i class="icon ion-ios-calendar positive"></i>
+              Fecha
+              <strong>{{dateFrom| date: "yyyy-MM-dd"}}</strong>
+          </div>
+          <div class="item item-icon-left" ion-datetime-picker time ng-model="timeFrom">
+              <i class="icon ion-ios-clock positive"></i>
+              Hora
+              <strong>{{timeFrom| date: "H:mm"}}</strong>
+          </div>
+          </div>
         <div class="item item-divider">
-            <span>Elegir componente</span>
+            <span>Opciones</span>
         </div>
-          <label class="item item-input item-select">
-            <div class="input-label">
-              Componente
-            </div>
-            <select>
-              <option selected>Todos</option>
-              <option>Aire acondicionado</option>
-              <option>Lavarropas</option>
-              <option>Heladera</option>
-            </select>
-          </label>
-        <div class="item item-text-wrap">
-          <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
-            <!--<canvas id="line" class="chart chart-line" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>-->
+        <ion-list>
+
+          <ion-checkbox ng-model="filter.yellow">Apagar componente</ion-checkbox>
+          <ion-checkbox checked ng-model="filter.red">Notificar por celular</ion-checkbox>
+          <ion-checkbox ng-model="filter.pink">Notificar por mail</ion-checkbox>
+
+        </ion-list>
+
+        <div class="item">
+          <div class="button-bar">
+            <a ui-sref="" class="button button-positive icon ion-ios-bolt">
+              Programar
+            </a>
+          </div>
         </div>
 
     </div>

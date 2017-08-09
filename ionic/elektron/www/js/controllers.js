@@ -124,6 +124,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 .controller('ComponentsCtrl', function($scope) {
 
+    // aca va la consulta ajax al servidor para traer los datos de los componentes
+
     $scope.components = [{
       id: 1,
       label: "Heladera",
@@ -224,16 +226,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 })
 
 .controller('ProfilesCtrl', function($scope) {
-    //$scope.profiles = Profiles.all();
-    /*Sensado.all().then(function(response){
-        $scope.sensado = response;
-    });*/
-    //$scope.sensado = Sensado.all();
-    //console.log($scope.sensado);
-    //console.log("hola");
 
-    //$scope.sensores = Sensores.all()
-    //console.log($scope.sensado);
+})
+
+.controller('ConfigurationCtrl', function($scope) {
 
 })
 
@@ -299,13 +295,26 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 })
 
 .controller('StatisticsCtrl', function($scope) {
-    $scope.datagraphic = 'pepe';
+
+    // aca va la consulta ajax al servidor para traer los datos de los componentes (ids y labels)
+
 })
 
 .controller('GraphicStatisticsCtrl', function($scope, $stateParams) {
 
     $scope.componentId = $stateParams.componentId;
+    $scope.dateFrom = new Date($stateParams.dateFrom);
+    $scope.timeFrom = new Date($stateParams.timeFrom);
+    $scope.dateTo = new Date($stateParams.dateTo);
+    $scope.timeTo = new Date($stateParams.timeTo);
+
+    // aca va la consulta ajax al servidor por el consumo de ese periodo
+
     console.log($scope.componentId);
+    console.log($scope.dateFrom);
+    console.log($scope.timeFrom);
+    console.log($scope.dateTo);
+    console.log($scope.timeTo);
 
     $scope.line = {};
     $scope.line.labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];

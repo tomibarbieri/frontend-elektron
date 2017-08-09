@@ -2,7 +2,7 @@
   <ion-content>
     <div class="card">
       <div class="item item-divider">
-          <span>Estadisticas en el tiempo</span>
+          <span>Estadisticas en el periodo</span>
       </div>
       <div class="item item-text-wrap">
         <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
@@ -10,14 +10,14 @@
       <div class="item item-divider">
         <span>Detalles:</span>
       </div>
-      <div class="item">
-        <span class=""><b>Desde</b>: fecha y hora</span>
+      <div date class="item">
+        <span class=""><b>Desde</b>: {{dateFrom| date: shortDate}} - Hora: {{timeFrom| date: "shortTime"}}</span>
+      </div>
+      <div date class="item">
+        <span class=""><b>Hasta</b>: {{dateTo| date: "shortDate"}} - Hora: {{timeTo| date: "shortTime"}}</span>
       </div>
       <div class="item">
-        <span class=""><b>Hasta</b>: fecha y hora</span>
-      </div>
-      <div class="item">
-        <span class=""><b>Componente</b>: componente</span>
+        <span class=""><b>Componente</b>: {{componentId}}</span>
       </div>
     </div>
   </ion-content>
