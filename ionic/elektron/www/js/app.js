@@ -7,13 +7,13 @@
 
 angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
 
-.run(function($ionicPlatform , $rootScope, $timeout) {
+.run(function($ionicPlatform , $rootScope, $timeout, $location, $state, LoginService) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
+      //cordova.plugins.Keyboard.disableScroll(true);
 
     }
     if (window.StatusBar) {
@@ -22,16 +22,28 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   });
 
-  $rootScope.authStatus = false;
+  $rootScope.authStatus = LoginService.isAuthenticated() || false;
+
+  //console.log("Is Authenticated: "+ LoginService.isAuthenticated());
+
+  /*
+  if(LoginService.isAuthenticated()) {
+    $location.path('/app/dashboard');
+  } else {
+    $location.path('/app/login');
+  };*/
+
   //stateChange event
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
     $rootScope.authStatus = toState.authStatus;
     if($rootScope.authStatus){}
-    });
+
+  });
 
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
 		console.log("URL : "+toState.url);
-		if(toState.url=='/dashboard'){
+    console.log("Is Authenticated: "+ LoginService.isAuthenticated());
+    if(toState.url=='/dashboard'){
 			console.log("match : "+toState.url);
 			$timeout(function(){
 				angular.element(document.querySelector('#leftMenu' )).removeClass("hide");
@@ -62,6 +74,16 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
       }
     },
 	authStatus: false
+  })
+
+  .state('app.logout', {
+    url: '/logout',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/logout.html',
+        controller: 'LogoutCtrl'
+      }
+    },
   })
 
   .state('app.signup', {

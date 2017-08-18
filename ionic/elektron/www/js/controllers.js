@@ -12,9 +12,16 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   // Form data for the login modal
   $scope.loginData = {};
 
-  //--------------------------------------------
+  $scope.wait = function(ms){
+     var start = new Date().getTime();
+     var end = start;
+     while(end < start + ms) {
+       end = new Date().getTime();
+    }
+  };
+
   $scope.logout = function() {   $location.path('/app/login');   };
-  //--------------------------------------------
+
    // An alert dialog
 	 $scope.showAlert = function(msg) {
 	   var alertPopup = $ionicPopup.alert({
@@ -26,95 +33,32 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   //--------------------------------------------
 })
 
-.controller('LoginCtrl', function($scope, $location, $http, $websocket) {
-
-    //var dataStream = $websocket('ws://localhost:8888/websocket');
-    console.log("Log");
+.controller('LoginCtrl', function($scope, $location, $http, $websocket, LoginService) {
 
     $scope.login = function(user) {
 
-      /*dataStream.onMessage(function(message) {
-
-        console.log("puto000000");
-        console.log(message.data);
-        if (message.data == "piola"){
-          $location.path('/app/dashboard');
-          //$scope.showAlert('Logueado.');
-        }else{
-          console.log("So malisimooooo");
-        };
-        */
-
-        /*
-        json = JSON.parse(message.data);
-
-        $scope.line.data[0].shift();
-        $scope.line.data[0].push(json.potencia);
-
-        $scope.line.data[1].shift();
-        $scope.line.data[1].push(json.corriente);
-
-        var date = new Date(json.timestamp*1000);
-        date = date.toTimeString().split(' ')[0];
-        //$scope.line.labels.shift();
-        //$scope.line.labels.push(date);
-
-        console.log(json);*/
-        //collection.push(JSON.parse(message.data));
-      //});
-
-      //dataStream.send({username:user.username, password:user.password});
-
-      console.log("Press Login");
-      console.log(user);
       if(typeof(user)=='undefined'){
-      	$scope.showAlert('Completá el usuario y contraseña, por favor.');
-      	return false;
+        $scope.showAlert('ComsetTimeout(function () {pletá el usuario y contraseña, por favor.');
+        return false;
       };
-      //Ajax al servidor para validar usuario y contraseña
-      /*data = { username:'Evita', password:'Montonera'};
-      $http({
-        method: 'POST',
-        url: 'http://192.168.43.125:5000/login',
-        params: data
-      }).then(function successCallback(response) {
-          // this callback will be called asynchronously
-          // when the response is available
-          console.log(response.status);
-          console.log("todo bien");
-        }, function errorCallback(response) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-          console.log(response.status);
-          console.log("todo mal");
-        });
 
-        $http.post('http://192.168.43.125:5000/login', data).then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
-            console.log(response.status);
-            console.log("todo bien");
-          }, function errorCallback(response) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-            console.log(response.status);
-            console.log("todo mal");
-          });*/
-
-      /*$http.post("http://192.168.43.125:5000/login").success( function(response) {
-        console.log(response);
-        console.log("Entré, eameo.");
-      });*/
-
-      // Hace una validacion hardcodeada del usuario y contraseña
-      if(user.username=='tomson' && user.password=='tomson'){
- 			  $location.path('/app/dashboard');
-      }else{
+      console.log(user.username);
+      if(LoginService.login(user.username, user.password)){
+        $location.path('/app/dashboard');
+      } else {
         console.log("Failed in password or username");
- 			  $scope.showAlert('Error de Usuario o contraseña.');
- 		  };
-
+        $scope.showAlert('Error de Usuario o contraseña.');
+      }
     };
+})
+
+.controller('LogoutCtrl', function($scope, $state, LoginService) {
+
+    LoginService.logout();
+    console.log("entro");
+    $scope.wait(2000);
+    $state.transitionTo('app.login');
+
 })
 
 //
@@ -233,12 +177,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('ProfileCtrl', function($scope, $stateParams , Profiles) {
-	$scope.profile = Profiles.get($stateParams.profileId);
+.controller('ProfileCtrl', function($scope, $stateParams) {
+
 })
 
 .controller('DashCtrl', function($scope, $websocket) {
-	//$scope.profiles = Profiles.all();
 
       var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
       console.log(dataStream);

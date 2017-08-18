@@ -4,3 +4,14 @@
 .elektronstatisticsspan {
   margin-right: 10px;
 }
+
+.logout-spinner{
+  text-align: center;
+  margin-top: 10px;
+}
+
+.logout-spinner-text{
+  color: white;
+  font-weight: lighter;
+  margin-bottom: 20px;
+}
