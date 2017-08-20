@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datetime-picker'])
+angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datetime-picker','ionic-toast'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout,  $location, $ionicPopup) {
 
@@ -46,6 +46,77 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 .controller('RegisterCtrl', function($scope, $location) {
       // hacer la funcion que valida el registro de usuarios
+})
+
+.controller('DashCtrl', function($scope, $websocket, ionicToast) {
+
+      var dataStream = $websocket('ws://localhost:8888/websocket');
+
+      /*
+      $scope.showToast = function(message, duration, location) {
+        $cordovaToast.show(message, duration, location).then(function(success) {
+              console.log("The toast was shown");
+          }, function (error) {
+              console.log("The toast was not shown due to " + error);
+        });
+      }
+      */
+
+      // cambiar ip a la del servior por ejemplo 192.168.0.20
+      console.log(dataStream);
+      var collection = [];
+      $scope.heladera = 33;
+      $scope.lavarropas = 0;
+      $scope.aire = 146;
+
+      dataStream.onError(function functionName() {
+        ionicToast.show('Error de conexión con el servidor.', 'bottom', true, 5000);
+      });
+
+      dataStream.onMessage(function(message) {
+        //console.log("puto")
+        //console.log(message.data)
+        json = JSON.parse(message.data);
+        console.log(json.data);
+
+        $scope.line.data[0].shift();
+        $scope.line.data[0].push(json.data);
+        $scope.heladera = json.data;
+        $scope.lavarropas = json.data;
+        $scope.aire = json.data;
+
+        //$scope.line.data[1].shift();
+        //$scope.line.data[1].push(json.corriente);
+
+        //var date = new Date(json.timestamp*1000);
+        //date = date.toTimeString().split(' ')[0];
+        //$scope.line.labels.shift();
+        //$scope.line.labels.push(date);
+
+        //console.log(json);
+        //collection.push(JSON.parse(message.data));
+      });
+
+      // Aca los datos para el grafico lineal
+
+     /*  $scope.bar = {};
+      $scope.bar.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+      $scope.bar.series = ['Series A', 'Series B'];
+
+      $scope.bar.data = [
+        [65, 59, 80, 81, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90]
+      ];*/
+
+      // Aca los datos para el grafico lineal
+
+      $scope.line = {};
+      $scope.line.labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
+      $scope.line.series = ['Potencia'];//, 'Corriente'];
+      $scope.line.data = [
+        [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
+        //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
+      ];
 })
 
 .controller('TaskCtrl', function($scope, $location) {
@@ -122,6 +193,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 .controller('ComponentCtrl', function($scope, $stateParams) {
 
+    // Pedir con ajax el componente que viene por parametro
     var components = [{
       id: 1,
       label: "Heladera",
@@ -153,6 +225,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       ip: "192.168.0.6",
       data: 134
     }];
+
     $scope.line = {};
     $scope.line.labels = ["E", "L", "E", "K", "T", "R", "O", "N", "0", "7"];
     $scope.line.series = ['Potencia'];//, 'Corriente'];
@@ -169,61 +242,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 .controller('ConfigurationCtrl', function($scope) {
 
-})
-
-.controller('DashCtrl', function($scope, $websocket) {
-
-      var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
-      console.log(dataStream);
-      var collection = [];
-      $scope.heladera = 33;
-      $scope.lavarropas = 0;
-      $scope.aire = 146;
-
-      dataStream.onMessage(function(message) {
-        //console.log("puto")
-        //console.log(message.data)
-        json = JSON.parse(message.data);
-        console.log(json.data);
-
-        $scope.line.data[0].shift();
-        $scope.line.data[0].push(json.data);
-        $scope.heladera = json.data;
-        $scope.lavarropas = json.data;
-        $scope.aire = json.data;
-
-        //$scope.line.data[1].shift();
-        //$scope.line.data[1].push(json.corriente);
-
-        //var date = new Date(json.timestamp*1000);
-        //date = date.toTimeString().split(' ')[0];
-        //$scope.line.labels.shift();
-        //$scope.line.labels.push(date);
-
-        //console.log(json);
-        //collection.push(JSON.parse(message.data));
-      });
-
-      // Aca los datos para el grafico lineal
-
-     /*  $scope.bar = {};
-      $scope.bar.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-      $scope.bar.series = ['Series A', 'Series B'];
-
-      $scope.bar.data = [
-        [65, 59, 80, 81, 56, 55, 40],
-        [28, 48, 40, 19, 86, 27, 90]
-      ];*/
-
-      // Aca los datos para el grafico lineal
-
-      $scope.line = {};
-      $scope.line.labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
-      $scope.line.series = ['Potencia'];//, 'Corriente'];
-      $scope.line.data = [
-        [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
-        //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
-      ];
 })
 
 .controller('StatisticsCtrl', function($scope) {
