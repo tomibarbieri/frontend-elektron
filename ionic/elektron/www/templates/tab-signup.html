@@ -11,16 +11,18 @@
   <div class="row responsive-sm padding remvoeBP">
 	  <div class="col">
 		   <div class="app-logo"><img class="logo-img" src="img/elektron.png" width="100"></div>
-
-			<div class="list list-inset removePM">
-			  <label class="item item-input"><input type="text" placeholder="Nombre completo"> </label>
-			  <label class="item item-input"><input type="text" placeholder="Dirección de mail"> </label>
-			  <label class="item item-input"><input type="text" placeholder="ID de aplicación"> </label>
-			  <label class="item item-input"><input type="password" placeholder="Contraseña"> </label>
-        <label class="item item-input"><input type="password" placeholder="Confirmar contraseña"> </label>
-			</div>
-
-			<div class="loginButton"><button class="button ion-person button-block button-balanced"> Registrarse </button>  </div>
+          <form name="elektraRegister" novalidate>
+            <div class="list list-inset removePM">
+      			  <label class="item item-input"><input required ng-minlength="5" type="text" ng-model="user.username" placeholder="Nombre completo"> </label>
+      			  <label class="item item-input"><input required type="text" ng-model="user.mail" placeholder="Dirección de mail"> </label>
+              <label class="item item-input"><input required type="text" ng-model="user.appid" placeholder="ID de aplicación"> </label>
+              <label class="item item-input"><input required type="password" ng-model="user.password" placeholder="Contraseña"> </label>
+              <label class="item item-input"><input required type="password" ng-model="user.password2" placeholder="Confirmar contraseña"> </label>
+      			</div>
+            <div class="loginButton">
+              <button type="button" class="button ion-person button-block button-balanced" ng-disabled="elektraRegister.$invalid" ng-click="register(user);"> Registrarse </button>
+            </div>
+          </form>
 	  </div>
   </div>
   <!-- Social network login

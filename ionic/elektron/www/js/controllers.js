@@ -44,8 +44,20 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     setTimeout(function(){ $location.path('/app/login'); }, 1500);
 })
 
-.controller('RegisterCtrl', function($scope, $location) {
-      // hacer la funcion que valida el registro de usuarios
+.controller('RegisterCtrl', function($scope) {
+  $scope.register = function(user) {
+    if(typeof(user)=='undefined'){
+      $scope.showAlert('Completá los campos, por favor.');
+      return false;
+    }else {
+      if (user.password != user.password2) {
+        $scope.showAlert('Las contraseñas no coinciden.');
+      }
+      else {
+        console.log(user);
+      }
+    }
+  };
 })
 
 .controller('DashCtrl', function($scope, $websocket, ionicToast) {
@@ -70,7 +82,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.aire = 146;
 
       dataStream.onError(function functionName() {
-        ionicToast.show('Error de conexión con el servidor.', 'bottom', true, 5000);
+        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
       });
 
       dataStream.onMessage(function(message) {
