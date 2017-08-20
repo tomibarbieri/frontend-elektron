@@ -1,0 +1,28 @@
+<ion-view view-title="Tareas">
+  <ion-content>
+    <div class="item">
+      <div class="button-bar">
+        <a ui-sref="app.task" class="button button-stable ion-plus-circled">
+          Agregar nueva tarea
+        </a>
+      </div>
+    </div>
+    <div class="card" ng-repeat="task in tasks">
+      <div class="item item-divider">
+          <b>Tarea:</b> {{task.label}}
+      </div>
+      <div class="list">
+          <div class="item">
+            <span>Componente: {{task.component}}</span>
+          </div>
+          <div class="item item-button-right">
+            <span><b>Dia:</b> {{task.date| date: "shortDate"}}</span>
+            <span><b>Hora:</b> {{task.date| date: "shortTime"}}</span>
+            <a class="button button-assertive">
+              <i class="icon ion-trash-b"></i>
+            </a>
+          </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

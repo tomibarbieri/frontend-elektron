@@ -37,7 +37,6 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
     $rootScope.authStatus = toState.authStatus;
     if($rootScope.authStatus){}
-
   });
 
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
@@ -168,12 +167,22 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   })
 
+  .state('app.task', {
+    url: '/task',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/task.html',
+        controller: 'TaskCtrl'
+      }
+    }
+  })
+
   .state('app.tasks', {
     url: '/tasks',
     views: {
       'menuContent': {
-        templateUrl: 'templates/tareas.html',
-        controller: 'ComponentsCtrl'
+        templateUrl: 'templates/tasks.html',
+        controller: 'TasksCtrl'
       }
     }
   })

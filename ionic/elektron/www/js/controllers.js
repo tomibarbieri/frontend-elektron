@@ -12,14 +12,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   // Form data for the login modal
   $scope.loginData = {};
 
-  $scope.wait = function(ms){
-     var start = new Date().getTime();
-     var end = start;
-     while(end < start + ms) {
-       end = new Date().getTime();
-    }
-  };
-
   $scope.logout = function() {   $location.path('/app/login');   };
 
    // An alert dialog
@@ -29,20 +21,14 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 		 template: msg
 	   });
 	 };
-
-  //--------------------------------------------
 })
 
 .controller('LoginCtrl', function($scope, $location, $http, $websocket, LoginService) {
-
     $scope.login = function(user) {
-
       if(typeof(user)=='undefined'){
-        $scope.showAlert('ComsetTimeout(function () {pletá el usuario y contraseña, por favor.');
+        $scope.showAlert('Completá el usuario y contraseña, por favor.');
         return false;
       };
-
-      console.log(user.username);
       if(LoginService.login(user.username, user.password)){
         $location.path('/app/dashboard');
       } else {
@@ -52,24 +38,54 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     };
 })
 
-.controller('LogoutCtrl', function($scope, $state, LoginService) {
-
+.controller('LogoutCtrl', function($scope, LoginService, $location) {
     LoginService.logout();
     console.log("entro");
-    $scope.wait(2000);
-    $state.transitionTo('app.login');
-
+    setTimeout(function(){ $location.path('/app/login'); }, 1500);
 })
 
-//
 .controller('RegisterCtrl', function($scope, $location) {
       // hacer la funcion que valida el registro de usuarios
 })
 
-.controller('ComponentsCtrl', function($scope) {
+.controller('TaskCtrl', function($scope, $location) {
 
+})
+
+.controller('TasksCtrl', function($scope, $location) {
+  $scope.tasks = [
+    {
+      id: 1,
+      label: "Apagar heladera",
+      component: "Heladera",
+      date: new Date(),
+      data: 34
+    },
+    {
+      id: 1,
+      label: "Endender Microondas",
+      component: "Microondas",
+      date: new Date(),
+      data: 35
+    }
+  ];
+})
+
+.controller('ComponentsCtrl', function($scope, $websocket) {
     // aca va la consulta ajax al servidor para traer los datos de los componentes
+    var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+    console.log(dataStream);
+    var collection = [];
+    $scope.data = 0;
 
+    dataStream.onMessage(function(message) {
+      //console.log(message.data)
+      json = JSON.parse(message.data);
+      console.log(json.data);
+      $scope.data = json.data;
+    });
+
+    // Pedir con ajax la lista de componentes
     $scope.components = [{
       id: 1,
       label: "Heladera",
@@ -104,26 +120,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('ComponentCtrl', function($scope, $stateParams, $websocket) {
+.controller('ComponentCtrl', function($scope, $stateParams) {
 
-    var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
-    console.log(dataStream);
-    var collection = [];
-    $scope.data = 0;
-
-    dataStream.onMessage(function(message) {
-      //console.log("puto")
-      //console.log(message.data)
-      json = JSON.parse(message.data);
-
-      console.log(json.data);
-
-      $scope.line.data[0].shift();
-      $scope.line.data[0].push(json.data);
-      $scope.data = json.data;
-
-
-    });
     var components = [{
       id: 1,
       label: "Heladera",
@@ -169,15 +167,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('ProfilesCtrl', function($scope) {
-
-})
-
 .controller('ConfigurationCtrl', function($scope) {
-
-})
-
-.controller('ProfileCtrl', function($scope, $stateParams) {
 
 })
 
@@ -194,7 +184,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         //console.log("puto")
         //console.log(message.data)
         json = JSON.parse(message.data);
-
         console.log(json.data);
 
         $scope.line.data[0].shift();
@@ -266,15 +255,4 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
       //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
     ];
-})
-
-.controller("ExampleController", function($scope) {
-
-/*    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-    $scope.series = ['Series A', 'Series B'];
-    $scope.data = [
-        [65, 59, 80, 81, 56, 55, 40],
-        [28, 48, 40, 19, 86, 27, 90]
-    ];
-*/
 });

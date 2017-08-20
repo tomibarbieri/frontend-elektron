@@ -4,6 +4,7 @@ angular.module('starter.services', ["ngResource"])
     var admin = 'admin';
     var pass = 'pass';
     var isAuthenticated = false;
+    // Guardar en la base de datos
 
     return {
       login : function(username, password) {
