@@ -1,2 +1,0 @@
-# elektra-unlp
-Proyecto Elektra

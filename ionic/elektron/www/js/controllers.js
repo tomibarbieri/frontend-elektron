@@ -55,7 +55,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       }
       else {
         console.log(user);
-      }
+      };
     }
   };
 })
