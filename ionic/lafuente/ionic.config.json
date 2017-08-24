@@ -1,8 +1,0 @@
-{
-  "name": "La Fuente UNLP",
-  "app_id": "eee686c2",
-  "type": "ionic1",
-  "watchPatterns": [
-    "scss/**/*"
-  ]
-}

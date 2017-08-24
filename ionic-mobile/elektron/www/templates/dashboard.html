@@ -1,0 +1,88 @@
+<ion-view view-title="Elektron" hide-back-button="true">
+
+    <ion-content>
+      <div class="card">
+          <div class="item item-toggle">
+              <span>Consumo en tiempo real</span>
+              <label class="toggle toggle-small label-elektron">
+                <input type="checkbox">
+                <div class="track">
+                  <div class="handle"></div>
+                </div>
+              </label>
+          </div>
+          <div class="item item-text-wrap">
+            <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+              <!--<canvas id="line" class="chart chart-line" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>-->
+          </div>
+      </div>
+      <div class="card">
+
+        <div class="list">
+              <div class="row item item-divider">
+                <div class="col col-50 title-components"><b>Componentes</b></div>
+                <div class="col"></div>
+                <div class="col"><a ui-sref="app.components" class="button button-small button-positive">Ver todos</a>
+                </div>
+              </div>
+              <div class="item">
+                Heladera
+                <span class="badge badge-calm">{{heladera}}</span>
+              </div>
+              <div class="item">
+                Lavarropas
+                <span class="badge badge-energized">{{lavarropas}}</span>
+              </div>
+              <div class="item">
+                Aire accondicionado
+                <span class="badge badge-assertive">{{aire}}</span>
+              </div>
+        </div>
+        <div class="row item item-divider">
+          <div class="col col-50 title-components"><b>Estadisticas</b></div>
+          <div class="col"></div>
+          <div class="col"><a ui-sref="app.statistics" class="button button-small button-positive">Ver estadisticas</a>
+          </div>
+        </div>
+      </div>
+      <!-- Toogle button
+      <label class="toggle toggle-small">
+        <input type="checkbox">
+        <div class="track">
+          <div class="handle"></div>
+        </div>
+      </label>
+      -->
+      <!--
+      <div class="card">
+          <div class="item item-divider">
+              A bar chart
+          </div>
+          <div class="item item-text-wrap">
+              <canvas id="bar" class="chart chart-bar" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>
+          </div>
+      </div>
+      -->
+    </ion-content><!--
+    <ion-list>
+      <div class="card">
+        <div class="item item-divider">Consumo actual</div>
+  		  <div class="item item-text-wrap">
+          <div class="x_title">
+            <h2>Potencia medida en el día</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+
+          </div>
+        </div>
+      </div>
+	  </ion-list>
+    <ion-list>
+      <div class="card" ng-repeat="profilelist in profiles" >
+        <div class="item item-divider">{{profilelist.name}}</div>
+        <div class="item item-text-wrap">{{profilelist.deseg}}</div>
+      </div>
+    </ion-list>
+  </ion-content>-->
+</ion-view>

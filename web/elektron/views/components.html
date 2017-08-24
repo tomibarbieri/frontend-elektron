@@ -1,0 +1,69 @@
+<div id="page-heading">
+	<ol class="breadcrumb">
+		<li><a href="#/">Dashboard</a></li>
+		<li class="active">Components</li>
+	</ol>
+
+	<h1>Componentes del sistema</h1>
+</div>
+
+<div class="container-fluid" ng-controller="ComponentsController">
+
+	<div class="row">
+		<div class="col-md-12">
+
+			<panel panel-class="panel-primary" data-heading="Componentes conectados">
+				  <panel-controls>
+					<panel-control-collapse></panel-control-collapse>
+					<button class="button-icon"><i class="glyphicon glyphicon-cog"></i></button>
+					<button class="button-icon"><i class="glyphicon glyphicon-wrench"></i></button>
+				  </panel-controls>
+				  <table class="table table-bordered table-condensed">
+					<tr style="font-weight: bold">
+						<td style="width:35%">Nombre</td>
+						<td style="width:20%">IP</td>
+						<td style="width:20%">Ultima medición</td>
+						<td style="width:25%">Modificar</td>
+					</tr>
+					<tr ng-repeat="component in components">
+					  <td>
+						<!-- editable username (text with validation) -->
+						<span editable-text="component.name" e-name="name" e-form="rowform" e-required>
+						  {{ component.name }}
+						</span>
+					  </td>
+					  <td>
+						<!-- editable status (select-local) -->
+						<span editable-text="component.ip" e-name="ip" e-form="rowform" e-required>
+						  {{ component.ip }}
+						</span>
+					  </td>
+					  <td>
+						<!-- editable group (select-remote) -->
+						<span editable-text="component.last" e-name="last" e-form="rowform" e-required>
+						  {{ component.last }}
+						</span>
+					  </td>
+					  <td style="white-space: nowrap">
+						<!-- form -->
+						<form editable-form name="rowform" onbeforesave="saveComponent($data, component.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == component">
+						  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
+							Guardar
+						  </button>
+						  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
+							Cancelar
+						  </button>
+						</form>
+						<div class="buttons" ng-show="!rowform.$visible">
+						  <button class="btn btn-sm btn-primary" ng-click="rowform.$show()">Editar</button>
+						  <button class="btn btn-sm btn-danger" ng-click="removeComponent($index)">Borrar</button>
+						</div>
+					  </td>
+					</tr>
+				  </table>
+				  <button class="btn btn-default" ng-click="addComponent()">Agregar componente</button>
+			</panel>
+		</div>
+	</div>
+
+</div>    <!-- container-fluid -->

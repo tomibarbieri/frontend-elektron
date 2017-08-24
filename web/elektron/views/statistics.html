@@ -1,0 +1,79 @@
+<div id="page-heading">
+    <ol class="breadcrumb">
+        <li><a href="#/">Inicio</a></li>
+        <li class="active">Estadisticas</li>
+    </ol>
+
+    <h1>Estadísticas</h1>
+</div>
+
+
+<div class="container-fluid" ng-controller="StatisticsController">
+
+    <div class="row">
+        <div class="col-md-8 animated-content">
+            <panel panel-class="panel-default no-padding" heading="Elegir componente">
+                <panel-controls>
+                    <panel-control-collapse></panel-control-collapse>
+                    <panel-control-title></panel-control-title>
+                    <panel-control-colors></panel-control-colors>
+                    <panel-control-refresh type="circular" is-loading="loadingChartData" ng-click="refreshAction()"></panel-control-refresh>
+                    <div class="pull-right mr10 hidden-xs">
+                        <button class="btn btn-sm btn-default" style="text-transform: uppercase;" daterangepicker="drp_options" date-begin="drp_start" date-end="drp_end">
+                            <i class="glyphicon glyphicon-calendar"></i> <span style="margin-left: 5px">{{drp_start}} - {{drp_end}}</span> <b class="caret"></b>
+                        </button>
+                    </div>
+                </panel-controls>
+
+                <div class="p20">
+                    <div class="row">
+                        <div class="col-md-12">
+                           <div class="" flot-chart style="width: 100%; height:319px"
+                                data-flot-data="plotStatsData"
+                                data-flot-options="plotStatsOptions"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+            </panel>
+        </div>
+        <div class="col-md-4 animated-content">
+            <div class="row">
+                <div class="col-xs-6">
+                    <tile-simple data="{ title: 'Componentes activos', href: '#/ui-tiles',text: '8', color: 'danger'}"></tile-simple>
+                </div>
+                <div class="col-xs-6">
+                    <tile-simple data="{ title: 'Consumo total', href: '#/ui-tiles',text: '441', color: 'indigo'}"></tile-simple>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <tile-simple data="{ title: 'Costo aproximado', href: '#/ui-tiles',text: '$1,138', color: 'success'}"></tile-simple>
+                </div>
+                <div class="col-xs-6">
+                    <tile-simple data="{ title: 'Componentes totales', href: '#/ui-tiles',text: '27', color: 'midnightblue'}"></tile-simple>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <tile type="default" heading="Limite gasto">
+                        <div easypiechart class="easypiechart"
+                            data-percent="55"
+                            data-options="epDiskSpace"><span class="percent">55</span>
+                        </div>
+                    </tile>
+                </div>
+                <div class="col-md-6" ng-drop="true">
+                    <tile type="default" heading="Parcial consumo" ng-drag="true">
+                        <div easypiechart class="easypiechart"
+                            data-percent="23"
+                            data-options="epBandwidth"><span class="percent">23</span>
+                        </div>
+                    </tile>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div> <!-- container-fluid -->
