@@ -51,23 +51,6 @@ angular
       iconClasses: '',
       separator: true
     }, {
-      label: 'Email',
-      iconClasses: 'glyphicon glyphicon-inbox',
-      html: '<span class="badge badge-indigo">3</span>',
-      children: [{
-        label: 'Inbox',
-        url: '#/inbox'
-      }, {
-        label: 'Compose',
-        url: '#/compose-mail'
-      }, {
-        label: 'Read',
-        url: '#/read-mail'
-      }, {
-        label: 'Email Templates',
-        url: '#/extras-email-templates'
-      }]
-    }, {
       label: 'Tasks',
       iconClasses: 'glyphicon glyphicon-ok',
       html: '<span class="badge badge-info">7</span>',
@@ -195,17 +178,6 @@ angular
       }, {
         label: 'Sparklines',
         url: '#/charts-sparklines'
-      }]
-    }, {
-      label: 'Maps',
-      iconClasses: 'glyphicon glyphicon-map-marker',
-      hideOnHorizontal: true,
-      children: [{
-        label: 'Google Maps',
-        url: '#/maps-google'
-      }, {
-        label: 'Vector Maps',
-        url: '#/maps-vector'
       }]
     }, {
       label: 'Pages',

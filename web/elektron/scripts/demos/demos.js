@@ -16,8 +16,6 @@ angular
     'theme.demos.gallery',
     'theme.demos.components',
     'theme.demos.statistics',
-    'theme.demos.google_maps',
-    'theme.demos.vector_maps',
     'theme.demos.ng_grid',
     'theme.demos.panels',
     'theme.demos.registration_page',
