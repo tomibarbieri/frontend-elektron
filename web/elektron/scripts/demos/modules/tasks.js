@@ -7,45 +7,45 @@ angular.module('theme.demos.tasks', [])
     $scope.showCompletedTab = false;
 
     $scope.tasks = [{
-      title: 'Write documentation',
+      title: 'Notificar por heladera',
       label: 'Due tomorrow',
       color: 'success'
     }, {
-      title: 'Compile Code',
+      title: 'Apagar microondas',
       label: 'Today',
       color: 'danger'
     }, {
-      title: 'Upload Files to Server',
+      title: 'Avisar consumo aire acondicionado',
       label: '6 days',
       color: 'primary'
     }, {
-      title: 'Call client',
+      title: 'Activar modo ahorro si se superan los 300w/h',
       label: 'Tomorrow',
       color: 'warning'
     }, {
-      title: 'Buy Milk',
+      title: 'Cerrar porton a las 10hs',
       label: 'Today',
       color: 'danger'
     }, {
-      title: 'Set up meeting with client',
+      title: 'Prender sistema de riego a las 6:00',
       label: 'Any day',
       color: 'inverse'
     }, {
-      title: 'Pay office rent and bills',
+      title: 'Prender sistema de riego a las 18:00',
       label: '5 days from now',
       color: 'success'
     }];
 
     $scope.tasksComplete = [{
-      title: 'Write documentation',
+      title: 'Encender luces patio 19:30hs',
       label: 'Due tomorrow',
       color: 'success'
     }, {
-      title: 'Set up meeting with client',
+      title: 'Activar modo alerta',
       label: 'Any day',
       color: 'inverse'
     }, {
-      title: 'Pay office rent and bills',
+      title: 'Apagar equipo musica',
       label: '5 days from now',
       color: 'success'
     }];

@@ -23,7 +23,6 @@ angular
     'theme.demos.not_found',
     'theme.demos.error_page',
     'theme.demos.tasks',
-    'theme.demos.mail',
   ])
   .directive('img', ['$timeout', function ($t) {
       // NOTE: this affects all <img> tags
