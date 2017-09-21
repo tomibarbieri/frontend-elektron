@@ -9,4 +9,10 @@ angular
     $scope.$on('$destroy', function() {
       $theme.set('fullscreen', false);
     });
+
+    $scope.login = function() {
+      if ($scope.username == "admin" && $scope.password == "pass") {
+        console.log($scope.username + $scope.password);
+      };
+    }
   }]);

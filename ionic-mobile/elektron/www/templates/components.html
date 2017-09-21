@@ -13,7 +13,7 @@
           Componentes
       </div>
       <div class="list">
-          <div class="item item-button-right" ng-repeat="component in components">
+          <div class="item item-button-right" ng-repeat="component in components_server">
             <span>{{component.label}}</span>
             <span class="badge badge-calm">{{data}}</span>
             <a ui-sref="app.component({ componentId: {{component.id}} })" class="button button-positive">

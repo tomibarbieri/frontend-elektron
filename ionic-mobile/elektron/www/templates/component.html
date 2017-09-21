@@ -2,7 +2,7 @@
   <ion-content>
     <div class="card">
       <div class="item item-toggle">
-          <span>Consumo de {{component.label}}</span>
+          <span>Consumo de {{component_server.label}}</span>
           <label class="toggle toggle-small label-elektron">
             <input type="checkbox">
             <div class="track">
@@ -18,14 +18,20 @@
         <span>Detalles:</span>
       </div>
       <div class="item">
-        <span class=""><b>Label</b>: {{component.label}}</span>
+        <span class=""><b>Label</b>: {{component_server.label}}</span>
+      </div>
+      <div class="item">
+        <span class=""><b>Encendido</b>: {{component_server.devicestate.description}}</span>
       </div>
       <div class="item">
         <span class=""><b>Consumo</b>: </span>
         <span class="badge badge-calm">{{data}}</span>
       </div>
       <div class="item">
-        <span class=""><b>IP</b>: {{component.ip}}</span>
+        <span class=""><b>IP</b>: {{component_server.device_ip}}</span>
+      </div>
+      <div class="item">
+        <span class=""><b>MAC</b>: {{component_server.device_mac}}</span>
       </div>
       <div class="item item-divider">
         <span>Configurar componente por</span>

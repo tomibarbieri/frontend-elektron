@@ -154,9 +154,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   ];
 })
 
-.controller('ComponentsCtrl', function($scope, $websocket) {
+.controller('ComponentsCtrl', function($scope, $websocket, $http, ionicToast) {
     // aca va la consulta ajax al servidor para traer los datos de los componentes
-    var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
+    /*var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
     console.log(dataStream);
     var collection = [];
     $scope.data = 0;
@@ -166,6 +166,18 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       json = JSON.parse(message.data);
       console.log(json.data);
       $scope.data = json.data;
+    });*/
+
+    $http({
+        method:'GET',
+        url:'http://158.69.223.78:8000/devices/'
+    }).then(function(response){
+        console.log(response.data);
+        $scope.components_server = response.data.devices;
+        console.log($scope.components_server[0].label);
+    }, function(response){
+        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
+        //show an appropriate message
     });
 
     // Pedir con ajax la lista de componentes
@@ -203,7 +215,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('ComponentCtrl', function($scope, $stateParams) {
+.controller('ComponentCtrl', function($scope, $stateParams, $http, ionicToast) {
 
     // Pedir con ajax el componente que viene por parametro
     var components = [{
@@ -248,6 +260,21 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
     $scope.componentId = $stateParams.componentId;
     $scope.component = components[$scope.componentId-1];
+
+    var url = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/data';
+
+    console.log(url);
+
+    $http({
+        method:'GET',
+        url: url
+    }).then(function(response){
+        console.log(response.data);
+        $scope.component_server = response.data;
+    }, function(response){
+        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
+        //show an appropriate message
+    });
 
 
 })

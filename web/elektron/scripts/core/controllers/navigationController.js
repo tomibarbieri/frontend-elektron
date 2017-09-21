@@ -208,8 +208,8 @@ angular
         label: 'Password Reset',
         url: '#/extras-forgotpassword'
       }, {
-        label: 'Login 1',
-        url: '#/extras-login'
+        label: 'Login',
+        url: '#/login'
       }, {
         label: 'Login 2',
         url: '#/extras-login2'
