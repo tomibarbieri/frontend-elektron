@@ -7,7 +7,7 @@
 
 angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
 
-.run(function($ionicPlatform , $rootScope, $timeout, $location, $state, LoginService) {
+.run(function($ionicPlatform , $http, $rootScope, $timeout, $location, $state, LoginService) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -23,6 +23,9 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
   });
 
   $rootScope.authStatus = LoginService.isAuthenticated() || false;
+
+  // CORS
+  //$http.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
   //console.log("Is Authenticated: "+ LoginService.isAuthenticated());
 
@@ -53,7 +56,10 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
 })
 
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+
+  $httpProvider.defaults.useXDomain = true;
+  delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
   $stateProvider
 

@@ -23,6 +23,7 @@ angular
       })
       .when('#', {
         templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
       })
       .otherwise({
         redirectTo: '/'

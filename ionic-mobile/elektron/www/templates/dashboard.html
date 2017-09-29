@@ -25,17 +25,9 @@
                 <div class="col"><a ui-sref="app.components" class="button button-small button-positive">Ver todos</a>
                 </div>
               </div>
-              <div class="item">
-                Heladera
-                <span class="badge badge-calm">{{heladera}}</span>
-              </div>
-              <div class="item">
-                Lavarropas
-                <span class="badge badge-energized">{{lavarropas}}</span>
-              </div>
-              <div class="item">
-                Aire accondicionado
-                <span class="badge badge-assertive">{{aire}}</span>
+              <div class="item" ng-repeat="component in components_server | limitTo:quantity">
+                <span>{{component.label}}</span>
+                <span class="badge badge-calm">{{component.device_ip}}</span>
               </div>
         </div>
         <div class="row item item-divider">
