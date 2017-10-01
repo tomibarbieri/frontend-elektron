@@ -1,7 +1,7 @@
 angular
   .module('theme.demos.forms', [
     'flow',
-    'angular-meditor', // used in the wysiwyg demo
+    //'angular-meditor', // used in the wysiwyg demo
     'xeditable',
     'theme.core.directives',
     'theme.core.services'

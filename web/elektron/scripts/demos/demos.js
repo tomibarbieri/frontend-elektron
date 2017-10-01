@@ -1,22 +1,16 @@
 angular
   .module('theme.demos', [
     'oc.lazyLoad',
-    'theme.demos.calendar',
-    'theme.demos.canvas_charts',
     'theme.demos.nvd3_charts',
-    'theme.demos.flot_charts',
-    'theme.demos.morris_charts',
-    'theme.demos.sparkline_charts',
-    'theme.demos.ui_components',
-    'theme.demos.basic_tables',
-    'theme.demos.boxed_layout',
-    'theme.demos.horizontal_layout',
+    'theme.demos.canvas_charts', // este sirve para los graficos
+    'theme.demos.flot_charts', // este sirve para los graficos
+    //'theme.demos.morris_charts',
+    //'theme.demos.sparkline_charts',
+    //'theme.demos.boxed_layout',
+    //'theme.demos.horizontal_layout',
     'theme.demos.dashboard',
-    'theme.demos.chatbox',
-    'theme.demos.gallery',
     'theme.demos.components',
     'theme.demos.statistics',
-    'theme.demos.ng_grid',
     'theme.demos.panels',
     'theme.demos.registration_page',
     'theme.demos.signup_page',
