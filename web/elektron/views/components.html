@@ -20,28 +20,35 @@
 				  </panel-controls>
 				  <table class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
-						<td style="width:35%">Nombre</td>
+						<td style="width:20%">Nombre</td>
 						<td style="width:20%">IP</td>
-						<td style="width:20%">Ultima medición</td>
-						<td style="width:25%">Modificar</td>
+            <td style="width:20%">Mac</td>
+						<td style="width:20%">Estado</td>
+						<td style="width:20%">Modificar</td>
 					</tr>
-					<tr ng-repeat="component in components">
+					<tr ng-repeat="component in components_server">
 					  <td>
 						<!-- editable username (text with validation) -->
-						<span editable-text="component.name" e-name="name" e-form="rowform" e-required>
-						  {{ component.name }}
+						<span editable-text="component.label" e-name="name" e-form="rowform" e-required>
+						  {{ component.label }}
 						</span>
 					  </td>
 					  <td>
 						<!-- editable status (select-local) -->
-						<span editable-text="component.ip" e-name="ip" e-form="rowform" e-required>
-						  {{ component.ip }}
+						<span e-name="ip" e-form="rowform" e-required>
+						  {{ component.device_ip }}
+						</span>
+					  </td>
+            <td>
+						<!-- editable status (select-local) -->
+						<span e-form="rowform" e-required>
+						  {{ component.device_mac }}
 						</span>
 					  </td>
 					  <td>
 						<!-- editable group (select-remote) -->
-						<span editable-text="component.last" e-name="last" e-form="rowform" e-required>
-						  {{ component.last }}
+						<span e-name="last" e-form="rowform" e-required>
+						  {{ component.enabled }}
 						</span>
 					  </td>
 					  <td style="white-space: nowrap">
@@ -54,14 +61,17 @@
 							Cancelar
 						  </button>
 						</form>
-						<div class="buttons" ng-show="!rowform.$visible">
+						<div class="buttons" style="display:flex;" ng-show="!rowform.$visible">
 						  <button class="btn btn-sm btn-primary" ng-click="rowform.$show()">Editar</button>
-						  <button class="btn btn-sm btn-danger" ng-click="removeComponent($index)">Borrar</button>
+              <div style="margin-left:3px;" ng-switch on="component.enabled">
+                  <button ng-switch-when="true" class="btn btn-sm btn-danger" ng-click="desactivateComponent($index)">Desactivar</button>
+                  <button ng-switch-when="false" class="btn btn-sm btn-success" ng-click="activateComponent($index)">Activar</button>
+              </div>
 						</div>
 					  </td>
 					</tr>
-				  </table>
-				  <button class="btn btn-default" ng-click="addComponent()">Agregar componente</button>
+        </table><!--
+				  <button class="btn btn-default" ng-click="addComponent()">Agregar componente</button> -->
 			</panel>
 		</div>
 	</div>
