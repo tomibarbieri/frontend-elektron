@@ -29,6 +29,10 @@ angular
           });
         });
 
+        angular.element(element).bind('actualizar', function(event, position, item) {
+          plot.setData(newVal);
+        });
+
         scope.$watch('data', function(newVal) {
           plot.setData(newVal);
           plot.setupGrid();

@@ -25,11 +25,11 @@ angular
     }, {
       label: 'Configuración',
       iconClasses: 'glyphicon glyphicon-cog',
-      url: '#/index'
+      url: ''
     }, {
       label: 'Cerrar sesión',
       iconClasses: 'glyphicon glyphicon-log-out',
-      url: '#/'
+      url: ''
     }];
 
 

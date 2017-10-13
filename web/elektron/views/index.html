@@ -42,10 +42,10 @@
                 <div class="p20">
                     <div class="row">
                         <div class="col-md-12">
-                           <div class="" flot-chart style="width: 100%; height:319px"
+                           <div name="tomson" class="" flot-chart style="width: 100%; height:319px"
                                 data-flot-data="plotStatsData"
-                                data-flot-options="plotStatsOptions"
-                            ></div>
+                                data-flot-options="plotStatsOptions">
+                           </div>
                         </div>
                     </div>
                 </div>
@@ -67,8 +67,8 @@
                                 spotRadius: 3,
                                 maxSpotColor: false}" data-data="[251,933,653,759,1022,1702,565]"></span>
                             </div>
-                            <h3 style="text-align: center; margin: 0;">7,550</h3>
-                            <p style="text-align: center; margin: 0;">Visits</p>
+                            <h3 style="text-align: center; margin: 0;">38 hs</h3>
+                            <p style="text-align: center; margin: 0;">Tiempo estimado</p>
                             <hr class="hidden-md hidden-sm hidden-lg">
                         </div>
                         <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
@@ -88,7 +88,7 @@
                                 maxSpotColor: false}" data-data="[1251,633,1653,1759,1022,1702,2565]"></span>
                             </div>
                             <h3 style="text-align: center; margin: 0;">12,350</h3>
-                            <p style="text-align: center; margin: 0;">Page Views</p>
+                            <p style="text-align: center; margin: 0;">Consumo total</p>
                             <hr class="hidden-md hidden-sm hidden-lg">
                         </div>
                         <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
@@ -109,7 +109,7 @@
                                 maxSpotColor: false}" data-data="[345,563,747,136,356,628,534]"></span>
                             </div>
                             <h3 style="text-align: center; margin: 0;">$6,180</h3>
-                            <p style="text-align: center; margin: 0;">Earnings</p>
+                            <p style="text-align: center; margin: 0;">Costos</p>
                             <hr class="hidden-md hidden-sm hidden-lg">
                         </div>
                         <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
@@ -129,8 +129,8 @@
                                 spotRadius: 3,
                                 maxSpotColor: false}" data-data="[80,143,107,216,246,128,214]"></span>
                             </div>
-                            <h3 style="text-align: center; margin: 0;">940</h3>
-                            <p style="text-align: center; margin: 0;">Items Sold</p>
+                            <h3 style="text-align: center; margin: 0;">17</h3>
+                            <p style="text-align: center; margin: 0;">Componentes</p>
                         </div>
                     </div>
                 </div>
@@ -164,7 +164,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <tile type="default" heading="Disk Space">
+                    <tile type="default" heading="Limite ocupado">
                         <div easypiechart class="easypiechart"
                             data-percent="25"
                             data-options="epDiskSpace"><span class="percent">25</span>
@@ -172,7 +172,7 @@
                     </tile>
                 </div>
                 <div class="col-md-6" ng-drop="true">
-                    <tile type="default" heading="Bandwidth" ng-drag="true">
+                    <tile type="default" heading="Capacidad componentes" ng-drag="true">
                         <div easypiechart class="easypiechart"
                             data-percent="23"
                             data-options="epBandwidth"><span class="percent">23</span>

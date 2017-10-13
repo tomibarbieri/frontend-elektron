@@ -1,114 +1,139 @@
 angular.module('theme.demos.tasks', [])
-  .controller('TasksController', ['$scope', function($scope) {
+  .controller('TasksController', ['$scope', '$http', '$filter', function($scope, $http, $filter) {
     'use strict';
     $scope.newTaskTitle = '';
     $scope.newTaskLabelText = '';
     $scope.showTasksTab = true;
     $scope.showCompletedTab = false;
 
-    $scope.tasks = [{
-      title: 'Notificar por heladera',
-      label: 'Due tomorrow',
-      color: 'success'
-    }, {
-      title: 'Apagar microondas',
-      label: 'Today',
-      color: 'danger'
-    }, {
-      title: 'Avisar consumo aire acondicionado',
-      label: '6 days',
-      color: 'primary'
-    }, {
-      title: 'Activar modo ahorro si se superan los 300w/h',
-      label: 'Tomorrow',
-      color: 'warning'
-    }, {
-      title: 'Cerrar porton a las 10hs',
-      label: 'Today',
-      color: 'danger'
-    }, {
-      title: 'Prender sistema de riego a las 6:00',
-      label: 'Any day',
-      color: 'inverse'
-    }, {
-      title: 'Prender sistema de riego a las 18:00',
-      label: '5 days from now',
-      color: 'success'
-    }];
+    $scope.datatasks_server = [];
+    $scope.datetimetasks_server = [];
 
-    $scope.tasksComplete = [{
-      title: 'Encender luces patio 19:30hs',
-      label: 'Due tomorrow',
-      color: 'success'
-    }, {
-      title: 'Activar modo alerta',
-      label: 'Any day',
-      color: 'inverse'
-    }, {
-      title: 'Apagar equipo musica',
-      label: '5 days from now',
-      color: 'success'
-    }];
+    $http({
+        method:'GET',
+        url:'http://158.69.223.78:8000/tasks/datatasks'
+    }).then(function(response){
+        console.log(response.data);
+        $scope.datatasks_server = response.data.datatasks;
+        console.log($scope.datatasks_server);
+    }, function(response){
+        console.log("problemas de conexion");
+    });
 
-    $scope.selectedItem = {};
+    $http({
+        method:'GET',
+        url:'http://158.69.223.78:8000/tasks/datetimetasks'
+    }).then(function(response){
+        console.log(response.data);
+        $scope.datetimetasks_server = response.data.datetimetasks;
+        console.log($scope.datetimetasks_server);
+    }, function(response){
+        console.log("problemas de conexion");
+    });
 
-    $scope.options = {};
 
-    $scope.remove = function(scope) {
-      $scope.tasks.splice(scope.index(), 1);
+    $scope.taskfunction = [
+      {value: 'shutdown', text: 'Apagar'},
+      {value: 'turnon', text: 'Encender'}
+    ];
+
+    $scope.taskstate = [
+      {value: 'done', text: 'Finalizada'},
+      {value: 'ready', text: 'Lista'}
+    ];
+
+    // Data task select
+    $scope.showDataFunction = function($index) {
+      var selected = $filter('filter')($scope.taskfunction, {value: $scope.datatasks_server[$index].taskfunction.name});
+      return ($scope.datatasks_server[$index].taskfunction.name && selected.length) ? selected[0].text : 'Not set';
     };
 
-    $scope.complete = function(scope, item) {
-      $scope.tasksComplete.push(item);
-      $scope.tasks.splice(scope.index(), 1);
+    $scope.showDataState = function($index) {
+      var selected = $filter('filter')($scope.taskstate, {value: $scope.datatasks_server[$index].taskstate.name});
+      return ($scope.datatasks_server[$index].taskstate.name && selected.length) ? selected[0].text : 'Not set';
     };
 
-    $scope.incomplete = function(item, index) {
-      $scope.tasks.push(item);
-      $scope.tasksComplete.splice(index, 1);
+    // Data time task select
+    $scope.showDateTimeFunction = function($index) {
+      var selected = $filter('filter')($scope.taskfunction, {value: $scope.datetimetasks_server[$index].taskfunction.name});
+      return ($scope.datetimetasks_server[$index].taskfunction.name && selected.length) ? selected[0].text : 'Not set';
     };
 
-    $scope.newItem = function(title, label, color) {
-      if (this.newTaskTitle === '') {
-        return;
-      }
-      $scope.tasks.push({
-        title: title,
-        label: label,
-        color: color
+    $scope.showDateTimeState = function($index) {
+      var selected = $filter('filter')($scope.taskstate, {value: $scope.datetimetasks_server[$index].taskstate.name});
+      return ($scope.datetimetasks_server[$index].taskstate.name && selected.length) ? selected[0].text : 'Not set';
+    };
+
+    $scope.editDataTask = function(index,id) {
+      $scope.datatasks_server.splice(index, 1);
+      console.log(index);
+      console.log(id);
+      var url_task = "http://158.69.223.78:8000/tasks/datatasks/" + id + "/remove";
+      console.log(url_task);
+      $http({
+          method:'GET',
+          url: url_task
+      }).then(function(response){
+          console.log(response.data);
+      }, function(response){
+          console.log("problemas de conexion");
       });
-      this.newTaskTitle = '';
-      this.newTaskLabelText = '';
-      this.showForm = false;
     };
 
-    $scope.edit = function(item) {
-      item.editing = true;
-      item.titlePrev = item.title;
-      item.labelPrev = item.label;
-      item.colorPrev = item.color;
+
+    $scope.removeDataTask = function(index,id) {
+      $scope.datatasks_server.splice(index, 1);
+      console.log(index);
+      console.log(id);
+      var url_task = "http://158.69.223.78:8000/tasks/datatasks/" + id + "/remove";
+      console.log(url_task);
+      $http({
+          method:'GET',
+          url: url_task
+      }).then(function(response){
+          console.log(response.data);
+      }, function(response){
+          console.log("problemas de conexion");
+      });
     };
 
-    $scope.cancelEdit = function($event, item) {
-      if ($event.keyCode !== 27) {
-        return;
-      }
-      item.title = item.titlePrev;
-      item.label = item.labelPrev;
-      item.color = item.colorPrev;
-      item.editing = false;
+    // add user
+    $scope.addDataTask = function() {
+      $scope.inserted = {
+        id: $scope.datatasks_server.length + 1,
+        name: '',
+        ip: '',
+        last: '',
+      };
+      $scope.datatasks_server.push($scope.inserted);
     };
 
-    $scope.cancelAdd = function($event) {
-      if ($event.keyCode !== 27) {
-        return;
-      }
-      this.newTaskTitle = '';
-      this.newTaskLabelText = '';
-      this.showForm = false;
+
+    $scope.removeDateTimeTask = function(index,id) {
+      $scope.datatasks_server.splice(index, 1);
+      console.log(index);
+      console.log(id);
+      var url_task = "http://158.69.223.78:8000/tasks/datetimetasks/" + id + "/remove";
+      console.log(url_task);
+      $http({
+          method:'GET',
+          url: url_task
+      }).then(function(response){
+          console.log(response.data);
+      }, function(response){
+          console.log("problemas de conexion");
+      });
     };
 
-    $scope.doneEditing = function(item) {
-      item.editing = false;
+    // add user
+    $scope.addDateTimeTask = function() {
+      $scope.inserted = {
+        id: $scope.datetimetasks_server.length + 1,
+        name: '',
+        ip: '',
+        last: '',
+      };
+      $scope.datetimetasks_server.push($scope.inserted);
     };
+
   }]);

@@ -4,140 +4,154 @@
 		<li class="active">Tareas</li>
 	</ol>
 
-	<h1>Tareas de componentes</h1>
+	<h1>Tareas de unidades elektron</h1>
+
 </div>
-
 <div class="container-fluid" ng-controller="TasksController">
-	<script type="text/ng-template" id="items_renderer.html">
-		<div class="task-container" as-sortable-item-handle>
-		    <!-- <input type="checkbox"> -->
-		    <span class="label label-{{item.color || 'primary'}}" ng-show="!item.editing"></span>
-		    <span class="task-description" ng-show="!item.editing">{{item.title}}</span>
-
-	          	<form class="form-horizontal" ng-submit="doneEditing(item)" ng-show="item.editing" data-nodrag>
-	          		<div class="form-group">
-	          			<div class="col-md-12">
-	          				<div class="input-group">
-							    <div class="input-group-btn">
-							    	<div class="btn-group" dropdown style="">
-							    	  <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
-							    	    <div class="label label-{{item.color||'primary'}} color-block"></div>
-							    	  </button>
-							    	  <ul class="dropdown-menu dropdown-colors" role="menu">
-			                            <li><span class="label label-success" ng-click="item.color='success'"></span></li>
-			                            <li><span class="label label-primary" ng-click="item.color='primary'"></span></li>
-			                            <li><span class="label label-warning" ng-click="item.color='warning'"></span></li>
-			                            <li><span class="label label-danger" ng-click="item.color='danger'"></span></li>
-			                            <li><span class="label label-info" ng-click="item.color='info'"></span></li>
-							    	  </ul>
-							    	</div>
-							    </div>
-							    <input type="text" class="form-control no-validate" ng-model="item.title" placeholder="Task title..." ng-keyup="cancelEdit($event, item)">
-							    <div class="input-group-btn">
-							    	<input type="submit" class="btn btn-primary" value="Save" /	>
-							    </div>
-						    </div>
-	          			</div>
-	          		</div>
-	          	</form>
-		</div>
-		<div class="options todooptions">
-		    <div class="btn-group" ng-show="!item.editing">
-		        <button data-nodrag class="btn btn-default btn-xs" ng-click="complete(this, item)"><i class="glyphicon glyphicon-ok"></i></button>
-		        <button data-nodrag class="btn btn-default btn-xs" ng-click="edit(item)"><i class="glyphicon glyphicon-edit"></i></button>
-		        <button data-nodrag class="btn btn-default btn-xs" ng-click="remove(this)"><i class="glyphicon glyphicon-remove"></i></button>
-		    </div>
-		</div>
-	</script>
 
 	<div class="row">
-		<div class="col-xs-12">
-
-			<panel heading="Tareas" panel-class="panel-sky">
-				<panel-controls>
+		<div class="col-md-12">
+			<panel panel-class="panel-primary" data-heading="Tareas por consumo">
+				  <panel-controls>
 					<panel-control-collapse></panel-control-collapse>
-                    <panel-control-title></panel-control-title>
-                    <panel-control-colors></panel-control-colors>
-					<button class="btn btn-primary btn-sm mr10" ng-click="showForm=true;showTasksTab=true;showCompletedTab=false" style="margin-top: -5px;">Agregar tarea</button>
-				</panel-controls>
-
-				<div>
-
-                  	<form class="form-horizontal" name="create_task" ng-submit="newItem(newTaskTitle, newTaskLabelText, newTaskColor)" ng-show="showForm">
-                  		<div class="form-group">
-
-
-                  			<div class="col-xs-12">
-                  				<div class="input-group">
-								    <div class="input-group-btn">
-								    	<div class="btn-group" dropdown style="">
-								    	  <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
-								    	    <div class="label label-{{newTaskColor||'primary'}} color-block"></div>
-								    	  </button>
-								    	  <ul class="dropdown-menu dropdown-colors" role="menu">
-				                            <li><span class="label label-success" ng-click="newTaskColor='success'"></span></li>
-				                            <li><span class="label label-primary" ng-click="newTaskColor='primary'"></span></li>
-				                            <li><span class="label label-warning" ng-click="newTaskColor='warning'"></span></li>
-				                            <li><span class="label label-danger" ng-click="newTaskColor='danger'"></span></li>
-				                            <li><span class="label label-info" ng-click="newTaskColor='info'"></span></li>
-								    	  </ul>
-								    	</div>
-								    </div>
-								    <input type="text" class="form-control no-validate" ng-model="newTaskTitle" placeholder="Task title..." ng-keyup="cancelAdd($event)">
-
-								    <div class="input-group-btn">
-								    	<input
-		                  				class="btn btn-success btn-block"
-		                  				value="Agregar tarea"
-		                  				type="submit"
-		                  				/>
-								    </div>
-							    </div>
-                  			</div>
-
-
-                  			<div class="col-xs-3 col-md-2">
-
-	                  		</div>
-                  		</div>
-
-                  	</form>
-                  </div>
-
- 					<div class="tasklist">
- 						<ul ng-model="tasks" as-sortable="{}" class="panel-tasks">
-							<li
-								as-sortable-item
-								ng-repeat="item in tasks"
-								ng-include="'items_renderer.html'"
-								ng-style="{'border-left': item.color? '2px solid '+item.color:''}"
-							>
-							</li>
-						</ul>
- 					</div>
-					<div class="tasklist">
- 						<ul ng-model="tasksComplete" as-sortable="{}" class="panel-tasks completed">
-							<li
-								as-sortable-item
-								ng-repeat="item in tasksComplete"
-								ng-style="{'border-left': item.color? '2px solid '+item.color:''}"
-							>
-                                <div class="task-container">
-								    <span class="label label-{{item.color || 'primary'}}" ng-show="item.label"></span>
-                                    <span class="task-description">{{item.title}}</span>
-                                </div>
-								<div class="options todooptions">
-								    <div class="btn-group" ng-show="!item.editing">
-								        <button data-nodrag class="btn btn-default btn-xs" ng-click="incomplete(item, $index)"><i class="glyphicon glyphicon-repeat"></i></button>
-								    </div>
-								</div>
-							</li>
-						</ul>
-
- 					</div>
+					<button class="button-icon"><i class="glyphicon glyphicon-cog"></i></button>
+					<button class="button-icon"><i class="glyphicon glyphicon-wrench"></i></button>
+				  </panel-controls>
+				  <table class="table table-bordered table-condensed">
+					<tr style="font-weight: bold">
+						<td style="width:20%">Nombre</td>
+						<td style="width:15%">Dipositivo</td>
+            <td style="width:15%">Valor</td>
+            <td style="width:15%">Estado</td>
+						<td style="width:15%">Función</td>
+						<td style="width:20%">Modificar</td>
+					</tr>
+					<tr ng-repeat="task in datatasks_server">
+					  <td>
+						<!-- editable username (text with validation) -->
+						<span editable-text="task.label" e-name="name" e-form="rowform" e-required>
+						  {{ task.label }}
+						</span>
+					  </td>
+					  <td>
+						<!-- editable status (select-local) -->
+						<span editable-text="task.device.label" e-name="device_label" e-form="rowform" e-required>
+						  {{ task.device.label }}
+						</span>
+					  </td>
+            <td>
+						<!-- editable status (select-local) -->
+						<span editable-text="task.data_value" e-name="data_value" e-form="rowform" e-required>
+						  {{ task.data_value }}
+						</span>
+					  </td>
+            <td>
+						<!-- editable status (select-local) -->
+						<span editable-select="task.taskstate.name" e-ng-options="s.value as s.text for s in taskstate" e-name="taskstate_name" e-form="rowform" e-required>
+						  {{ showDataState($index) }}
+						</span>
+					  </td>
+					  <td>
+						<!-- editable group (select-remote) -->
+						<span editable-select="task.taskfunction.name" e-ng-options="s.value as s.text for s in taskfunction" e-name="taskfunction_name" e-form="rowform" e-required>
+						  {{ showDataFunction($index) }}
+						</span>
+					  </td>
+					  <td style="white-space: nowrap">
+						<!-- form -->
+						<form editable-form name="rowform" onbeforesave="saveComponent($data, task.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == task">
+						  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
+							Guardar
+						  </button>
+						  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
+							Cancelar
+						  </button>
+						</form>
+						<div class="buttons" style="display:flex;" ng-show="!rowform.$visible">
+						  <button class="btn btn-sm btn-primary" ng-click="rowform.$show()">Editar</button>
+              <button style="margin-left:3px;" class="btn btn-sm btn-danger" ng-click="removeDataTask($index, task.id)">Borrar</button>
+						</div>
+					  </td>
+					</tr>
+        </table>
+				  <button class="btn btn-default" ng-click="addDataTask()">Agregar tarea</button>
 			</panel>
+
+      <panel panel-class="panel-primary" data-heading="Tareas por fecha">
+				  <panel-controls>
+					<panel-control-collapse></panel-control-collapse>
+					<button class="button-icon"><i class="glyphicon glyphicon-cog"></i></button>
+					<button class="button-icon"><i class="glyphicon glyphicon-wrench"></i></button>
+				  </panel-controls>
+				  <table class="table table-bordered table-condensed">
+					<tr style="font-weight: bold">
+						<td style="width:14%">Nombre</td>
+						<td style="width:14%">Dipositivo</td>
+            <td style="width:13%">Fecha</td>
+            <td style="width:14%">Hora</td>
+            <td style="width:13%">Estado</td>
+						<td style="width:13%">Función</td>
+						<td style="width:20%">Modificar</td>
+					</tr>
+					<tr ng-repeat="task in datetimetasks_server">
+					  <td>
+						<!-- editable label (text with validation) -->
+						<span editable-text="task.label" e-name="name" e-form="rowform" e-required>
+						  {{ task.label }}
+						</span>
+					  </td>
+					  <td>
+						<!-- editable status (select-local) -->
+						<span editable-text="task.device.label" e-name="device_label" e-form="rowform" e-required>
+						  {{ task.device.label }}
+						</span>
+					  </td>
+            <td>
+						<!-- editable status (select-local) -->
+						<span editable-bsdate="task.datetime" e-datepicker-popup="shortDate" e-name="data_value" e-form="rowform" e-required>
+                {{ (task.datetime | date:"shortDate") || 'empty' }}
+						</span>
+					  </td>
+            <td>
+						<!-- editable status (select-local) -->
+						<span editable-bstime="task.datetime" e-show-meridian="false" e-name="data_value" e-form="rowform" e-required>
+                {{ (task.datetime | date:"HH:mm") || 'empty' }}
+						</span>
+					  </td>
+            <td>
+						<!-- editable status (select-local) -->
+						<span editable-select="task.taskstate.name" e-ng-options="s.value as s.text for s in taskstate" e-name="taskstate_name" e-form="rowform" e-required>
+						  {{ showDateTimeState($index) }}
+						</span>
+					  </td>
+					  <td>
+						<!-- editable group (select-remote) -->
+						<span editable-select="task.taskfunction.name" e-ng-options="s.value as s.text for s in taskfunction" e-name="taskfunction_name" e-form="rowform" e-required>
+						  {{ showDateTimeFunction($index) }}
+						</span>
+					  </td>
+					  <td style="white-space: nowrap">
+						<!-- form -->
+						<form editable-form name="rowform" onbeforesave="saveDateTimeTask($data, task.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == task">
+						  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
+							Guardar
+						  </button>
+						  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
+							Cancelar
+						  </button>
+						</form>
+						<div class="buttons" style="display:flex;" ng-show="!rowform.$visible">
+						  <button class="btn btn-sm btn-primary" ng-click="rowform.$show()">Editar</button>
+              <button style="margin-left:3px;" class="btn btn-sm btn-danger" ng-click="removeDateTimeTask($index,task.id)">Borrar</button>
+						</div>
+					  </td>
+					</tr>
+        </table>
+				  <button class="btn btn-default" ng-click="addDateTimeTask()">Agregar tarea</button>
+			</panel>
+
 
 		</div>
 	</div>
 
-</div> <!-- container-fluid -->
+</div>    <!-- container-fluid -->

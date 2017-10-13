@@ -2,6 +2,8 @@ angular
   .module('themesApp', [
     'theme',
     'theme.demos',
+    'ngWebSocket',
+    'ui.bootstrap'
   ])
   .config(['$provide', '$routeProvider', function($provide, $routeProvider) {
     'use strict';

@@ -3,6 +3,7 @@ angular
     'ngCookies',
     'ngResource',
     'ngSanitize',
+    'ngWebSocket',
     'ngRoute',
     'ngAnimate',
     'ui.sortable',

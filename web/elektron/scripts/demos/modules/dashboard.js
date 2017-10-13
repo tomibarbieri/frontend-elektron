@@ -1,9 +1,10 @@
 angular.module('theme.demos.dashboard', [
     'angular-skycons',
     'theme.demos.forms',
-    'theme.demos.tasks'
+    'theme.demos.tasks',
+    'ngWebSocket'
   ])
-  .controller('DashboardController', ['$scope', '$timeout', '$window', function($scope, $timeout, $window) {
+  .controller('DashboardController', ['$scope', '$timeout', '$window', function($scope, $timeout, $window, $websocket) {
     'use strict';
     var moment = $window.moment;
     var _ = $window._;
@@ -22,7 +23,7 @@ angular.module('theme.demos.dashboard', [
 
     $scope.plotStatsData = [{
       data: [
-        [1, 1500],
+        [1, 2500],
         [2, 2200],
         [3, 1100],
         [4, 1900],
@@ -33,7 +34,7 @@ angular.module('theme.demos.dashboard', [
         [9, 900],
         [10, 1200],
       ],
-      label: 'Page Views'
+      label: 'Costo'
     }, {
       data: [
         [1, 3100],
@@ -47,7 +48,7 @@ angular.module('theme.demos.dashboard', [
         [9, 1900],
         [10, 2200],
       ],
-      label: 'Unique Views'
+      label: 'Consumo total'
     }];
 
     $scope.plotStatsOptions = {
@@ -113,225 +114,85 @@ angular.module('theme.demos.dashboard', [
       }
     };
 
-    $scope.plotRevenueData = [{
-      data: [
-        [1, 1100],
-        [2, 1400],
-        [3, 1200],
-        [4, 800],
-        [5, 600],
-        [6, 800],
-        [7, 700],
-        [8, 900],
-        [9, 700],
-        [10, 300]
-      ],
-      label: 'Revenues'
-    }];
 
-    $scope.plotRevenueOptions = {
-      series: {
 
-        // lines: {
-        //     show: true,
-        //     lineWidth: 1.5,
-        //     fill: 0.1
-        // },
-        bars: {
-          show: true,
-          fill: 1,
-          lineWidth: 0,
-          barWidth: 0.6,
-          align: 'center'
-        },
-        points: {
-          show: false
-        },
-        shadowSize: 0
-      },
-      grid: {
-        labelMargin: 10,
-        hoverable: true,
-        clickable: true,
-        borderWidth: 0
-      },
-      tooltip: true,
-      tooltipOpts: {
-        defaultTheme: false,
-        content: 'Revenue: %y'
-      },
-      colors: ['#b3bcc7'],
-      xaxis: {
-        tickColor: 'transparent',
-        //min: -0.5,
-        //max: 2.7,
-        tickDecimals: 0,
-        autoscaleMargin: 0,
-        font: {
-          color: 'rgba(0,0,0,0.4)',
-          size: 11
-        }
-      },
-      yaxis: {
-        ticks: 4,
-        tickDecimals: 0,
-        tickColor: 'rgba(0,0,0,0.04)',
-        font: {
-          color: 'rgba(0,0,0,0.4)',
-          size: 11
-        },
-        tickFormatter: function(val) {
-          if (val > 999) {
-            return '$' + (val / 1000) + 'K';
-          } else {
-            return '$' + val;
-          }
-        }
-      },
-      legend: {
-        labelBoxBorderColor: 'transparent'
-      }
+    /*const WebSocket = require('ws');
+
+    const ws = new WebSocket('ws://localhost:8888/websocket');
+
+    ws.on('open', function open() {
+      ws.send('something');
+    });
+
+    ws.on('message', function incoming(data) {
+      console.log(data);
+    });*/
+
+    var ws = new WebSocket("ws://localhost:8888/websocket");
+    //console.log(ws);
+
+    //Open the socket and say hi
+    ws.onopen = function() {
+      ws.send("Hello, world");
     };
 
-    $scope.currentPage = 1;
-    $scope.itemsPerPage = 7;
+    //Receive message form server
+    ws.onmessage = function (evt) {
+      console.log("puto")
+      var json = JSON.parse(evt.data);
+      console.log(json);
 
-    $scope.accountsInRange = function() {
-      return this.userAccounts.slice(this.currentPage * 7, this.currentPage * 7 + 7);
+      $scope.plotStatsData[0]['data'].shift();
+      $scope.plotStatsData[0]['data'].push([10,json.data]);
+
+      console.log($scope.plotStatsData[0]['data']);
+
     };
 
-    $scope.uaHandle = function($index) {
-      // console.log(ua);
-      this.userAccounts.splice($index, 1);
-    };
+    //var dataStream = $websocket('ws://localhost:8888/websocket');
 
-    $scope.uaHandleSelected = function() {
-      this.userAccounts = _.filter(this.userAccounts, function(item) {
-        return (item.rem === false || item.rem === undefined);
+    /*
+    var dataStream = $websocket('ws://localhost:8888/websocket');
+
+    // 158.69.223.78
+      // cambiar ip a la del servior por ejemplo 192.168.0.20
+      console.log(dataStream);
+      var collection = [];
+      $scope.heladera = 33;
+      $scope.lavarropas = 0;
+      $scope.aire = 146;
+
+
+
+      dataStream.onError(function functionName() {
+        console.log("fallo el server");
       });
-    };
 
-    var avatars = ['potter.png', 'tennant.png', 'johansson.png', 'jackson.png', 'jobs.png'];
-    $scope.userAccounts = [{
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Foreman Bullock',
-      'email': 'foremanbullock@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Alberta Ochoa',
-      'email': 'albertaochoa@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Terry Hahn',
-      'email': 'terryhahn@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Donovan Doyle',
-      'email': 'donovandoyle@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Stacie Blankenship',
-      'email': 'stacieblankenship@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Julie Nunez',
-      'email': 'julienunez@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Lacey Farrell',
-      'email': 'laceyfarrell@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Stacy Cooke',
-      'email': 'stacycooke@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Teri Frost',
-      'email': 'terifrost@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Dionne Payne',
-      'email': 'dionnepayne@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Kaufman Garrison',
-      'email': 'kaufmangarrison@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Curry Avery',
-      'email': 'curryavery@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Carr Sharp',
-      'email': 'carrsharp@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Cooper Scott',
-      'email': 'cooperscott@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Juana Spencer',
-      'email': 'juanaspencer@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Madelyn Marks',
-      'email': 'madelynmarks@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Bridget Ray',
-      'email': 'bridgetray@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Santos Christensen',
-      'email': 'santoschristensen@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Geneva Rivers',
-      'email': 'genevarivers@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Carmella Bond',
-      'email': 'carmellabond@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Duke Munoz',
-      'email': 'dukemunoz@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Ramos Rasmussen',
-      'email': 'ramosrasmussen@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Maricela Sweeney',
-      'email': 'maricelasweeney@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Carmen Riley',
-      'email': 'carmenriley@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Whitfield Hartman',
-      'email': 'whitfieldhartman@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Jasmine Keith',
-      'email': 'jasminekeith@geemail.com'
-    }, {
-      'picture': _.shuffle(avatars).shift(),
-      'name': 'Baker Juarez',
-      'email': 'bakerjuarez@geemail.com'
-    }];
+      dataStream.onMessage(function(message) {
+
+        json = JSON.parse(message.data);
+        console.log(json.data_value);
+
+        $scope.line.data[0].shift();
+        $scope.line.data[0].push(json.data);
+        $scope.heladera = json.data_value;
+        $scope.lavarropas = json.data_value;
+        $scope.aire = json.data_value;
+
+      });*/
+
+
 
     $scope.drp_start = moment().subtract(1, 'days').format('MMMM D, YYYY');
     $scope.drp_end = moment().add(31, 'days').format('MMMM D, YYYY');
     $scope.drp_options = {
       ranges: {
-        'Today': [moment(), moment()],
-        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        'Hoy': [moment(), moment()],
+        'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
+        'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
+        'Este mes': [moment().startOf('month'), moment().endOf('month')],
+        'El mes anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
       },
       opens: 'left',
       startDate: moment().subtract(29, 'days'),
@@ -364,16 +225,4 @@ angular.module('theme.demos.dashboard', [
       lineCap: 'circle'
     };
 
-    $scope.mapspace = {
-      animate: {
-        duration: 0,
-        enabled: false
-      },
-      barColor: '#ef553a',
-      trackColor: '#ebedf0',
-      scaleColor: false,
-      lineWidth: 3,
-      size: 75,
-      lineCap: 'circle'
-    };
   }]);
