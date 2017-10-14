@@ -31,7 +31,6 @@ angular.module('theme.demos.tasks', [])
         console.log("problemas de conexion");
     });
 
-
     $scope.taskfunction = [
       {value: 'shutdown', text: 'Apagar'},
       {value: 'turnon', text: 'Encender'}
@@ -64,15 +63,20 @@ angular.module('theme.demos.tasks', [])
       return ($scope.datetimetasks_server[$index].taskstate.name && selected.length) ? selected[0].text : 'Not set';
     };
 
-    $scope.editDataTask = function(index,id) {
-      $scope.datatasks_server.splice(index, 1);
-      console.log(index);
-      console.log(id);
-      var url_task = "http://158.69.223.78:8000/tasks/datatasks/" + id + "/remove";
-      console.log(url_task);
+    // Data tasks
+
+    $scope.editDataTask = function(data,id) {
+
+      var data2 = {'taskstate':1, 'taskfunction':1, 'label': data.label, 'description': '', 'owner':'root', 'data_value': data.data_value, 'device_mac': 'fe:12:52:12:92'};
+      var url_task = "http://158.69.223.78:8000/tasks/datatasks/" + id + "/update";
+
       $http({
-          method:'GET',
-          url: url_task
+          method:'POST',
+          url: url_task,
+          data: $.param(data2),
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+          }
       }).then(function(response){
           console.log(response.data);
       }, function(response){
@@ -99,13 +103,64 @@ angular.module('theme.demos.tasks', [])
 
     // add user
     $scope.addDataTask = function() {
-      $scope.inserted = {
+      /*$scope.inserted = {
         id: $scope.datatasks_server.length + 1,
-        name: '',
+        //name: '',
         ip: '',
         last: '',
       };
-      $scope.datatasks_server.push($scope.inserted);
+      $scope.datatasks_server.push($scope.inserted);*/
+    };
+
+    // Data time tasks
+
+    $scope.editDateTimeTask = function(data,id) {
+
+      console.log($scope.datetimetasks_server[$scope.datetimetasks_server.length - 1]);
+      console.log(id);
+      if ($scope.datetimetasks_server[$scope.datetimetasks_server.length - 1].id != id) {
+
+          var data3 = {'taskstate':'1', 'taskfunction':'1', 'label': data.label, 'description':'taks is done', 'owner':'root', 'datetime': data.data_value, 'device_mac':'11:11:11:11'}
+          console.log(data3);
+          //var data2 = {'taskstate':1, 'taskfunction':1, 'label': data.label, 'description': '', 'owner':'root', 'data_value': data.data_value, 'device_mac': 'fe:12:52:12:92'};
+          var url_task = "http://158.69.223.78:8000/tasks/datetimetasks/" + id + "/update";
+
+          $http({
+              method:'POST',
+              url: url_task,
+              data: $.param(data3),
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+              }
+          }).then(function(response){
+              console.log(response.data);
+          }, function(response){
+              console.log("problemas de conexion");
+          });
+
+      } else {
+
+          console.log(data);
+
+          var data3 = {'taskstate':'1', 'taskfunction':'1', 'label': data.label, 'description':'taks is done', 'owner':'root', 'datetime': data.data_value, 'device_mac':'11:11:11:11'}
+          console.log(data3);
+          //var data2 = {'taskstate':1, 'taskfunction':1, 'label': data.label, 'description': '', 'owner':'root', 'data_value': data.data_value, 'device_mac': 'fe:12:52:12:92'};
+          var url_task = "http://158.69.223.78:8000/tasks/datetimetasks/create";
+
+          $http({
+              method:'POST',
+              url: url_task,
+              data: $.param(data3),
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+              }
+          }).then(function(response){
+              console.log(response.data);
+          }, function(response){
+              console.log("problemas de conexion");
+          });
+
+      }
     };
 
 
@@ -125,15 +180,18 @@ angular.module('theme.demos.tasks', [])
       });
     };
 
+
     // add user
     $scope.addDateTimeTask = function() {
+
       $scope.inserted = {
         id: $scope.datetimetasks_server.length + 1,
-        name: '',
-        ip: '',
+        lable: '',
+        device_label: '',
         last: '',
       };
       $scope.datetimetasks_server.push($scope.inserted);
+
     };
 
   }]);

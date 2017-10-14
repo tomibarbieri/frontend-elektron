@@ -21,7 +21,7 @@
 					<tr style="font-weight: bold">
 						<td style="width:20%">Nombre</td>
 						<td style="width:15%">Dipositivo</td>
-            <td style="width:15%">Valor</td>
+            <td style="width:15%">Valor máximo</td>
             <td style="width:15%">Estado</td>
 						<td style="width:15%">Función</td>
 						<td style="width:20%">Modificar</td>
@@ -29,7 +29,7 @@
 					<tr ng-repeat="task in datatasks_server">
 					  <td>
 						<!-- editable username (text with validation) -->
-						<span editable-text="task.label" e-name="name" e-form="rowform" e-required>
+						<span editable-text="task.label" e-name="label" e-form="rowform" e-required>
 						  {{ task.label }}
 						</span>
 					  </td>
@@ -59,7 +59,7 @@
 					  </td>
 					  <td style="white-space: nowrap">
 						<!-- form -->
-						<form editable-form name="rowform" onbeforesave="saveComponent($data, task.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == task">
+						<form editable-form name="rowform" onbeforesave="editDataTask($data, task.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == task">
 						  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
 							Guardar
 						  </button>
@@ -96,7 +96,7 @@
 					<tr ng-repeat="task in datetimetasks_server">
 					  <td>
 						<!-- editable label (text with validation) -->
-						<span editable-text="task.label" e-name="name" e-form="rowform" e-required>
+						<span editable-text="task.label" e-name="label" e-form="rowform" e-required>
 						  {{ task.label }}
 						</span>
 					  </td>
@@ -132,7 +132,7 @@
 					  </td>
 					  <td style="white-space: nowrap">
 						<!-- form -->
-						<form editable-form name="rowform" onbeforesave="saveDateTimeTask($data, task.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == task">
+						<form editable-form name="rowform" onbeforesave="editDateTimeTask($data, task.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == task">
 						  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
 							Guardar
 						  </button>

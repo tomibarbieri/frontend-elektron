@@ -45,7 +45,7 @@ angular
 
       var send = $http({
         method: 'POST',
-        url: 'http://163.10.33.153:8000/devices/update',
+        url: 'http://192.168.0.21:8000/devices/update',
         data: serializedData,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
