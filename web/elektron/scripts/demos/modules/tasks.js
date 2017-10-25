@@ -31,6 +31,8 @@ angular.module('theme.demos.tasks', [])
         console.log("problemas de conexion");
     });
 
+    // Reemplazar por Ajax
+
     $scope.taskfunction = [
       {value: 'shutdown', text: 'Apagar'},
       {value: 'turnon', text: 'Encender'}

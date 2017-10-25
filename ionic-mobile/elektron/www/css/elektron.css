@@ -19,3 +19,19 @@
 .label-elektron {
   margin-top: 3px;
 }
+
+.badge-component {
+  display: inline !important;
+  right: inherit !important;
+  margin-left: 10px;
+}
+
+.costo-input-label {
+  max-width: 25%;
+  margin-left: 15%;
+}
+
+.costo-input {
+  padding-left: 5% !important;
+  padding-right: 5% !important;
+}

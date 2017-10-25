@@ -2,14 +2,8 @@
 
     <ion-content>
       <div class="card">
-          <div class="item item-toggle">
+          <div class="item">
               <span>Consumo en tiempo real</span>
-              <label class="toggle toggle-small label-elektron">
-                <input type="checkbox">
-                <div class="track">
-                  <div class="handle"></div>
-                </div>
-              </label>
           </div>
           <div class="item item-text-wrap">
             <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
@@ -17,7 +11,27 @@
           </div>
       </div>
       <div class="card">
-
+        <div class="list">
+              <div class="row item item-divider">
+                <div class="col col-50 title-components"><b>Resumen de datos</b></div>
+              </div>
+              <div class="item">
+                <span>Componentes: </span>
+                <span class="badge badge-balanced">{{components_server.length}}</span>
+              </div>
+              <div class="item">
+                <span>Tareas programadas: </span>
+                <span class="badge badge-dark">{{components_server.length}}</span>
+              </div>
+              <div class="item">
+                <span>Consumo actual: </span>
+                <span class="badge badge-positive"> 233 </span>
+              </div>
+              <div class="item">
+                <span>Costo aproximado: </span>
+                <span class="badge badge-calm"> $1233 </span>
+              </div>
+        </div>
         <div class="list">
               <div class="row item item-divider">
                 <div class="col col-50 title-components"><b>Componentes</b></div>
@@ -27,7 +41,8 @@
               </div>
               <div class="item" ng-repeat="component in components_server | limitTo:quantity">
                 <span>{{component.label}}</span>
-                <span class="badge badge-calm">{{component.device_ip}}</span>
+                <span ng-if="component.devicestate.name == 'on'" class="badge badge-balanced">encendido</span>
+                <span ng-if="component.devicestate.name == 'off'" class="badge badge-assertive">apagado</span>
               </div>
         </div>
         <div class="row item item-divider">

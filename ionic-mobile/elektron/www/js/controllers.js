@@ -164,18 +164,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 })
 
 .controller('ComponentsCtrl', function($scope, $websocket, $http, ionicToast) {
-    // aca va la consulta ajax al servidor para traer los datos de los componentes
-    /*var dataStream = $websocket('ws://localhost:8888/websocket'); // cambiar ip a la del servior por ejemplo 192.168.0.20
-    console.log(dataStream);
-    var collection = [];
-    $scope.data = 0;
-
-    dataStream.onMessage(function(message) {
-      //console.log(message.data)
-      json = JSON.parse(message.data);
-      console.log(json.data);
-      $scope.data = json.data;
-    });*/
 
     $http({
         method:'GET',
@@ -189,75 +177,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         //show an appropriate message
     });
 
-    // Pedir con ajax la lista de componentes
-    $scope.components = [{
-      id: 1,
-      label: "Heladera",
-      ip: "192.168.0.1",
-      data: 34
-    },{
-      id: 2,
-      label: "Lavarropas",
-      ip: "192.168.0.2",
-      data: 66
-    },{
-      id: 3,
-      label: "Microondas",
-      ip: "192.168.0.3",
-      data: 43
-    },{
-      id: 4,
-      label: "Computadora",
-      ip: "192.168.0.4",
-      data: 56
-    },{
-      id: 5,
-      label: "Termotanque",
-      ip: "192.168.0.5",
-      data: 99
-    },{
-      id: 6,
-      label: "Luces",
-      ip: "192.168.0.6",
-      data: 134
-    }];
 
 })
 
 .controller('ComponentCtrl', function($scope, $stateParams, $http, ionicToast) {
-
-    // Pedir con ajax el componente que viene por parametro
-    var components = [{
-      id: 1,
-      label: "Heladera",
-      ip: "192.168.0.1",
-      data: 34
-    },{
-      id: 2,
-      label: "Lavarropas",
-      ip: "192.168.0.2",
-      data: 66
-    },{
-      id: 3,
-      label: "Microondas",
-      ip: "192.168.0.3",
-      data: 43
-    },{
-      id: 4,
-      label: "Computadora",
-      ip: "192.168.0.4",
-      data: 56
-    },{
-      id: 5,
-      label: "Termotanque",
-      ip: "192.168.0.5",
-      data: 99
-    },{
-      id: 6,
-      label: "Luces",
-      ip: "192.168.0.6",
-      data: 134
-    }];
 
     $scope.line = {};
     $scope.line.labels = ["E", "L", "E", "K", "T", "R", "O", "N", "0", "7"];
@@ -268,22 +191,44 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     ];
 
     $scope.componentId = $stateParams.componentId;
-    $scope.component = components[$scope.componentId-1];
 
-    var url = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/data';
-
-    console.log(url);
+    var url_data = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/data';
 
     $http({
         method:'GET',
-        url: url
+        url: url_data
     }).then(function(response){
         console.log(response.data);
-        $scope.component_server = response.data;
+        $scope.component_data = response.data.data;
+        if ($scope.component_data.length != 0) {
+          $scope.last_data = $scope.component_data[$scope.component_data.length - 1].data_value;
+        } else {
+          $scope.last_data = 0;
+        }
     }, function(response){
         ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
         //show an appropriate message
     });
+
+    var url_device = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/'
+
+    $http({
+        method:'GET',
+        url: url_device
+    }).then(function(response){
+        console.log(response.data);
+        $scope.component_server = response.data.device;
+        if ($scope.component_server.length != 0) {
+          $scope.component_status = ($scope.component_server.devicestate.name == 'on')
+        }
+    }, function(response){
+        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
+        //show an appropriate message
+    });
+
+    $scope.changeStatus = function() {
+      $scope.component_status = !$scope.component_status;
+    }
 
 
 })

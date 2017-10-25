@@ -1,14 +1,21 @@
 <ion-view view-title="{{component.label}}">
   <ion-content>
     <div class="card">
-      <div class="item item-toggle">
-          <span>Consumo de {{component_server.label}}</span>
+      <div class="item">
+
+          <ion-toggle  ng-model="component_status"
+                     ng-checked="component_status">
+                     <span>Consumo de <b>{{component_server.label}}</b></span>
+          </ion-toggle>
+          <!--
           <label class="toggle toggle-small label-elektron">
-            <input type="checkbox">
+            <input ng-checked="component_status" ng-model="component_status" type="checkbox">
             <div class="track">
               <div class="handle"></div>
             </div>
-          </label>
+          </label
+          -->
+
       </div>
       <div class="item item-text-wrap">
         <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
@@ -18,20 +25,29 @@
         <span>Detalles:</span>
       </div>
       <div class="item">
-        <span class=""><b>Label</b>: {{component_server.label}}</span>
+        <span class=""><b>Label: </b>
+          <span class="badge badge-light">{{component_server.label}}</span>
+        </span>
       </div>
       <div class="item">
-        <span class=""><b>Encendido</b>: {{component_server.devicestate.description}}</span>
+        <span class=""><b>Estado: </b>
+          <span ng-if="component_status == true" class="badge badge-balanced">encendido</span>
+          <span ng-if="component_status == false" class="badge badge-assertive">apagado</span>
+        </span>
       </div>
       <div class="item">
-        <span class=""><b>Consumo</b>: </span>
-        <span class="badge badge-calm">{{data}}</span>
+        <span class=""><b>Último consumo</b>: </span>
+        <span class="badge badge-calm">{{last_data}}</span>
       </div>
       <div class="item">
-        <span class=""><b>IP</b>: {{component_server.device_ip}}</span>
+        <span class=""><b>IP</b>:
+          <span class="badge badge-light">{{component_server.device_ip}}</span>
+        </span>
       </div>
       <div class="item">
-        <span class=""><b>MAC</b>: {{component_server.device_mac}}</span>
+        <span class=""><b>MAC</b>:
+          <span class="badge badge-light">{{component_server.device_mac}}</span>
+        <span>
       </div>
       <div class="item item-divider">
         <span>Configurar componente por</span>
