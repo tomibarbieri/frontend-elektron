@@ -5,6 +5,22 @@ angular
     'ngWebSocket',
     'ui.bootstrap'
   ])
+
+  .run(['$rootScope', '$location', 'LoginService', function ($rootScope, $location, LoginService) {
+    $rootScope.$on('$routeChangeStart', function (event, next) {
+        if (!LoginService.isAuthenticated()) {
+            console.log('Acceso no autorizado');
+            $location.path('/login');
+        }
+        else {
+            console.log('Todo ok');
+            if (next.params.templateFile == undefined){
+              $location.path('/index');
+            }
+        }
+    });
+  }])
+
   .config(['$provide', '$routeProvider', function($provide, $routeProvider) {
     'use strict';
     $routeProvider
@@ -21,11 +37,12 @@ angular
       .when('/:templateFile', {
         templateUrl: function(param) {
           return 'views/' + param.templateFile + '.html';
-        }
+        },
+        requireLogin: true
       })
       .when('#', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginCtrl'
+        templateUrl: 'views/index.html',
+        controller: 'DashboardController'
       })
       .otherwise({
         redirectTo: '/'

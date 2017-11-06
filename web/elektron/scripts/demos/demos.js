@@ -15,6 +15,7 @@ angular
     'theme.demos.panels',
     'theme.demos.registration_page',
     'theme.demos.signup_page',
+    'theme.demos.logout',
     'theme.demos.not_found',
     'theme.demos.error_page',
     'theme.demos.tasks',

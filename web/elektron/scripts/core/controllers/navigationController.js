@@ -29,7 +29,7 @@ angular
     }, {
       label: 'Cerrar sesión',
       iconClasses: 'glyphicon glyphicon-log-out',
-      url: ''
+      url: '#/logout'
     }];
 
 

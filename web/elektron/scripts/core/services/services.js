@@ -37,6 +37,50 @@ angular
       },
     };
   }])
+
+
+  .factory('LoginService', function($http) {
+      'use strict';
+      var admin = 'root';
+      var pass = 'q1w2e3r4';
+      var isAuthenticated = false;
+      var token;
+
+      return {
+        login : function(username, password) {
+          var responsestatus = false;
+          var user = {'username':username, 'password':password};
+          $http({
+              method:'POST',
+              url:'http://158.69.223.78:8000/elektronusers/login',
+              data: $.param(user),
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+              }
+          }).then(function(response){
+              console.log("todo piola");
+              console.log(response);
+              isAuthenticated = response.status == 200;
+          }, function(response){
+              console.log(response);
+              console.log("problemas de conexion");
+          });
+          return isAuthenticated;
+        },
+        isAuthenticated : function() {
+          return isAuthenticated;
+        },
+        logout : function() {
+          isAuthenticated = false;
+        }
+      };
+    })
+
+
+
+
+
+
   .factory('$bootbox', ['$modal', '$window', function($modal, $window) {
     'use strict';
     // NOTE: this is a workaround to make BootboxJS somewhat compatible with
