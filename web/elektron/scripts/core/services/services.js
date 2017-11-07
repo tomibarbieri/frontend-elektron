@@ -39,7 +39,7 @@ angular
   }])
 
 
-  .factory('LoginService', function($http) {
+  .factory('LoginService', function($cookies, $http) {
       'use strict';
       var admin = 'root';
       var pass = 'q1w2e3r4';
@@ -53,6 +53,7 @@ angular
           $http({
               method:'POST',
               url:'http://158.69.223.78:8000/elektronusers/login',
+              //url:'http://163.10.33.155:8000/elektronusers/login',
               data: $.param(user),
               headers: {
                   'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
@@ -60,15 +61,19 @@ angular
           }).then(function(response){
               console.log("todo piola");
               console.log(response);
-              isAuthenticated = response.status == 200;
+              console.log($cookies);
+              isAuthenticated = (response.status == 200);
           }, function(response){
               console.log(response);
+              isAuthenticated = (response.status == 200);
               console.log("problemas de conexion");
           });
-          return isAuthenticated;
         },
         isAuthenticated : function() {
           return isAuthenticated;
+        },
+        checkToken : function() {
+          return token;
         },
         logout : function() {
           isAuthenticated = false;

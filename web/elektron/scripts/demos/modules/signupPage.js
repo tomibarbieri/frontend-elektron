@@ -2,26 +2,7 @@ angular
   .module('theme.demos.signup_page', [
     'theme.core.services'
   ])
-/*  .factory('LoginService', function() {
-
-      var admin = 'admin';
-      var pass = 'pass';
-      var isAuthenticated = false;
-
-      return {
-        login : function(username, password) {
-          console.log('re dale guacho');
-          console.log(username, password);
-          //isAuthenticated = username === admin && password === pass;
-          return isAuthenticated;
-        },
-        isAuthenticated : function() {
-          return isAuthenticated;
-        }
-      };
-
-    })*/
-  .controller('SignupPageController', ['$scope', '$theme', 'LoginService', '$location', function($scope, $theme, LoginService, $location) {
+  .controller('SignupPageController', ['$scope', '$theme', 'LoginService', '$route', '$location', '$cookies', function($scope, $theme, LoginService, $route, $location,$cookies) {
     'use strict';
 
     $scope.error = '';
@@ -33,12 +14,18 @@ angular
     });
 
     $scope.formSubmit = function() {
-      if(LoginService.login($scope.username, $scope.password)) {
-        $location.path('/index');
-      } else {
-        $scope.error = 'usuario o contraseña incorrecta';
-        console.log("Incorrect username/password !");
-      }
+      LoginService.login($scope.username, $scope.password);
+      setTimeout(function(){
+        console.log("setTimeout");
+        if(LoginService.isAuthenticated()) {
+          console.log($cookies);
+          $location.path('/index');
+          $route.reload();
+        } else {
+          $scope.error = 'usuario o contraseña incorrecta';
+          console.log("Incorrect username/password !");
+        }
+      },3000);
     };
 
   }]);

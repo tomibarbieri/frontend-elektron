@@ -6,7 +6,7 @@ angular
     'ui.bootstrap'
   ])
 
-  .run(['$rootScope', '$location', 'LoginService', function ($rootScope, $location, LoginService) {
+  /*.run(['$rootScope', '$location', 'LoginService', function ($rootScope, $location, LoginService) {
     $rootScope.$on('$routeChangeStart', function (event, next) {
         if (!LoginService.isAuthenticated()) {
             console.log('Acceso no autorizado');
@@ -19,7 +19,7 @@ angular
             }
         }
     });
-  }])
+  }])*/
 
   .config(['$provide', '$routeProvider', function($provide, $routeProvider) {
     'use strict';
