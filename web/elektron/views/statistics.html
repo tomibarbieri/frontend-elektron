@@ -4,7 +4,6 @@
         <li class="active">Estadisticas</li>
     </ol>
 
-    <h1>Estadísticas</h1>
 </div>
 
 
@@ -12,27 +11,39 @@
 
     <div class="row">
         <div class="col-md-8 animated-content">
-            <panel panel-class="panel-default no-padding" heading="Elegir componente">
+          <panel panel-class="panel-default no-padding" heading="Configurar estadísticas">
+              <panel-controls>
+                  <panel-control-collapse></panel-control-collapse>
+
+              </panel-controls>
+
+              <div class="p20">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <form class="mr10 hidden-xs" name="myForm">
+
+                        <label for="repeatSelect"> Mostrar datos: </label>
+                        <select name="mySelect" id="mySelect"
+                          ng-options="option.name for option in select_data.availableOptions track by option.id"
+                          ng-model="select_data.selectedOption"
+                          ng-change="executeSelect()">
+                        </select>
+                      </form>
+                    </div>
+                  </div>
+              </div>
+          </panel>
+            <panel panel-class="panel-default no-padding" heading="Periodo elegido">
                 <panel-controls>
                     <panel-control-collapse></panel-control-collapse>
-                    <panel-control-title></panel-control-title>
-                    <panel-control-colors></panel-control-colors>
-                    <panel-control-refresh type="circular" is-loading="loadingChartData" ng-click="refreshAction()"></panel-control-refresh>
                     <form class="pull-right mr10 hidden-xs" name="myForm">
-                      <label for="repeatSelect"> Elegir rango: </label>
+                      <label for="repeatSelect"> Mostrar datos: </label>
                       <select name="mySelect" id="mySelect"
                         ng-options="option.name for option in select_data.availableOptions track by option.id"
                         ng-model="select_data.selectedOption"
                         ng-change="executeSelect()">
                       </select>
                     </form>
-                    <!--
-                    <div class="pull-right mr10 hidden-xs">
-                        <button class="btn btn-sm btn-default" style="text-transform: uppercase;" daterangepicker="drp_options" date-begin="drp_start" date-end="drp_end">
-                            <i class="glyphicon glyphicon-calendar"></i> <span style="margin-left: 5px">{{drp_start}} - {{drp_end}}</span> <b class="caret"></b>
-                        </button>
-                    </div>
-                    -->
                 </panel-controls>
 
                 <div class="p20">
@@ -40,14 +51,6 @@
                       <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
                         chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
                       </canvas>
-                        <!--
-                        <div class="col-md-12">
-                           <div class="" flot-chart style="width: 100%; height:319px"
-                                data-flot-data="plotStatsData"
-                                data-flot-options="plotStatsOptions"
-                            ></div>
-                        </div>
-                        -->
                     </div>
                 </div>
             </panel>
@@ -55,7 +58,7 @@
         <div class="col-md-4">
             <div class="row">
                 <div class="col-xs-6">
-                  <a class="boxes-a boxes-indigo" >
+                  <a class="boxes-a boxes-orange" >
                     <div class="boxes-title">
                         <div class="text-center">Cantidad de datos sensados</div>
                     </div>
@@ -65,7 +68,14 @@
                   </a>
                 </div>
                 <div class="col-xs-6">
-                    <tile-simple data="{ title: 'Consumo total', href: '#/ui-tiles',text: '441', color: 'indigo'}"></tile-simple>
+                  <a class="boxes-a boxes-indigo" >
+                    <div class="boxes-title">
+                        <div class="text-center">Total de consumo acumulado</div>
+                    </div>
+                    <div class="boxes-body">
+                        <div class="text-center">{{total_datos}}wts</div>
+                    </div>
+                  </a>
                 </div>
             </div>
             <div class="row">
