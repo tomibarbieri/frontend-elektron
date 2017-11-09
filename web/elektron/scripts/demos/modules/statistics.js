@@ -13,36 +13,43 @@ angular.module('theme.demos.statistics', [
     var url_cape = 'http://163.10.33.173:8000';
 
     $scope.chart;
+    $scope.datos_medidos = 22;
 
     $scope.$on('chart-create', function (evt, chart) {
       console.log(chart);
       $scope.chart = chart;
     });
 
-    $http({
-        method:'GET',
-        url: url_server + '/data/',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    }).then(function(response){
-        console.log(response.data.data);
-        console.log(response.data);
-        $scope.graficate(response.data.data);
+    $scope.loadDay = function(day_p) {
 
-    }, function(response){
-        console.log("problemas de conexion");
-    });
+      var day = $filter('date')(day_p._d, "dd/MM/yyyy")
+      console.log(day);
 
-
-    $scope.loadToday = function() {
-
-      console.log("load today");
-
-      var day = '05/11/2017/';
       $http({
           method:'GET',
-          url: url_server + '/data/' + day,
+          url: url_server + '/data/' + day + '/',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+      }).then(function(response){
+
+          console.log(response.data.data);
+          console.log(response.data);
+          $scope.graficate(response.data.data);
+
+      }, function(response){
+          console.log("problemas de conexion");
+      });
+    }
+
+    $scope.loadDayToDay = function(day_from, day_to) {
+
+      var dayf = $filter('date')(day_from._d, "dd/MM/yyyy")
+      var dayt = $filter('date')(day_to._d, "dd/MM/yyyy")
+
+      $http({
+          method:'GET',
+          url: url_server + '/data/' + dayt + '/' + dayf + '/',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
@@ -101,6 +108,7 @@ angular.module('theme.demos.statistics', [
     }
 
     $scope.graficate = function(data) {
+
       console.log(data);
       $scope.line = {};
 
@@ -119,28 +127,43 @@ angular.module('theme.demos.statistics', [
       if ($scope.chart) {
           $scope.chart.update();
       }
+
+      $scope.updateBoxes(data);
+
+    }
+
+    $scope.updateBoxes = function(data) {
+      $scope.datos_medidos = data.length;
+      
     }
 
 
-    $scope.data = {
+    $scope.select_data = {
     model: null,
     availableOptions: [
-      {id: '1', name: 'Hoy', function: $scope.loadToday },
-      {id: '2', name: 'Ayer', function: ''},
-      {id: '3', name: 'Últimos 7 días', function: ''},
-      {id: '4', name: 'Últimos 14 días', function: ''},
-      {id: '5', name: 'Último mes', function: ''},
-      {id: '6', name: 'Este mes', function: ''},
+      {id: '1', name: 'Hoy', function: $scope.loadDay, date: moment() },
+      {id: '2', name: 'Ayer', function: $scope.loadDay, date: moment().subtract(1, 'days') },
+      {id: '3', name: 'Últimos 7 días', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(7, 'days') },
+      {id: '4', name: 'Últimos 14 días', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(14, 'days')},
+      {id: '5', name: 'Último mes', function: $scope.loadDayToDay, date: moment().subtract(1, 'month'), dateTo: moment().subtract(2, 'month')},
+      {id: '6', name: 'Este mes', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(1, 'month')},
     ],
-    selectedOption: {id: '3', name: 'Últimos 14 días', function: ''}
+    selectedOption: {id: '1', name: 'Hoy', function: $scope.loadDay, date: moment()}
    };
 
 
 
    $scope.executeSelect = function() {
      console.log("daleguachoooo");
-     $scope.data.selectedOption.function();
+     if (!$scope.select_data.selectedOption.dateTo) {
+       $scope.select_data.selectedOption.function($scope.select_data.selectedOption.date);
+     } else {
+       $scope.select_data.selectedOption.function($scope.select_data.selectedOption.date, $scope.select_data.selectedOption.dateTo);
+     }
+
    }
+
+   $scope.loadDay(moment());
 
 
 

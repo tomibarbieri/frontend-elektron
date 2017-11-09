@@ -21,8 +21,8 @@
                     <form class="pull-right mr10 hidden-xs" name="myForm">
                       <label for="repeatSelect"> Elegir rango: </label>
                       <select name="mySelect" id="mySelect"
-                        ng-options="option.name for option in data.availableOptions track by option.id"
-                        ng-model="data.selectedOption"
+                        ng-options="option.name for option in select_data.availableOptions track by option.id"
+                        ng-model="select_data.selectedOption"
                         ng-change="executeSelect()">
                       </select>
                     </form>
@@ -52,10 +52,17 @@
                 </div>
             </panel>
         </div>
-        <div class="col-md-4 animated-content">
+        <div class="col-md-4">
             <div class="row">
                 <div class="col-xs-6">
-                    <tile-simple data="{ title: 'Componentes activos', href: '#/ui-tiles',text: '8', color: 'danger'}"></tile-simple>
+                  <a class="boxes-a boxes-indigo" >
+                    <div class="boxes-title">
+                        <div class="text-center">Cantidad de datos sensados</div>
+                    </div>
+                    <div class="boxes-body">
+                        <div class="text-center">{{datos_medidos}}</div>
+                    </div>
+                  </a>
                 </div>
                 <div class="col-xs-6">
                     <tile-simple data="{ title: 'Consumo total', href: '#/ui-tiles',text: '441', color: 'indigo'}"></tile-simple>
