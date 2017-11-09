@@ -2,9 +2,9 @@ angular
   .module('theme.demos', [
     'oc.lazyLoad',
     'ngWebSocket',
-    'theme.demos.nvd3_charts',
-    'theme.demos.canvas_charts', // este sirve para los graficos
-    'theme.demos.flot_charts', // este sirve para los graficos
+    //'theme.demos.nvd3_charts',
+    //'theme.demos.canvas_charts', // este sirve para los graficos
+    //'theme.demos.flot_charts', // este sirve para los graficos
     //'theme.demos.morris_charts',
     //'theme.demos.sparkline_charts',
     //'theme.demos.boxed_layout',

@@ -3,7 +3,7 @@ angular
     'theme',
     'theme.demos',
     'ngWebSocket',
-    'ui.bootstrap'
+    'ui.bootstrap',
   ])
 
   /*.run(['$rootScope', '$location', 'LoginService', function ($rootScope, $location, LoginService) {

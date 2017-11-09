@@ -2,12 +2,15 @@ angular.module('theme.demos.dashboard', [
     'angular-skycons',
     'theme.demos.forms',
     'theme.demos.tasks',
-    'ngWebSocket'
-  ])
-  .controller('DashboardController', ['$scope', '$timeout', '$window', function($scope, $timeout, $window, $websocket) {
+    'ngWebSocket',
+    'chart.js'
+    ])
+
+  .controller('DashboardController', ['$scope', '$timeout', '$window', '$http', '$filter', function($scope, $timeout, $window, $http, $filter, $websocket) {
     'use strict';
     var moment = $window.moment;
     var _ = $window._;
+
     $scope.loadingChartData = false;
     $scope.refreshAction = function() {
       $scope.loadingChartData = true;
@@ -96,7 +99,6 @@ angular.module('theme.demos.dashboard', [
         tickColor: 'transparent',
         ticks: 4,
         tickDecimals: 0,
-        //tickColor: 'rgba(0,0,0,0.04)',
         font: {
           color: 'rgba(0,0,0,0.4)',
           size: 11
@@ -114,72 +116,75 @@ angular.module('theme.demos.dashboard', [
       }
     };
 
+    $scope.chart;
 
-
-    /*const WebSocket = require('ws');
-
-    const ws = new WebSocket('ws://localhost:8888/websocket');
-
-    ws.on('open', function open() {
-      ws.send('something');
+    $scope.$on('chart-create', function (evt, chart) {
+      console.log(chart);
+      $scope.chart = chart;
     });
 
-    ws.on('message', function incoming(data) {
-      console.log(data);
-    });*/
+    var ip_server = '158.69.223.78';
+    var url_server = 'http://158.69.223.78:8000';
+    var url_cape = 'http://163.10.33.173:8000';
 
-    var ws = new WebSocket("ws://localhost:8888/websocket");
-    //console.log(ws);
+    $http({
+        method:'GET',
+        url: url_server + '/data/'
+    }).then(function(response){
+        console.log(response.data.data);
+        console.log(response.data);
+        $scope.line = {};
 
-    //Open the socket and say hi
+        $scope.line.series = ['Potencia'];
+
+        $scope.line.labels = [];
+        $scope.line.data = [[]];
+
+        for (var i = 0; i < 20; i++) {
+          var date = $filter('date')(response.data.data[i].date, "dd/MM/yyyy");
+          var data = response.data.data[i].data_value;
+          console.log(data);
+          $scope.line.labels.push(date);
+          $scope.line.data[0].push(data);
+        }
+
+    }, function(response){
+        console.log("problemas de conexion");
+    });
+
+
+    var url_websocket = "ws://" + ip_server + ":8888/websocket";
+    console.log(url_websocket);
+    var ws = new WebSocket(url_websocket,'ws');
+
     ws.onopen = function() {
       ws.send("Hello, world");
     };
 
-    //Receive message form server
-    ws.onmessage = function (evt) {
-      console.log("puto")
-      var json = JSON.parse(evt.data);
-      console.log(json);
 
-      $scope.plotStatsData[0]['data'].shift();
-      $scope.plotStatsData[0]['data'].push([10,json.data]);
+    ws.onmessage = function(message) {
+        console.log(message.data);
 
-      console.log($scope.plotStatsData[0]['data']);
-
-    };
-
-    //var dataStream = $websocket('ws://localhost:8888/websocket');
-
-    /*
-    var dataStream = $websocket('ws://localhost:8888/websocket');
-
-    // 158.69.223.78
-      // cambiar ip a la del servior por ejemplo 192.168.0.20
-      console.log(dataStream);
-      var collection = [];
-      $scope.heladera = 33;
-      $scope.lavarropas = 0;
-      $scope.aire = 146;
-
-
-
-      dataStream.onError(function functionName() {
-        console.log("fallo el server");
-      });
-
-      dataStream.onMessage(function(message) {
-
-        json = JSON.parse(message.data);
+        var json = JSON.parse(message.data);
         console.log(json.data_value);
 
-        $scope.line.data[0].shift();
-        $scope.line.data[0].push(json.data);
-        $scope.heladera = json.data_value;
-        $scope.lavarropas = json.data_value;
-        $scope.aire = json.data_value;
+        $scope.last_value = json.data_value;
 
-      });*/
+        console.log($scope.line.data[0]);
+
+        $scope.line.data[0].splice(0,1);
+
+
+        console.log($scope.line.data[0].push(json.data_value));
+
+        console.log($scope.line.data[0][9]);
+
+        if ($scope.chart) {
+            $scope.chart.update();
+        }
+
+      };
+
 
 
 

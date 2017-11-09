@@ -18,21 +18,36 @@
                     <panel-control-title></panel-control-title>
                     <panel-control-colors></panel-control-colors>
                     <panel-control-refresh type="circular" is-loading="loadingChartData" ng-click="refreshAction()"></panel-control-refresh>
+                    <form class="pull-right mr10 hidden-xs" name="myForm">
+                      <label for="repeatSelect"> Elegir rango: </label>
+                      <select name="mySelect" id="mySelect"
+                        ng-options="option.name for option in data.availableOptions track by option.id"
+                        ng-model="data.selectedOption"
+                        ng-change="executeSelect()">
+                      </select>
+                    </form>
+                    <!--
                     <div class="pull-right mr10 hidden-xs">
                         <button class="btn btn-sm btn-default" style="text-transform: uppercase;" daterangepicker="drp_options" date-begin="drp_start" date-end="drp_end">
                             <i class="glyphicon glyphicon-calendar"></i> <span style="margin-left: 5px">{{drp_start}} - {{drp_end}}</span> <b class="caret"></b>
                         </button>
                     </div>
+                    -->
                 </panel-controls>
 
                 <div class="p20">
                     <div class="row">
+                      <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
+                        chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
+                      </canvas>
+                        <!--
                         <div class="col-md-12">
                            <div class="" flot-chart style="width: 100%; height:319px"
                                 data-flot-data="plotStatsData"
                                 data-flot-options="plotStatsOptions"
                             ></div>
                         </div>
+                        -->
                     </div>
                 </div>
             </panel>

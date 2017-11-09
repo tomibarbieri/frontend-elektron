@@ -5,7 +5,7 @@
     </ol>
 
     <h1>Elektron - control de consumo eléctico libre</h1>
-    
+
 </div>
 
 
@@ -13,7 +13,8 @@
 
     <div class="row">
         <div class="col-md-8 animated-content">
-            <panel panel-class="panel-default no-padding" heading="Medición en tiempo real">
+
+            <panel panel-class="panel-default no-padding" heading="Ultimos 20 datos medidos">
                 <panel-controls>
                     <panel-control-collapse></panel-control-collapse>
                     <panel-control-title></panel-control-title>
@@ -28,12 +29,17 @@
 
                 <div class="p20">
                     <div class="row">
-                        <div class="col-md-12">
+                      <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
+                        chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
+                      </canvas>
+
+
+                          <!--<div class="col-md-12">
                            <div name="tomson" class="" flot-chart style="width: 100%; height:319px"
                                 data-flot-data="plotStatsData"
                                 data-flot-options="plotStatsOptions">
                            </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
                 <div class="m-n panel-footer">
@@ -54,8 +60,8 @@
                                 spotRadius: 3,
                                 maxSpotColor: false}" data-data="[251,933,653,759,1022,1702,565]"></span>
                             </div>
-                            <h3 style="text-align: center; margin: 0;">38 hs</h3>
-                            <p style="text-align: center; margin: 0;">Tiempo estimado</p>
+                            <h3 style="text-align: center; margin: 0;">{{last_value}}</h3>
+                            <p style="text-align: center; margin: 0;">Último valor medido</p>
                             <hr class="hidden-md hidden-sm hidden-lg">
                         </div>
                         <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
@@ -135,7 +141,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-6">
-                    <tile-simple data="{ title: 'Consumo utilizado actualmente', href: '#/ui-tiles',text: '27%', color: 'orange'}"></tile-simple>
+                    <tile-simple data="{ title: 'Último valor medido', href: '#/ui-tiles',text: '33w', color: 'orange'}"></tile-simple>
                 </div>
                 <div class="col-xs-6">
                     <tile-simple data="{ title: 'Maximo consumo planificado', href: '#/ui-tiles',text: '733 Kw', color: 'danger'}"></tile-simple>
