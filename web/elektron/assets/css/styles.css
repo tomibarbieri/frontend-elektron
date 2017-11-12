@@ -36,3 +36,11 @@
 .boxes-orange{
   background: #f0934e;
 }
+
+.buttons-grid {
+  display: grid;
+}
+
+.buttons-grid button{
+  margin-bottom: 2px;
+}

@@ -15,12 +15,57 @@ angular.module('theme.demos.statistics', [
     $scope.chart;
     $scope.datos_medidos = 22;
     $scope.total_datos = 322;
+    $scope.currentData = [];
+    $scope.currentDataIndex = 0;
+    $scope.previousPageDisable = false;
+    $scope.nextPageDisable = false;
 
+    $scope.date_config = {
+      'dateFrom': new Date(),
+      'dateTo': new Date(),
+      'timeFrom': new Date(),
+      'timeTo': new Date()
+    }
+
+    $scope.components = [{
+      'id': 0,
+      'label': 'Todos'
+    }];
+    $scope.selectedComponent = {
+      'label': "Todos",
+      'id': 0
+    };
+
+    $scope.loadComponents = function() {
+      console.log("Loading components...");
+      $http({
+          method:'GET',
+          url: url_server + '/devices/'
+      }).then(function(response){
+          //console.log(response.data.devices);
+          $scope.components.push.apply($scope.components, response.data.devices);
+          //$scope.components.concat(response.data.devices);
+          //console.log($scope.components);
+      }, function(response){
+          console.log("problemas de conexion");
+      });
+    };
+
+    $scope.loadComponents();
+
+    $scope.showComponentsFunction = function() {
+      var selected = $filter('filter')($scope.components, {id: $scope.selectedComponent.id});
+      //console.log(selected);
+      return ($scope.selectedComponent.label && selected.length) ? selected[0].label : 'Not set';
+    };
+
+    // guarda la variable del chart para luego hacer update
     $scope.$on('chart-create', function (evt, chart) {
       console.log(chart);
       $scope.chart = chart;
     });
 
+    // Busca los datos de una fecha determinada
     $scope.loadDay = function(day_p) {
 
       var day = $filter('date')(day_p._d, "dd/MM/yyyy")
@@ -34,8 +79,9 @@ angular.module('theme.demos.statistics', [
           }
       }).then(function(response){
 
-          console.log(response.data.data);
-          console.log(response.data);
+          //console.log(response.data.data);
+          //console.log(response.data);
+          $scope.currentData = response.data.data;
           $scope.graficate(response.data.data);
 
       }, function(response){
@@ -43,6 +89,7 @@ angular.module('theme.demos.statistics', [
       });
     }
 
+    // Busca los datos entre dos fechas
     $scope.loadDayToDay = function(day_from, day_to) {
 
       var dayf = $filter('date')(day_from._d, "dd/MM/yyyy")
@@ -56,8 +103,9 @@ angular.module('theme.demos.statistics', [
           }
       }).then(function(response){
 
-          console.log(response.data.data);
-          console.log(response.data);
+          //console.log(response.data.data);
+          //console.log(response.data);
+          $scope.currentData = response.data.data;
           $scope.graficate(response.data.data);
 
       }, function(response){
@@ -65,23 +113,19 @@ angular.module('theme.demos.statistics', [
       });
     }
 
-    $scope.loadCurrentData = function() {
-
-      var dateFrom = $scope.currendDateFrom;
-      var dateTo = $scope.currendDateTo;
-
-      var timeFrom = $scope.currendTimeFrom;
-      var timeTo = $scope.currendTimeTo;
+    // funcion generica para traer data
+    $scope.loadAllData = function(dateFrom, timeFrom, dateTo, timeTo) {
+      console.log("Loading data from all components...");
 
       var capelequeque = '';
       if (dateFrom) {
-        capelequeque += dateFrom;
+        capelequeque += $filter('date')(dateFrom, "dd/MM/yyyy") + '/';
         if (timeFrom) {
-            capelequeque += timeFrom;
+            capelequeque += $filter('date')(timeFrom, "HH") + '/';
         if (dateTo) {
-            capelequeque += dateTo;
+            capelequeque += $filter('date')(dateTo, "dd/MM/yyyy") + '/';
             if (timeTo) {
-              capelequeque += timeTo;
+              capelequeque += $filter('date')(timeTo, "HH") + '/';
             }
           }
         }
@@ -99,8 +143,9 @@ angular.module('theme.demos.statistics', [
           }
       }).then(function(response){
 
-          console.log(response.data.data);
-          console.log(response.data);
+          //console.log(response.data.data);
+          //console.log(response.data);
+          $scope.currentData = response.data.data;
           $scope.graficate(response.data.data);
 
       }, function(response){
@@ -108,9 +153,68 @@ angular.module('theme.demos.statistics', [
       });
     }
 
+    // Funcion generica para traer la data de un componente determinado
+    $scope.loadOneData = function(componentId, dateFrom, timeFrom, dateTo, timeTo) {
+      console.log("Loading data from one component");
+
+      var capelequeque = '';
+
+      if (dateFrom) {
+        capelequeque += $filter('date')(dateFrom, "dd/MM/yyyy") + '/';
+        if (timeFrom) {
+            capelequeque += $filter('date')(timeFrom, "HH") + '/';
+        if (dateTo) {
+            capelequeque += $filter('date')(dateTo, "dd/MM/yyyy") + '/';
+            if (timeTo) {
+              capelequeque += $filter('date')(timeTo, "HH") + '/';
+            }
+          }
+        }
+      }
+
+      console.log(capelequeque);
+
+      var final_url = url_server + '/devices/' + componentId + '/data/' + capelequeque;
+
+      $http({
+          method:'GET',
+          url: final_url,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+      }).then(function(response){
+
+          //console.log(response.data.data);
+          //console.log(response.data);
+          $scope.currentData = response.data.data;
+          $scope.graficate(response.data.data);
+
+      }, function(response){
+          console.log("problemas de conexion");
+      });
+    }
+
+    // funcion luego de elegir los campos del form de estadisticas
+    $scope.updateChart = function(date_config) {
+      var selected = $filter('filter')($scope.components, {id: date_config.component});
+      $scope.selectedComponent = ($scope.selectedComponent.label && selected.length) ? selected[0] : 'Not set';
+      console.log($scope.selectedComponent);
+      console.log(date_config);
+      if (date_config.component == 0) {
+        $scope.loadAllData(date_config.dateFrom, date_config.timeFrom, date_config.dateTo, date_config.timeTo);
+      } else {
+        $scope.loadOneData(date_config.component, date_config.dateFrom, date_config.timeFrom, date_config.dateTo, date_config.timeTo);
+      }
+
+    }
+
+    // funcion final que le llega la data para graficar
     $scope.graficate = function(data) {
 
       console.log(data);
+      //$scope.currentData = data;
+      $scope.previousPageDisable = $scope.currentDataIndex == 0 ? true : false;
+      $scope.nextPageDisable = ($scope.currentDataIndex + 20 >= $scope.currentData.length) ? true : false;
       $scope.line = {};
 
       $scope.line.series = ['Potencia'];
@@ -126,6 +230,7 @@ angular.module('theme.demos.statistics', [
         $scope.line.data[0].push(data_value);
       }
       if ($scope.chart) {
+          console.log("Grafico actualizado");
           $scope.chart.update();
       }
 
@@ -133,13 +238,54 @@ angular.module('theme.demos.statistics', [
 
     }
 
+    $scope.nextPage = function() {
+
+      console.log("Next page ..."); // {{(currentData.length <= 20 && currentDataIndex >= currentData.length) ? true : false }}
+      console.log($scope.currentData);
+      console.log($scope.currentDataIndex);
+      console.log($scope.currentData.length);
+      if ($scope.currentDataIndex + 20 <= $scope.currentData.length - 20) {
+        $scope.currentDataIndex = $scope.currentDataIndex + 20;
+      } else {
+        $scope.currentDataIndex = $scope.currentData.length - 20;
+      }
+      console.log($scope.currentDataIndex);
+
+      var copy_array = $scope.currentData.slice();
+      console.log(copy_array);
+      console.log($scope.currentData);
+      var data = copy_array.slice($scope.currentDataIndex, $scope.currentDataIndex + 20);
+      console.log(data);
+      $scope.graficate(data);
+
+    }
+
+    $scope.previousPage = function() {
+
+      console.log("Previous page ..."); // {{currentDataIndex == 0 ? true : false}}
+      console.log($scope.currentData);
+      console.log($scope.currentDataIndex);
+      console.log($scope.currentData.length);
+      (($scope.currentDataIndex <= 20) ? $scope.currentDataIndex = 0 : $scope.currentDataIndex -= 20);
+      console.log($scope.currentDataIndex);
+
+      var copy_array = $scope.currentData.slice();
+      console.log(copy_array);
+      console.log($scope.currentData);
+      var data = copy_array.slice($scope.currentDataIndex, $scope.currentDataIndex + 20);
+      console.log(data);
+      $scope.graficate(data);
+
+    }
+
     $scope.updateBoxes = function(data) {
       $scope.datos_medidos = data.length;
       var total = 0;
       data.forEach(function(element) {
-          total += element.data_value;
+          total += parseInt(element.data_value);
       });
       $scope.total_datos = total;
+      console.log(total);
 
     }
 
@@ -169,7 +315,7 @@ angular.module('theme.demos.statistics', [
 
    }
 
-   $scope.loadDay(moment());
+   $scope.loadDayToDay(moment(), moment().subtract(7, 'days'));
 
 
 

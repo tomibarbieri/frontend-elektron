@@ -19,16 +19,65 @@
 
               <div class="p20">
                   <div class="row">
-                    <div class="col-xs-6">
-                      <form class="mr10 hidden-xs" name="myForm">
+                    <div class="mr10 hidden-xs">
 
-                        <label for="repeatSelect"> Mostrar datos: </label>
-                        <select name="mySelect" id="mySelect"
-                          ng-options="option.name for option in select_data.availableOptions track by option.id"
-                          ng-model="select_data.selectedOption"
-                          ng-change="executeSelect()">
-                        </select>
-                      </form>
+                        <table class="table table-bordered table-condensed">
+              					<tr style="font-weight: bold">
+                          <td style="width:20%">Dispositivo</td>
+                          <td style="width:20%">Fecha desde</td>
+              						<td style="width:15%">Hora desde</td>
+                          <td style="width:20%">Fecha hasta</td>
+                          <td style="width:15%">Hora hasta</td>
+                          <td style="width:10%">Acciones</td>
+              					</tr>
+              					<tr >
+                          <td>
+                						<!-- Listado de dispositivos -->
+                						<span editable-select="components.label" e-ng-options="c.id as c.label for c in components" e-name="component" e-form="rowform" e-required>
+                						  {{ showComponentsFunction() }}
+                						</span>
+              					  </td>
+              					  <td>
+                						<!-- Fecha desde -->
+                						<span editable-bsdate="date_config.dateFrom" e-datepicker-popup="dd/MM/yyyy" e-name="dateFrom" e-form="rowform" e-required>
+                						  {{ (date_config.dateFrom | date:"dd/MM/yyyy") || 'empty' }}
+                						</span>
+              					  </td>
+              					  <td>
+                						<!-- Hora desde -->
+                						<span editable-bstime="date_config.timeFrom" e-show-meridian="false" e-name="timeFrom" e-form="rowform" e-required>
+                						  {{ (date_config.timeFrom | date:"HH:mm") || 'empty' }}
+                						</span>
+              					  </td>
+                          <td>
+                						<!-- Fecha hasta -->
+                						<span editable-bsdate="date_config.dateTo" e-datepicker-popup="dd/MM/yyyy" e-name="dateTo" e-form="rowform" e-required>
+                                {{ (date_config.dateTo | date:"dd/MM/yyyy") || 'empty' }}
+                						</span>
+              					  </td>
+                          <td>
+                						<!-- Hora hasta -->
+                						<span editable-bstime="date_config.timeTo" e-show-meridian="false" e-name="timeTo" e-form="rowform" e-required>
+                                {{ (date_config.timeTo | date:"HH:mm") || 'empty' }}
+                						</span>
+              					  </td>
+              					  <td style="white-space: nowrap">
+              						<!-- form -->
+              						<form editable-form name="rowform" onbeforesave="updateChart($data)" ng-show="rowform.$visible" class="buttons-grid form-buttons form-inline" shown="inserted == date_config">
+              						  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
+              							  Mostrar
+              						  </button>
+              						  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
+              							  Volver
+              						  </button>
+              						</form>
+              						<div class="buttons buttons-grid" ng-show="!rowform.$visible">
+              						  <button class="btn btn-sm btn-primary" ng-click="rowform.$show()">Configurar</button>
+              						</div>
+              					  </td>
+              					</tr>
+                      </table>
+
                     </div>
                   </div>
               </div>
@@ -36,6 +85,7 @@
             <panel panel-class="panel-default no-padding" heading="Periodo elegido">
                 <panel-controls>
                     <panel-control-collapse></panel-control-collapse>
+
                     <form class="pull-right mr10 hidden-xs" name="myForm">
                       <label for="repeatSelect"> Mostrar datos: </label>
                       <select name="mySelect" id="mySelect"
@@ -43,6 +93,12 @@
                         ng-model="select_data.selectedOption"
                         ng-change="executeSelect()">
                       </select>
+                      <button type="submit" ng-disabled="previousPageDisable" ng-click="previousPage()" class="btn btn-sm btn-primary">
+                        20 previos
+                      </button>
+                      <button type="button" ng-disabled="nextPageDisable" ng-click="nextPage()" class="btn btn-sm btn-primary">
+                        20 siguientes
+                      </button>
                     </form>
                 </panel-controls>
 
