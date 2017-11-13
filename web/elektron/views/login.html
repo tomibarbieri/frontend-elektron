@@ -19,8 +19,7 @@
 				<div class="clearfix">
 				</div>
 				<a class="btn btn-primary btn-block" ng-click="formSubmit()" data-pulsate="{reach:10, pause: 2000}">Ingresar</a>
-        <span class="text-danger">{{ error }}</span>
-			</form>
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)"><span ng-bind-html="alert.msg | safe_html"></span></alert>			</form>
 		</div>
 		<div class="panel-footer">
 

@@ -2,12 +2,72 @@ angular.module('theme.demos.statistics', [
     'angular-skycons',
     'theme.demos.forms',
     'theme.demos.tasks',
-    'chart.js'
+    'chart.js',
+    'theme.core.services'
   ])
-  .controller('StatisticsController', ['$scope', '$timeout', '$window', '$http', '$filter', function($scope, $timeout, $window, $http, $filter) {
+  .controller('StatisticsController', ['$scope', '$timeout', '$window', '$http', '$filter', 'pinesNotifications', function($scope, $timeout, $window, $http, $filter, pinesNotifications) {
     'use strict';
     var moment = $window.moment;
     var _ = $window._;
+
+    $scope.simpleInfo = function(title,text) {
+      console.log("notificando");
+      pinesNotifications.notify({
+        title: title,
+        text: text,
+        type: 'info'
+      });
+    };
+
+    $scope.simpleSuccess = function(title,text) {
+      pinesNotifications.notify({
+        title: title,
+        text: text,
+        type: 'success'
+      });
+    };
+
+    $scope.showDynamic = function() {
+      var percent = 0;
+      var notice = pinesNotifications.notify({
+        title: 'Cargando datos..',
+        type: 'info',
+        icon: 'fa fa-spin fa-refresh',
+        hide: false,
+        closer: false,
+        sticker: false,
+        opacity: 0.75,
+        shadow: false,
+        width: '200px'
+      });
+
+      setTimeout(function() {
+        notice.notify({
+          title: false
+        });
+        var interval = setInterval(function() {
+          percent += 5;
+          var options = {
+            text: percent + '% complete.'
+          };
+          if (percent === 80) {
+            options.title = 'Ya casi';
+          }
+          if (percent >= 100) {
+            window.clearInterval(interval);
+            options.title = 'Listo!';
+            options.type = 'success';
+            options.hide = true;
+            options.closer = true;
+            options.sticker = true;
+            options.icon = 'fa fa-check';
+            options.opacity = 1;
+            options.shadow = true;
+          }
+          notice.notify(options);
+        }, 60);
+      }, 2000);
+    };
 
     var url_server = 'http://158.69.223.78:8000';
     var url_cape = 'http://163.10.33.173:8000';
@@ -68,6 +128,8 @@ angular.module('theme.demos.statistics', [
     // Busca los datos de una fecha determinada
     $scope.loadDay = function(day_p) {
 
+      $scope.showDynamic();
+
       var day = $filter('date')(day_p._d, "dd/MM/yyyy")
       console.log(day);
 
@@ -91,6 +153,8 @@ angular.module('theme.demos.statistics', [
 
     // Busca los datos entre dos fechas
     $scope.loadDayToDay = function(day_from, day_to) {
+
+      $scope.showDynamic();
 
       var dayf = $filter('date')(day_from._d, "dd/MM/yyyy")
       var dayt = $filter('date')(day_to._d, "dd/MM/yyyy")
@@ -208,8 +272,12 @@ angular.module('theme.demos.statistics', [
 
     }
 
+
     // funcion final que le llega la data para graficar
     $scope.graficate = function(data) {
+
+      //$scope.simpleInfo('Cargando datos', 'Los datos fueron obtenidos con éxito y se estan cargando en el gráfico');
+      $scope.simpleSuccess('Datos cargados!', 'Los datos fueron obtenidos con éxito y se estan cargando en el gráfico');
 
       console.log(data);
       //$scope.currentData = data;
