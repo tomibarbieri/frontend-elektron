@@ -11,6 +11,10 @@ angular.module('theme.demos.dashboard', [
     var moment = $window.moment;
     var _ = $window._;
 
+    $scope.websocketStatus = false;
+
+
+    /*
     $scope.loadingChartData = false;
     $scope.refreshAction = function() {
       $scope.loadingChartData = true;
@@ -116,6 +120,9 @@ angular.module('theme.demos.dashboard', [
       }
     };
 
+    */
+
+
     $scope.chart;
 
     $scope.$on('chart-create', function (evt, chart) {
@@ -126,6 +133,41 @@ angular.module('theme.demos.dashboard', [
     var ip_server = '158.69.223.78';
     var url_server = 'http://158.69.223.78:8000';
     var url_cape = 'http://163.10.33.173:8000';
+
+    $http({
+        method:'GET',
+        url: url_server + '/devices/'
+    }).then(function(response){
+        console.log(response.data);
+        $scope.components_server = response.data.devices;
+        $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
+        $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
+
+    }, function(response){
+        console.log("problemas de conexion");
+    });
+
+    $http({
+        method:'GET',
+        url:'http://158.69.223.78:8000/tasks/datatasks'
+    }).then(function(response){
+        console.log(response.data);
+        $scope.datatasks_server = response.data.datatasks;
+        console.log($scope.datatasks_server);
+    }, function(response){
+        console.log("problemas de conexion");
+    });
+
+    $http({
+        method:'GET',
+        url:'http://158.69.223.78:8000/tasks/datetimetasks'
+    }).then(function(response){
+        console.log(response.data);
+        $scope.datetimetasks_server = response.data.datetimetasks;
+        console.log($scope.datetimetasks_server);
+    }, function(response){
+        console.log("problemas de conexion");
+    });
 
     $http({
         method:'GET',
@@ -159,8 +201,16 @@ angular.module('theme.demos.dashboard', [
 
     ws.onopen = function() {
       ws.send("Hello, world");
+      $scope.websocketStatus = true;
     };
 
+    ws.onclose = function() {
+      $scope.websocketStatus = false;
+    }
+
+    ws.onerror = function() {
+      $scope.websocketStatus = false;
+    }
 
     ws.onmessage = function(message) {
         console.log(message.data);
@@ -186,7 +236,7 @@ angular.module('theme.demos.dashboard', [
       };
 
 
-
+/*
 
     $scope.drp_start = moment().subtract(1, 'days').format('MMMM D, YYYY');
     $scope.drp_end = moment().add(31, 'days').format('MMMM D, YYYY');
@@ -202,9 +252,9 @@ angular.module('theme.demos.dashboard', [
       opens: 'left',
       startDate: moment().subtract(29, 'days'),
       endDate: moment()
-    };
+    };*/
 
-    $scope.epDiskSpace = {
+/*    $scope.epDiskSpace = {
       animate: {
         duration: 0,
         enabled: false
@@ -228,6 +278,6 @@ angular.module('theme.demos.dashboard', [
       lineWidth: 5,
       size: 100,
       lineCap: 'circle'
-    };
+    };*/
 
   }]);

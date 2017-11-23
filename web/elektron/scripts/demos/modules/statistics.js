@@ -48,7 +48,7 @@ angular.module('theme.demos.statistics', [
         var interval = setInterval(function() {
           percent += 5;
           var options = {
-            text: percent + '% complete.'
+            text: percent + '% completado.'
           };
           if (percent === 80) {
             options.title = 'Ya casi';
@@ -277,7 +277,7 @@ angular.module('theme.demos.statistics', [
     $scope.graficate = function(data) {
 
       //$scope.simpleInfo('Cargando datos', 'Los datos fueron obtenidos con éxito y se estan cargando en el gráfico');
-      $scope.simpleSuccess('Datos cargados!', 'Los datos fueron obtenidos con éxito y se estan cargando en el gráfico');
+      //$scope.simpleSuccess('Datos cargados!', 'Los datos fueron obtenidos con éxito y se estan cargando en el gráfico');
 
       console.log(data);
       //$scope.currentData = data;

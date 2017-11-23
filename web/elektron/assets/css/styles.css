@@ -33,8 +33,44 @@
   background: #854e9d;
 }
 
+.boxes-danger {
+  background: #ef553a;
+}
+
+.boxes-danger:hover {
+  background: #e66a54;
+}
+
 .boxes-orange{
   background: #f0934e;
+}
+
+.boxes-orange:hover {
+  background: #e69d67;
+}
+
+.boxes-green {
+  background: #38a085;
+}
+
+.boxes-green:hover {
+  background: #4bbda0;
+}
+
+.boxes-success {
+  background: #81c04d;
+}
+
+.boxes-success:hover {
+  background: #7dcc93;
+}
+
+.boxes-dark {
+  background: #37444e;
+}
+
+.boxes-dark:hover {
+  background: #3f4d58;
 }
 
 .buttons-grid {
