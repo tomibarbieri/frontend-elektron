@@ -12,6 +12,7 @@ angular
     'theme.demos.dashboard',
     'theme.demos.components',
     'theme.demos.statistics',
+    'theme.demos.monitor',
     'theme.demos.panels',
     'theme.demos.registration_page',
     'theme.demos.signup_page',

@@ -14,130 +14,29 @@
     <div class="row">
         <div class="col-md-8 animated-content">
 
-            <panel panel-class="panel-default no-padding" heading="Consumo en tiempo real del sistema (últimos 20 datos)">
+            <panel panel-class="panel-default no-padding" heading="Consumo en tiempo real (últimos 20 datos)">
                 <panel-controls>
                     <panel-control-collapse></panel-control-collapse>
+                    <div class="btn-group" dropdown>
+                      <button type="button" class="btn btn-sm btn-info">{{ current_component.label }}</button>
+                      <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+                        <i class="caret"></i>
+                      </button>
+                      <ul class="dropdown-menu pull-right">
+                        <li ng-repeat="component in components_server"><a ng-click="changeCurrentComponent(component.id)">{{ component.label }}</a></li>
+                      </ul>
+                    </div>
+                    <button ng-click="reloadWebsocketConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
                     <button ng-show="websocketStatus" class="btn btn-sm btn-success">On</button>
                     <button ng-show="!websocketStatus" class="btn btn-sm btn-danger">Off</button>
-                    <!--<panel-control-title></panel-control-title>
-                    <panel-control-colors></panel-control-colors>
-                    <panel-control-refresh type="circular" is-loading="loadingChartData" ng-click="refreshAction()"></panel-control-refresh>
-                    <div class="pull-right mr10 hidden-xs">
-
-
-                        <button class="btn btn-sm btn-default" style="text-transform: uppercase;" daterangepicker="drp_options" date-begin="drp_start" date-end="drp_end">
-                            <i class="glyphicon glyphicon-calendar"></i> <span style="margin-left: 5px">{{drp_start}} - {{drp_end}}</span> <b class="caret"></b>
-                        </button>
-
-
-                    </div>
-                  -->
                 </panel-controls>
-
                 <div class="p20">
                     <div class="row">
                       <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
                         chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
                       </canvas>
-
-
-                          <!--<div class="col-md-12">
-                           <div name="tomson" class="" flot-chart style="width: 100%; height:319px"
-                                data-flot-data="plotStatsData"
-                                data-flot-options="plotStatsOptions">
-                           </div>
-                        </div>-->
                     </div>
                 </div>
-                <!--
-                <div class="m-n panel-footer">
-
-                    <div class="row">
-                        <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
-                            <div class="sparkline-block">
-                                <span sparklines="{
-                                lineWidth: 2,
-                                type: 'line',
-                                width: '52px',
-                                height: '20px',
-                                lineColor: '#6cc7d9',
-                                fillColor: '#e2f4f7',
-                                spotColor: false,
-                                minSpotColor: false,
-                                highlightLineColor: 'rgba(0,0,0,0.1)',
-                                highlightSpotColor: '#6cc7d9',
-                                spotRadius: 3,
-                                maxSpotColor: false}" data-data="[251,933,653,759,1022,1702,565]"></span>
-                            </div>
-                            <h3 style="text-align: center; margin: 0;">{{last_value}}</h3>
-                            <p style="text-align: center; margin: 0;">Último valor medido</p>
-                            <hr class="hidden-md hidden-sm hidden-lg">
-                        </div>
-                        <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
-                            <div class="sparkline-block">
-                                <span sparklines="{
-                                lineWidth: 2,
-                                type: 'line',
-                                width: '52px',
-                                height: '20px',
-                                lineColor: '#5299cc',
-                                fillColor: '#dcebf5',
-                                spotColor: false,
-                                minSpotColor: false,
-                                highlightLineColor: 'rgba(0,0,0,0.1)',
-                                highlightSpotColor: '#5299cc',
-                                spotRadius: 3,
-                                maxSpotColor: false}" data-data="[1251,633,1653,1759,1022,1702,2565]"></span>
-                            </div>
-                            <h3 style="text-align: center; margin: 0;">12,350</h3>
-                            <p style="text-align: center; margin: 0;">Consumo total</p>
-                            <hr class="hidden-md hidden-sm hidden-lg">
-                        </div>
-                        <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
-                            <div class="sparkline-block">
-                                <span sparklines="{
-                                barWidth: 4,
-                                type: 'bar',
-                                barSpacing: 4,
-                                width: '52px',
-                                height: '20px',
-                                barColor: '#70cc87',
-                                fillColor: '#70cc87',
-                                spotColor: false,
-                                minSpotColor: false,
-                                highlightLineColor: 'rgba(0,0,0,0.1)',
-                                highlightSpotColor: '#70cc87',
-                                spotRadius: 3,
-                                maxSpotColor: false}" data-data="[345,563,747,136,356,628,534]"></span>
-                            </div>
-                            <h3 style="text-align: center; margin: 0;">$6,180</h3>
-                            <p style="text-align: center; margin: 0;">Costos</p>
-                            <hr class="hidden-md hidden-sm hidden-lg">
-                        </div>
-                        <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
-                            <div class="sparkline-block">
-                                <span sparklines="{
-                                barWidth: 4,
-                                type: 'bar',
-                                barSpacing: 4,
-                                width: '52px',
-                                height: '20px',
-                                barColor: '#797b80',
-                                fillColor: '#797b80',
-                                spotColor: false,
-                                minSpotColor: false,
-                                highlightLineColor: 'rgba(0,0,0,0.1)',
-                                highlightSpotColor: '#797b80',
-                                spotRadius: 3,
-                                maxSpotColor: false}" data-data="[80,143,107,216,246,128,214]"></span>
-                            </div>
-                            <h3 style="text-align: center; margin: 0;">17</h3>
-                            <p style="text-align: center; margin: 0;">Componentes</p>
-                        </div>
-                    </div>
-
-                </div>
-                -->
             </panel>
         </div>
         <div class="col-md-4 animated-content">

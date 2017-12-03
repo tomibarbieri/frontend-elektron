@@ -15,6 +15,10 @@ angular
       iconClasses: 'glyphicon glyphicon-th-large',
       url: '#/components'
     }, {
+      label: 'Monitor',
+      iconClasses: 'glyphicon glyphicon-dashboard',
+      url: '#/monitor'
+    }, {
       label: 'Tareas',
       iconClasses: 'glyphicon glyphicon-list-alt',
       url: '#/tasks'

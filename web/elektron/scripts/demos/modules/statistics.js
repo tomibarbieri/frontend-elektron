@@ -221,6 +221,7 @@ angular.module('theme.demos.statistics', [
     $scope.loadOneData = function(componentId, dateFrom, timeFrom, dateTo, timeTo) {
       console.log("Loading data from one component");
 
+      // armado de la ruta
       var capelequeque = '';
 
       if (dateFrom) {
@@ -272,12 +273,15 @@ angular.module('theme.demos.statistics', [
 
     }
 
-
     // funcion final que le llega la data para graficar
-    $scope.graficate = function(data) {
+    $scope.graficate = function(data,not_new) {
 
       //$scope.simpleInfo('Cargando datos', 'Los datos fueron obtenidos con éxito y se estan cargando en el gráfico');
       //$scope.simpleSuccess('Datos cargados!', 'Los datos fueron obtenidos con éxito y se estan cargando en el gráfico');
+
+      if (not_new === undefined) {
+        $scope.currentDataIndex = 0;
+      }
 
       console.log(data);
       //$scope.currentData = data;
@@ -290,12 +294,18 @@ angular.module('theme.demos.statistics', [
       $scope.line.labels = [];
       $scope.line.data = [[]];
 
+      var data_sense = data;
+
       for (var i = 0; i < 20; i++) {
-        var date = $filter('date')(data[i].date, "dd/MM/yyyy");
-        var data_value = data[i].data_value;
-        console.log(data_value);
-        $scope.line.labels.push(date);
-        $scope.line.data[0].push(data_value);
+        var hora = $filter('date')(data_sense[i].date, "HH:mm");
+        var dia = $filter('date')(data_sense[i].date, 'dd');
+        var mes = $filter('date')(data_sense[i].date, 'MM');
+
+        var data = data_sense[i].data_value;
+
+        var label = '(' + dia + '/' + mes + ') ' + hora;
+        $scope.line.labels.push(label);
+        $scope.line.data[0].push(data);
       }
       if ($scope.chart) {
           console.log("Grafico actualizado");
@@ -306,6 +316,7 @@ angular.module('theme.demos.statistics', [
 
     }
 
+    // funcion para avanzar a la siguiente pagina
     $scope.nextPage = function() {
 
       console.log("Next page ..."); // {{(currentData.length <= 20 && currentDataIndex >= currentData.length) ? true : false }}
@@ -324,10 +335,11 @@ angular.module('theme.demos.statistics', [
       console.log($scope.currentData);
       var data = copy_array.slice($scope.currentDataIndex, $scope.currentDataIndex + 20);
       console.log(data);
-      $scope.graficate(data);
+      $scope.graficate(data,true);
 
     }
 
+    // funcion para ir a la pagina anterior
     $scope.previousPage = function() {
 
       console.log("Previous page ..."); // {{currentDataIndex == 0 ? true : false}}
@@ -342,10 +354,11 @@ angular.module('theme.demos.statistics', [
       console.log($scope.currentData);
       var data = copy_array.slice($scope.currentDataIndex, $scope.currentDataIndex + 20);
       console.log(data);
-      $scope.graficate(data);
+      $scope.graficate(data,true);
 
     }
 
+    // funcion para actualizar los boxes en cada pagina
     $scope.updateBoxes = function(data) {
       $scope.datos_medidos = data.length;
       var total = 0;
@@ -357,57 +370,35 @@ angular.module('theme.demos.statistics', [
 
     }
 
-
+    // Select para el tablero de mediciones
     $scope.select_data = {
-    model: null,
-    availableOptions: [
-      {id: '1', name: 'Hoy', function: $scope.loadDay, date: moment() },
-      {id: '2', name: 'Ayer', function: $scope.loadDay, date: moment().subtract(1, 'days') },
-      {id: '3', name: 'Últimos 7 días', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(7, 'days') },
-      {id: '4', name: 'Últimos 14 días', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(14, 'days')},
-      {id: '5', name: 'Último mes', function: $scope.loadDayToDay, date: moment().subtract(1, 'month'), dateTo: moment().subtract(2, 'month')},
-      {id: '6', name: 'Este mes', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(1, 'month')},
-    ],
-    selectedOption: {id: '1', name: 'Hoy', function: $scope.loadDay, date: moment()}
-   };
+      model: null,
+      availableOptions: [
+        {id: '1', name: 'Hoy', function: $scope.loadDay, date: moment() },
+        {id: '2', name: 'Ayer', function: $scope.loadDay, date: moment().subtract(1, 'days') },
+        {id: '3', name: 'Últimos 7 días', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(7, 'days') },
+        {id: '4', name: 'Últimos 14 días', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(14, 'days')},
+        {id: '5', name: 'Último mes', function: $scope.loadDayToDay, date: moment().subtract(1, 'month'), dateTo: moment().subtract(2, 'month')},
+        {id: '6', name: 'Este mes', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(1, 'month')},
+      ],
+      selectedOption: {id: '1', name: 'Hoy', function: $scope.loadDay, date: moment()}
+    };
 
-
-
-   $scope.executeSelect = function() {
-     console.log("daleguachoooo");
-     if (!$scope.select_data.selectedOption.dateTo) {
-       $scope.select_data.selectedOption.function($scope.select_data.selectedOption.date);
-     } else {
-       $scope.select_data.selectedOption.function($scope.select_data.selectedOption.date, $scope.select_data.selectedOption.dateTo);
+    // funcion cuando marcas otra opcion del select
+    $scope.executeSelect = function() {
+       if (!$scope.select_data.selectedOption.dateTo) {
+         $scope.select_data.selectedOption.function($scope.select_data.selectedOption.date);
+       } else {
+         $scope.select_data.selectedOption.function($scope.select_data.selectedOption.date, $scope.select_data.selectedOption.dateTo);
+       }
      }
 
-   }
-
-   $scope.loadDayToDay(moment(), moment().subtract(7, 'days'));
+    $scope.loadDayToDay(moment(), moment().subtract(7, 'days'));
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // COSAS VIEJAS _ BORRAR
 
     $scope.epDiskSpace = {
       animate: {
@@ -434,8 +425,6 @@ angular.module('theme.demos.statistics', [
       size: 100,
       lineCap: 'circle'
     };
-
-
 
 
   }]);

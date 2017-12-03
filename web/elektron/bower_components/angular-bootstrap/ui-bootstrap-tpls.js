@@ -1553,13 +1553,14 @@ function ($compile, $parse, $document, $position, dateFilter, dateParser, datepi
         scope.keydown(evt);
       };
       element.bind('keydown', keydown);
+      element.bind('focus', keydown);
 
       scope.keydown = function(evt) {
         if (evt.which === 27) {
           evt.preventDefault();
           evt.stopPropagation();
           scope.close();
-        } else if (evt.which === 40 && !scope.isOpen) {
+        } else if ((evt.which === 40 || evt.type === 'focus') && !scope.isOpen) {
           scope.isOpen = true;
         }
       };
@@ -3676,7 +3677,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
       //we need to propagate user's query so we can higlight matches
       scope.query = undefined;
 
-      //Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later 
+      //Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later
       var timeoutPromise;
 
       var scheduleSearchWithTimeout = function(inputValue) {

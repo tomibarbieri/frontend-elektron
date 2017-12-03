@@ -11,273 +11,148 @@ angular.module('theme.demos.dashboard', [
     var moment = $window.moment;
     var _ = $window._;
 
-    $scope.websocketStatus = false;
-
-
-    /*
-    $scope.loadingChartData = false;
-    $scope.refreshAction = function() {
-      $scope.loadingChartData = true;
-      $timeout(function() {
-        $scope.loadingChartData = false;
-      }, 2000);
-    };
-
-    $scope.percentages = [53, 65, 23, 99];
-    $scope.randomizePie = function() {
-      $scope.percentages = _.shuffle($scope.percentages);
-    };
-
-    $scope.plotStatsData = [{
-      data: [
-        [1, 2500],
-        [2, 2200],
-        [3, 1100],
-        [4, 1900],
-        [5, 1300],
-        [6, 1900],
-        [7, 900],
-        [8, 1500],
-        [9, 900],
-        [10, 1200],
-      ],
-      label: 'Costo'
-    }, {
-      data: [
-        [1, 3100],
-        [2, 4400],
-        [3, 2300],
-        [4, 3800],
-        [5, 2600],
-        [6, 3800],
-        [7, 1700],
-        [8, 2900],
-        [9, 1900],
-        [10, 2200],
-      ],
-      label: 'Consumo total'
-    }];
-
-    $scope.plotStatsOptions = {
-      series: {
-        stack: true,
-        lines: {
-          // show: true,
-          lineWidth: 2,
-          fill: 0.1
-        },
-        splines: {
-          show: true,
-          tension: 0.3,
-          fill: 0.1,
-          lineWidth: 3
-        },
-        points: {
-          show: true
-        },
-        shadowSize: 0
-      },
-      grid: {
-        labelMargin: 10,
-        hoverable: true,
-        clickable: true,
-        borderWidth: 0
-      },
-      tooltip: true,
-      tooltipOpts: {
-        defaultTheme: false,
-        content: 'View Count: %y'
-      },
-      colors: ['#b3bcc7'],
-      xaxis: {
-        tickColor: 'rgba(0,0,0,0.04)',
-        ticks: 10,
-        tickDecimals: 0,
-        autoscaleMargin: 0,
-        font: {
-          color: 'rgba(0,0,0,0.4)',
-          size: 11
-        }
-      },
-      yaxis: {
-        tickColor: 'transparent',
-        ticks: 4,
-        tickDecimals: 0,
-        font: {
-          color: 'rgba(0,0,0,0.4)',
-          size: 11
-        },
-        tickFormatter: function(val) {
-          if (val > 999) {
-            return (val / 1000) + 'K';
-          } else {
-            return val;
-          }
-        }
-      },
-      legend: {
-        labelBoxBorderColor: 'transparent',
-      }
-    };
-
-    */
-
-
-    $scope.chart;
-
-    $scope.$on('chart-create', function (evt, chart) {
-      console.log(chart);
-      $scope.chart = chart;
-    });
-
     var ip_server = '158.69.223.78';
     var url_server = 'http://158.69.223.78:8000';
     var url_cape = 'http://163.10.33.173:8000';
 
-    $http({
-        method:'GET',
-        url: url_server + '/devices/'
-    }).then(function(response){
-        console.log(response.data);
-        $scope.components_server = response.data.devices;
-        $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
-        $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
+    $scope.websocketStatus = false;       // estado de la conexion de websocket
+    $scope.chart;                         // variable para tener guardado el grafico y refrescarlos
+    $scope.current_component;             // componente que filtra los websockets
 
-    }, function(response){
-        console.log("problemas de conexion");
+    // Funcion para asociar la creacion del chart y guardar la variable
+    $scope.$on('chart-create', function (evt, chart) {
+      $scope.chart = chart;
     });
 
+    // Obtiene todos los dispositivos para mostrarlos
     $http({
-        method:'GET',
-        url:'http://158.69.223.78:8000/tasks/datatasks'
-    }).then(function(response){
-        console.log(response.data);
-        $scope.datatasks_server = response.data.datatasks;
-        console.log($scope.datatasks_server);
-    }, function(response){
-        console.log("problemas de conexion");
+          method:'GET',
+          url: url_server + '/devices/'
+      }).then(function(response){
+          console.log(response.data);
+
+          $scope.components_server = response.data.devices;
+
+          $scope.current_component = $scope.components_server[0];
+
+          $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
+          $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
+
+      }, function(response){
+          console.log("problemas de conexion");
     });
 
+    // Obtiene los data tasks para contarlos y ponerlos en el box
     $http({
-        method:'GET',
-        url:'http://158.69.223.78:8000/tasks/datetimetasks'
-    }).then(function(response){
-        console.log(response.data);
-        $scope.datetimetasks_server = response.data.datetimetasks;
-        console.log($scope.datetimetasks_server);
-    }, function(response){
-        console.log("problemas de conexion");
+          method:'GET',
+          url:'http://158.69.223.78:8000/tasks/datatasks'
+      }).then(function(response){
+          console.log(response.data);
+          $scope.datatasks_server = response.data.datatasks;
+          console.log($scope.datatasks_server);
+      }, function(response){
+          console.log("problemas de conexion");
     });
 
+    // Obtiene los date time tasks para contarlos y ponerlos en el box
     $http({
-        method:'GET',
-        url: url_server + '/data/'
-    }).then(function(response){
-        console.log(response.data.data);
-        console.log(response.data);
-        $scope.line = {};
-
-        $scope.line.series = ['Potencia'];
-
-        $scope.line.labels = [];
-        $scope.line.data = [[]];
-
-        for (var i = 0; i < 20; i++) {
-          var date = $filter('date')(response.data.data[i].date, "dd/MM/yyyy");
-          var data = response.data.data[i].data_value;
-          console.log(data);
-          $scope.line.labels.push(date);
-          $scope.line.data[0].push(data);
-        }
-
-    }, function(response){
-        console.log("problemas de conexion");
+          method:'GET',
+          url:'http://158.69.223.78:8000/tasks/datetimetasks'
+      }).then(function(response){
+          console.log(response.data);
+          $scope.datetimetasks_server = response.data.datetimetasks;
+          console.log($scope.datetimetasks_server);
+      }, function(response){
+          console.log("problemas de conexion");
     });
 
+    // Obtiene toda la data medida para
+    $http({
+          method:'GET',
+          url: url_server + '/data/'
+      }).then(function(response){
+          console.log(response.data.data);
+          console.log(response.data);
+          $scope.line = {};
 
-    var url_websocket = "ws://" + ip_server + ":8888/websocket";
-    console.log(url_websocket);
-    var ws = new WebSocket(url_websocket,'ws');
+          var data_sense = response.data.data;
+          var inicio = (data_sense.length >= 20) ? (data_sense.length - 20) : (0);
+          var fin = data_sense.length;
 
-    ws.onopen = function() {
-      ws.send("Hello, world");
-      $scope.websocketStatus = true;
+          console.log(inicio,fin);
+
+          $scope.line.series = ['Potencia'];
+
+          $scope.line.labels = [];
+          $scope.line.data = [[]];
+
+          for (var i = inicio; i < fin; i++) {
+            console.log(data_sense[i]);
+            var hora = $filter('date')(data_sense[i].date, "HH:mm");
+            var dia = $filter('date')(data_sense[i].date, 'dd');
+            var mes = $filter('date')(data_sense[i].date, 'MM');
+
+            var data = data_sense[i].data_value;
+
+            var label = '(' + dia + '/' + mes + ') ' + hora;
+            $scope.line.labels.push(label);
+            $scope.line.data[0].push(data);
+          }
+
+      }, function(response){
+          console.log("problemas de conexion");
+    });
+
+    // funcion para el select
+    $scope.changeCurrentComponent = function(ids) {
+      console.log(ids);
+      var selected = $filter('filter')($scope.components_server, {id: ids})[0];
+      console.log(selected);
+      $scope.current_component = selected;
     };
 
-    ws.onclose = function() {
-      $scope.websocketStatus = false;
-    }
+    // funcion para regenerar el ws
+    $scope.reloadWebsocketConnection = function() {
+      console.log("Regenerate WS connection");
 
-    ws.onerror = function() {
-      $scope.websocketStatus = false;
-    }
+      if ($scope.ws) {
+        $scope.ws.terminate();
+      }
 
-    ws.onmessage = function(message) {
-        console.log(message.data);
+      var url_websocket = "ws://" + ip_server + ":8888/websocket";
+      $scope.ws = new WebSocket(url_websocket,'ws');
 
-        var json = JSON.parse(message.data);
-        console.log(json.data_value);
-
-        $scope.last_value = json.data_value;
-
-        console.log($scope.line.data[0]);
-
-        $scope.line.data[0].splice(0,1);
-
-
-        console.log($scope.line.data[0].push(json.data_value));
-
-        console.log($scope.line.data[0][9]);
-
-        if ($scope.chart) {
-            $scope.chart.update();
-        }
-
+      $scope.ws.onopen = function() {
+        ws.send("Conectado");
+        $scope.websocketStatus = true;
       };
 
+      $scope.ws.onclose = function() {
+        $scope.websocketStatus = false;
+      };
 
-/*
+      $scope.ws.onerror = function() {
+        $scope.websocketStatus = false;
+      };
 
-    $scope.drp_start = moment().subtract(1, 'days').format('MMMM D, YYYY');
-    $scope.drp_end = moment().add(31, 'days').format('MMMM D, YYYY');
-    $scope.drp_options = {
-      ranges: {
-        'Hoy': [moment(), moment()],
-        'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
-        'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
-        'Este mes': [moment().startOf('month'), moment().endOf('month')],
-        'El mes anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-      },
-      opens: 'left',
-      startDate: moment().subtract(29, 'days'),
-      endDate: moment()
-    };*/
+      $scope.ws.onmessage = function(message) {
+          console.log(message.data);
+          var json = JSON.parse(message.data);
 
-/*    $scope.epDiskSpace = {
-      animate: {
-        duration: 0,
-        enabled: false
-      },
-      barColor: '#e6da5c',
-      trackColor: '#ebedf0',
-      scaleColor: false,
-      lineWidth: 5,
-      size: 100,
-      lineCap: 'circle'
+          // chequea que el dato sea del componente elegido y lo muestra
+          if (message.data.device_mac == $scope.current_component.device_mac) {
+            // Saca el primero del arreglo y pone uno nuevo al final
+            $scope.line.data[0].splice(0,1);
+            $scope.line.data[0].push(json.data_value);
+            if ($scope.chart) {
+                $scope.chart.update();
+            }
+          }
+
+      };
+      console.log($scope.ws);
     };
 
-    $scope.epBandwidth = {
-      animate: {
-        duration: 0,
-        enabled: false
-      },
-      barColor: '#d95762',
-      trackColor: '#ebedf0',
-      scaleColor: false,
-      lineWidth: 5,
-      size: 100,
-      lineCap: 'circle'
-    };*/
+    $scope.reloadWebsocketConnection();
 
   }]);
