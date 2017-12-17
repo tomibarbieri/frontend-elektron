@@ -3,7 +3,7 @@ angular
     'ngWebSocket',
     'theme.controllers.dashboard',
     'theme.controllers.components',
-    'theme.controllers.statistics',
+    'theme.controllers.history',
     'theme.controllers.monitor',
     'theme.controllers.panels',
     'theme.controllers.registration_page',

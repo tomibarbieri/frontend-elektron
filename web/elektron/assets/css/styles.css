@@ -25,6 +25,10 @@
   border-bottom-left-radius: 3px;
 }
 
+.boxes-body div {
+  font-size: 0.6em;
+}
+
 .boxes-indigo{
   background: #9358ac;
 }

@@ -11,6 +11,7 @@ angular
     //'theme.demos.horizontal_layout',
     'theme.demos.dashboard',
     'theme.demos.components',
+    'theme.demos.history',
     'theme.demos.statistics',
     'theme.demos.monitor',
     'theme.demos.panels',

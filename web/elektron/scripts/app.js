@@ -6,6 +6,8 @@ angular
     'ui.bootstrap',
   ])
 
+  // For sessions
+
   /*.run(['$rootScope', '$location', 'LoginService', function ($rootScope, $location, LoginService) {
     $rootScope.$on('$routeChangeStart', function (event, next) {
         if (!LoginService.isAuthenticated()) {

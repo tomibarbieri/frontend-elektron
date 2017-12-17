@@ -27,6 +27,10 @@ angular
       iconClasses: 'glyphicon glyphicon-stats',
       url: '#/statistics'
     }, {
+      label: 'Datos históricos',
+      iconClasses: 'glyphicon glyphicon-time',
+      url: '#/history'
+    }, {
       label: 'Configuración',
       iconClasses: 'glyphicon glyphicon-cog',
       url: ''

@@ -1,167 +1,196 @@
 <div id="page-heading">
-    <ol class="breadcrumb">
-        <li><a href="#/">Inicio</a></li>
-        <li class="active">Estadisticas</li>
-    </ol>
+	<ol class="breadcrumb">
+		<li><a href="#/">Dashboard</a></li>
+		<li class="active">Estadísticas</li>
+	</ol>
 
+	<h1>Estadísticas del sistema</h1>
 </div>
-
 
 <div class="container-fluid" ng-controller="StatisticsController">
 
-    <div class="row">
-        <div class="col-md-8 animated-content">
-          <panel panel-class="panel-default no-padding" heading="Configurar estadísticas">
-              <panel-controls>
-                  <panel-control-collapse></panel-control-collapse>
+	<div class="row">
 
-              </panel-controls>
+		<div class="col-md-12">
 
-              <div class="p20">
-                  <div class="row">
-                    <div class="mr10 hidden-xs">
+			<panel panel-class="panel-primary" data-heading="Detalles de componentes">
+				  <panel-controls>
+  					<panel-control-collapse></panel-control-collapse>
+  					<!--
+              <button class="button-icon"><i class="glyphicon glyphicon-cog"></i></button>
+  					   <button class="button-icon"><i class="glyphicon glyphicon-wrench"></i></button>
+            -->
+				  </panel-controls>
+				  <table class="table table-bordered table-condensed">
+					<tr style="font-weight: bold">
+						<td style="width:10%">Nombre</td>
+						<td style="width:3%">Estado</td>
+            <td style="width:8%">Consumo total</td>
+            <td style="width:8%">Costo aproximado</td>
+            <td style="width:8%">Co2 producido</td>
+						<td style="width:8%">Ultima medicion</td>
+            <td style="width:8%">Período actividad</td>
+            <td style="width:8%">Consumo Período actual</td>
+            <td style="width:8%">Nº encendidos y apagados</td>
+					</tr>
+					<tr ng-repeat="component in components_server">
+					  <td>
+						<!-- editable username (text with validation) -->
+						<span editable-text="component.label" e-name="name" e-form="rowform" e-required>
+						  {{ component.label }}
+						</span>
+					  </td>
+					  <td>
+						<!-- editable status (select-local) -->
+						<span e-name="ip" e-form="rowform" e-required>
+              <div style="margin-left:3px;" ng-switch on="component.devicestate.name">
+                  <button ng-switch-when="off" class="btn btn-sm btn-danger" ng-click=""></button>
+                  <button ng-switch-when="on" class="btn btn-sm btn-success" ng-click=""></button>
+              </div>
+						</span>
+					  </td>
+            <td>
+						<!-- editable status (select-local) -->
+						<span e-form="rowform" e-required>
+						  300kw (15%)
+						</span>
+					  </td>
 
-                        <table class="table table-bordered table-condensed">
-              					<tr style="font-weight: bold">
-                          <td style="width:20%">Dispositivo</td>
-                          <td style="width:20%">Fecha desde</td>
-              						<td style="width:15%">Hora desde</td>
-                          <td style="width:20%">Fecha hasta</td>
-                          <td style="width:15%">Hora hasta</td>
-                          <td style="width:10%">Acciones</td>
-              					</tr>
-              					<tr >
-                          <td>
-                						<!-- Listado de dispositivos -->
-                						<span editable-select="components.label" e-ng-options="c.id as c.label for c in components" e-name="component" e-form="rowform" e-required>
-                						  {{ showComponentsFunction() }}
-                						</span>
-              					  </td>
-              					  <td>
-                						<!-- Fecha desde -->
-                						<span editable-bsdate="date_config.dateFrom" e-datepicker-popup="dd/MM/yyyy" e-name="dateFrom" e-form="rowform" e-required>
-                						  {{ (date_config.dateFrom | date:"dd/MM/yyyy") || 'empty' }}
-                						</span>
-              					  </td>
-              					  <td>
-                						<!-- Hora desde -->
-                						<span editable-bstime="date_config.timeFrom" e-show-meridian="false" e-name="timeFrom" e-form="rowform" e-required>
-                						  {{ (date_config.timeFrom | date:"HH:mm") || 'empty' }}
-                						</span>
-              					  </td>
-                          <td>
-                						<!-- Fecha hasta -->
-                						<span editable-bsdate="date_config.dateTo" e-datepicker-popup="dd/MM/yyyy" e-name="dateTo" e-form="rowform" e-required>
-                                {{ (date_config.dateTo | date:"dd/MM/yyyy") || 'empty' }}
-                						</span>
-              					  </td>
-                          <td>
-                						<!-- Hora hasta -->
-                						<span editable-bstime="date_config.timeTo" e-show-meridian="false" e-name="timeTo" e-form="rowform" e-required>
-                                {{ (date_config.timeTo | date:"HH:mm") || 'empty' }}
-                						</span>
-              					  </td>
-              					  <td style="white-space: nowrap">
-              						<!-- form -->
-              						<form editable-form name="rowform" onbeforesave="updateChart($data)" ng-show="rowform.$visible" class="buttons-grid form-buttons form-inline" shown="inserted == date_config">
-              						  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
-              							  Mostrar
-              						  </button>
-              						  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
-              							  Volver
-              						  </button>
-              						</form>
-              						<div class="buttons buttons-grid" ng-show="!rowform.$visible">
-              						  <button class="btn btn-sm btn-primary" ng-click="rowform.$show()">Configurar</button>
-              						</div>
-              					  </td>
-              					</tr>
-                      </table>
+            <td>
+						<!-- editable status (select-local) -->
+						<span e-form="rowform" e-required>
+						  $ 350
+						</span>
+					  </td>
+            <td>
+						<!-- editable status (select-local) -->
+						<span e-form="rowform" e-required>
+						  0.2 Kg
+						</span>
+					  </td>
+					  <td>
+						<!-- editable group (select-remote) -->
+						<span e-name="last" e-form="rowform" e-required>
+              04/12 09:45
+						</span>
+					  </td>
 
+            <td>
+						<!-- editable group (select-remote) -->
+						<span e-name="last" e-form="rowform" e-required>
+              13:45hs
+						</span>
+					  </td>
+
+            <td>
+						<!-- editable group (select-remote) -->
+						<span e-name="last" e-form="rowform" e-required>
+              35 kw
+						</span>
+					  </td>
+
+            <td>
+						<!-- editable status (select-local) -->
+						<span e-name="ip" e-form="rowform" e-required>
+              <div style="margin-left:3px;" ng-switch on="component.devicestate.name">
+                  <button class="btn btn-sm btn-danger" ng-click="">5</button>
+                  <button class="btn btn-sm btn-success" ng-click="">4</button>
+              </div>
+						</span>
+					  </td>
+
+					</tr>
+        </table>
+				  <!--<button class="btn btn-default" ng-click="addComponent()">Agregar componente</button>-->
+			</panel>
+		</div>
+
+    <div class="col-md-6">
+
+        <panel panel-class="panel-default no-padding" heading="Porcentaje de consumo">
+            <panel-controls>
+                <panel-control-collapse></panel-control-collapse>
+            </panel-controls>
+
+            <div class="p20">
+                <div class="row">
+
+                  <canvas id="doughnut" height="150" class="chart chart-doughnut"
+                    chart-data="doughnutdata" chart-labels="doughnutlabels">
+                  </canvas>
+
+                  <div style="margin-top:10px;">
+                    <div ng-repeat="value in doughnut.config.data.labels" style="margin:5px;float:left;">
+                      <span class="badge" style="background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
+                        {{ value }}
+                      </span>
                     </div>
                   </div>
-              </div>
-          </panel>
-            <panel panel-class="panel-default no-padding" heading="Periodo elegido">
-                <panel-controls>
-                    <panel-control-collapse></panel-control-collapse>
 
-                    <form class="pull-right mr10 hidden-xs" name="myForm">
-                      <label for="repeatSelect"> Mostrar datos: </label>
-                      <select name="mySelect" id="mySelect"
-                        ng-options="option.name for option in select_data.availableOptions track by option.id"
-                        ng-model="select_data.selectedOption"
-                        ng-change="executeSelect()">
-                      </select>
-                      <button type="submit" ng-disabled="previousPageDisable" ng-click="previousPage()" class="btn btn-sm btn-primary">
-                        20 previos
-                      </button>
-                      <button type="button" ng-disabled="nextPageDisable" ng-click="nextPage()" class="btn btn-sm btn-primary">
-                        20 siguientes
-                      </button>
-                    </form>
-                </panel-controls>
-
-                <div class="p20">
-                    <div class="row">
-                      <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
-                        chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
-                      </canvas>
-                    </div>
-                </div>
-            </panel>
-        </div>
-        <div class="col-md-4">
-            <div class="row">
-                <div class="col-xs-6">
-                  <a class="boxes-a boxes-orange" >
-                    <div class="boxes-title">
-                        <div class="text-center">Cantidad de datos sensados</div>
-                    </div>
-                    <div class="boxes-body">
-                        <div class="text-center">{{datos_medidos}}</div>
-                    </div>
-                  </a>
-                </div>
-                <div class="col-xs-6">
-                  <a class="boxes-a boxes-indigo" >
-                    <div class="boxes-title">
-                        <div class="text-center">Total de consumo acumulado</div>
-                    </div>
-                    <div class="boxes-body">
-                        <div class="text-center">{{total_datos}}wts</div>
-                    </div>
-                  </a>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-6">
-                    <tile-simple data="{ title: 'Costo aproximado', href: '#/ui-tiles',text: '$1,138', color: 'success'}"></tile-simple>
-                </div>
-                <div class="col-xs-6">
-                    <tile-simple data="{ title: 'Componentes totales', href: '#/ui-tiles',text: '27', color: 'midnightblue'}"></tile-simple>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <tile type="default" heading="Limite gasto">
-                        <div easypiechart class="easypiechart"
-                            data-percent="55"
-                            data-options="epDiskSpace"><span class="percent">55</span>
-                        </div>
-                    </tile>
-                </div>
-                <div class="col-md-6" ng-drop="true">
-                    <tile type="default" heading="Parcial consumo" ng-drag="true">
-                        <div easypiechart class="easypiechart"
-                            data-percent="23"
-                            data-options="epBandwidth"><span class="percent">23</span>
-                        </div>
-                    </tile>
-                </div>
+            <div class="m-n panel-footer">
+
+
 
             </div>
-        </div>
+
+        </panel>
+
     </div>
 
-</div> <!-- container-fluid -->
+    <div class="col-md-6">
+
+        <panel panel-class="panel-default no-padding" heading="Comparacion entre componentes">
+            <panel-controls>
+                <panel-control-collapse></panel-control-collapse>
+
+                <div class="btn-group" dropdown>
+                  <button type="button" class="btn btn-sm btn-info">Heladera</button>
+                  <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+                    <i class="caret"></i>
+                  </button>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a>Heladera</a>
+                      <a>Microondas</a>
+                      <a>Pava electrica</a>
+                      <a>Aire Acondicionado</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="btn-group" dropdown>
+                  <button type="button" class="btn btn-sm btn-info">Aire acondicionado</button>
+                  <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+                    <i class="caret"></i>
+                  </button>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a>Heladera</a>
+                      <a>Microondas</a>
+                      <a>Pava electrica</a>
+                      <a>Aire Acondicionado</a>
+                    </li>
+                  </ul>
+                </div>
+            </panel-controls>
+
+            <div class="p20">
+                <div class="row">
+
+                  <canvas id="bar" class="chart chart-bar"
+                    chart-data="data1" chart-labels="labels1" chart-series="series">
+                  </canvas>
+
+                </div>
+            </div>
+
+        </panel>
+
+    </div>
+
+
+  </div>
+
+</div>    <!-- container-fluid -->

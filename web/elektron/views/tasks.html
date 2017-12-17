@@ -14,8 +14,6 @@
 			<panel panel-class="panel-primary" data-heading="Tareas por consumo">
 				  <panel-controls>
 					<panel-control-collapse></panel-control-collapse>
-					<button class="button-icon"><i class="glyphicon glyphicon-cog"></i></button>
-					<button class="button-icon"><i class="glyphicon glyphicon-wrench"></i></button>
 				  </panel-controls>
 				  <table class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
@@ -74,14 +72,12 @@
 					  </td>
 					</tr>
         </table>
-				  <button class="btn btn-default" ng-click="addDataTask()">Agregar tarea</button>
+        <a ng-click="addDataTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por consumo</a>
 			</panel>
 
-      <panel panel-class="panel-primary" data-heading="Tareas por fecha">
+      <panel panel-class="panel-primary" data-heading="Tareas por fecha y hora">
 				  <panel-controls>
 					<panel-control-collapse></panel-control-collapse>
-					<button class="button-icon"><i class="glyphicon glyphicon-cog"></i></button>
-					<button class="button-icon"><i class="glyphicon glyphicon-wrench"></i></button>
 				  </panel-controls>
 				  <table class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
@@ -147,7 +143,7 @@
 					  </td>
 					</tr>
         </table>
-				  <button class="btn btn-default" ng-click="addDateTimeTask()">Agregar tarea</button>
+        <a ng-click="addTimeTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha</a>
 			</panel>
 
 
