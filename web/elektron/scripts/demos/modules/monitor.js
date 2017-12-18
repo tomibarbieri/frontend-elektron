@@ -6,13 +6,13 @@ angular.module('theme.demos.monitor', [
     'chart.js'
     ])
 
-  .controller('MonitorController', ['$scope', '$timeout', '$window', '$http', '$filter', function($scope, $timeout, $window, $http, $filter, $websocket) {
+  .controller('MonitorController', ['$scope', '$timeout', '$window', '$http', '$filter', 'Notifier', function($scope, $timeout, $window, $http, $filter, Notifier, $websocket) {
     'use strict';
     var moment = $window.moment;
     var _ = $window._;
 
     $scope.websocketStatus = false;
-    $scope.switchStatus2 = 0;
+    $scope.switchStatus2 = 1;
 
     $scope.chart;
 
@@ -38,33 +38,18 @@ angular.module('theme.demos.monitor', [
         console.log("problemas de conexion");
     });
 
-    /*
-    $http({
-        method:'GET',
-        url:'http://158.69.223.78:8000/tasks/datatasks'
-    }).then(function(response){
-        console.log(response.data);
-        $scope.datatasks_server = response.data.datatasks;
-        console.log($scope.datatasks_server);
-    }, function(response){
-        console.log("problemas de conexion");
-    });
+    $scope.refreshConnection = function(){
+      if ($scope.websocketStatus == false) {
+        $scope.openWebsocketConnection();
+      } else {
+        Notifier.simpleInfo("Conexion establecida","Ya esta establecida la conexion en tiempo real");
+      }
+    }
+
 
     $http({
         method:'GET',
-        url:'http://158.69.223.78:8000/tasks/datetimetasks'
-    }).then(function(response){
-        console.log(response.data);
-        $scope.datetimetasks_server = response.data.datetimetasks;
-        console.log($scope.datetimetasks_server);
-    }, function(response){
-        console.log("problemas de conexion");
-    });
-    */
-
-    $http({
-        method:'GET',
-        url: url_server + '/data/'
+        url: url_server + '/devices/36/data/13/12/2017/'
     }).then(function(response){
         console.log(response.data.data);
         console.log(response.data);
@@ -138,50 +123,5 @@ angular.module('theme.demos.monitor', [
         }
 
       };
-
-
-/*
-
-    $scope.drp_start = moment().subtract(1, 'days').format('MMMM D, YYYY');
-    $scope.drp_end = moment().add(31, 'days').format('MMMM D, YYYY');
-    $scope.drp_options = {
-      ranges: {
-        'Hoy': [moment(), moment()],
-        'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
-        'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
-        'Este mes': [moment().startOf('month'), moment().endOf('month')],
-        'El mes anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-      },
-      opens: 'left',
-      startDate: moment().subtract(29, 'days'),
-      endDate: moment()
-    };*/
-
-/*    $scope.epDiskSpace = {
-      animate: {
-        duration: 0,
-        enabled: false
-      },
-      barColor: '#e6da5c',
-      trackColor: '#ebedf0',
-      scaleColor: false,
-      lineWidth: 5,
-      size: 100,
-      lineCap: 'circle'
-    };
-
-    $scope.epBandwidth = {
-      animate: {
-        duration: 0,
-        enabled: false
-      },
-      barColor: '#d95762',
-      trackColor: '#ebedf0',
-      scaleColor: false,
-      lineWidth: 5,
-      size: 100,
-      lineCap: 'circle'
-    };*/
 
   }]);

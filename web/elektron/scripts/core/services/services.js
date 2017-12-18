@@ -26,6 +26,7 @@ angular
     'use strict';
     return $window.enquire;
   }])
+
   .factory('pinesNotifications', ['$window', function ($window) {
     'use strict';
     return {
@@ -80,6 +81,106 @@ angular
         }
       };
     })
+
+    .service('Notifier',['pinesNotifications', function (pinesNotifications) {
+
+      this.simpleInfo = function(title,text) {
+        console.log("notificando");
+        pinesNotifications.notify({
+          title: title,
+          text: text,
+          type: 'info'
+        });
+      };
+
+      this.simpleSuccess = function(title,text) {
+        pinesNotifications.notify({
+          title: title,
+          text: text,
+          type: 'success'
+        });
+      };
+
+      this.simpleError = function(title,text) {
+        pinesNotifications.notify({
+          title: title,
+          text: text,
+          type: 'error'
+        });
+      };
+
+      // this notifications are permanent (can be close with the 'X')
+
+      this.stickyInfo = function() {
+        pinesNotifications.notify({
+          title: 'Sticky Info',
+          text: 'Sticky info, you know, like a newspaper covered in honey.',
+          type: 'info',
+          hide: false
+        });
+      };
+
+      this.stickySuccess = function() {
+        pinesNotifications.notify({
+          title: 'Sticky Success',
+          text: 'Sticky success... I\'m not even gonna make a joke.',
+          type: 'success',
+          hide: false
+        });
+      };
+
+      this.stickyError = function() {
+        pinesNotifications.notify({
+          title: 'Uh Oh!',
+          text: 'Something really terrible happened. You really need to read this, so I won\'t close automatically.',
+          type: 'error',
+          hide: false
+        });
+      };
+
+      this.showDynamic = function() {
+        var percent = 0;
+        var notice = pinesNotifications.notify({
+          title: 'Cargando datos..',
+          type: 'info',
+          icon: 'fa fa-spin fa-refresh',
+          hide: false,
+          closer: false,
+          sticker: false,
+          opacity: 0.75,
+          shadow: false,
+          width: '200px'
+        });
+
+        setTimeout(function() {
+          notice.notify({
+            title: false
+          });
+          var interval = setInterval(function() {
+            percent += 5;
+            var options = {
+              text: percent + '% completado.'
+            };
+            if (percent === 80) {
+              options.title = 'Ya casi';
+            }
+            if (percent >= 100) {
+              window.clearInterval(interval);
+              options.title = 'Listo!';
+              options.type = 'success';
+              options.hide = true;
+              options.closer = true;
+              options.sticker = true;
+              options.icon = 'fa fa-check';
+              options.opacity = 1;
+              options.shadow = true;
+            }
+            notice.notify(options);
+          }, 60);
+        }, 2000);
+      };
+
+    }])
 
 
 

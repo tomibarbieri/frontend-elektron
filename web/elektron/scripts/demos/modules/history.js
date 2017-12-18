@@ -5,69 +5,10 @@ angular.module('theme.demos.history', [
     'chart.js',
     'theme.core.services'
   ])
-  .controller('HistoryController', ['$scope', '$timeout', '$window', '$http', '$filter', 'pinesNotifications', function($scope, $timeout, $window, $http, $filter, pinesNotifications) {
+  .controller('HistoryController', ['$scope', '$timeout', '$window', '$http', '$filter', 'Notifier', function($scope, $timeout, $window, $http, $filter, Notifier) {
     'use strict';
     var moment = $window.moment;
     var _ = $window._;
-
-    $scope.simpleInfo = function(title,text) {
-      console.log("notificando");
-      pinesNotifications.notify({
-        title: title,
-        text: text,
-        type: 'info'
-      });
-    };
-
-    $scope.simpleSuccess = function(title,text) {
-      pinesNotifications.notify({
-        title: title,
-        text: text,
-        type: 'success'
-      });
-    };
-
-    $scope.showDynamic = function() {
-      var percent = 0;
-      var notice = pinesNotifications.notify({
-        title: 'Cargando datos..',
-        type: 'info',
-        icon: 'fa fa-spin fa-refresh',
-        hide: false,
-        closer: false,
-        sticker: false,
-        opacity: 0.75,
-        shadow: false,
-        width: '200px'
-      });
-
-      setTimeout(function() {
-        notice.notify({
-          title: false
-        });
-        var interval = setInterval(function() {
-          percent += 5;
-          var options = {
-            text: percent + '% completado.'
-          };
-          if (percent === 80) {
-            options.title = 'Ya casi';
-          }
-          if (percent >= 100) {
-            window.clearInterval(interval);
-            options.title = 'Listo!';
-            options.type = 'success';
-            options.hide = true;
-            options.closer = true;
-            options.sticker = true;
-            options.icon = 'fa fa-check';
-            options.opacity = 1;
-            options.shadow = true;
-          }
-          notice.notify(options);
-        }, 60);
-      }, 2000);
-    };
 
     var url_server = 'http://158.69.223.78:8000';
     var url_cape = 'http://163.10.33.173:8000';
@@ -100,6 +41,7 @@ angular.module('theme.demos.history', [
 
     $scope.loadComponents = function() {
       console.log("Loading components...");
+      Notifier.simpleInfo('Cargando componentes','Cargando desde el servidor');
       $http({
           method:'GET',
           url: url_server + '/devices/'
@@ -109,9 +51,11 @@ angular.module('theme.demos.history', [
           //$scope.current_component = $scope.components_server[0];
           $scope.components.push.apply($scope.components, $scope.components_server);
           //$scope.components.concat(response.data.devices);
+          Notifier.simpleSuccess("Componentes cargados", "Se han cargado con exito un total de " + response.data.devices.length + " componentes.");
           //console.log($scope.components);
       }, function(response){
           console.log("problemas de conexion");
+          Notifier.simpleError("Error al traer los componentes", "Problemas de conexion");
       });
     };
 
@@ -132,9 +76,11 @@ angular.module('theme.demos.history', [
     // Busca los datos de una fecha determinada
     $scope.loadDay = function(day_p) {
 
-      $scope.showDynamic();
+      //$scope.showDynamic();
+
 
       var day = $filter('date')(day_p._d, "dd/MM/yyyy")
+      Notifier.simpleInfo('Cargando datos para dia', day);
       console.log(day);
 
       $http({
@@ -145,6 +91,8 @@ angular.module('theme.demos.history', [
           }
       }).then(function(response){
 
+          //Notifier.simpleSuccess('Datos cargados con exito','Se han traido ' + response.data.data.length + ' datos.')
+
           //console.log(response.data.data);
           //console.log(response.data);
           $scope.currentData = response.data.data;
@@ -152,32 +100,35 @@ angular.module('theme.demos.history', [
 
       }, function(response){
           console.log("problemas de conexion");
+          Notifier.simpleError("Error al traer los datos", "Problemas de conexion");
       });
     }
 
     // Busca los datos entre dos fechas
     $scope.loadDayToDay = function(day_from, day_to) {
 
-      $scope.showDynamic();
-
       var dayf = $filter('date')(day_from._d, "dd/MM/yyyy")
       var dayt = $filter('date')(day_to._d, "dd/MM/yyyy")
 
+      Notifier.simpleInfo('Cargando datos entre los dias', dayf + ' y ' + dayt);
+
       $http({
           method:'GET',
-          url: url_server + '/data/' + dayt + '/' + dayf + '/',
+          url: url_server + '/data/' + dayf + '/' + dayt + '/',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
       }).then(function(response){
 
+          //Notifier.simpleSuccess('Datos cargados con exito','Se han traido ' + response.data.data.length + ' datos.')
           //console.log(response.data.data);
           //console.log(response.data);
           $scope.currentData = response.data.data;
           $scope.graficate(response.data.data);
 
       }, function(response){
-          console.log("problemas de conexion");
+          console.log("Problemas de conexion", "No se pudo estableces la conexion con el servidor");
+          Notifier.simpleError("Error al traer los datos", "Problemas de conexion");
       });
     }
 
@@ -280,7 +231,8 @@ angular.module('theme.demos.history', [
     // funcion final que le llega la data para graficar
     $scope.graficate = function(data,not_new) {
 
-      //$scope.simpleInfo('Cargando datos', 'Los datos fueron obtenidos con éxito y se estan cargando en el gráfico');
+
+      Notifier.simpleSuccess('Cargando datos', 'Los datos (' + data.length + ') fueron obtenidos con éxito y se estan ubicando en el gráfico');
       //$scope.simpleSuccess('Datos cargados!', 'Los datos fueron obtenidos con éxito y se estan cargando en el gráfico');
 
       if (not_new === undefined) {
@@ -375,7 +327,7 @@ angular.module('theme.demos.history', [
 
     }
 
-    $scope.loadDayToDay(moment(), moment().subtract(7, 'days'));
+    $scope.loadDayToDay(moment().subtract(7, 'days'), moment());
 
     $scope.periods = [
       {id: '1', name: 'Hoy', function: $scope.loadDay, date: moment() },

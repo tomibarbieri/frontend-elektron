@@ -6,7 +6,7 @@ angular.module('theme.demos.dashboard', [
     'chart.js'
     ])
 
-  .controller('DashboardController', ['$scope', '$timeout', '$window', '$http', '$filter', function($scope, $timeout, $window, $http, $filter, $websocket) {
+  .controller('DashboardController', ['$scope', '$timeout', '$window', '$http', '$filter', 'Notifier', function($scope, $timeout, $window, $http, $filter, Notifier, $websocket) {
     'use strict';
     var moment = $window.moment;
     var _ = $window._;
@@ -66,57 +66,114 @@ angular.module('theme.demos.dashboard', [
           console.log("problemas de conexion");
     });
 
-    // Obtiene toda la data medida para
+
+    Notifier.simpleInfo('Cargando datos', 'Cargando datos para el componente X');
     $http({
           method:'GET',
-          url: url_server + '/data/'
+          url: url_server + '/devices/36/data/13/12/2017/'
       }).then(function(response){
+
           console.log(response.data.data);
-          console.log(response.data);
-          $scope.line = {};
 
-          var data_sense = response.data.data;
-          var inicio = (data_sense.length >= 20) ? (data_sense.length - 20) : (0);
-          var fin = data_sense.length;
-
-          console.log(inicio,fin);
-
-          $scope.line.series = ['Potencia'];
-
-          $scope.line.labels = [];
-          $scope.line.data = [[]];
-
-          for (var i = inicio; i < fin; i++) {
-            console.log(data_sense[i]);
-            var hora = $filter('date')(data_sense[i].date, "HH:mm");
-            var dia = $filter('date')(data_sense[i].date, 'dd');
-            var mes = $filter('date')(data_sense[i].date, 'MM');
-
-            var data = data_sense[i].data_value;
-
-            var label = '(' + dia + '/' + mes + ') ' + hora;
-            $scope.line.labels.push(label);
-            $scope.line.data[0].push(data);
+          if (response.data.data.length > 0) {
+            Notifier.simpleSuccess('Datos cargados', 'Los datos para el componente X fueron cargados con exito');
+            $scope.graficate(response.data.data);
+          } else {
+            Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado')
           }
 
       }, function(response){
           console.log("problemas de conexion");
+          Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion');
     });
 
-    // funcion para el select
+    $scope.graficate = function(data){
+
+        $scope.line = {};
+
+        var data_sense = data;
+        var inicio = (data_sense.length >= 20) ? (data_sense.length - 20) : (0);
+        var fin = data_sense.length;
+
+        console.log(inicio,fin);
+
+        $scope.line.series = ['Potencia'];
+
+        $scope.line.labels = [];
+        $scope.line.data = [[]];
+
+        for (var i = inicio; i < fin; i++) {
+          console.log(data_sense[i]);
+          var hora = $filter('date')(data_sense[i].date, "HH:mm");
+          var dia = $filter('date')(data_sense[i].date, 'dd');
+          var mes = $filter('date')(data_sense[i].date, 'MM');
+
+          var data = data_sense[i].data_value;
+
+          var label = '(' + dia + '/' + mes + ') ' + hora;
+          $scope.line.labels.push(label);
+          $scope.line.data[0].push(data);
+        }
+    }
+
+    // funcion que se ejecuta cuando se selecciona un componente
     $scope.changeCurrentComponent = function(ids) {
       console.log(ids);
       var selected = $filter('filter')($scope.components_server, {id: ids})[0];
       console.log(selected);
       $scope.current_component = selected;
+      // carga los datos del nuevo componente
+      $scope.changeComponentWS();
     };
 
-    // funcion para regenerar el ws
-    $scope.reloadWebsocketConnection = function() {
-      console.log("Regenerate WS connection");
+    // una vez seleccionado cambia los datos
+    $scope.changeComponentWS = function(){
 
+      if ($scope.websocketStatus == false) {
+        $scope.openWebsocketConnection();
+      }
+      $scope.reloadData();
+
+    }
+
+    // Graficar
+    $scope.reloadData = function(){
+      //Notifier.simpleInfo('Cargando datos', 'Cargando datos para el componente X');
+      var device_id = $scope.current_component.id;
+      $http({
+            method:'GET',
+            url: url_server + '/devices/' + device_id + '/data/13/12/2017/'
+        }).then(function(response){
+
+            console.log(response.data.data);
+
+            if (response.data.data.length > 0) {
+              Notifier.simpleSuccess('Datos cargados', 'Los datos para el componente X fueron cargados con exito');
+              $scope.graficate(response.data.data);
+            } else {
+              Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado')
+            }
+
+        }, function(response){
+            console.log("problemas de conexion");
+            Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion');
+      });
+    };
+
+    $scope.refreshConnection = function(){
+      // falta ver como hacer
+    }
+
+    // funcion para abrir una conexion ws
+    $scope.openWebsocketConnection = function() {
+
+      // si existe una conexion actual la cierra y abre otra
       if ($scope.ws) {
         $scope.ws.terminate();
+        console.log("Regenerate WS connection");
+        Notifier.simpleInfo("Regenerando conexion en tiempo real", "Para el componente X");
+      } else {
+        Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente X");
       }
 
       var url_websocket = "ws://" + ip_server + ":8888/websocket";
@@ -125,14 +182,18 @@ angular.module('theme.demos.dashboard', [
       $scope.ws.onopen = function() {
         ws.send("Conectado");
         $scope.websocketStatus = true;
+        Notifier.simpleSuccess('Conexion establecida','Se ha establecido la conexion de tiempo real.')
       };
 
       $scope.ws.onclose = function() {
         $scope.websocketStatus = false;
+        $scope.ws = null;
+        Notifier.simpleInfo('Conexion cerrada','Se ha cerrado la conexion de tiempo real.')
       };
 
       $scope.ws.onerror = function() {
         $scope.websocketStatus = false;
+        Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion de tiempo real.')
       };
 
       $scope.ws.onmessage = function(message) {
@@ -153,6 +214,6 @@ angular.module('theme.demos.dashboard', [
       console.log($scope.ws);
     };
 
-    $scope.reloadWebsocketConnection();
+    $scope.openWebsocketConnection();
 
   }]);

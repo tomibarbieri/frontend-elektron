@@ -26,7 +26,7 @@
                         <li ng-repeat="component in components_server"><a ng-click="changeCurrentComponent(component.id)">{{ component.label }}</a></li>
                       </ul>
                     </div>
-                    <button ng-click="reloadWebsocketConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
+                    <button ng-click="refreshConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
                     <button ng-show="websocketStatus" class="btn btn-sm btn-success">On</button>
                     <button ng-show="!websocketStatus" class="btn btn-sm btn-danger">Off</button>
                 </panel-controls>
