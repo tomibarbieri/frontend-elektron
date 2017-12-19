@@ -1,5 +1,5 @@
 angular
-  .module('theme.demos.statistics', ["chart.js"])
+  .module('theme.demos.statistics', ['chart.js'])
   .controller('StatisticsController', ['$scope', '$http', function($scope, $http) {
     'use strict';
 
@@ -17,9 +17,7 @@ angular
       if (chart.config.type) {
         $scope.doughnut = chart;
       }
-
     });
-
 
     $scope.doughnutlabels = [];
     $scope.doughnutdata = [];

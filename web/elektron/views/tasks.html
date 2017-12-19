@@ -10,6 +10,7 @@
 <div class="container-fluid" ng-controller="TasksController">
 
 	<div class="row">
+
 		<div class="col-md-12">
 			<panel panel-class="panel-primary" data-heading="Tareas por consumo">
 				  <panel-controls>
@@ -17,12 +18,14 @@
 				  </panel-controls>
 				  <table class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
-						<td style="width:20%">Nombre</td>
+						<td style="width:12%">Nombre</td>
 						<td style="width:15%">Dipositivo</td>
-            <td style="width:15%">Valor máximo</td>
-            <td style="width:15%">Estado</td>
-						<td style="width:15%">Función</td>
-						<td style="width:20%">Modificar</td>
+            <td style="width:12%">Valor máximo</td>
+            <td style="width:13%">Estado</td>
+            <td style="width:13%">Repeticiones (realizadas)</td>
+            <td style="width:13%">Úlitma repetición</td>
+						<td style="width:12%">Función</td>
+						<td style="width:10%">Modificar</td>
 					</tr>
 					<tr ng-repeat="task in datatasks_server">
 					  <td>
@@ -49,6 +52,18 @@
 						  {{ showDataState($index) }}
 						</span>
 					  </td>
+            <td>
+            <!-- editable status (select-local) -->
+            <span editable-text="task.repeats" e-name="repeats" e-form="rowform" e-required>
+              {{ task.repeats }} ()
+            </span>
+            </td>
+            <td>
+            <!-- editable status (select-local) -->
+            <span editable-text="task.last_run" e-name="repeats" e-form="rowform" e-required>
+              {{ task.last_run | date:'short' }}
+            </span>
+            </td>
 					  <td>
 						<!-- editable group (select-remote) -->
 						<span editable-select="task.taskfunction.name" e-ng-options="s.value as s.text for s in taskfunction" e-name="taskfunction_name" e-form="rowform" e-required>
@@ -72,8 +87,92 @@
 					  </td>
 					</tr>
         </table>
-        <a ng-click="addDataTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por consumo</a>
+        <a ng-click="addBoxDataTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por consumo</a>
 			</panel>
+
+      <panel id="panelDataTask" ng-show="blockdatataskdiv == false" panel-class="panel-primary" data-heading="Agregar tarea por consumo">
+            <panel-controls>
+              <panel-control-collapse></panel-control-collapse>
+            </panel-controls>
+
+            <form action="" class="form-horizontal row-border">
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Nombre</label>
+                <div class="col-sm-6">
+                  <input ng-model="currentDataTask.label" id="nameDataTask" type="text" class="form-control" placeholder="Nombre de la tarea">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Descripción</label>
+                <div class="col-sm-6">
+                  <input ng-model="currentDataTask.description" type="text" class="form-control" placeholder="Nombre de la tarea">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Componente</label>
+                <div class="col-sm-6">
+                  <select ng-model="currentDataTask.component" class="form-control" id="source">
+                    <optgroup label="Componentes disponibles">
+                      <option ng-repeat="component in components_server" value="{{component.id}}">{{ component.label }}</option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Valor máximo</label>
+                <div class="col-sm-6">
+                  <input ng-model="currentDataTask.max_value" class="form-control" type="number" value="42" id="example-number-input">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Accion a realizar</label>
+                <div class="col-sm-6">
+                  <select ng-model="currentDataTask.action" class="form-control" id="source">
+                    <optgroup label="Acciones disponibles">
+                      <option ng-repeat="function in taskfunction" value="{{function.value}}">{{function.text}}</option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Cantidad de repeticiones</label>
+                <div class="col-sm-6">
+                  <input ng-model="currentDataTask.repeats" class="form-control" type="number" value="3" id="example-number-input">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Comparador</label>
+                <div class="col-sm-6">
+                  <select ng-model="currentDataTask.comparator" class="form-control" id="source">
+                    <optgroup label="Comparadores disponibles">
+                      <option value="AK">Mayor</option>
+                      <option value="HI">Menor</option>
+                      <option value="HI">Igual</option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+            </form>
+            <div class="panel-footer">
+      			<div class="row">
+      				<div class="col-sm-6 col-sm-offset-3">
+      					<div class="btn-toolbar">
+      						<button ng-click="createDataTask()" class="btn-success btn"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea</button>
+      						<button ng-click="closeBoxDataTask()" class="btn-default btn">Cancelar</button>
+      					</div>
+      				</div>
+      			</div>
+      		</div>
+
+      </panel>
 
       <panel panel-class="panel-primary" data-heading="Tareas por fecha y hora">
 				  <panel-controls>
@@ -81,13 +180,15 @@
 				  </panel-controls>
 				  <table class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
-						<td style="width:14%">Nombre</td>
+						<td style="width:12%">Nombre</td>
 						<td style="width:14%">Dipositivo</td>
-            <td style="width:13%">Fecha</td>
-            <td style="width:14%">Hora</td>
-            <td style="width:13%">Estado</td>
+            <td style="width:10%">Fecha</td>
+            <td style="width:6%">Hora</td>
+            <td style="width:11%">Estado</td>
+            <td style="width:12%">Repeticiones (Criterio)</td>
+            <td style="width:13%">Última repetición</td>
 						<td style="width:13%">Función</td>
-						<td style="width:20%">Modificar</td>
+						<td style="width:10%">Modificar</td>
 					</tr>
 					<tr ng-repeat="task in datetimetasks_server">
 					  <td>
@@ -120,6 +221,18 @@
 						  {{ showDateTimeState($index) }}
 						</span>
 					  </td>
+            <td>
+						<!-- editable status (select-local) -->
+						<span editable-text="task.repeats" e-name="repeats" e-form="rowform" e-required>
+						  {{ task.repeats }} (Cada {{showCriteriaTime($index)}})
+						</span>
+					  </td>
+            <td>
+						<!-- editable status (select-local) -->
+						<span editable-text="task.repeats" e-name="repeats" e-form="rowform" e-required>
+						  {{ task.last_run | date:'short' }}
+						</span>
+					  </td>
 					  <td>
 						<!-- editable group (select-remote) -->
 						<span editable-select="task.taskfunction.name" e-ng-options="s.value as s.text for s in taskfunction" e-name="taskfunction_name" e-form="rowform" e-required>
@@ -143,8 +256,92 @@
 					  </td>
 					</tr>
         </table>
-        <a ng-click="addTimeTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha</a>
+        <a ng-click="addBoxDateTimeTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha</a>
 			</panel>
+
+      <panel id="panelDateTimeTask" ng-show="blockdatetimetaskdiv == false" panel-class="panel-primary" data-heading="Agregar tarea por fecha y hora">
+            <panel-controls>
+              <panel-control-collapse></panel-control-collapse>
+            </panel-controls>
+
+            <form action="" class="form-horizontal row-border">
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Nombre</label>
+                <div class="col-sm-6">
+                  <input id="nameDataTask" type="text" class="form-control" placeholder="Nombre de la tarea">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Componente</label>
+                <div class="col-sm-6">
+                  <select class="form-control" id="source">
+                    <optgroup label="Componentes disponibles">
+                      <option ng-repeat="component in components_server" value="{{component.id}}">{{ component.label }}</option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+        				<label for="#" class="col-md-3 control-label">Elegir día</label>
+        				<div class="col-md-6">
+        					<datepicker ng-model="dt" min-date="minDate" show-weeks="true" class="datepicker"></datepicker>
+        				</div>
+        			</div>
+
+              <div class="form-group">
+        				<label class="col-sm-3 control-label">Elegir hora</label>
+        				<div class="timepickerform" class="col-sm-6">
+        					<timepicker ng-model="mytime" class="timepicker"></timepicker>
+        				</div>
+        			</div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Accion a realizar</label>
+                <div class="col-sm-6">
+                  <select class="form-control" id="source">
+                    <optgroup label="Acciones disponibles">
+                      <option ng-repeat="function in taskfunction" value="{{function.value}}">{{function.text}}</option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Cantidad de repeticiones</label>
+                <div class="col-sm-6">
+                  <input class="form-control" type="number" value="3" id="example-number-input">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Criterio de repetición</label>
+                <div class="col-sm-6">
+                  <select class="form-control" id="source">
+                    <optgroup label="Comparadores disponibles">
+                      <option value="AK">Cada hora</option>
+                      <option value="HI">Cada día</option>
+                      <option value="HI">Cada semana</option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+            </form>
+            <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <div class="btn-toolbar">
+                  <button ng-click="addDateTimeTask()" class="btn-success btn"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea</button>
+                  <button ng-click="closeBoxDateTimeTask()" class="btn-default btn">Cancelar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </panel>
 
 
 		</div>

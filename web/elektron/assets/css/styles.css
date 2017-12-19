@@ -90,3 +90,7 @@
 .button-refresh {
   margin-right: 4px;
 }
+
+.timepickerform td {
+  padding: 0px !important;
+}
