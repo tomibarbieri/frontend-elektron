@@ -51,7 +51,6 @@ angular.module('theme.demos.history', [
           //$scope.current_component = $scope.components_server[0];
           $scope.components.push.apply($scope.components, $scope.components_server);
           //$scope.components.concat(response.data.devices);
-          Notifier.simpleSuccess("Componentes cargados", "Se han cargado con exito un total de " + response.data.devices.length + " componentes.");
           //console.log($scope.components);
       }, function(response){
           console.log("problemas de conexion");

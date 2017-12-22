@@ -40,6 +40,7 @@ angular.module('theme.demos.dashboard', [
 
       }, function(response){
           console.log("problemas de conexion");
+          Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
     });
 
     // Obtiene los data tasks para contarlos y ponerlos en el box
@@ -67,7 +68,7 @@ angular.module('theme.demos.dashboard', [
     });
 
 
-    Notifier.simpleInfo('Cargando datos', 'Cargando datos para el componente X');
+    //Notifier.simpleInfo('Cargando datos', 'Cargando datos para el componente X');
     $http({
           method:'GET',
           url: url_server + '/devices/36/data/13/12/2017/'
@@ -84,7 +85,7 @@ angular.module('theme.demos.dashboard', [
 
       }, function(response){
           console.log("problemas de conexion");
-          Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion');
+          Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar la información');
     });
 
     $scope.graficate = function(data){
@@ -148,7 +149,7 @@ angular.module('theme.demos.dashboard', [
             console.log(response.data.data);
 
             if (response.data.data.length > 0) {
-              Notifier.simpleSuccess('Datos cargados', 'Los datos para el componente X fueron cargados con exito');
+              Notifier.simpleSuccess('Datos cargados', 'Los datos  para el componente X fueron cargados con exito');
               $scope.graficate(response.data.data);
             } else {
               Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado')
@@ -162,6 +163,8 @@ angular.module('theme.demos.dashboard', [
 
     $scope.refreshConnection = function(){
       // falta ver como hacer
+
+      $scope.openWebsocketConnection();
     }
 
     // funcion para abrir una conexion ws
@@ -173,7 +176,7 @@ angular.module('theme.demos.dashboard', [
         console.log("Regenerate WS connection");
         Notifier.simpleInfo("Regenerando conexion en tiempo real", "Para el componente X");
       } else {
-        Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente X");
+        //Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente X");
       }
 
       var url_websocket = "ws://" + ip_server + ":8888/websocket";
@@ -182,18 +185,18 @@ angular.module('theme.demos.dashboard', [
       $scope.ws.onopen = function() {
         ws.send("Conectado");
         $scope.websocketStatus = true;
-        Notifier.simpleSuccess('Conexion establecida','Se ha establecido la conexion de tiempo real.')
+        Notifier.simpleSuccess('Conexion establecida','Se ha establecido la conexion para la vision de datos en tiempo real.')
       };
 
       $scope.ws.onclose = function() {
         $scope.websocketStatus = false;
         $scope.ws = null;
-        Notifier.simpleInfo('Conexion cerrada','Se ha cerrado la conexion de tiempo real.')
+        //Notifier.simpleInfo('Conexion cerrada','Se ha cerrado la conexion de tiempo real.')
       };
 
       $scope.ws.onerror = function() {
         $scope.websocketStatus = false;
-        Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion de tiempo real.')
+        Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion para la vision de datos en tiempo real.')
       };
 
       $scope.ws.onmessage = function(message) {

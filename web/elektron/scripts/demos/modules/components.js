@@ -1,6 +1,6 @@
 angular
   .module('theme.demos.components', [])
-  .controller('ComponentsController', ['$scope', '$http', function($scope, $http) {
+  .controller('ComponentsController', ['$scope', '$http','Notifier', function($scope, $http, Notifier) {
     'use strict';
 
     var url_server = 'http://158.69.223.78:8000';
@@ -12,8 +12,10 @@ angular
     }).then(function(response){
         console.log(response.data);
         $scope.components_server = response.data.devices;
+        Notifier.simpleSuccess("Componentes cargados", "Se han cargado con exito un total de " + response.data.devices.length + " componentes.");
     }, function(response){
         console.log("problemas de conexion");
+        Notifier.simpleError("Error de conexión","No se pudo traer la informacion de los componentes del servidor");
     });
 
     $scope.saveComponent = function(data, id) {
