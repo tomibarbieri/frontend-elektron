@@ -12,8 +12,8 @@ angular.module('theme.demos.tasks', [])
     $scope.datatasks_server = [];
     $scope.datetimetasks_server = [];
 
-    //var url_server = 'http://158.69.223.78:8000';
-    var url_server = 'http://192.168.0.21:8000';
+    var url_server = 'http://158.69.223.78:8000';
+    //var url_server = 'http://192.168.0.21:8000';
 
     $http({
         method:'GET',

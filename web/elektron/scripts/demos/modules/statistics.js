@@ -1,34 +1,54 @@
 angular
   .module('theme.demos.statistics', ['chart.js'])
-  .controller('StatisticsController', ['$scope', '$http', function($scope, $http) {
+  .controller('StatisticsController', ['$scope', '$http', '$filter', 'Notifier', function($scope, $http, $filter, Notifier) {
     'use strict';
 
     console.log("Statistics");
 
-    var url_server = 'http://158.69.223.78:8000';
-    var url_cape = 'http://163.10.33.173:8000';
+    //var url_server = 'http://158.69.223.78:8000';
+    var url_server = 'http://192.168.0.21:8000';
 
     $scope.doughnut;
+    $scope.bar;
 
     $scope.$on('chart-create', function (evt, chart) {
       console.log(chart);
       console.log(chart.config.type);
       console.log(chart.config.data);
-      if (chart.config.type) {
+      if (chart.config.type == 'doughnut') {
         $scope.doughnut = chart;
+      }
+      else {
+        $scope.bar = chart;
       }
     });
 
     $scope.doughnutlabels = [];
     $scope.doughnutdata = [];
 
-    $scope.labels1 = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-    $scope.series = ['Aire acondicionado', 'Heladera'];
+    $scope.barlabels = [];
+    $scope.barseries = [];
+    $scope.bardata = [[],[]];
 
-    $scope.data1 = [
-      [65, 59, 80, 81, 56, 55, 40],
-      [28, 48, 40, 19, 86, 27, 90]
-    ];
+    $scope.barPrecision = [{
+      'id': 0,
+      'label': 'Por día',
+      'url': 'perday'
+    }, {
+      'id': 1,
+      'label': 'Por hora',
+      'url': 'perhour'
+    }, {
+      'id': 2,
+      'label': 'Cada 5 seg',
+      'url': 'normal'
+    }];
+
+    $scope.currentPrecision = {
+      'id': 0,
+      'label': 'Por día',
+      'url': 'perday'
+    };
 
     $http({
         method:'GET',
@@ -36,46 +56,130 @@ angular
     }).then(function(response){
         console.log(response.data);
         $scope.components_server = response.data.devices;
+        Notifier.simpleSuccess('Datos cargados con exito','Desde el servidor')
 
-        for (var i = 0; i < $scope.components_server.length; i++) {
-          $scope.doughnutlabels.push($scope.components_server[i].label);
-          $scope.doughnutdata.push(Math.floor((Math.random() * 100) + 1));
-        }
+        $scope.createBarChart();
+        $scope.createDoughnutChart();
 
     }, function(response){
         console.log("problemas de conexion");
+        Notifier.simpleError("Error de conexión","No se pudo traer la informacion de los componentes del servidor");
     });
 
-    $scope.saveComponent = function(data, id) {
-      //$scope.user not updated yet
-      angular.extend(data, {
-        id: id
-      });
-      console.log(data);
+    $scope.changeCriteria = function(id_selected) {
+      var selected = $filter('filter')($scope.barPrecision, {id: id_selected});
+      var selectedPrecision = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
 
-      var data2 = {'label': data.name};
+      $scope.currentPrecision = selectedPrecision;
 
-      var url = url_server + '/devices/'+ id +'/updatelabel';
+      $scope.barlabels = [];
 
-      var serializedData = $.param(data2);
-      console.log(serializedData);
+      $scope.getComponentData('left',$scope.currentBarLeft);
+      $scope.getComponentData('right',$scope.currentBarRigth);
 
-      var send = $http({
-        method: 'POST',
-        url: url,
-        data: serializedData,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
-      console.log(send);
-      send.then(
-        function(response){
-          console.log(response);
+    }
+
+    $scope.changeLeftBarComponent = function(id) {
+      console.log(id);
+      $scope.changeBarComponent(id,'left');
+    }
+
+    $scope.changeRigthBarComponent = function(id) {
+      console.log(id);
+      $scope.changeBarComponent(id,'right');
+    }
+
+    $scope.changeBarComponent = function(id_selected, side) {
+      var selected = $filter('filter')($scope.components_server, {id: id_selected});
+      var selectedComponent = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
+
+      $scope.getComponentData(side,selectedComponent);
+
+      if (side == 'left') {
+        $scope.currentBarLeft = selectedComponent;
+      }
+      else {
+        $scope.currentBarRigth = selectedComponent;
+      }
+    }
+
+    $scope.getComponentData = function(side, component) {
+
+      $http({
+          method:'GET',
+          url: url_server + '/devices/' + component.id + '/data/' + $scope.currentPrecision.url // modificar la URL /devices/id/data/perhour
+      }).then(function(response){
+          console.log(response.data.data);
+          //$scope.components_server = response.data.devices;
+          Notifier.simpleSuccess('Datos cargados con exito','Para el componente: ' + component.label)
+          $scope.graficateComponentBar(response.data.data,side);
+
       }, function(response){
           console.log("problemas de conexion");
+          Notifier.simpleError("Error de conexión","No se pudo traer la informacion del componente" + component.label);
       });
-    };
+    }
+
+    $scope.graficateComponentBar = function(data,side) {
+
+      if ($scope.barlabels.length == 0) {
+        console.log('preparando footer');
+        for (var i = 6; i > 0; i--) {
+          var time;
+          if ($scope.currentPrecision.url == 'perday') {
+            time = $filter('date')(data[i].date, 'shortDate');
+          } else {
+            if ($scope.currentPrecision.url == 'perhour') {
+              time = $filter('date')(data[i].date, 'shortTime')
+            } else {
+              console.log('chicharitoo');
+            }
+          }
+          $scope.barlabels.push(time);
+        }
+      }
+
+      if (side == 'left') {
+        console.log('izquierda');
+        $scope.bardata[0] = [];
+        for (var i = 6; i > 0; i--) {
+          if (data[i].data_value == null) {
+            $scope.bardata[0].push(0);
+          } else {
+            $scope.bardata[0].push(data[i].data_value);
+          }
+        }
+      } else {
+        console.log('derecha');
+        $scope.bardata[1] = [];
+        for (var i = 6; i > 0; i--) {
+          if (data[i].data_value == null) {
+            $scope.bardata[1].push(0);
+          } else {
+            $scope.bardata[1].push(data[i].data_value);
+          }
+        }
+      }
+
+    }
+
+    $scope.createBarChart = function() {
+      $scope.currentBarLeft = $scope.components_server[0];
+      $scope.currentBarRigth = $scope.components_server[0];
+
+      $scope.barseries = [$scope.currentBarLeft.label, $scope.currentBarRigth.label];
+
+      $scope.getComponentData('left',$scope.currentBarLeft)
+      $scope.getComponentData('rigth',$scope.currentBarRigth)
+
+    }
+
+    $scope.createDoughnutChart = function() {
+      for (var i = 0; i < $scope.components_server.length; i++) {
+        $scope.doughnutlabels.push($scope.components_server[i].label);
+        $scope.doughnutdata.push(Math.floor((Math.random() * 100) + 1));
+      }
+    }
 
     $scope.turnOnComponent = function(index,id) {
       var url = url_server + '/devices/' + id + '/turnon';
@@ -115,42 +219,5 @@ angular
       });
     };
 
-    $scope.enableComponent = function(index,id) {
-      var url = url_server + '/devices/' + id + '/enable';
-      var send = $http({
-        method: 'POST',
-        url: url,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
-      console.log(send);
-      send.then(
-        function(response){
-          console.log(response);
-          $scope.components_server[index].enabled = 'true';
-      }, function(response){
-          console.log("problemas de conexion");
-      });
-    };
-
-    $scope.disableComponent = function(index,id) {
-      var url = url_server + '/devices/' + id + '/disable';
-      var send = $http({
-        method: 'POST',
-        url: url,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
-      console.log(send);
-      send.then(
-        function(response){
-          console.log(response);
-          $scope.components_server[index].enabled = 'false';
-      }, function(response){
-          console.log("problemas de conexion");
-      });
-    };
 
 }]);

@@ -203,7 +203,7 @@ angular.module('theme.demos.history', [
           }
       }).then(function(response){
 
-          //console.log(response.data.data);
+          console.log(response.data.data);
           //console.log(response.data);
           $scope.currentData = response.data.data;
           $scope.graficate(response.data.data);
@@ -238,8 +238,9 @@ angular.module('theme.demos.history', [
         $scope.currentDataIndex = 0;
       }
 
-      console.log(data);
+
       //$scope.currentData = data;
+      console.log($scope.currentDataIndex);
       $scope.previousPageDisable = $scope.currentDataIndex == 0 ? true : false;
       $scope.nextPageDisable = ($scope.currentDataIndex + 20 >= $scope.currentData.length) ? true : false;
       $scope.line = {};
@@ -250,18 +251,18 @@ angular.module('theme.demos.history', [
       $scope.line.data = [[]];
 
       var data_sense = data;
-
+      console.log(data_sense);
       // REVISAR LA ITERACION PARA MOSTAR BIEN EL PAGINADO
-      for (var i = 20; i > 0; i--) {
+      for (var i = 19; i >= 0; i--) {
         var hora = $filter('date')(data_sense[i].date, "HH:mm");
         var dia = $filter('date')(data_sense[i].date, 'dd');
         var mes = $filter('date')(data_sense[i].date, 'MM');
 
-        var data = data_sense[i].data_value;
+        var data_2 = data_sense[i].data_value;
 
         var label = '(' + dia + '/' + mes + ') ' + hora;
         $scope.line.labels.push(label);
-        $scope.line.data[0].push(data);
+        $scope.line.data[0].push(data_2);
       }
       if ($scope.chart) {
           console.log("Grafico actualizado");
@@ -316,6 +317,7 @@ angular.module('theme.demos.history', [
 
     // funcion para actualizar los boxes en cada pagina
     $scope.updateBoxes = function(data) {
+      console.log(data);
       $scope.datos_medidos = data.length;
       var total = 0;
       data.forEach(function(element) {

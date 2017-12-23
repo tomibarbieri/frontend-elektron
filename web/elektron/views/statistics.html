@@ -141,36 +141,42 @@
 
     <div class="col-md-6">
 
-        <panel panel-class="panel-default no-padding" heading="Comparacion entre componentes">
+        <panel panel-class="panel-default no-padding" heading="Comparación">
             <panel-controls>
                 <panel-control-collapse></panel-control-collapse>
 
                 <div class="btn-group" dropdown>
-                  <button type="button" class="btn btn-sm btn-info">Heladera</button>
+                  <button type="button" class="btn btn-sm btn-info">{{ currentPrecision.label }}</button>
                   <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                     <i class="caret"></i>
                   </button>
                   <ul class="dropdown-menu pull-right">
                     <li>
-                      <a>Heladera</a>
-                      <a>Microondas</a>
-                      <a>Pava electrica</a>
-                      <a>Aire Acondicionado</a>
+                      <a ng-repeat="precision in barPrecision" ng-click="changeCriteria(precision.id)">{{precision.label}}</a>
                     </li>
                   </ul>
                 </div>
 
                 <div class="btn-group" dropdown>
-                  <button type="button" class="btn btn-sm btn-info">Aire acondicionado</button>
+                  <button type="button" class="btn btn-sm btn-info">{{currentBarLeft.label}}</button>
                   <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                     <i class="caret"></i>
                   </button>
                   <ul class="dropdown-menu pull-right">
                     <li>
-                      <a>Heladera</a>
-                      <a>Microondas</a>
-                      <a>Pava electrica</a>
-                      <a>Aire Acondicionado</a>
+                      <a ng-repeat="component in components_server" ng-click="changeLeftBarComponent(component.id)">{{ component.label }}</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="btn-group" dropdown>
+                  <button type="button" class="btn btn-sm btn-info">{{currentBarRigth.label}}</button>
+                  <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+                    <i class="caret"></i>
+                  </button>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a ng-repeat="component in components_server" ng-click="changeRigthBarComponent(component.id)">{{ component.label }}</a>
                     </li>
                   </ul>
                 </div>
@@ -180,7 +186,7 @@
                 <div class="row">
 
                   <canvas id="bar" class="chart chart-bar"
-                    chart-data="data1" chart-labels="labels1" chart-series="series">
+                    chart-data="bardata" chart-labels="barlabels" chart-series="barseries">
                   </canvas>
 
                 </div>
