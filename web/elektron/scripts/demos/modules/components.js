@@ -44,8 +44,10 @@ angular
       send.then(
         function(response){
           console.log(response);
+          Notifier.simpleSuccess('Componente guardado','El nombre del componente se ha editado con éxito');
       }, function(response){
           console.log("problemas de conexion");
+          Notifier.simpleError('No se pudo guardar','Por problemas de conexión no se pudo guardar');
       });
     };
 
@@ -63,8 +65,10 @@ angular
         function(response){
           console.log(response);
           $scope.components_server[index].devicestate.name = 'on';
+          Notifier.simpleSuccess('Componente encendido','El componente se ha encendido con éxito');
       }, function(response){
           console.log("problemas de conexion");
+          Notifier.simpleError('No se pudo encender','Por problemas de conexión no se pudo encender el componente');
       });
     };
 
@@ -82,8 +86,10 @@ angular
         function(response){
           console.log(response);
           $scope.components_server[index].devicestate.name = 'off';
+          Notifier.simpleSuccess('Componente apagado','El componente se ha apagado con éxito');
       }, function(response){
           console.log("problemas de conexion");
+          Notifier.simpleError('No se pudo apagar','Por problemas de conexión no se pudo apagar el componente');
       });
     };
 
@@ -101,8 +107,10 @@ angular
         function(response){
           console.log(response);
           $scope.components_server[index].enabled = 'true';
+          Notifier.simpleSuccess('Componente activado','El componente se ha activado con éxito');
       }, function(response){
           console.log("problemas de conexion");
+          Notifier.simpleError('No se pudo activar','Por problemas de conexión no se pudo activar el componente');
       });
     };
 
@@ -120,8 +128,10 @@ angular
         function(response){
           console.log(response);
           $scope.components_server[index].enabled = 'false';
+          Notifier.simpleSuccess('Componente desactivado','El componente se ha desactivado con éxito');
       }, function(response){
           console.log("problemas de conexion");
+          Notifier.simpleError('No se pudo desactivar','Por problemas de conexión no se pudo desactivar el componente');
       });
     };
 
