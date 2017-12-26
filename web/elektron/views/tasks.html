@@ -18,7 +18,7 @@
 				  </panel-controls>
 				  <table class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
-						<td style="width:16%">Nombre</td>
+						<td style="width:16%">Nombre y descripción (<span class="glyphicon glyphicon-file"></span>)</td>
 						<td style="width:15%">Dipositivo</td>
             <td style="width:12%">Valor máximo</td>
             <td style="width:13%">Estado</td>
@@ -33,6 +33,7 @@
 						<span editable-text="task.label" e-name="label" e-form="rowform" e-required>
 						  {{ task.label }}
 						</span>
+            <span title="{{task.description}}" class="float-right glyphicon glyphicon-file"></span>
 					  </td>
 					  <td>
 						<!-- editable status (select-local) -->
@@ -193,7 +194,7 @@
 				  </panel-controls>
 				  <table class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
-						<td style="width:16%">Nombre</td>
+						<td style="width:16%">Nombre y descripción (<span class="glyphicon glyphicon-file"></span>)</td>
 						<td style="width:14%">Dipositivo</td>
             <td style="width:9%">Fecha</td>
             <td style="width:7%">Hora</td>
@@ -209,6 +210,7 @@
 						<span editable-text="task.label" e-name="label" e-form="rowform" e-required>
 						  {{ task.label }}
 						</span>
+            <span title="{{task.description}}" class="float-right glyphicon glyphicon-file"></span>
 					  </td>
 					  <td>
 						<!-- editable status (select-local) -->

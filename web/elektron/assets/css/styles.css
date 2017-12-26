@@ -94,3 +94,7 @@
 .timepickerform td {
   padding: 0px !important;
 }
+
+.float-right {
+  float: right;
+}

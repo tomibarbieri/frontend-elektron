@@ -5,8 +5,8 @@ angular
 
     console.log("Statistics");
 
-    //var url_server = 'http://158.69.223.78:8000';
-    var url_server = 'http://192.168.0.21:8000';
+    var url_server = 'http://158.69.223.78:8000';
+    //var url_server = 'http://192.168.0.21:8000';
 
     $scope.doughnut;
     $scope.bar;
