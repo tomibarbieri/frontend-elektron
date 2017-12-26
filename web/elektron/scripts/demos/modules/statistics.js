@@ -111,12 +111,12 @@ angular
       }).then(function(response){
           console.log(response.data.data);
           //$scope.components_server = response.data.devices;
-          Notifier.simpleSuccess('Datos cargados con exito','Para el componente: ' + component.label)
+          Notifier.simpleSuccess('Tabla comparativa','Datos cargados con exito para el componente: ' + component.label)
           $scope.graficateComponentBar(response.data.data,side);
 
       }, function(response){
           console.log("problemas de conexion");
-          Notifier.simpleError("Error de conexión","No se pudo traer la informacion del componente" + component.label);
+          Notifier.simpleError("Tabla comparativa - Error","No se pudo traer la informacion del componente " + component.label + " por problemas de conexión");
       });
     }
 

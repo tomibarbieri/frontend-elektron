@@ -23,6 +23,8 @@ angular.module('theme.demos.history', [
     //$scope.current_component;
     $scope.current_period;
 
+    $scope.costo_estimado = 1245;
+
     $scope.date_config = {
       'dateFrom': new Date(),
       'dateTo': new Date(),
@@ -95,6 +97,7 @@ angular.module('theme.demos.history', [
           //console.log(response.data.data);
           //console.log(response.data);
           $scope.currentData = response.data.data;
+          Notifier.simpleSuccess('Datos cargados con éxito', 'Los datos (' + response.data.data + ') fueron obtenidos con éxito y se estan ubicando en el gráfico');
           $scope.graficate(response.data.data);
 
       }, function(response){
@@ -206,7 +209,11 @@ angular.module('theme.demos.history', [
           console.log(response.data.data);
           //console.log(response.data);
           $scope.currentData = response.data.data;
-          $scope.graficate(response.data.data);
+          if (response.data.data > 0) {
+            $scope.graficate(response.data.data);
+          } else {
+            Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado. ');
+          }
 
       }, function(response){
           console.log("problemas de conexion");
@@ -231,7 +238,7 @@ angular.module('theme.demos.history', [
     $scope.graficate = function(data,not_new) {
 
 
-      Notifier.simpleSuccess('Cargando datos', 'Los datos (' + data.length + ') fueron obtenidos con éxito y se estan ubicando en el gráfico');
+
       //$scope.simpleSuccess('Datos cargados!', 'Los datos fueron obtenidos con éxito y se estan cargando en el gráfico');
 
       if (not_new === undefined) {
@@ -269,7 +276,7 @@ angular.module('theme.demos.history', [
           $scope.chart.update();
       }
 
-      $scope.updateBoxes(data);
+      //$scope.updateBoxes(data);
 
     }
 
@@ -351,7 +358,7 @@ angular.module('theme.demos.history', [
 
 
     // COSAS VIEJAS _ BORRAR
-
+ /*
     $scope.epDiskSpace = {
       animate: {
         duration: 0,
@@ -377,6 +384,6 @@ angular.module('theme.demos.history', [
       size: 100,
       lineCap: 'circle'
     };
-
+*/
 
   }]);

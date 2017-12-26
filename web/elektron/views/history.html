@@ -10,24 +10,23 @@
 <div class="container-fluid" ng-controller="HistoryController">
 
     <div class="row">
-        <div class="col-md-8 animated-content">
+        <div class="col-md-12 animated-content">
           <panel panel-class="panel-default no-padding" heading="Ver datos históricos">
               <panel-controls>
                   <panel-control-collapse></panel-control-collapse>
-
               </panel-controls>
-
               <div class="p20">
                   <div class="row">
                     <div class="mr10 hidden-xs">
 
                         <table class="table table-bordered table-condensed">
               					<tr style="font-weight: bold">
-                          <td style="width:20%">Dispositivo</td>
-                          <td style="width:20%">Fecha desde</td>
+                          <td style="width:15%">Dispositivo</td>
+                          <td style="width:15%">Fecha desde</td>
               						<td style="width:15%">Hora desde</td>
-                          <td style="width:20%">Fecha hasta</td>
+                          <td style="width:15%">Fecha hasta</td>
                           <td style="width:15%">Hora hasta</td>
+                          <td style="width:15%">Precision</td>
                           <td style="width:10%">Acciones</td>
               					</tr>
               					<tr >
@@ -61,6 +60,12 @@
                                 {{ (date_config.timeTo | date:"HH:mm") || 'empty' }}
                 						</span>
               					  </td>
+                          <td>
+                            <!-- Listado de dispositivos -->
+                            <span editable-select="components.label" e-ng-options="c.id as c.label for c in components" e-name="component" e-form="rowform" e-required>
+                              {{ showComponentsFunction() }}
+                            </span>
+                          </td>
               					  <td style="white-space: nowrap">
               						<!-- form -->
               						<form editable-form name="rowform" onbeforesave="updateChart($data)" ng-show="rowform.$visible" class="buttons-grid form-buttons form-inline" shown="inserted == date_config">
@@ -82,52 +87,56 @@
                   </div>
               </div>
           </panel>
-            <panel panel-class="panel-default no-padding" heading="Periodo elegido">
-                <panel-controls>
-                    <panel-control-collapse></panel-control-collapse>
-
-                    <form class="pull-right mr10 hidden-xs" name="myForm">
-
-                      <div class="btn-group" dropdown>
-                        <button type="button" class="btn btn-sm btn-info">{{ current_period.name }}</button>
-                        <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
-                          <i class="caret"></i>
-                        </button>
-                        <ul class="dropdown-menu pull-right">
-                          <li ng-repeat="period in periods">
-                            <a ng-click="changeCurrentPeriod(period.id)">{{ period.name }}</a>
-                          </li>
-                        </ul>
-                      </div>
-
-                      <!--
-                      <label for="repeatSelect"> Mostrar datos: </label>
-                      <select name="mySelect" id="mySelect"
-                        ng-options="option.name for option in select_data.availableOptions track by option.id"
-                        ng-model="select_data.selectedOption"
-                        ng-change="executeSelect()">
-                      </select>
-                    -->
-                      <button type="submit" ng-disabled="previousPageDisable" ng-click="previousPage()" class="btn btn-sm btn-primary">
-                        20 previos
-                      </button>
-                      <button type="button" ng-disabled="nextPageDisable" ng-click="nextPage()" class="btn btn-sm btn-primary">
-                        20 siguientes
-                      </button>
-                    </form>
-                </panel-controls>
-
-                <div class="p20">
-                    <div class="row">
-
-                      <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
-                        chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
-                      </canvas>
-                      
-                    </div>
-                </div>
-            </panel>
         </div>
+
+        <div class="col-md-8 animated-content">
+          <panel panel-class="panel-default no-padding" heading="Periodo elegido">
+              <panel-controls>
+                  <panel-control-collapse></panel-control-collapse>
+
+                  <form class="pull-right mr10 hidden-xs" name="myForm">
+
+                    <div class="btn-group" dropdown>
+                      <button type="button" class="btn btn-sm btn-info">{{ current_period.name }}</button>
+                      <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+                        <i class="caret"></i>
+                      </button>
+                      <ul class="dropdown-menu pull-right">
+                        <li ng-repeat="period in periods">
+                          <a ng-click="changeCurrentPeriod(period.id)">{{ period.name }}</a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <!--
+                    <label for="repeatSelect"> Mostrar datos: </label>
+                    <select name="mySelect" id="mySelect"
+                      ng-options="option.name for option in select_data.availableOptions track by option.id"
+                      ng-model="select_data.selectedOption"
+                      ng-change="executeSelect()">
+                    </select>
+                  -->
+                    <button type="submit" ng-disabled="previousPageDisable" ng-click="previousPage()" class="btn btn-sm btn-primary">
+                      20 previos
+                    </button>
+                    <button type="button" ng-disabled="nextPageDisable" ng-click="nextPage()" class="btn btn-sm btn-primary">
+                      20 siguientes
+                    </button>
+                  </form>
+              </panel-controls>
+
+              <div class="p20">
+                  <div class="row">
+
+                    <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
+                      chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
+                    </canvas>
+
+                  </div>
+              </div>
+          </panel>
+        </div>
+
         <div class="col-md-4">
             <div class="row">
                 <div class="col-xs-6">
@@ -175,13 +184,27 @@
             </div>
             <div class="row">
                 <div class="col-xs-6">
-                    <tile-simple data="{ title: 'Costo periodo seleccionado', href: '#/ui-tiles',text: '$1,138', color: 'success'}"></tile-simple>
+                    <a class="boxes-a boxes-dark" >
+                      <div class="boxes-title">
+                          <div class="text-center">Componente seleccionado</div>
+                      </div>
+                      <div class="boxes-body">
+                          <div class="text-center">{{selectedComponent.label || 'Todos'}}</div>
+                      </div>
+                    </a>
                 </div>
                 <div class="col-xs-6">
-                    <tile-simple data="{ title: 'Componente seleccionado', href: '#/ui-tiles',text: 'Heladera', color: 'midnightblue'}"></tile-simple>
+                    <a class="boxes-a boxes-green" >
+                      <div class="boxes-title">
+                          <div class="text-center">Costo periodo seleccionado</div>
+                      </div>
+                      <div class="boxes-body">
+                          <div class="text-center">${{costo_estimado}}</div>
+                      </div>
+                    </a>
                 </div>
             </div>
-
+            <!--
             <div class="row">
                 <div class="col-md-6">
                     <tile type="default" heading="Comparacion al total de consumo del sistema">
@@ -201,6 +224,7 @@
                 </div>
 
             </div>
+            -->
         </div>
     </div>
 

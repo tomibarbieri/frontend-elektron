@@ -49,10 +49,13 @@ angular.module('theme.demos.monitor', [
 
     $http({
         method:'GET',
-        url: url_server + '/devices/36/data/13/12/2017/'
+        url: url_server + '/devices/36/data/13/12/2017/' // data de ejemplo
     }).then(function(response){
         console.log(response.data.data);
         console.log(response.data);
+
+        Notifier.simpleSuccess('Datos iniciales cargados','Datos iniciales cargados con exito');
+
         $scope.line = {};
 
         var data_sense = response.data.data;
@@ -81,6 +84,7 @@ angular.module('theme.demos.monitor', [
 
     }, function(response){
         console.log("problemas de conexion");
+        Notifier.simpleError('No se pudieron cargar los datos','No se pudieron cargar los datos iniciales de los graficos');
     });
 
 
