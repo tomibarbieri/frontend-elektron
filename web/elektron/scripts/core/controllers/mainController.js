@@ -84,11 +84,13 @@ angular.module('theme.core.main_controller', ['theme.core.services'])
 
     $scope.hideHeaderBar = function() {
       $theme.set('headerBarHidden', true);
+      console.log('hideHeaderBar');
     };
 
     $scope.showHeaderBar = function($event) {
       $event.stopPropagation();
       $theme.set('headerBarHidden', false);
+      console.log('showHeaderBar');
     };
 
     $scope.toggleLeftBar = function() {

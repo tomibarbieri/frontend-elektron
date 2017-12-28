@@ -97,30 +97,35 @@ angular
 
       if (side == 'left') {
         $scope.currentBarLeft = selectedComponent;
+        $scope.barseries[0] = $scope.currentBarLeft.label;
       }
       else {
         $scope.currentBarRigth = selectedComponent;
+        $scope.barseries[1] = $scope.currentBarRigth.label;
       }
+      console.log($scope.barseries);
     }
 
     $scope.getComponentData = function(side, component) {
 
+      var c = component;
+
       $http({
           method:'GET',
-          url: url_server + '/devices/' + component.id + '/data/' + $scope.currentPrecision.url // modificar la URL /devices/id/data/perhour
+          url: url_server + '/devices/' + c.id + '/data/' + $scope.currentPrecision.url // modificar la URL /devices/id/data/perhour
       }).then(function(response){
           console.log(response.data.data);
           //$scope.components_server = response.data.devices;
-          Notifier.simpleSuccess('Tabla comparativa','Datos cargados con exito para el componente: ' + component.label)
-          $scope.graficateComponentBar(response.data.data,side);
+          Notifier.simpleSuccess('Tabla comparativa','Datos cargados con exito para el componente');
+          $scope.graficateComponentBar(response.data.data, side);
 
       }, function(response){
           console.log("problemas de conexion");
-          Notifier.simpleError("Tabla comparativa - Error","No se pudo traer la informacion del componente " + component.label + " por problemas de conexión");
+          Notifier.simpleError("Tabla comparativa - Error","No se pudo traer la informacion del componente por problemas de conexión");
       });
     }
 
-    $scope.graficateComponentBar = function(data,side) {
+    $scope.graficateComponentBar = function(data, side) {
 
       if ($scope.barlabels.length == 0) {
         console.log('preparando footer');
@@ -152,6 +157,7 @@ angular
       } else {
         console.log('derecha');
         $scope.bardata[1] = [];
+
         for (var i = 6; i > 0; i--) {
           if (data[i].data_value == null) {
             $scope.bardata[1].push(0);

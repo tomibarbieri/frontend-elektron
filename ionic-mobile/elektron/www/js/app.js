@@ -37,6 +37,7 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
   };*/
 
   //stateChange event
+  /*
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
     $rootScope.authStatus = toState.authStatus;
     if($rootScope.authStatus){}
@@ -52,6 +53,7 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
 			},1000);
 		}
 	});
+  */
 
 })
 
@@ -153,6 +155,16 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   })
 
+  .state('app.history', {
+    url: '/history',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/history.html',
+        controller: 'HistoryCtrl'
+      }
+    }
+  })
+
   .state('app.configuration', {
     url: '/configuration',
     views: {
@@ -204,6 +216,6 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/login');
+  $urlRouterProvider.otherwise('/app/dashboard');
 
 });

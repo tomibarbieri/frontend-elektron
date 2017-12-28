@@ -2,12 +2,27 @@
 
     <ion-content>
       <div class="card">
+        <div class="list">
+              <div class="row item-divider item item-icon-right">
+                <div class="col col-50 title-components"><b>Consumo en tiempo real</b></div>
+                <i ng-if="websocketStatus == true" ng-click="refreshConnection()" class="icon ion-refresh balanced"></i>
+                <i ng-if="websocketStatus == false" ng-click="refreshConnection()" class="icon ion-refresh assertive"></i>
+              </div>
+        </div>
+      </div>
+      <div class="card">
           <div class="item">
-              <span>Consumo en tiempo real</span>
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Componente
+              </div>
+              <select ng-options="c.label for c in components_server_enabled"
+                    ng-model="current_component" ng-change="changeCurrentComponent(current_component)">
+              </select>
+            </label>
           </div>
           <div class="item item-text-wrap">
             <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
-              <!--<canvas id="line" class="chart chart-line" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>-->
           </div>
       </div>
       <div class="card">
@@ -17,7 +32,15 @@
               </div>
               <div class="item">
                 <span>Componentes: </span>
-                <span class="badge badge-balanced">{{components_server.length}}</span>
+                <span class="badge badge-positive">{{components_server.length}}</span>
+              </div>
+              <div class="item">
+                <span>Componentes conectados: </span>
+                <span class="badge badge-balanced">{{components_server_enabled.length}}</span>
+              </div>
+              <div class="item">
+                <span>Componentes desconectados: </span>
+                <span class="badge badge-assertive">{{components_server_not_enabled.length}}</span>
               </div>
               <div class="item">
                 <span>Tareas programadas: </span>
@@ -52,44 +75,5 @@
           </div>
         </div>
       </div>
-      <!-- Toogle button
-      <label class="toggle toggle-small">
-        <input type="checkbox">
-        <div class="track">
-          <div class="handle"></div>
-        </div>
-      </label>
-      -->
-      <!--
-      <div class="card">
-          <div class="item item-divider">
-              A bar chart
-          </div>
-          <div class="item item-text-wrap">
-              <canvas id="bar" class="chart chart-bar" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>
-          </div>
-      </div>
-      -->
-    </ion-content><!--
-    <ion-list>
-      <div class="card">
-        <div class="item item-divider">Consumo actual</div>
-  		  <div class="item item-text-wrap">
-          <div class="x_title">
-            <h2>Potencia medida en el día</h2>
-            <div class="clearfix"></div>
-          </div>
-          <div class="x_content">
-
-          </div>
-        </div>
-      </div>
-	  </ion-list>
-    <ion-list>
-      <div class="card" ng-repeat="profilelist in profiles" >
-        <div class="item item-divider">{{profilelist.name}}</div>
-        <div class="item item-text-wrap">{{profilelist.deseg}}</div>
-      </div>
-    </ion-list>
-  </ion-content>-->
+    </ion-content>
 </ion-view>

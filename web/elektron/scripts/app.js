@@ -26,7 +26,7 @@ angular
   .config(['$provide', '$routeProvider', function($provide, $routeProvider) {
     'use strict';
     $routeProvider
-      .when('/', {
+      /*.when('/', {
         templateUrl: 'views/index.html',
         resolve: {
           loadCalendar: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -35,7 +35,7 @@ angular
             ]);
           }]
         }
-      })
+      })*/
       .when('/:templateFile', {
         templateUrl: function(param) {
           return 'views/' + param.templateFile + '.html';
@@ -43,10 +43,11 @@ angular
         requireLogin: true
       })
       .when('#', {
-        templateUrl: 'views/index.html',
-        controller: 'DashboardController'
+        redirectTo: '/#/index'
+        //templateUrl: 'views/index.html',
+        //controller: 'DashboardController'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/#/index'
       });
   }]);

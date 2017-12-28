@@ -1,54 +1,22 @@
-<ion-view view-title="Estadísticas">
+<ion-view view-title="Estadisticas">
 
     <ion-content >
-      <div class="card">
-          <div class="item item-divider">
-              <span>Elegir consumo</span>
-          </div>
-          <div "">
-            <div class="item item-icon-left" ion-datetime-picker date ng-model="dateFrom">
-                <i class="icon ion-ios-calendar positive"></i>
-                Desde
-                <strong>{{dateFrom| date: "yyyy-MM-dd"}}</strong>
-            </div>
-            <div class="item item-icon-left" ion-datetime-picker time ng-model="timeFrom">
-                <i class="icon ion-ios-clock positive"></i>
-                Hora
-                <strong>{{timeFrom| date: "H:mm"}}</strong>
-            </div>
-            <div class="item item-icon-left" ion-datetime-picker date ng-model="dateTo">
-                <i class="icon ion-ios-calendar-outline positive"></i>
-                Hasta
-                <strong>{{dateTo| date: "yyyy-MM-dd"}}</strong>
-            </div>
-            <div class="item item-icon-left" ion-datetime-picker time ng-model="timeTo">
-                <i class="icon ion-ios-clock positive"></i>
-                Hora
-                <strong>{{timeTo| date: "H:mm"}}</strong>
-            </div>
-          </div>
-          <div class="item item-divider">
-              <span>Elegir componente</span>
-          </div>
-            <label class="item item-input item-select">
-              <div class="input-label">
-                Componente
-              </div>
-              <select>
-                <option selected>Todos</option>
-                <option>Aire acondicionado</option>
-                <option>Lavarropas</option>
-                <option>Heladera</option>
-              </select>
-            </label>
+      <div class="card" ng-repeat="component in components_server">
+        <div class="item item-divider">
+            <b>Componente:</b> {{component.label}}
+        </div>
+        <div class="list">
             <div class="item">
-              <div class="button-bar">
-                <a ui-sref="app.graphic-statistics({ componentId: 2, dateFrom: dateFrom, timeFrom: timeFrom, dateTo:dateTo, timeTo:timeTo })" class="button button-positive icon ion-stats-bars">
-                  Ver estadísticas
-                </a>
-              </div>
+              <span>Componente: {{component.id}}</span>
             </div>
+            <div class="item item-button-right">
+              <span><b>Dia:</b> </span>
+              <span><b>Hora:</b> </span>
+              <a class="button button-assertive">
+                <i class="icon ion-trash-b"></i>
+              </a>
+            </div>
+        </div>
       </div>
-
     </ion-content>
 </ion-view>

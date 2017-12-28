@@ -33,10 +33,10 @@ angular.module('theme.demos.dashboard', [
 
           $scope.components_server = response.data.devices;
 
-          $scope.current_component = $scope.components_server[0];
-
           $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
           $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
+
+          $scope.current_component = $scope.components_server_enabled[0];
 
       }, function(response){
           console.log("problemas de conexion");
@@ -104,7 +104,7 @@ angular.module('theme.demos.dashboard', [
         $scope.line.data = [[]];
 
         for (var i = inicio; i < fin; i++) {
-          console.log(data_sense[i]);
+
           var hora = $filter('date')(data_sense[i].date, "HH:mm");
           var dia = $filter('date')(data_sense[i].date, 'dd');
           var mes = $filter('date')(data_sense[i].date, 'MM');
@@ -172,19 +172,22 @@ angular.module('theme.demos.dashboard', [
 
       // si existe una conexion actual la cierra y abre otra
       if ($scope.ws) {
-        $scope.ws.terminate();
-        console.log("Regenerate WS connection");
-        Notifier.simpleInfo("Regenerando conexion en tiempo real", "Para el componente X");
+        //$scope.ws.terminate();
+        //console.log("Regenerate WS connection");
+        //Notifier.simpleInfo("Regenerando conexion en tiempo real", "Para el componente X");
       } else {
         //Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente X");
       }
+      Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente elegido inicialmente.");
 
       var url_websocket = "ws://" + ip_server + ":8888/websocket";
       $scope.ws = new WebSocket(url_websocket,'ws');
 
       $scope.ws.onopen = function() {
-        ws.send("Conectado");
+        //ws.send("Conectado");
+        console.log("on open");
         $scope.websocketStatus = true;
+        $scope.$apply();
         Notifier.simpleSuccess('Conexion establecida','Se ha establecido la conexion para la vision de datos en tiempo real.')
       };
 
@@ -200,14 +203,16 @@ angular.module('theme.demos.dashboard', [
       };
 
       $scope.ws.onmessage = function(message) {
-          console.log(message.data);
-          var json = JSON.parse(message.data);
+
+          
+          var data = JSON.parse(message.data);
+          console.log(data);
 
           // chequea que el dato sea del componente elegido y lo muestra
-          if (message.data.device_mac == $scope.current_component.device_mac) {
+          if (data.device_mac == $scope.current_component.device_mac) {
             // Saca el primero del arreglo y pone uno nuevo al final
             $scope.line.data[0].splice(0,1);
-            $scope.line.data[0].push(json.data_value);
+            $scope.line.data[0].push(data.data_value);
             if ($scope.chart) {
                 $scope.chart.update();
             }

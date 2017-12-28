@@ -23,12 +23,12 @@
                         <i class="caret"></i>
                       </button>
                       <ul class="dropdown-menu pull-right">
-                        <li ng-repeat="component in components_server"><a ng-click="changeCurrentComponent(component.id)">{{ component.label }}</a></li>
+                        <li ng-repeat="component in components_server_enabled"><a ng-click="changeCurrentComponent(component.id)">{{ component.label }}</a></li>
                       </ul>
                     </div>
                     <button ng-click="refreshConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
-                    <button ng-show="websocketStatus" class="btn btn-sm btn-success">On</button>
-                    <button ng-show="!websocketStatus" class="btn btn-sm btn-danger">Off</button>
+                    <button ng-show="websocketStatus == true" class="btn btn-sm btn-success">On</button>
+                    <button ng-show="websocketStatus == false" class="btn btn-sm btn-danger">Off</button>
                 </panel-controls>
                 <div class="p20">
                     <div class="row">
