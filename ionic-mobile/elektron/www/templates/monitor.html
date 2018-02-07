@@ -1,0 +1,22 @@
+<ion-view view-title="Elektron" hide-back-button="true">
+
+    <ion-content>
+      <div class="card">
+        <div class="list">
+              <div class="row item-divider item item-icon-right">
+                <div class="col col-50 title-components"><b>Monitor de componentes</b></div>
+                <i ng-if="websocketStatus == true" ng-click="refreshConnection()" class="icon ion-refresh balanced"></i>
+                <i ng-if="websocketStatus == false" ng-click="refreshConnection()" class="icon ion-refresh assertive"></i>
+              </div>
+        </div>
+      </div>
+      <div class="card" ng-repeat="component in components_server">
+          <div class="item item-divider">
+            Componente: <b>{{component.label}}</b>
+          </div>
+          <div class="item item-text-wrap">
+            <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+          </div>
+      </div>
+    </ion-content>
+</ion-view>

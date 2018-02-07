@@ -152,6 +152,7 @@ angular.module('theme.demos.dashboard', [
               Notifier.simpleSuccess('Datos cargados', 'Los datos  para el componente X fueron cargados con exito');
               $scope.graficate(response.data.data);
             } else {
+              
               Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado')
             }
 
@@ -181,7 +182,7 @@ angular.module('theme.demos.dashboard', [
       Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente elegido inicialmente.");
 
       var url_websocket = "ws://" + ip_server + ":8888/websocket";
-      $scope.ws = new WebSocket(url_websocket,'ws');
+      $scope.ws = new WebSocket(url_websocket);
 
       $scope.ws.onopen = function() {
         //ws.send("Conectado");
@@ -204,7 +205,7 @@ angular.module('theme.demos.dashboard', [
 
       $scope.ws.onmessage = function(message) {
 
-          
+
           var data = JSON.parse(message.data);
           console.log(data);
 

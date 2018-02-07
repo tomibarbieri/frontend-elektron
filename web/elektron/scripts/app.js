@@ -26,7 +26,7 @@ angular
   .config(['$provide', '$routeProvider', function($provide, $routeProvider) {
     'use strict';
     $routeProvider
-      /*.when('/', {
+      .when('/', {
         templateUrl: 'views/index.html',
         resolve: {
           loadCalendar: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -35,7 +35,7 @@ angular
             ]);
           }]
         }
-      })*/
+      })
       .when('/:templateFile', {
         templateUrl: function(param) {
           return 'views/' + param.templateFile + '.html';
@@ -48,6 +48,6 @@ angular
         //controller: 'DashboardController'
       })
       .otherwise({
-        redirectTo: '/#/index'
+        redirectTo: '/'
       });
   }]);

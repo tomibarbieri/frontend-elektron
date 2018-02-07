@@ -27,7 +27,6 @@ angular.module('theme.demos.tasks', [])
     });
 
     $scope.getDataTasks = function() {
-      $scope.datatasks_server = [];
       $http({
           method:'GET',
           url: url_server + '/tasks/datatasks'

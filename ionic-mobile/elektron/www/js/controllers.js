@@ -144,27 +144,142 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
+.controller('MonitorCtrl', function($scope, $filter, $websocket, $http, ionicToast) {
+
+      var ip_server = '158.69.223.78';
+      var url_server = 'http://158.69.223.78:8000';
+      var url_cape = 'http://163.10.33.173:8000';
+
+      $scope.websocketStatus = false;       // estado de la conexion de websocket
+      $scope.chart;                         // variable para tener guardado el grafico y refrescarlos
+      $scope.current_component;             // componente que filtra los websockets
+
+      // Grafico en tiempo real
+      $scope.line = {};
+      $scope.line.labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
+      $scope.line.series = ['Potencia'];//, 'Corriente'];
+      $scope.line.data = [
+        [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
+        //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
+      ];
+
+      var dataStream = $websocket('ws://' + ip_server +':8888/websocket');
+
+      // 158.69.223.78
+      // cambiar ip a la del servior por ejemplo 192.168.0.20
+      console.log(dataStream);
+      var collection = [];
+
+      dataStream.onError(function functionName() {
+        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
+      });
+
+      dataStream.onopen = function() {
+        console.log("on open");
+        $scope.websocketStatus = true;
+        $scope.$apply();
+      };
+
+      dataStream.onMessage(function(message) {
+
+        if ($scope.websocketStatus == false) {
+          $scope.websocketStatus = true;
+          $scope.$apply();
+        }
+
+        json = JSON.parse(message.data);
+        console.log("data value mac -> " + json.device_mac);
+        console.log("current_component mac -> " + $scope.current_component.device_mac);
+
+        if (json.device_mac == $scope.current_component.device_mac) {
+          $scope.line.data[0].shift();
+          $scope.line.data[0].push(json.data_value);
+        }
+
+      });
+
+
+      // Obtiene los componentes del servidor
+      $http({
+          method:'GET',
+          url:'http://158.69.223.78:8000/devices/'
+      }).then(function(response){
+          console.log(response.data);
+          $scope.components_server = response.data.devices;
+          $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
+          $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
+          $scope.current_component = $scope.components_server_enabled[0];
+          console.log($scope.components_server[0].label);
+      }, function(response){
+          ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
+          //show an appropriate message
+      });
+
+      // Muestra los primeros 4 componentes de la lista
+      $scope.quantity = 4;
+
+      $scope.changeCurrentComponent = function(component) {
+        $scope.current_component = component;
+      };
+
+      $scope.refreshConnection = function() {
+        console.log("refresh");
+      }
+
+})
+
 .controller('TaskCtrl', function($scope, $location) {
 
 })
 
-.controller('TasksCtrl', function($scope, $location) {
-  $scope.tasks = [
-    {
-      id: 1,
-      label: "Apagar heladera",
-      component: "Heladera",
-      date: new Date(),
-      data: 34
-    },
-    {
-      id: 1,
-      label: "Endender Microondas",
-      component: "Microondas",
-      date: new Date(),
-      data: 35
-    }
-  ];
+.controller('TasksCtrl', function($scope, $http) {
+
+  $scope.datatasks_server = [];
+  $scope.datetimetasks_server = [];
+  $scope.porconsumo = true;
+
+  var url_server = 'http://158.69.223.78:8000';
+  //var url_server = 'http://192.168.0.21:8000';
+
+  $scope.getDataTasks = function() {
+    $http({
+        method:'GET',
+        url: url_server + '/tasks/datatasks'
+    }).then(function(response){
+        console.log(response.data);
+        $scope.datatasks_server = response.data.datatasks;
+        console.log($scope.datatasks_server);
+    }, function(response){
+        console.log("problemas de conexion");
+        Notifier.simpleError("Error de conexión","No se pudo traer la informacion de las tareas del servidor");
+
+    });
+  }
+
+  $scope.getDateTimeTasks = function() {
+    $http({
+        method:'GET',
+        url: url_server + '/tasks/datetimetasks'
+    }).then(function(response){
+        console.log(response.data);
+        $scope.datetimetasks_server = response.data.datetimetasks;
+        console.log($scope.datetimetasks_server);
+    }, function(response){
+        console.log("problemas de conexion");
+    });
+  }
+
+  $scope.changeToDate = function() {
+    $scope.porconsumo = false;
+  }
+
+  $scope.changeToConsume = function() {
+    $scope.porconsumo = true;
+  }
+
+  $scope.getDataTasks();
+  $scope.getDateTimeTasks();
+
 })
 
 .controller('ComponentsCtrl', function($scope, $websocket, $http, ionicToast) {

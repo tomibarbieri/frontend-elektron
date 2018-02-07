@@ -35,3 +35,8 @@
   padding-left: 5% !important;
   padding-right: 5% !important;
 }
+
+.task-float-right {
+  float: right;
+  margin-left: 5px;
+}

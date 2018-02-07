@@ -15,10 +15,12 @@ angular.module('theme.demos.monitor', [
     $scope.switchStatus2 = 1;
 
     $scope.chart;
+    $scope.charts = [];
 
     $scope.$on('chart-create', function (evt, chart) {
       console.log(chart);
       $scope.chart = chart;
+      $scope.charts.push(chart);
     });
 
     var ip_server = '158.69.223.78';
@@ -34,6 +36,20 @@ angular.module('theme.demos.monitor', [
         $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
         $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
 
+        $scope.line = {};
+
+        var hora = $filter('date')(new Date(), "HH:mm");
+        var dia = $filter('date')(new Date(), 'dd');
+        var mes = $filter('date')(new Date(), 'MM');
+
+        var label = '(' + dia + '/' + mes + ') ' + hora;
+
+        for (var component in $scope.components_server_enabled) {
+          $scope.line[$scope.components_server_enabled[component].device_mac] = {'series':['Potencia'],'labels':[label,label,label,label,label,label,label,label,label,label],'data':[[0,0,0,0,0,0,0,0,0,0]]};
+        }
+
+        console.log($scope.line);
+
     }, function(response){
         console.log("problemas de conexion");
     });
@@ -46,7 +62,7 @@ angular.module('theme.demos.monitor', [
       }
     }
 
-
+/*
     $http({
         method:'GET',
         url: url_server + '/devices/36/data/13/12/2017/' // data de ejemplo
@@ -86,11 +102,12 @@ angular.module('theme.demos.monitor', [
         console.log("problemas de conexion");
         Notifier.simpleError('No se pudieron cargar los datos','No se pudieron cargar los datos iniciales de los graficos');
     });
+    */
 
 
     var url_websocket = "ws://" + ip_server + ":8888/websocket";
     console.log(url_websocket);
-    var ws = new WebSocket(url_websocket,'ws');
+    var ws = new WebSocket(url_websocket);
 
     ws.onopen = function() {
       ws.send("Hello, world");
@@ -109,21 +126,16 @@ angular.module('theme.demos.monitor', [
         console.log(message.data);
 
         var json = JSON.parse(message.data);
-        console.log(json.data_value);
-
         $scope.last_value = json.data_value;
+        var current_mac = json.device_mac;
 
-        console.log($scope.line.data[0]);
-
-        $scope.line.data[0].splice(0,1);
-
-
-        console.log($scope.line.data[0].push(json.data_value));
-
-        console.log($scope.line.data[0][9]);
+        $scope.line[current_mac].data[0].splice(0,1);
+        $scope.line[current_mac].data[0].push(json.data_value)
 
         if ($scope.chart) {
-            $scope.chart.update();
+            for (var i = 0; i < $scope.charts.length; i++) {
+              $scope.charts[i].update();
+            }
         }
 
       };

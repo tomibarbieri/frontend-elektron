@@ -4,7 +4,7 @@
         <li class="active">Monitor</li>
     </ol>
 
-    <h1>Monitor de componentes (solo encendidos)</h1>
+    <h1>Monitor de componentes (solo encendidos y activos)</h1>
 
 </div>
 
@@ -13,7 +13,7 @@
 
     <div class="row">
 
-        <div ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on'}}" class="col-md-6">
+        <div ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true}}" class="col-md-6">
 
 
             <panel panel-class="panel-default no-padding" heading="{{ component.label }}">
@@ -33,8 +33,8 @@
                 <div class="p20">
                     <div class="row">
 
-                      <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
-                        chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
+                      <canvas id="{{component.device_mac}}" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
+                        chart-series="line[component.device_mac].series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
                       </canvas>
 
                     </div>
