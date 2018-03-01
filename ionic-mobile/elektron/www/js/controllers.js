@@ -84,6 +84,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       // 158.69.223.78
       // cambiar ip a la del servior por ejemplo 192.168.0.20
       console.log(dataStream);
+      
       var collection = [];
 
       dataStream.onError(function functionName() {

@@ -23,7 +23,7 @@
                         <i class="caret"></i>
                       </button>
                       <ul class="dropdown-menu pull-right">
-                        <li ng-repeat="component in components_server_enabled" ng-show="component.devicestate.name='on'"><a ng-click="changeCurrentComponent(component.id)">{{ component.label }}</a></li>
+                        <li ng-repeat="component in components_server_enabled" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true}}"><a ng-click="changeCurrentComponent(component.id)">{{ component.label }}</a></li>
                       </ul>
                     </div>
                     <button ng-click="refreshConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>

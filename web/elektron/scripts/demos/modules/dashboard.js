@@ -38,6 +38,8 @@ angular.module('theme.demos.dashboard', [
 
           $scope.current_component = $scope.components_server_enabled[0];
 
+          $scope.loadInitialData();
+
       }, function(response){
           console.log("problemas de conexion");
           Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
@@ -69,24 +71,26 @@ angular.module('theme.demos.dashboard', [
 
 
     //Notifier.simpleInfo('Cargando datos', 'Cargando datos para el componente X');
-    $http({
-          method:'GET',
-          url: url_server + '/devices/36/data/13/12/2017/'
-      }).then(function(response){
+    $scope.loadInitialData = function() {
+      $http({
+            method:'GET',
+            url: url_server + '/devices/' + $scope.current_component.id + '/data/offsetlimit/1/20/1/'
+        }).then(function(response){
 
-          console.log(response.data.data);
+            console.log(response.data.data);
 
-          if (response.data.data.length > 0) {
-            Notifier.simpleSuccess('Datos cargados', 'Los datos para el componente X fueron cargados con exito');
-            $scope.graficate(response.data.data);
-          } else {
-            Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado')
-          }
+            if (response.data.data.length > 0) {
+              Notifier.simpleSuccess('Datos cargados', 'Los datos para el componente X fueron cargados con exito');
+              $scope.graficate(response.data.data);
+            } else {
+              Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado')
+            }
 
-      }, function(response){
-          console.log("problemas de conexion");
-          Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar la información');
-    });
+        }, function(response){
+            console.log("problemas de conexion");
+            Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar la información');
+      });
+    }
 
     $scope.graficate = function(data){
 
@@ -143,7 +147,7 @@ angular.module('theme.demos.dashboard', [
       var device_id = $scope.current_component.id;
       $http({
             method:'GET',
-            url: url_server + '/devices/' + device_id + '/data/13/12/2017/'
+            url: url_server + '/devices/' + device_id + '/data/offsetlimit/1/20/1/'
         }).then(function(response){
 
             console.log(response.data.data);
@@ -152,7 +156,7 @@ angular.module('theme.demos.dashboard', [
               Notifier.simpleSuccess('Datos cargados', 'Los datos  para el componente X fueron cargados con exito');
               $scope.graficate(response.data.data);
             } else {
-              
+
               Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado')
             }
 
