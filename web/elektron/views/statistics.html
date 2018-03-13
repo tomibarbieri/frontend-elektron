@@ -33,17 +33,17 @@
             <td style="width:8%">Consumo Período actual</td>
             <td style="width:8%">Nº encendidos y apagados</td>
 					</tr>
-					<tr ng-repeat="component in components_server">
+					<tr ng-repeat="component in components_statistics">
 					  <td>
 						<!-- editable username (text with validation) -->
-						<span editable-text="component.label" e-name="name" e-form="rowform" e-required>
-						  {{ component.label }}
+						<span editable-text="component.device.label" e-name="name" e-form="rowform" e-required>
+						  {{ component.device.label }}
 						</span>
 					  </td>
 					  <td>
 						<!-- editable status (select-local) -->
 						<span e-name="ip" e-form="rowform" e-required>
-              <div style="margin-left:3px;" ng-switch on="component.devicestate.name">
+              <div style="margin-left:3px;" ng-switch on="component.device.devicestate.name">
                   <button ng-switch-when="off" class="btn btn-sm btn-danger" ng-click=""></button>
                   <button ng-switch-when="on" class="btn btn-sm btn-success" ng-click=""></button>
               </div>
@@ -52,14 +52,14 @@
             <td>
 						<!-- editable status (select-local) -->
 						<span e-form="rowform" e-required>
-						  300kw (15%)
+						  {{component.data_sum * 1.0 | number:0}}kw (15%)
 						</span>
 					  </td>
 
             <td>
 						<!-- editable status (select-local) -->
 						<span e-form="rowform" e-required>
-						  $ 350
+						  $ {{component.data_sum * 1.5 | number:0}}
 						</span>
 					  </td>
             <td>
@@ -92,9 +92,9 @@
             <td>
 						<!-- editable status (select-local) -->
 						<span e-name="ip" e-form="rowform" e-required>
-              <div style="margin-left:3px;" ng-switch on="component.devicestate.name">
-                  <button class="btn btn-sm btn-danger" ng-click="">5</button>
-                  <button class="btn btn-sm btn-success" ng-click="">4</button>
+              <div style="margin-left:3px;" ng-switch on="component.device.devicestate.name">
+                  <button class="btn btn-sm btn-danger" ng-click="">{{component.device.state_counter_off}}</button>
+                  <button class="btn btn-sm btn-success" ng-click="">{{component.device.state_counter_on}}</button>
               </div>
 						</span>
 					  </td>

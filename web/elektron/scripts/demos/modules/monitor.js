@@ -50,13 +50,15 @@ angular.module('theme.demos.monitor', [
 
         console.log($scope.line);
 
+        $scope.loadWebsocket();
+
     }, function(response){
         console.log("problemas de conexion");
     });
 
     $scope.refreshConnection = function(){
       if ($scope.websocketStatus == false) {
-        $scope.openWebsocketConnection();
+        $scope.loadWebsocketConnection();
       } else {
         Notifier.simpleInfo("Conexion establecida","Ya esta establecida la conexion en tiempo real");
       }
@@ -104,40 +106,41 @@ angular.module('theme.demos.monitor', [
     });
     */
 
+    $scope.loadWebsocket = function() {
+      var url_websocket = "ws://" + ip_server + ":8888/websocket";
+      console.log(url_websocket);
+      var ws = new WebSocket(url_websocket);
 
-    var url_websocket = "ws://" + ip_server + ":8888/websocket";
-    console.log(url_websocket);
-    var ws = new WebSocket(url_websocket);
-
-    ws.onopen = function() {
-      ws.send("Hello, world");
-      $scope.websocketStatus = true;
-    };
-
-    ws.onclose = function() {
-      $scope.websocketStatus = false;
-    }
-
-    ws.onerror = function() {
-      $scope.websocketStatus = false;
-    }
-
-    ws.onmessage = function(message) {
-        console.log(message.data);
-
-        var json = JSON.parse(message.data);
-        $scope.last_value = json.data_value;
-        var current_mac = json.device_mac;
-
-        $scope.line[current_mac].data[0].splice(0,1);
-        $scope.line[current_mac].data[0].push(json.data_value)
-
-        if ($scope.chart) {
-            for (var i = 0; i < $scope.charts.length; i++) {
-              $scope.charts[i].update();
-            }
-        }
-
+      ws.onopen = function() {
+        ws.send("Hello, world");
+        $scope.websocketStatus = true;
+        $scope.$apply();
       };
+
+      ws.onclose = function() {
+        $scope.websocketStatus = false;
+      }
+
+      ws.onerror = function() {
+        $scope.websocketStatus = false;
+      }
+
+      ws.onmessage = function(message) {
+          console.log(message.data);
+
+          var json = JSON.parse(message.data);
+          $scope.last_value = json.data_value;
+          var current_mac = json.device_mac;
+
+          $scope.line[current_mac].data[0].splice(0,1);
+          $scope.line[current_mac].data[0].push(json.data_value)
+
+          if ($scope.chart) {
+              for (var i = 0; i < $scope.charts.length; i++) {
+                $scope.charts[i].update();
+              }
+          }
+        };
+    }
 
   }]);

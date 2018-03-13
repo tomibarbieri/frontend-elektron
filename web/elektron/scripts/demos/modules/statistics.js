@@ -50,6 +50,20 @@ angular
       'url': 'perday'
     };
 
+
+    $http({
+        method:'GET',
+        url: url_server + '/devices/statistics'
+    }).then(function(response){
+        console.log(response.data);
+
+        $scope.components_statistics = response.data.devices;
+
+    }, function(response){
+        console.log("problemas de conexion");
+    });
+
+
     $http({
         method:'GET',
         url: url_server + '/devices/'

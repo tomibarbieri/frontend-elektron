@@ -23,11 +23,12 @@
                     <a href="#/history" class="button-refresh btn btn-sm btn-info">Ver datos históricos</a>
 
                     <button ng-click="refreshConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
-                    <span class="button-refresh" ><input type="checkbox" ng-model="switchStatus2" class="rejs-switch" ui-switch="{color: '#7dcc93', secondaryColor: '#e75a5a'}" /></span>
                     <!--
-                    <button ng-show="websocketStatus" class="btn btn-sm btn-success">On</button>
-                    <button ng-show="!websocketStatus" class="btn btn-sm btn-danger">Off</button>
+                    <span class="button-refresh" ><input type="checkbox" ng-model="switchStatus2" class="rejs-switch" ui-switch="{color: '#7dcc93', secondaryColor: '#e75a5a'}" /></span>
                     -->
+                    <button ng-show="websocketStatus == true" class="btn btn-sm btn-success">On</button>
+                    <button ng-show="websocketStatus == false" class="btn btn-sm btn-danger">Off</button>
+
                 </panel-controls>
 
                 <div class="p20">

@@ -74,7 +74,7 @@ angular.module('theme.demos.dashboard', [
     $scope.loadInitialData = function() {
       $http({
             method:'GET',
-            url: url_server + '/devices/' + $scope.current_component.id + '/data/offsetlimit/1/20/1/'
+            url: url_server + '/devices/' + $scope.current_component.id + '/lastdata/20/'
         }).then(function(response){
 
             console.log(response.data.data);
@@ -113,9 +113,9 @@ angular.module('theme.demos.dashboard', [
           var dia = $filter('date')(data_sense[i].date, 'dd');
           var mes = $filter('date')(data_sense[i].date, 'MM');
 
+          var label = '(' + dia + '/' + mes + ') ' + hora;
           var data = data_sense[i].data_value;
 
-          var label = '(' + dia + '/' + mes + ') ' + hora;
           $scope.line.labels.push(label);
           $scope.line.data[0].push(data);
         }
@@ -147,7 +147,7 @@ angular.module('theme.demos.dashboard', [
       var device_id = $scope.current_component.id;
       $http({
             method:'GET',
-            url: url_server + '/devices/' + device_id + '/data/offsetlimit/1/20/1/'
+            url: url_server + '/devices/' + device_id + '/lastdata/20/'
         }).then(function(response){
 
             console.log(response.data.data);
@@ -211,17 +211,38 @@ angular.module('theme.demos.dashboard', [
 
 
           var data = JSON.parse(message.data);
-          console.log(data);
 
           // chequea que el dato sea del componente elegido y lo muestra
-          if (data.device_mac == $scope.current_component.device_mac) {
-            // Saca el primero del arreglo y pone uno nuevo al final
-            $scope.line.data[0].splice(0,1);
-            $scope.line.data[0].push(data.data_value);
-            if ($scope.chart) {
-                $scope.chart.update();
+          if ($scope.current_component) {
+
+            if (data.device_mac == $scope.current_component.device_mac) {
+              // Saca el primero del arreglo y pone uno nuevo al final
+
+              console.log(data);
+
+              var date = new Date();
+
+              var hora = $filter('date')(date, "HH:mm");
+              var dia = $filter('date')(date, 'dd');
+              var mes = $filter('date')(date, 'MM');
+
+              var label = '(' + dia + '/' + mes + ') ' + hora;
+
+              $scope.line.labels.splice(0,1);
+              $scope.line.labels.push(label);
+
+              $scope.line.data[0].splice(0,1);
+              $scope.line.data[0].push(data.data_value);
+
+
+              if ($scope.chart) {
+                  $scope.chart.update();
+              }
             }
+          } else {
+            console.log('No fue seleccionado ningun componente');
           }
+
 
       };
       console.log($scope.ws);
