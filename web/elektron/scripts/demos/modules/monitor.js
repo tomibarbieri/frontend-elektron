@@ -139,6 +139,7 @@ angular.module('theme.demos.monitor', [
               for (var i = 0; i < $scope.charts.length; i++) {
                 $scope.charts[i].update();
               }
+              $scope.$apply()
           }
         };
     }

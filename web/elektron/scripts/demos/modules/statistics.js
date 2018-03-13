@@ -184,8 +184,8 @@ angular
     }
 
     $scope.createBarChart = function() {
-      $scope.currentBarLeft = $scope.components_server[0];
-      $scope.currentBarRigth = $scope.components_server[0];
+      $scope.currentBarLeft = $scope.components_server[0].device;
+      $scope.currentBarRigth = $scope.components_server[0].device;
 
       $scope.barseries = [$scope.currentBarLeft.label, $scope.currentBarRigth.label];
 

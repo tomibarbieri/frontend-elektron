@@ -79,41 +79,47 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
       ];
 
-      var dataStream = $websocket('ws://' + ip_server +':8888/websocket');
+      $scope.openWebsocketConnection = function() {
 
-      // 158.69.223.78
-      // cambiar ip a la del servior por ejemplo 192.168.0.20
-      console.log(dataStream);
-      
-      var collection = [];
+        var dataStream = $websocket('ws://' + ip_server +':8888/websocket');
 
-      dataStream.onError(function functionName() {
-        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
-      });
+        // 158.69.223.78
+        // cambiar ip a la del servior por ejemplo 192.168.0.20
+        console.log(dataStream);
 
-      dataStream.onopen = function() {
-        console.log("on open");
-        $scope.websocketStatus = true;
-        $scope.$apply();
-      };
+        var collection = [];
 
-      dataStream.onMessage(function(message) {
+        dataStream.onError(function functionName() {
+          ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
+        });
 
-        if ($scope.websocketStatus == false) {
+        dataStream.onopen = function() {
+          console.log("on open");
           $scope.websocketStatus = true;
           $scope.$apply();
-        }
+        };
 
-        json = JSON.parse(message.data);
-        console.log("data value mac -> " + json.device_mac);
-        console.log("current_component mac -> " + $scope.current_component.device_mac);
+        dataStream.onMessage(function(message) {
 
-        if (json.device_mac == $scope.current_component.device_mac) {
-          $scope.line.data[0].shift();
-          $scope.line.data[0].push(json.data_value);
-        }
+          if ($scope.websocketStatus == false) {
+            $scope.websocketStatus = true;
+            $scope.$apply();
+          }
 
-      });
+          json = JSON.parse(message.data);
+
+          if ($scope.current_component) {
+
+            console.log("data value mac -> " + json.device_mac);
+            console.log("current_component mac -> " + $scope.current_component.device_mac);
+
+            if (json.device_mac == $scope.current_component.device_mac) {
+              $scope.line.data[0].shift();
+              $scope.line.data[0].push(json.data_value);
+            }
+          }
+        })
+      };
 
 
       // Obtiene los componentes del servidor
@@ -126,7 +132,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
           $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
           $scope.current_component = $scope.components_server_enabled[0];
-          console.log($scope.components_server[0].label);
+          $scope.openWebsocketConnection();
       }, function(response){
           ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
           //show an appropriate message
@@ -357,20 +363,219 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('StatisticsCtrl', function($scope,$http) {
+.controller('StatisticsCtrl', function($scope, $http, $filter, ionicToast) {
+
+  $scope.listado = true;
+  var url_server = 'http://158.69.223.78:8000';
 
   $http({
       method:'GET',
-      url:'http://158.69.223.78:8000/devices/'
+      url: url_server + '/devices/statistics'
   }).then(function(response){
       console.log(response.data);
       $scope.components_server = response.data.devices;
-      console.log($scope.components_server[0].label);
+      $scope.createDoughnutChart();
+      $scope.createBarChart();
+      console.log($scope.components_server[0].device.label);
   }, function(response){
       ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
       //show an appropriate message
+  })
+
+  $http({
+      method:'GET',
+      url: url_server + '/devices/'
+  }).then(function(response){
+      console.log(response.data);
+      $scope.components_totales = response.data.devices;
+  }, function(response){
+      ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
+      //show an appropriate message
+  })
+
+  $scope.changeToCharts = function() {
+    $scope.listado = false;
+  }
+
+  $scope.changeToList = function() {
+    $scope.listado = true;
+  }
+
+
+  $scope.doughnut;
+  $scope.bar;
+  $scope.barOptions = {};
+
+  $scope.$on('chart-create', function (evt, chart) {
+    console.log(chart);
+    console.log(chart.config.type);
+    console.log(chart.config.data);
+    if (chart.config.type == 'doughnut') {
+      $scope.doughnut = chart;
+    }
+    else {
+      $scope.bar = chart;
+    }
   });
-    // aca va la consulta ajax al servidor para traer los datos de los componentes (ids y labels)
+
+  $scope.doughnutlabels = [];
+  $scope.doughnutdata = [];
+
+  $scope.barlabels = [];
+  $scope.barseries = [];
+  $scope.bardata = [[],[]];
+
+  $scope.barPrecision = [{
+    'id': 0,
+    'label': 'Por día',
+    'url': 'perday'
+  }, {
+    'id': 1,
+    'label': 'Por hora',
+    'url': 'perhour'
+  }, {
+    'id': 2,
+    'label': 'Cada 5 seg',
+    'url': 'normal'
+  }];
+
+  $scope.currentPrecision = {
+    'id': 0,
+    'label': 'Por día',
+    'url': 'perday'
+  };
+
+  $scope.createDoughnutChart = function() {
+    for (var i = 0; i < $scope.components_server.length; i++) {
+      $scope.doughnutlabels.push($scope.components_server[i].device.label);
+      $scope.doughnutdata.push(Math.floor((Math.random() * 100) + 1));
+    }
+  }
+
+  $scope.changeCriteria = function() {
+    //var selected = $filter('filter')($scope.barPrecision, {id: id_selected});
+    //var selectedPrecision = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
+
+    console.log($scope.barOptions.precisionSelected);
+
+    //$scope.currentPrecision = selectedPrecision;
+
+    //$scope.barlabels = [];
+
+    //$scope.getComponentData('left',$scope.currentBarLeft);
+    //$scope.getComponentData('right',$scope.currentBarRigth);
+
+  }
+
+  $scope.changeBarComponents = function(){
+    console.log($scope.barOptions.componentLeft);
+    console.log($scope.barOptions.componentRight);
+    console.log($scope.barOptions.precisionSelected);
+  }
+
+  $scope.changeLeftBarComponent = function() {
+    console.log($scope.barOptions.componentLeft);
+    //$scope.changeBarComponent(id,'left');
+  }
+
+  $scope.changeRigthBarComponent = function() {
+    console.log($scope.barOptions.componentLeft);
+    //$scope.changeBarComponent(id,'right');
+  }
+
+  $scope.changeBarComponent = function(id_selected, side) {
+    var selected = $filter('filter')($scope.components_server, {id: id_selected});
+    var selectedComponent = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
+
+    $scope.getComponentData(side,selectedComponent);
+
+    if (side == 'left') {
+      $scope.currentBarLeft = selectedComponent;
+      $scope.barseries[0] = $scope.currentBarLeft.label;
+    }
+    else {
+      $scope.currentBarRigth = selectedComponent;
+      $scope.barseries[1] = $scope.currentBarRigth.label;
+    }
+    console.log($scope.barseries);
+  }
+
+  $scope.getComponentData = function(side, component) {
+
+    var c = component;
+
+    $http({
+        method:'GET',
+        url: url_server + '/devices/' + c.id + '/data/' + $scope.currentPrecision.url // modificar la URL /devices/id/data/perhour
+    }).then(function(response){
+        console.log(response.data.data);
+        //$scope.components_server = response.data.devices;
+        //Notifier.simpleSuccess('Tabla comparativa','Datos cargados con exito para el componente');
+        $scope.graficateComponentBar(response.data.data, side);
+
+    }, function(response){
+        console.log("problemas de conexion");
+        //Notifier.simpleError("Tabla comparativa - Error","No se pudo traer la informacion del componente por problemas de conexión");
+    });
+  }
+
+  $scope.graficateComponentBar = function(data, side) {
+
+    if ($scope.barlabels.length == 0) {
+      console.log('preparando footer');
+      for (var i = 6; i > 0; i--) {
+        var time;
+        if ($scope.currentPrecision.url == 'perday') {
+          time = $filter('date')(data[i].date, 'shortDate');
+        } else {
+          if ($scope.currentPrecision.url == 'perhour') {
+            time = $filter('date')(data[i].date, 'shortTime')
+          } else {
+            console.log('chicharitoo');
+          }
+        }
+        $scope.barlabels.push(time);
+      }
+    }
+
+    if (side == 'left') {
+      console.log('izquierda');
+      $scope.bardata[0] = [];
+      for (var i = 6; i > 0; i--) {
+        if (data[i].data_value == null) {
+          $scope.bardata[0].push(0);
+        } else {
+          $scope.bardata[0].push(data[i].data_value);
+        }
+      }
+    } else {
+      console.log('derecha');
+      $scope.bardata[1] = [];
+
+      for (var i = 6; i > 0; i--) {
+        if (data[i].data_value == null) {
+          $scope.bardata[1].push(0);
+        } else {
+          $scope.bardata[1].push(data[i].data_value);
+        }
+      }
+    }
+
+  }
+
+  $scope.createBarChart = function() {
+    $scope.currentBarLeft = $scope.components_server[0].device;
+    $scope.currentBarRigth = $scope.components_server[0].device;
+
+    $scope.barseries = [$scope.currentBarLeft.label, $scope.currentBarRigth.label];
+
+    $scope.getComponentData('left',$scope.currentBarLeft)
+    $scope.getComponentData('rigth',$scope.currentBarRigth)
+
+  }
+
+
+
 
 })
 

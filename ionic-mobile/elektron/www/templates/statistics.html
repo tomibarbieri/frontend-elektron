@@ -1,22 +1,102 @@
 <ion-view view-title="Estadisticas">
 
     <ion-content >
-      <div class="card" ng-repeat="component in components_server">
+      <div class="item">
+        <div class="button-bar">
+          <a class="button button-positive" ng-show="listado == true">Listado</a>
+          <a class="button" ng-show="listado == false" ng-click="changeToList()">Listado</a>
+          <a class="button" ng-show="listado == true" ng-click="changeToCharts()">Graficos</a>
+          <a class="button button-positive" ng-show="listado == false">Graficos</a>
+        </div>
+      </div>
+
+      <div ng-show="listado == true" class="card" ng-repeat="component in components_server">
         <div class="item item-divider">
-            <b>Componente:</b> {{component.label}}
+            <b>Componente:</b> {{component.device.label}}
         </div>
         <div class="list">
             <div class="item">
-              <span>Componente: {{component.id}}</span>
+              <span>Componente: {{component.device.id}}</span>
             </div>
             <div class="item item-button-right">
               <span><b>Dia:</b> </span>
               <span><b>Hora:</b> </span>
-              <a class="button button-assertive">
-                <i class="icon ion-trash-b"></i>
-              </a>
             </div>
         </div>
       </div>
+
+      <div ng-show="listado == false">
+        <div class="card">
+          <div class="item item-divider">
+              <b>Porcentaje de consumo de componentes</b>
+          </div>
+          <div class="item">
+            <canvas id="doughnut" height="150" class="chart chart-doughnut"
+              chart-data="doughnutdata" chart-labels="doughnutlabels">
+            </canvas>
+          </div>
+          <div class="item">
+              <div ng-repeat="value in doughnut.config.data.labels">
+                {{ value }}
+                <!--<span class="badge" style="background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
+                  {{ value }}
+                </span>-->
+              </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item item-divider">
+              <b>Gafico comparativo de componentes</b>
+          </div>
+          <div class="item">
+
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Componente 1
+              </div>
+              <select ng-model="barOptions.componentLeft" ng-change="changeLeftBarComponent()">
+                <option ng-repeat="component in components_totales" value="{{component.id}}">{{component.label}}</option>
+              </select>
+
+            </label>
+
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Componente 2
+              </div>
+              <select ng-model="barOptions.componentRight" ng-change="changeRightBarComponent()">
+                <option ng-repeat="component in components_totales" value="{{component.id}}">{{component.label}}</option>
+              </select>
+            </label>
+
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Precisión
+              </div>
+              <select ng-model="barOptions.precisionSelected" ng-change="changeCriteria()">
+                <option ng-repeat="prec in barPrecision" value="{{prec.url}}" >{{prec.label}}</option>
+              </select>
+            </label>
+            <div class="item">
+              <a ng-click="changeBarComponents()" class="button icon-right ion-chevron-right button-calm">Ver gráfico</a>
+            </div>
+            <div class="item">
+                {{barOptions.precisionSelected}}
+                {{barOptions.componentRight}}
+                {{barOptions.componentLeft}}
+            </div>
+
+          </div>
+          <div class="item">
+            <canvas id="bar" class="chart chart-bar"
+              chart-data="bardata" chart-labels="barlabels" chart-series="barseries">
+            </canvas>
+          </div>
+        </div>
+
+      </div>
+
+
     </ion-content>
 </ion-view>
