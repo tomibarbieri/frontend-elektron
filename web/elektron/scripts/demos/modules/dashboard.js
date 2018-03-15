@@ -39,6 +39,7 @@ angular.module('theme.demos.dashboard', [
           $scope.current_component = $scope.components_server_enabled[0];
 
           $scope.loadInitialData();
+          $scope.openWebsocketConnection();
 
       }, function(response){
           console.log("problemas de conexion");
@@ -168,8 +169,9 @@ angular.module('theme.demos.dashboard', [
 
     $scope.refreshConnection = function(){
       // falta ver como hacer
-
-      $scope.openWebsocketConnection();
+      if ($scope.websocketStatus == false) {
+        $scope.openWebsocketConnection();
+      }
     }
 
     // funcion para abrir una conexion ws
@@ -247,7 +249,5 @@ angular.module('theme.demos.dashboard', [
       };
       console.log($scope.ws);
     };
-
-    $scope.openWebsocketConnection();
 
   }]);
