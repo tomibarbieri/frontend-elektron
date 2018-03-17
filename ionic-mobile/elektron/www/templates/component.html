@@ -2,25 +2,17 @@
   <ion-content>
     <div class="card">
       <div class="item">
-
-          <ion-toggle  ng-model="component_status"
-                     ng-checked="component_status">
-                     <span>Consumo de <b>{{component_server.label}}</b></span>
-          </ion-toggle>
-          <!--
-          <label class="toggle toggle-small label-elektron">
-            <input ng-checked="component_status" ng-model="component_status" type="checkbox">
-            <div class="track">
-              <div class="handle"></div>
-            </div>
-          </label
-          -->
-
+        <ion-toggle  ng-model="component_status" class="toogle-assertive"
+                    ng-change="changeStatus()"
+                   ng-checked="component_status">
+                   <span>Consumo de <b>{{component_server.label}}</b></span>
+        </ion-toggle>
       </div>
       <div class="item item-text-wrap">
         <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
           <!--<canvas id="line" class="chart chart-line" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>-->
       </div>
+
       <div class="item item-divider">
         <span>Detalles:</span>
       </div>
@@ -37,7 +29,7 @@
       </div>
       <div class="item">
         <span class=""><b>Último consumo</b>: </span>
-        <span class="badge badge-calm">{{last_data}}</span>
+        <span class="badge badge-calm">{{last_data}} w</span>
       </div>
       <div class="item">
         <span class=""><b>IP</b>:
@@ -48,6 +40,20 @@
         <span class=""><b>MAC</b>:
           <span class="badge badge-light">{{component_server.device_mac}}</span>
         <span>
+      </div>
+      <div class="item-divider">
+
+      </div>
+      <ion-toggle  ng-model="component_activate"
+                    ng-change="activateComponent()"
+                   ng-checked="component_activate">
+                   <span><b>Activo:</b></span>
+      </ion-toggle>
+      <div class="item">
+        <span class=""><b>Enchufado</b>:
+          <span ng-if="component_server.pluged == true" class="badge badge-positive">enchufado</span>
+          <span ng-if="component_server.pluged == false" class="badge badge-black">desenchufado</span>
+        </span>
       </div>
       <div class="item item-divider">
         <span>Configurar componente por</span>

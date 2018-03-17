@@ -69,6 +69,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.websocketStatus = false;       // estado de la conexion de websocket
       $scope.chart;                         // variable para tener guardado el grafico y refrescarlos
       $scope.current_component;             // componente que filtra los websockets
+      $scope.websocket;
 
       // Muestra los primeros 4 componentes de la lista
       $scope.quantity = 4;
@@ -76,8 +77,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.refreshConnection = function() {
         console.log("refresh");
         if ($scope.websocketStatus == false) {
-          $scope.openWebsocketConnection();
+          $scope.websocket.close();
         }
+        $scope.openWebsocketConnection();
       }
 
       // Grafico en tiempo real
@@ -171,24 +173,24 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
       $scope.openWebsocketConnection = function() {
 
-        var dataStream = $websocket('ws://' + ip_server +':8888/websocket');
+        $scope.websocket = $websocket('ws://' + ip_server +':8888/websocket');
 
-        console.log(dataStream);
+        console.log($scope.websocket);
 
         var collection = [];
 
-        dataStream.onError(function functionName() {
+        $scope.websocket.onError(function functionName() {
           ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
         });
 
-        dataStream.onopen = function() {
+        $scope.websocket.onopen = function() {
           console.log("on open");
           ionicToast.show('Conexion en tiempo real iniciada', 'bottom', false, 8000);
           $scope.websocketStatus = true;
           $scope.$apply();
         };
 
-        dataStream.onMessage(function(message) {
+        $scope.websocket.onMessage(function(message) {
 
           if ($scope.websocketStatus == false) {
             $scope.websocketStatus = true;
@@ -207,8 +209,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
               var hora = $filter('date')(json.date, "HH:mm");
               var label = '' + hora;
-              $scope.line.labels[0].shift();
-              $scope.line.labels[0].push(label);
+              $scope.line.labels.shift();
+              $scope.line.labels.push(label);
 
               $scope.line.data[0].shift();
               $scope.line.data[0].push(json.data_value);
@@ -229,6 +231,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.websocketStatus = false;       // estado de la conexion de websocket
       $scope.chart;                         // variable para tener guardado el grafico y refrescarlos
       $scope.current_component;             // componente que filtra los websockets
+      $scope.websocket;
 
       // Grafico en tiempo real
       $scope.line = {};
@@ -239,24 +242,24 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
       ];
 
-      var dataStream = $websocket('ws://' + ip_server +':8888/websocket');
+      $scope.websocket = $websocket('ws://' + ip_server +':8888/websocket');
 
       // 158.69.223.78
       // cambiar ip a la del servior por ejemplo 192.168.0.20
-      console.log(dataStream);
+      console.log($scope.websocket);
       var collection = [];
 
-      dataStream.onError(function functionName() {
+      $scope.websocket.onError(function functionName() {
         ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
       });
 
-      dataStream.onopen = function() {
+      $scope.websocket.onopen = function() {
         console.log("on open");
         $scope.websocketStatus = true;
         $scope.$apply();
       };
 
-      dataStream.onMessage(function(message) {
+      $scope.websocket.onMessage(function(message) {
 
         if ($scope.websocketStatus == false) {
           $scope.websocketStatus = true;
@@ -375,19 +378,12 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('ComponentCtrl', function($scope, $stateParams, $http, ionicToast) {
-
-    $scope.line = {};
-    $scope.line.labels = ["E", "L", "E", "K", "T", "R", "O", "N", "0", "7"];
-    $scope.line.series = ['Potencia'];//, 'Corriente'];
-    $scope.line.data = [
-      [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
-      //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
-    ];
+.controller('ComponentCtrl', function($scope, $stateParams, $http, $filter, ionicToast) {
 
     $scope.componentId = $stateParams.componentId;
+    $scope.component_activate;
 
-    var url_data = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/data';
+    var url_data = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/lastdata/10/';
 
     $http({
         method:'GET',
@@ -395,6 +391,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     }).then(function(response){
         console.log(response.data);
         $scope.component_data = response.data.data;
+
+        $scope.createChart();
+
         if ($scope.component_data.length != 0) {
           $scope.last_data = $scope.component_data[$scope.component_data.length - 1].data_value;
         } else {
@@ -405,7 +404,23 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         //show an appropriate message
     });
 
+    $scope.createChart = function() {
+      $scope.line = {};
+      $scope.line.series = ['Potencia'];
+      $scope.line.data = [[]];
+      $scope.line.labels = [];
+
+      console.log($scope.component_data);
+      var length = $scope.component_data.length - 1;
+
+      for (var i = length; i >= 0; i--) {
+        $scope.line.data[0].push($scope.component_data[i].data_value);
+        $scope.line.labels.push($filter('date')($scope.component_data[i].date, "HH:mm"));
+      }
+    }
+
     var url_device = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/'
+    var url_server = 'http://158.69.223.78:8000'
 
     $http({
         method:'GET',
@@ -415,6 +430,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         $scope.component_server = response.data.device;
         if ($scope.component_server.length != 0) {
           $scope.component_status = ($scope.component_server.devicestate.name == 'on')
+          $scope.component_activate  = ($scope.component_server.enabled == 'on')
         }
     }, function(response){
         ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
@@ -422,8 +438,104 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     });
 
     $scope.changeStatus = function() {
-      $scope.component_status = !$scope.component_status;
+      if ($scope.component_status) {
+        console.log("apagando");
+        $scope.turnOffComponent($scope.componentId);
+      }
+      else {
+        console.log("prendiendo");
+        $scope.turnOnComponent($scope.componentId);
+      }
     }
+
+    $scope.turnOnComponent = function(id) {
+      var url = url_server + '/devices/' + id + '/turnon';
+      var send = $http({
+        method: 'GET',
+        url: url,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(send);
+      send.then(
+        function(response){
+          console.log(response);
+          $scope.component_status = !$scope.component_status;
+
+      }, function(response){
+          console.log("problemas de conexion");
+      });
+    };
+
+    $scope.turnOffComponent = function(id) {
+      var url = url_server + '/devices/' + id + '/shutdown';
+      var send = $http({
+        method: 'GET',
+        url: url,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(send);
+      send.then(
+        function(response){
+          console.log(response);
+          $scope.component_status = !$scope.component_status;
+      }, function(response){
+          console.log("problemas de conexion");
+      });
+    };
+
+    $scope.activateComponent = function() {
+      if ($scope.component_activate) {
+        console.log("desactivar");
+        $scope.enableComponent($scope.componentId);
+      }
+      else {
+        console.log("prendiendo");
+        $scope.disableComponent($scope.componentId);
+      }
+    }
+
+    $scope.enableComponent = function(id) {
+      var url = url_server + '/devices/' + id + '/enable';
+      var send = $http({
+        method: 'POST',
+        url: url,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(send);
+      send.then(
+        function(response){
+          console.log(response);
+          $scope.component_activate = 'true';
+          console.log("Yo ya perdi");
+      }, function(response){
+          console.log("problemas de conexion");
+      });
+    };
+
+    $scope.disableComponent = function(id) {
+      var url = url_server + '/devices/' + id + '/disable';
+      var send = $http({
+        method: 'POST',
+        url: url,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      send.then(
+        function(response){
+          $scope.component_activate = 'false';
+          console.log("Yo ya gane");
+      }, function(response){
+          console.log("problemas de conexion");
+      });
+    };
+
 
 
 })

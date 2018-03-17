@@ -14,7 +14,7 @@
       </div>
       <div class="list">
           <div class="item item-button-right" ng-repeat="component in components_server">
-            <span>{{component.label}}
+            <span><b>{{component.label}}</b> <span class="mac-components">({{component.device_mac}})</span>
               <span ng-if="component.devicestate.name == 'on'" class="badge-component badge badge-balanced">encendido</span>
               <span ng-if="component.devicestate.name == 'off'" class="badge-component badge badge-assertive">apagado</span>
             </span>

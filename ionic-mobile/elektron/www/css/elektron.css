@@ -22,8 +22,14 @@
 
 .badge-component {
   display: inline !important;
-  right: inherit !important;
+  font-size: 0.7em;
+  /*right: inherit !important;*/
+  margin-right: 8px;
   margin-left: 10px;
+}
+
+.mac-components {
+  font-size: 0.8em;
 }
 
 .costo-input-label {
