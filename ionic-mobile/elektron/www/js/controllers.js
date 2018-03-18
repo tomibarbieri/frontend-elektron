@@ -378,10 +378,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('ComponentCtrl', function($scope, $stateParams, $http, $filter, ionicToast) {
+.controller('ComponentCtrl', function($scope, $stateParams, $http, $filter, $ionicModal, $httpParamSerializerJQLike, ionicToast) {
 
     $scope.componentId = $stateParams.componentId;
     $scope.component_activate;
+    $scope.currentLabel = 'Por defecto';
 
     var url_data = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/lastdata/10/';
 
@@ -419,8 +420,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       }
     }
 
-    var url_device = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/'
-    var url_server = 'http://158.69.223.78:8000'
+    var url_device = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/';
+    var url_server = 'http://158.69.223.78:8000';
 
     $http({
         method:'GET',
@@ -431,6 +432,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         if ($scope.component_server.length != 0) {
           $scope.component_status = ($scope.component_server.devicestate.name == 'on')
           $scope.component_activate  = ($scope.component_server.enabled == 'on')
+          $scope.currentLabel = $scope.component_server.label;
         }
     }, function(response){
         ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
@@ -462,7 +464,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         function(response){
           console.log(response);
           $scope.component_status = !$scope.component_status;
-
+          ionicToast.show('Componente encendido con éxito.', 'bottom', false, 5000);
       }, function(response){
           console.log("problemas de conexion");
       });
@@ -482,6 +484,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         function(response){
           console.log(response);
           $scope.component_status = !$scope.component_status;
+          ionicToast.show('Componente apagado con éxito.', 'bottom', false, 5000);
       }, function(response){
           console.log("problemas de conexion");
       });
@@ -512,7 +515,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         function(response){
           console.log(response);
           $scope.component_activate = 'true';
-          console.log("Yo ya perdi");
+          ionicToast.show('Componente activado con éxito.', 'bottom', false, 5000);
       }, function(response){
           console.log("problemas de conexion");
       });
@@ -530,12 +533,97 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       send.then(
         function(response){
           $scope.component_activate = 'false';
-          console.log("Yo ya gane");
+          ionicToast.show('Componente desactivado con éxito.', 'bottom', false, 5000);
       }, function(response){
           console.log("problemas de conexion");
       });
     };
 
+    $ionicModal.fromTemplateUrl('templates/modal.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+    $scope.openModal = function() {
+      $scope.modal.show();
+    };
+    $scope.closeModal = function() {
+      $scope.modal.hide();
+    };
+    // Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+      $scope.modal.remove();
+    });
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+      // Execute action
+    });
+    // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+      // Execute action
+    });
+
+    $scope.saveLabel = function(label) {
+      if (label !== $scope.currentLabel) {
+        console.log("guardando");
+
+        var parametros = $httpParamSerializerJQLike({'label': label});
+        var url = url_server + '/devices/'+ $scope.componentId +'/updatelabel';
+
+        var send = $http({
+          method: 'POST',
+          url: url,
+          data: parametros,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        });
+        console.log(send);
+        send.then(
+          function(response){
+            console.log(response);
+            ionicToast.show('Nombre del componente modificado con éxito.', 'bottom', false, 5000);
+            $scope.currentLabel = label;
+        }, function(response){
+            console.log("problemas de conexion");
+            ionicToast.show('No se pudo modificar el nombre del componente.', 'bottom', false, 5000);
+        });
+      }
+      $scope.modal.hide();
+    };
+
+    $scope.saveComponent = function(data, id) {
+      //$scope.user not updated yet
+      angular.extend(data, {
+        id: id
+      });
+      console.log(data);
+
+      var data2 = {'label': data.name};
+
+      var url = url_server + '/devices/'+ id +'/updatelabel';
+
+      var serializedData = $.param(data2);
+      console.log(serializedData);
+
+      var send = $http({
+        method: 'POST',
+        url: url,
+        data: serializedData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(send);
+      send.then(
+        function(response){
+          console.log(response);
+          Notifier.simpleSuccess('Componente guardado','El nombre del componente se ha editado con éxito');
+      }, function(response){
+          console.log("problemas de conexion");
+          Notifier.simpleError('No se pudo guardar','Por problemas de conexión no se pudo guardar');
+      });
+    };
 
 
 })

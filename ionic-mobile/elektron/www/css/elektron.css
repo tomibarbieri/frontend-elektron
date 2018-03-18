@@ -28,6 +28,11 @@
   margin-left: 10px;
 }
 
+.edit-component-label {
+  font-size: 1.2em;
+  margin-left: 10px;
+}
+
 .mac-components {
   font-size: 0.8em;
 }

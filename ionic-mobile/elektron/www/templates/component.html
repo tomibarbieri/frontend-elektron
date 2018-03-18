@@ -18,8 +18,13 @@
       </div>
       <div class="item">
         <span class=""><b>Label: </b>
-          <span class="badge badge-light">{{component_server.label}}</span>
+          <span class="badge badge-light">{{currentLabel}}
+            <a ng-click="openModal()" class="edit-component-label">
+              <i class="icon positive ion-compose"></i>
+            </a>
+          </span>
         </span>
+
       </div>
       <div class="item">
         <span class=""><b>Estado: </b>
@@ -60,14 +65,33 @@
       </div>
       <div class="item">
         <div class="button-bar">
-          <button class="button button-positive icon ion-gear-a">
+          <a ui-sref="app.tasks" class="button button-positive icon ion-gear-a">
             Tiempo
-          </button>
-          <button class="button button-positive icon ion-gear-a">
+          </a>
+          <a ui-sref="app.tasks" class="button button-positive icon ion-gear-a">
             Consumo
-          </button>
+          </a>
         </div>
       </div>
     </div>
   </ion-content>
+
+  <script id="templates/modal.html" type="text/ng-template">
+    <ion-modal-view>
+      <ion-header-bar class="bar bar-header bar-positive">
+        <h1 class="title">Editar nombre</h1>
+        <button class="button button-clear button-primary" ng-click="modal.hide()">Cancelar</button>
+      </ion-header-bar>
+      <ion-content class="padding">
+        <div class="list">
+          <label class="item item-input">
+            <span class="input-label">Label:</span>
+            <input ng-model="newName" placeholder="{{currentLabel}}" type="text">
+          </label>
+          <button class="button button-full button-positive" ng-click="saveLabel(newName)">Guardar</button>
+        </div>
+      </ion-content>
+    </ion-modal-view>
+  </script>
+
 </ion-view>

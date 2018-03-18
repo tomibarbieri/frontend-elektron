@@ -25,11 +25,10 @@ angular
       });
       console.log(data);
 
-      var data2 = {'label': data.name};
-
       var url = url_server + '/devices/'+ id +'/updatelabel';
-
+      var data2 = {'label': data.name};
       var serializedData = $.param(data2);
+
       console.log(serializedData);
 
       var send = $http({
