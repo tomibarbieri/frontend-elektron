@@ -120,6 +120,16 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           //show an appropriate message
       });
 
+      $http({
+          method:'GET',
+          url:'http://158.69.223.78:8000/data/totalwattstaxco2'
+      }).then(function(response){
+          console.log(response.data);
+          $scope.general_data = response.data;
+      }, function(response){
+          //show an appropriate message
+      });
+
       // function para cargar la informacion del 1er componente
       $scope.loadInitialData = function() {
         $http({
