@@ -196,22 +196,32 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   })
 
-  .state('app.task', {
-    url: '/task',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/task.html',
-        controller: 'TaskCtrl'
-      }
-    }
-  })
-
   .state('app.tasks', {
     url: '/tasks',
     views: {
       'menuContent': {
         templateUrl: 'templates/tasks.html',
         controller: 'TasksCtrl'
+      }
+    }
+  })
+
+  .state('app.datatask', {
+    url: '/datatask',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/datatask.html',
+        controller: 'DatataskCtrl'
+      }
+    }
+  })
+
+  .state('app.datetimetask', {
+    url: '/datetimetask',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/datetimetask.html',
+        controller: 'DatetimetaskCtrl'
       }
     }
   })

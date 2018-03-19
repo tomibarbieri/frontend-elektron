@@ -12,7 +12,7 @@
     <div ng-show="porconsumo == true">
       <div class="item">
         <div class="button-bar">
-          <a ui-sref="app.task" class="button button-stable ion-plus-circled">
+          <a ui-sref="app.datatask" class="button button-stable ion-plus-circled">
             Agregar nueva tarea por consumo
           </a>
         </div>
@@ -46,7 +46,7 @@
             </div>
             <div class="item">
               <b>Última ejecución:</b> {{task.last_run | date: "shortDate"}} ({{task.last_run | date: "shortTime"}})
-              <a class="task-float-right button button-small button-assertive">
+              <a ng-click="deleteTask(task.id,'datatasks')" class="task-float-right button button-small button-assertive">
                 <i class="icon ion-trash-b"></i>
               </a>
               <a class="task-float-right button button-small button-positive">
@@ -61,7 +61,7 @@
     <div ng-show="porconsumo == false">
       <div class="item">
         <div class="button-bar">
-          <a ui-sref="app.task" class="button button-stable ion-plus-circled">
+          <a ui-sref="app.datetimetask" class="button button-stable ion-plus-circled">
             Agregar nueva tarea por fecha
           </a>
         </div>
@@ -87,7 +87,7 @@
             <div class="item">
               <b>Repeticiones:</b> {{task.repeats}}
 
-              <a class="task-float-right button button-small button-assertive">
+              <a ng-click="deleteTask(task.id,'datetimetasks')" class="task-float-right button button-small button-assertive">
                 <i class="icon ion-trash-b"></i>
               </a>
               <a class="task-float-right button button-small button-positive">

@@ -307,11 +307,63 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('TaskCtrl', function($scope, $location) {
+.controller('DatataskCtrl', function($scope, $location, $filter, $http, $state, $httpParamSerializerJQLike) {
+
+  var url_server = 'http://158.69.223.78:8000';
+  $scope.task = {};
+
+  $http({
+      method:'GET',
+      url:'http://158.69.223.78:8000/devices/'
+  }).then(function(response){
+      console.log(response.data);
+      $scope.components_server = response.data.devices;
+      console.log($scope.components_server[0].label);
+  }, function(response){
+      ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
+      //show an appropriate message
+  });
+
+  $scope.addDataTask = function(task) {
+    console.log(task);
+
+    var data_params = {
+      'taskstate': task.state,
+      'taskfunction': task.function,
+      'label': task.label,
+      'description': task.description,
+      'owner':'root',
+      'repeats': task.repeats,
+      'data_value': task.data_value,
+      'comparator': task.comparator,
+      'device_mac': task.component_mac
+    }
+
+    console.log(data_params);
+    var url_task = url_server + "/tasks/datatasks/create";
+
+    $http({
+        method:'POST',
+        url: url_task,
+        data: $httpParamSerializerJQLike(data_params),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+        }
+    }).then(function(response){
+        console.log(response.data);
+        $state.go( "app.tasks" );
+    }, function(response){
+        console.log("problemas de conexion");
+    });
+  }
 
 })
 
-.controller('TasksCtrl', function($scope, $http) {
+.controller('DatetimetaskCtrl', function($scope, $location) {
+
+})
+
+.controller('TasksCtrl', function($scope, $http, $ionicPopup) {
 
   $scope.datatasks_server = [];
   $scope.datetimetasks_server = [];
@@ -325,11 +377,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         method:'GET',
         url: url_server + '/tasks/datatasks'
     }).then(function(response){
-        console.log(response.data);
+        //console.log(response.data);
         $scope.datatasks_server = response.data.datatasks;
-        console.log($scope.datatasks_server);
+        //console.log($scope.datatasks_server);
     }, function(response){
-        console.log("problemas de conexion");
+        //console.log("problemas de conexion");
         Notifier.simpleError("Error de conexión","No se pudo traer la informacion de las tareas del servidor");
 
     });
@@ -340,11 +392,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         method:'GET',
         url: url_server + '/tasks/datetimetasks'
     }).then(function(response){
-        console.log(response.data);
+        //console.log(response.data);
         $scope.datetimetasks_server = response.data.datetimetasks;
-        console.log($scope.datetimetasks_server);
+        //console.log($scope.datetimetasks_server);
     }, function(response){
-        console.log("problemas de conexion");
+        //console.log("problemas de conexion");
     });
   }
 
@@ -359,6 +411,32 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.getDataTasks();
   $scope.getDateTimeTasks();
 
+  // A confirm dialog
+  $scope.deleteTask = function(id,type) {
+    console.log(id);
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Borrar tarea',
+      template: '¿Estas seguro de borrar la tarea?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        var url_task = url_server + "/tasks/" + type + "/" + id + "/remove";
+        //console.log(url_task);
+        $http({
+           method:'GET',
+           url: url_task
+         }).then(function(response){
+             //console.log(response.data);
+             $scope.getDataTasks();
+             $scope.getDateTimeTasks();
+         }, function(response){
+             console.log("problemas de conexion");
+         });
+      } else {
+        console.log('cancelado');
+      }
+    });
+  };
 })
 
 .controller('ComponentsCtrl', function($scope, $websocket, $http, ionicToast) {
@@ -440,7 +518,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     });
 
     $scope.changeStatus = function() {
-      if ($scope.component_status) {
+      console.log($scope.component_status);
+      if ($scope.component_status == true) {
         console.log("apagando");
         $scope.turnOffComponent($scope.componentId);
       }
@@ -491,12 +570,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     };
 
     $scope.activateComponent = function() {
-      if ($scope.component_activate) {
-        console.log("desactivar");
+      console.log($scope.component_activate);
+      if ($scope.component_activate != true) {
+        console.log("activar");
         $scope.enableComponent($scope.componentId);
       }
       else {
-        console.log("prendiendo");
+        console.log("desactivar");
         $scope.disableComponent($scope.componentId);
       }
     }
@@ -514,7 +594,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       send.then(
         function(response){
           console.log(response);
-          $scope.component_activate = 'true';
+          $scope.component_activate = true;
           ionicToast.show('Componente activado con éxito.', 'bottom', false, 5000);
       }, function(response){
           console.log("problemas de conexion");
@@ -532,7 +612,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       });
       send.then(
         function(response){
-          $scope.component_activate = 'false';
+          $scope.component_activate = false;
           ionicToast.show('Componente desactivado con éxito.', 'bottom', false, 5000);
       }, function(response){
           console.log("problemas de conexion");

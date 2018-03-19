@@ -1,0 +1,84 @@
+<ion-view view-title="Nueva tarea por consumo">
+  <ion-content >
+    <div class="card">
+        <div class="item item-divider">
+            <span>Nombre y descripción</span>
+        </div>
+        <label class="item item-input">
+          <input ng-model="task.label" type="text" placeholder="Nombre">
+        </label>
+        <label class="item item-input">
+          <input ng-model="task.description" type="text" placeholder="Descripción">
+        </label>
+        <div class="item item-divider">
+            <span>Elegir componente</span>
+        </div>
+        <label class="item item-input item-select">
+          <div class="input-label ">
+            Componente
+          </div>
+          <select ng-model="task.component_mac" >
+            <option ng-repeat="component in components_server" value="{{component.device_mac}}">{{component.label}}</option>
+          </select>
+        </label>
+        <label class="item item-input item-divider">
+          <span class="input-label">Consumo establecido
+            <span ng-show="task.data_value !== undefined" class="badge badge-task badge-positive">{{task.data_value}}</span>
+          </span>
+        </label>
+        <div class="list">
+          <div class="item range range-positive">
+            <i class="icon ion-ios-bolt-outline"></i>
+            <input ng-model="task.data_value" type="range" name="volume" min="0" max="500" value="50">
+            <i class="icon ion-ios-bolt"></i>
+          </div>
+        </div>
+        <label class="item item-input item-select">
+          <div class="input-label ">
+            Comparador
+          </div>
+          <select ng-model="task.comparator">
+            <option selected value="1" >Mayor</option>
+            <option value="-1">Menor</option>
+            <option value="0">Igual</option>
+          </select>
+        </label>
+        <label class="item item-input">
+          <div class="input-label">
+            Repeticiones
+          </div>
+          <input ng-model="task.repeats" class="repeticiones-input" type="number" placeholder="1">
+        </label>
+        <div class="item item-divider">
+            <span>Accion a realizar</span>
+        </div>
+        <label class="item item-input item-select">
+          <div class="input-label ">
+            Accion
+          </div>
+          <select ng-model="task.function">
+            <option selected value="1" >Apagar</option>
+            <option value="2" >Encender</option>
+          </select>
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label ">
+            Estado inicial
+          </div>
+          <select ng-model="task.state">
+            <option selected value="1" >Lista</option>
+            <option value="2">Finalizada</option>
+          </select>
+        </label>
+        <div class="item">
+          <div class="button-bar">
+            <a ng-click="addDataTask(task)" class="button button-positive icon ion-ios-bolt">
+              Programar tarea
+            </a>
+          </div>
+        </div>
+
+    </div>
+
+  </ion-content>
+</ion-view>

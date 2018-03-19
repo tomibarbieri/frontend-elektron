@@ -28,9 +28,17 @@
   margin-left: 10px;
 }
 
+.badge-task {
+  margin-top:2px;
+}
+
 .edit-component-label {
   font-size: 1.2em;
   margin-left: 10px;
+}
+
+.repeticiones-input {
+  text-align: end;
 }
 
 .mac-components {
