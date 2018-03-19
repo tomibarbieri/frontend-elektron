@@ -369,7 +369,56 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('DatetimetaskCtrl', function($scope, $location) {
+.controller('DatetimetaskCtrl', function($scope, $location, $filter, $http, $state, $httpParamSerializerJQLike) {
+
+  var url_server = 'http://158.69.223.78:8000';
+  $scope.task = {};
+
+  $http({
+      method:'GET',
+      url:'http://158.69.223.78:8000/devices/'
+  }).then(function(response){
+      console.log(response.data);
+      $scope.components_server = response.data.devices;
+      console.log($scope.components_server[0].label);
+  }, function(response){
+      ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
+      //show an appropriate message
+  });
+
+  $scope.addDateTimeTask = function (task) {
+
+    console.log(task);
+
+    var data_params = {
+      'taskstate': task.state,
+      'taskfunction': task.function,
+      'label': task.label,
+      'description': task.description,
+      'owner':'root',
+      'repeats': task.repeats,
+      'repeat_criteria': task.criteria,
+      'datetime': task.date.toUTCString(),
+      'device_mac': task.device_mac
+    }
+
+    var url_task = url_server + "/tasks/datetimetasks/create";
+
+    $http({
+        method:'POST',
+        url: url_task,
+        data: $httpParamSerializerJQLike(data_params),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+        }
+    }).then(function(response){
+        console.log(response.data);
+    }, function(response){
+        console.log("problemas de conexion");
+    });
+
+
+  }
 
 })
 

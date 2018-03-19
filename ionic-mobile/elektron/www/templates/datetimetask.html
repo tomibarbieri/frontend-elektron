@@ -1,6 +1,15 @@
-<ion-view view-title="Nueva tarea">
+<ion-view view-title="Nueva tarea por fecha y hora">
   <ion-content >
     <div class="card">
+        <div class="item item-divider">
+            <span>Nombre y descripción</span>
+        </div>
+        <label class="item item-input">
+          <input ng-model="task.label" type="text" placeholder="Nombre">
+        </label>
+        <label class="item item-input">
+          <input ng-model="task.description" type="text" placeholder="Descripción">
+        </label>
         <div class="item item-divider">
             <span>Elegir componente</span>
         </div>
@@ -8,53 +17,64 @@
           <div class="input-label ">
             Componente
           </div>
-          <select>
-            <option selected>Luces</option>
-            <option>Aire acondicionado</option>
-            <option>Lavarropas</option>
-            <option>Heladera</option>
+          <select ng-model="task.device_mac" >
+            <option ng-repeat="component in components_server" value="{{component.device_mac}}">{{component.label}}</option>
           </select>
         </label>
-        <label class="item item-input item-divider">
-          <span class="input-label">Por consumo</span>
-        </label>
-        <div class="list">
-          <div class="item range range-positive">
-            <i class="icon ion-ios-bolt-outline"></i>
-            <input type="range" name="volume" min="0" max="100" value="33">
-            <i class="icon ion-ios-bolt"></i>
-          </div>
-        </div>
         <label class="item item-input item-divider">
           <span class="input-label">Por fecha</span>
         </label>
         <div>
-          <div class="item item-icon-left" ion-datetime-picker date ng-model="dateFrom">
+          <div class="item item-icon-left" ion-datetime-picker ng-model="task.date">
               <i class="icon ion-ios-calendar positive"></i>
-              Fecha
-              <strong>{{dateFrom| date: "yyyy-MM-dd"}}</strong>
+              Fecha y hora
+              <strong>{{task.date| date: "yyyy-MM-dd H:mm"}}</strong>
           </div>
-          <div class="item item-icon-left" ion-datetime-picker time ng-model="timeFrom">
-              <i class="icon ion-ios-clock positive"></i>
-              Hora
-              <strong>{{timeFrom| date: "H:mm"}}</strong>
+          <div class="item item-divider">
+              <span>Repeticiones</span>
           </div>
+          <label class="item item-input item-select">
+            <div class="input-label ">
+              Criterio de repetición
+            </div>
+            <select ng-model="task.criteria">
+              <option selected value="1" >Cada hora</option>
+              <option value="0">Cada día</option>
+            </select>
+          </label>
+          <label class="item item-input">
+            <div class="input-label">
+              Repeticiones
+            </div>
+            <input ng-model="task.repeats" class="repeticiones-input" type="number" placeholder="1">
+          </label>
           </div>
-        <div class="item item-divider">
-            <span>Opciones</span>
-        </div>
-        <ion-list>
-
-          <ion-checkbox ng-model="filter.yellow">Apagar componente</ion-checkbox>
-          <ion-checkbox checked ng-model="filter.red">Notificar por celular</ion-checkbox>
-          <ion-checkbox ng-model="filter.pink">Notificar por mail</ion-checkbox>
-
-        </ion-list>
+          <div class="item item-divider">
+              <span>Accion a realizar</span>
+          </div>
+          <label class="item item-input item-select">
+            <div class="input-label ">
+              Accion
+            </div>
+            <select ng-model="task.function">
+              <option selected value="1" >Apagar</option>
+              <option value="2" >Encender</option>
+            </select>
+          </label>
+          <label class="item item-input item-select">
+            <div class="input-label ">
+              Estado inicial
+            </div>
+            <select ng-model="task.state">
+              <option selected value="1" >Lista</option>
+              <option value="2">Finalizada</option>
+            </select>
+          </label>
 
         <div class="item">
           <div class="button-bar">
-            <a class="button button-positive icon ion-ios-bolt">
-              Programar
+            <a ng-click="addDateTimeTask(task)" class="button button-positive icon ion-ios-bolt">
+              Programar tarea
             </a>
           </div>
         </div>
