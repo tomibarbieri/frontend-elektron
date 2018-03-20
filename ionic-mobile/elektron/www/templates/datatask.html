@@ -1,4 +1,4 @@
-<ion-view view-title="Nueva tarea por consumo">
+<ion-view view-title="{{datatasktitle}}">
   <ion-content >
     <div class="card">
         <div class="item item-divider">
@@ -72,7 +72,10 @@
         </label>
         <div class="item">
           <div class="button-bar">
-            <a ng-click="addDataTask(task)" class="button button-positive icon ion-ios-bolt">
+            <a ng-show="editButton == false" ng-click="addDataTask(task)" class="button button-positive icon ion-ios-bolt">
+              Programar tarea
+            </a>
+            <a ng-show="editButton == true" ng-click="addDataTask(task)" class="button button-positive icon ion-ios-bolt">
               Programar tarea
             </a>
           </div>

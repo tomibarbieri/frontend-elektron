@@ -317,10 +317,26 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('DatataskCtrl', function($scope, $location, $filter, $http, $state, $httpParamSerializerJQLike) {
+.controller('DatataskCtrl', function($scope, $location, $filter, $http, $stateParams, $httpParamSerializerJQLike) {
 
   var url_server = 'http://158.69.223.78:8000';
-  $scope.task = {};
+
+  console.log($stateParams);
+
+  if ($stateParams.task) {
+    var task = JSON.parse($stateParams.task);
+    console.log("editar");
+    console.log(task);
+    $scope.task = task;
+    $scope.editButton = true;
+    $scope.datatasktitle = "Editar tarea por consumo";
+  }
+  else {
+    console.log("nuevo");
+    $scope.task = {};
+    $scope.editButton = false;
+    $scope.datatasktitle = "Agregar tarea por consumo";
+  }
 
   $http({
       method:'GET',
@@ -422,7 +438,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('TasksCtrl', function($scope, $http, $ionicPopup) {
+.controller('TasksCtrl', function($scope, $http, $state, $ionicPopup) {
 
   $scope.datatasks_server = [];
   $scope.datetimetasks_server = [];
@@ -441,8 +457,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         //console.log($scope.datatasks_server);
     }, function(response){
         //console.log("problemas de conexion");
-        Notifier.simpleError("Error de conexión","No se pudo traer la informacion de las tareas del servidor");
-
     });
   }
 
@@ -496,6 +510,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       }
     });
   };
+
+  $scope.editDataTask = function(tasky) {
+    console.log(tasky);
+    $state.go("app.datatask", { 'task' : 'tasky'});
+  }
+
+
 })
 
 .controller('ComponentsCtrl', function($scope, $websocket, $http, ionicToast) {

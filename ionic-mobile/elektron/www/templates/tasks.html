@@ -49,7 +49,7 @@
               <a ng-click="deleteTask(task.id,'datatasks')" class="task-float-right button button-small button-assertive">
                 <i class="icon ion-trash-b"></i>
               </a>
-              <a class="task-float-right button button-small button-positive">
+              <a ui-sref="app.datatask({contactId: task.id})" class="task-float-right button button-small button-positive">
                 <i class="icon ion-edit"></i>
               </a>
             </div>
