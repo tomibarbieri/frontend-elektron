@@ -252,69 +252,65 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
       ];
 
-      $scope.websocket = $websocket('ws://' + ip_server +':8888/websocket');
-
-      // 158.69.223.78
-      // cambiar ip a la del servior por ejemplo 192.168.0.20
-      console.log($scope.websocket);
-      var collection = [];
-
-      $scope.websocket.onError(function functionName() {
-        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
-      });
-
-      $scope.websocket.onopen = function() {
-        console.log("on open");
-        $scope.websocketStatus = true;
-        $scope.$apply();
-      };
-
-      $scope.websocket.onMessage(function(message) {
-
-        if ($scope.websocketStatus == false) {
-          $scope.websocketStatus = true;
-          $scope.$apply();
-        }
-
-        json = JSON.parse(message.data);
-        console.log("data value mac -> " + json.device_mac);
-        console.log("current_component mac -> " + $scope.current_component.device_mac);
-
-        if (json.device_mac == $scope.current_component.device_mac) {
-          $scope.line.data[0].shift();
-          $scope.line.data[0].push(json.data_value);
-        }
-
-      });
-
-
       // Obtiene los componentes del servidor
       $http({
           method:'GET',
           url:'http://158.69.223.78:8000/devices/'
-      }).then(function(response){
-          console.log(response.data);
-          $scope.components_server = response.data.devices;
-          $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
-          $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
-          $scope.current_component = $scope.components_server_enabled[0];
-          console.log($scope.components_server[0].label);
-      }, function(response){
-          ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
-          //show an appropriate message
+        }).then(function(response){
+            console.log(response.data);
+            $scope.components_server = response.data.devices;
+            $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
+            $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
+            $scope.current_component = $scope.components_server_enabled[0];
+            $scope.loadWebsocket();
+
+            console.log($scope.components_server[0].label);
+        }, function(response){
+            ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
+            //show an appropriate message
       });
-
-      // Muestra los primeros 4 componentes de la lista
-      $scope.quantity = 4;
-
-      $scope.changeCurrentComponent = function(component) {
-        $scope.current_component = component;
-      };
 
       $scope.refreshConnection = function() {
         console.log("refresh");
       }
 
+      $scope.loadWebsocket = function() {
+
+        $scope.websocket = $websocket('ws://' + ip_server +':8888/websocket');
+
+        // 158.69.223.78
+        // cambiar ip a la del servior por ejemplo 192.168.0.20
+        console.log($scope.websocket);
+        var collection = [];
+
+        $scope.websocket.onError(function functionName() {
+          ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
+        });
+
+        $scope.websocket.onopen = function() {
+          console.log("on open");
+          $scope.websocketStatus = true;
+          $scope.$apply();
+        };
+
+        $scope.websocket.onMessage(function(message) {
+
+          if ($scope.websocketStatus == false) {
+            $scope.websocketStatus = true;
+            $scope.$apply();
+          }
+
+          json = JSON.parse(message.data);
+          console.log("data value mac -> " + json.device_mac);
+          console.log("current_component mac -> " + $scope.current_component.device_mac);
+
+          if (json.device_mac == $scope.current_component.device_mac) {
+            $scope.line.data[0].shift();
+            $scope.line.data[0].push(json.data_value);
+          }
+
+        });
+      }
 })
 
 .controller('DatataskCtrl', function($scope, $location, $filter, $http, $stateParams, $httpParamSerializerJQLike) {
