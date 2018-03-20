@@ -30,24 +30,32 @@
           <div class="item item-divider">
               <span>Elegir componente</span>
           </div>
-            <label class="item item-input item-select">
-              <div class="input-label">
-                Componente
-              </div>
-              <select>
-                <option selected>Todos</option>
-                <option>Aire acondicionado</option>
-                <option>Lavarropas</option>
-                <option>Heladera</option>
-              </select>
-            </label>
-            <div class="item">
-              <div class="button-bar">
-                <a ui-sref="app.graphic-statistics({ componentId: 2, dateFrom: dateFrom, timeFrom: timeFrom, dateTo:dateTo, timeTo:timeTo })" class="button button-positive icon ion-stats-bars">
-                  Ver estadísticas
-                </a>
-              </div>
+          <label class="item item-input item-select">
+            <div class="input-label">
+              Componente
             </div>
+            <select ng-model="device_id">
+              <option ng-repeat="component in components_server" value="{{component.id}}" >{{component.label}}</option>
+            </select>
+          </label>
+          <div class="item item-divider">
+              <span>Elegir precisión</span>
+          </div>
+          <label class="item item-input item-select">
+            <div class="input-label">
+              Precisión
+            </div>
+            <select ng-model="pepe">
+              <option ng-repeat="component in components_server" value="" >Todos</option>
+            </select>
+          </label>
+          <div class="item">
+            <div class="button-bar">
+              <a ui-sref="app.graphic-history({ componentId: device_id, dateFrom: dateFrom, timeFrom: timeFrom, dateTo:dateTo, timeTo:timeTo })" class="button button-positive icon ion-stats-bars">
+                Ver datos históricos
+              </a>
+            </div>
+          </div>
       </div>
 
     </ion-content>

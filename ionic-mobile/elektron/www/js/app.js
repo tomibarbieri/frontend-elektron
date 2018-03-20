@@ -186,12 +186,12 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   })
 
-  .state('app.graphic-statistics', {
-    url: '/graphic-statistics/{componentId}?dateFrom&timeFrom$dateTo&timeTo',
+  .state('app.graphic-history', {
+    url: '/graphic-history/{componentId}?dateFrom&timeFrom$dateTo&timeTo',
     views: {
       'menuContent': {
-        templateUrl: 'templates/graphic-statistics.html',
-        controller: 'GraphicStatisticsCtrl'
+        templateUrl: 'templates/graphic-history.html',
+        controller: 'GraphicHistoryCtrl'
       }
     }
   })

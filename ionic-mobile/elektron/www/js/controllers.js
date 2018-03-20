@@ -1020,7 +1020,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('GraphicStatisticsCtrl', function($scope, $stateParams, $http, $filter, ionicToast) {
+.controller('GraphicHistoryCtrl', function($scope, $stateParams, $http, $filter, ionicToast) {
 
     console.log($stateParams.componentId);
     $scope.componentId = $stateParams.componentId;
@@ -1029,12 +1029,17 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     $scope.dateTo = new Date($stateParams.dateTo);
     $scope.timeTo = new Date($stateParams.timeTo);
 
-    // aca va la consulta ajax al servidor por el consumo de ese periodo
-
     // armando la url
     var id = $scope.componentId;
     var from = $filter('date')($scope.dateFrom, 'ddMMyy');
     var to = $filter('date')($scope.dateTo, 'ddMMyy');
+
+    var hourfrom = $filter('date')($scope.timeFrom, 'HH');
+    var minutesfrom = $filter('date')($scope.timeFrom, 'mm');
+    var hourto = $filter('date')($scope.timeTo, 'HH');
+    var minutesto = $filter('date')($scope.timeTo, 'mm');
+
+    console.log(hourfrom,minutesfrom,hourto,minutesto);
 
     var date = $filter('date')($scope.dateFrom, 'shortDate');
 
@@ -1048,7 +1053,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     var day = dateObj.getUTCDate();
     var year = dateObj.getUTCFullYear();
 
-    var dateF = day + "/" + month + "/" + year;
+    var dateF = day + "/" + month + "/" + year + '/' + hourfrom;
 
     var dateObj = $scope.dateTo;
 
@@ -1056,19 +1061,28 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     var day = dateObj.getUTCDate();
     var year = dateObj.getUTCFullYear();
 
-    var dateT = day + "/" + month + "/" + year;
+    var dateT = day + "/" + month + "/" + year + '/' + hourto;
 
-
-    var url = 'http://158.69.223.78:8000/devices/' + 9 + '/data/' + dateF + '/' + dateT;
+    var url_server = 'http://158.69.223.78:8000';
+    var url = url_server + '/devices/' + $scope.componentId + '/data/' + dateF + '/' + dateT + '/';
 
     console.log(url);
 
     $http({
         method:'GET',
-        url: url
+        url: url,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+        }
     }).then(function(response){
-        console.log(response.data);
-        $scope.statistic = response.data;
+        $scope.data = response.data.data;
+        console.log($scope.data);
+        if ($scope.data.length > 0) {
+          $scope.loadChart();
+        }
+        else {
+          ionicToast.show('No hay datos para ese período seleccionado.', 'top', false, 5000);
+        }
     }, function(response){
         console.log("problemas");
         ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
@@ -1077,17 +1091,34 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
     // Fin de consulta
 
-    console.log($scope.componentId);
-    console.log($scope.dateFrom);
-    console.log($scope.timeFrom);
-    console.log($scope.dateTo);
-    console.log($scope.timeTo);
+    $scope.loadChart = function () {
 
-    $scope.line = {};
-    $scope.line.labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
-    $scope.line.series = ['Potencia'];//, 'Corriente'];
-    $scope.line.data = [
-      [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
-      //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
-    ];
+      $scope.line = {};
+      $scope.line.series = ['Potencia'];
+      $scope.line.labels = [];
+      $scope.line.data = [[]];
+
+      $scope.chartlength = 0;
+      ($scope.data.length > 10) ? $scope.chartlenght = 10 : $scope.chartlength = $scope.data.length;
+
+      for (var i = 0; i < $scope.chartlenght; i++) {
+
+        var label = '' + $filter('date')($scope.data[i].date, "HH:mm");
+
+        $scope.line.labels.push(label)
+        $scope.line.data[0].push($scope.data[i].data_value)
+      }
+    }
+
+    $http({
+        method:'GET',
+        url:'http://158.69.223.78:8000/devices/' + $scope.componentId + '/'
+    }).then(function(response){
+        $scope.component_details = response.data.device;
+        console.log($scope.component_details);
+    }, function(response){
+        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
+        //show an appropriate message
+    });
+
 });

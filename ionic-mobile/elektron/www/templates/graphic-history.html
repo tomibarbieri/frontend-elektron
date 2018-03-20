@@ -1,8 +1,8 @@
-<ion-view view-title="Estadisticas">
+<ion-view view-title="Datos historicos para {{component_details.label}}">
   <ion-content>
     <div class="card">
       <div class="item item-divider">
-          <span>Estadisticas en el periodo</span>
+          <span>Datos históricos en el periodo</span>
       </div>
       <div class="item item-text-wrap">
         <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
@@ -17,7 +17,7 @@
         <span class=""><b>Hasta</b>: {{dateTo| date: "shortDate"}} - Hora: {{timeTo| date: "shortTime"}}</span>
       </div>
       <div class="item">
-        <span class=""><b>Componente</b>: {{componentId}}</span>
+        <span class=""><b>Componente</b>: {{component_details.label}}</span>
       </div>
     </div>
   </ion-content>
