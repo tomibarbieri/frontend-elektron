@@ -13,14 +13,50 @@
       <div ng-show="listado == true" class="card" ng-repeat="component in components_server">
         <div class="item item-divider">
             <b>Componente:</b> {{component.device.label}}
+            <span ng-if="component.device.devicestate.name == 'on'" class="badge-component badge badge-balanced">encendido</span>
+            <span ng-if="component.device.devicestate.name == 'off'" class="badge-component badge badge-assertive">apagado</span>
         </div>
         <div class="list">
             <div class="item">
-              <span>Componente: {{component.device.id}}</span>
+              <div class="row">
+                <div class="col">
+                  <span>Consumo: <b>{{component.data_sum * 1.0 | number:0}}kw</b></span>
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+                  <span class="">Costo: <b>$ {{component.data_sum * 1.5 | number:0}}</b></span>
+                </div>
+                <div class="col">
+                  <span class="">Co2: <b>32 Kg</b></span>
+                </div>
+              </div>
             </div>
-            <div class="item item-button-right">
-              <span><b>Dia:</b> </span>
-              <span><b>Hora:</b> </span>
+            <div class="item">
+              <div class="row">
+                  <span>Última medición: <b> {{ 1288323623006 | date:'yyyy-MM-dd HH:mm' }}</b></span>
+                  <span class="badge badge-energized"><b> {{ component.last_data || 0 }}</b></span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="row">
+                  <span>Último período: <b> {{ 1288323623006 | date:'yyyy-MM-dd HH:mm' }}</b></span>
+                  <span class="badge badge-light"><b>{{ component.last_data || 0 }}</b></span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="row">
+                <div class="col">
+                  <span>Encendidos: <b>{{component.device.state_counter_on}}</b></span>
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+                  <span>Apagados: <b>{{component.device.state_counter_off}}</b></span>
+                </div>
+              </div>
             </div>
         </div>
       </div>
