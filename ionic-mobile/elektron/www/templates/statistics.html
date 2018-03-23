@@ -8,7 +8,7 @@
           <a class="button button-positive" ng-show="listado == false">Graficos</a>
         </div>
       </div>
-      <div ng-show="listado == true" class="card" ng-repeat="component in components_server">
+      <div ng-show="listado == true" class="card" ng-repeat="component in components_statistics">
         <div class="item item-divider">
             <b>Componente:</b> {{component.device.label}}
             <span ng-if="component.device.devicestate.name == 'on'" class="badge-component badge badge-balanced">encendido</span>
@@ -18,7 +18,7 @@
             <div class="item">
               <div class="row">
                 <div class="col">
-                  <span>Consumo: <b>{{component.data_sum | number:1 }}kw</b></span>
+                  <span>Consumo: <b>{{component.data_sum | number:1 }}kw ({{ component.prom_total || 0 | number:1 }}% del total)</b></span>
                 </div>
               </div>
               <div class="row">
@@ -69,9 +69,19 @@
             </canvas>
           </div>
           <div class="item">
-              <div ng-repeat="value in doughnut.config.data.labels">
-                {{ value }}
+            <div class="row">
+              <div class="col">
+
               </div>
+              <div class="col">
+                <div ng-repeat="value in doughnut.config.data.labels" style="text-align:center; font-size:0.7em; border-radius: 25px;background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
+                  <span>{{ value }}</span>
+                </div>
+              </div>
+              <div class="col">
+
+              </div>
+            </div>
           </div>
         </div>
         <div class="card">
@@ -84,7 +94,7 @@
                 Componente 1
               </div>
               <select ng-model="barOptions.componentLeft" >
-                <option ng-repeat="component in components_totales" value="{{component.id}}">{{component.label}}</option>
+                <option ng-repeat="component in components_server" value="{{component.id}}">{{component.label}}</option>
               </select>
             </label>
             <label class="item item-input item-select">
@@ -92,7 +102,7 @@
                 Componente 2
               </div>
               <select ng-model="barOptions.componentRight" >
-                <option ng-repeat="component in components_totales" value="{{component.id}}">{{component.label}}</option>
+                <option ng-repeat="component in components_server" value="{{component.id}}">{{component.label}}</option>
               </select>
             </label>
 
@@ -105,7 +115,7 @@
               </select>
             </label>
             <div class="item">
-              <a ng-click="changeBarComponents()" class="button icon-right ion-chevron-right button-calm">Ver gráfico</a>
+              <a ng-click="createBarChart()" class="button icon-right ion-chevron-right button-calm">Ver gráfico</a>
             </div>
           </div>
           <div class="item">

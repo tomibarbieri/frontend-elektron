@@ -788,23 +788,24 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('StatisticsCtrl', function($scope, $http, $filter, ionicToast) {
+.controller('StatisticsCtrl', function($scope, $http, $filter, $timeout, ionicToast) {
 
   $scope.listado = true;
   var url_server = 'http://158.69.223.78:8000';
+
+  ionicToast.show('Cargando estadisticas.', 'top', false, 8000);
 
   $http({
       method:'GET',
       url: url_server + '/devices/statistics'
   }).then(function(response){
       console.log(response.data);
-      $scope.components_server = response.data.devices;
+      $scope.components_statistics = response.data.devices;
       $scope.createDoughnutChart();
-      $scope.createBarChart();
-      console.log($scope.components_server[0].device.label);
+      //$scope.createBarChart();
+      console.log($scope.components_statistics[0].device.label);
   }, function(response){
       ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
-      //show an appropriate message
   })
 
   $http({
@@ -812,29 +813,23 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       url: url_server + '/devices/'
   }).then(function(response){
       console.log(response.data);
-      $scope.components_totales = response.data.devices;
+      $scope.components_server = response.data.devices;
   }, function(response){
       ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
-      //show an appropriate message
   })
 
   $scope.changeToCharts = function() {
     $scope.listado = false;
+    $timeout(function() { $scope.$apply(); }, 2000);
   }
 
   $scope.changeToList = function() {
     $scope.listado = true;
   }
 
-
   $scope.doughnut;
-  $scope.bar;
-  $scope.barOptions = {};
 
   $scope.$on('chart-create', function (evt, chart) {
-    console.log(chart);
-    console.log(chart.config.type);
-    console.log(chart.config.data);
     if (chart.config.type == 'doughnut') {
       $scope.doughnut = chart;
     }
@@ -845,10 +840,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   $scope.doughnutlabels = [];
   $scope.doughnutdata = [];
-
-  $scope.barlabels = [];
-  $scope.barseries = [];
-  $scope.bardata = [[],[]];
+  $scope.barOptions = {};
 
   $scope.barPrecision = [{
     'id': 0,
@@ -871,16 +863,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   };
 
   $scope.createDoughnutChart = function() {
-    for (var i = 0; i < $scope.components_server.length; i++) {
-      $scope.doughnutlabels.push($scope.components_server[i].device.label);
-      $scope.doughnutdata.push(Math.floor((Math.random() * 100) + 1));
+    for (var i = 0; i < $scope.components_statistics.length; i++) {
+      var percent = ($scope.components_statistics[i].prom_total) ? $filter('number')($scope.components_statistics[i].prom_total, 2) : 0;
+      var label = $scope.components_statistics[i].device.label + ' (' + percent + '%)';
+      $scope.doughnutlabels.push(label);
+      $scope.doughnutdata.push(percent);
     }
   }
-
-  /*$scope.changeCriteria = function() {
-    console.log($scope.barOptions.precisionSelected);
-    $scope.changeBarComponents();
-  }*/
 
   $scope.changeBarComponents = function(){
     console.log($scope.barOptions.componentLeft);
@@ -901,12 +890,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   $scope.changeBarComponent = function(id_selected, side) {
 
-    console.log($scope.components_server);
     var selected = $filter('filter')($scope.components_server, {id: id_selected});
-    console.log(selected);
-    console.log(id_selected);
     var selectedComponent = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
-    console.log(selectedComponent);
 
     $scope.getComponentData(side,id_selected);
 
@@ -918,12 +903,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.currentBarRigth = selectedComponent;
       $scope.barseries[1] = $scope.barOptions.componentRight.label;
     }
-    console.log($scope.barseries);
   }
 
   $scope.getComponentData = function(side, component) {
-
-    //var c = component;
 
     $http({
         method:'GET',
@@ -990,11 +972,14 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   }
 
   $scope.createBarChart = function() {
-    $scope.currentBarLeft = $scope.components_server[0].device;
-    $scope.currentBarRigth = $scope.components_server[0].device;
-    $scope.barseries = [$scope.currentBarLeft.label, $scope.currentBarRigth.label];
-    //$scope.getComponentData('left',$scope.currentBarLeft)
-    //$scope.getComponentData('rigth',$scope.currentBarRigth)
+    if ($scope.bar == undefined) {
+      $scope.bar;
+      $scope.barlabels = [];
+      $scope.barseries = [];
+      $scope.bardata = [[],[]];
+    }
+    ionicToast.show('Cargando tabla comparativa.', 'bottom', false, 3000);
+    $scope.changeBarComponents();
   }
 
 

@@ -58,6 +58,9 @@ angular
 
         $scope.components_statistics = response.data.devices;
 
+        $scope.createBarChart();
+        $scope.createDoughnutChart();
+
     }, function(response){
         console.log("problemas de conexion");
     });
@@ -70,9 +73,6 @@ angular
         console.log(response.data);
         $scope.components_server = response.data.devices;
         Notifier.simpleSuccess('Datos cargados con exito','Desde el servidor')
-
-        $scope.createBarChart();
-        $scope.createDoughnutChart();
 
     }, function(response){
         console.log("problemas de conexion");
@@ -141,11 +141,7 @@ angular
 
     $scope.graficateComponentBar = function(data, side) {
 
-      console.log($scope.barlabels.length);
-
       var length = (data.length >= 6) ? 6 : data.length;
-      console.log(length);
-
 
       if ($scope.barlabels.length == 0) {
         console.log('preparando footer');
@@ -168,10 +164,7 @@ angular
         console.log('izquierda');
         $scope.bardata[0] = [];
         for (var i = length-1; i > 0; i--) {
-          console.log(data);
-          console.log(i);
           if (data[i].data_value == null) {
-            console.log("vuelta");
             $scope.bardata[0].push(0);
           } else {
             $scope.bardata[0].push(data[i].data_value);
@@ -183,7 +176,6 @@ angular
 
         for (var i = length-1; i > 0; i--) {
           if (data[i].data_value == null) {
-            console.log("vuelta");
             $scope.bardata[1].push(0);
           } else {
             $scope.bardata[1].push(data[i].data_value);
@@ -206,9 +198,11 @@ angular
     }
 
     $scope.createDoughnutChart = function() {
-      for (var i = 0; i < $scope.components_server.length; i++) {
-        $scope.doughnutlabels.push($scope.components_server[i].label);
-        $scope.doughnutdata.push(Math.floor((Math.random() * 100) + 1));
+      for (var i = 0; i < $scope.components_statistics.length; i++) {
+        var percent = ($scope.components_statistics[i].prom_total) ? $filter('number')($scope.components_statistics[i].prom_total, 2) : 0;
+        var label = $scope.components_statistics[i].device.label + ' (' + percent + '%)';
+        $scope.doughnutlabels.push(label);
+        $scope.doughnutdata.push(percent);
       }
     }
 
