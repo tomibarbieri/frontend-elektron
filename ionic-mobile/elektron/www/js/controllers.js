@@ -877,61 +877,57 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     }
   }
 
-  $scope.changeCriteria = function() {
-    //var selected = $filter('filter')($scope.barPrecision, {id: id_selected});
-    //var selectedPrecision = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
-
+  /*$scope.changeCriteria = function() {
     console.log($scope.barOptions.precisionSelected);
-
-    //$scope.currentPrecision = selectedPrecision;
-
-    //$scope.barlabels = [];
-
-    //$scope.getComponentData('left',$scope.currentBarLeft);
-    //$scope.getComponentData('right',$scope.currentBarRigth);
-
-  }
+    $scope.changeBarComponents();
+  }*/
 
   $scope.changeBarComponents = function(){
     console.log($scope.barOptions.componentLeft);
     console.log($scope.barOptions.componentRight);
     console.log($scope.barOptions.precisionSelected);
+
+    $scope.changeLeftBarComponent($scope.barOptions.componentLeft);
+    $scope.changeRigthBarComponent($scope.barOptions.componentRight);
   }
 
-  $scope.changeLeftBarComponent = function() {
-    console.log($scope.barOptions.componentLeft);
-    //$scope.changeBarComponent(id,'left');
+  $scope.changeLeftBarComponent = function(id) {
+    $scope.changeBarComponent(id,'left');
   }
 
-  $scope.changeRigthBarComponent = function() {
-    console.log($scope.barOptions.componentLeft);
-    //$scope.changeBarComponent(id,'right');
+  $scope.changeRigthBarComponent = function(id) {
+    $scope.changeBarComponent(id,'right');
   }
 
   $scope.changeBarComponent = function(id_selected, side) {
-    var selected = $filter('filter')($scope.components_server, {id: id_selected});
-    var selectedComponent = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
 
-    $scope.getComponentData(side,selectedComponent);
+    console.log($scope.components_server);
+    var selected = $filter('filter')($scope.components_server, {id: id_selected});
+    console.log(selected);
+    console.log(id_selected);
+    var selectedComponent = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
+    console.log(selectedComponent);
+
+    $scope.getComponentData(side,id_selected);
 
     if (side == 'left') {
       $scope.currentBarLeft = selectedComponent;
-      $scope.barseries[0] = $scope.currentBarLeft.label;
+      $scope.barseries[0] = $scope.barOptions.componentLeft.label;
     }
     else {
       $scope.currentBarRigth = selectedComponent;
-      $scope.barseries[1] = $scope.currentBarRigth.label;
+      $scope.barseries[1] = $scope.barOptions.componentRight.label;
     }
     console.log($scope.barseries);
   }
 
   $scope.getComponentData = function(side, component) {
 
-    var c = component;
+    //var c = component;
 
     $http({
         method:'GET',
-        url: url_server + '/devices/' + c.id + '/data/' + $scope.currentPrecision.url // modificar la URL /devices/id/data/perhour
+        url: url_server + '/devices/' + component + '/data/' + $scope.barOptions.precisionSelected // modificar la URL /devices/id/data/perhour
     }).then(function(response){
         console.log(response.data.data);
         //$scope.components_server = response.data.devices;
@@ -946,9 +942,15 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   $scope.graficateComponentBar = function(data, side) {
 
+    console.log($scope.barlabels.length);
+
+    var length = (data.length >= 6) ? 6 : data.length;
+    console.log(length);
+
+
     if ($scope.barlabels.length == 0) {
       console.log('preparando footer');
-      for (var i = 6; i > 0; i--) {
+      for (var i = length-1; i > 0; i--) {
         var time;
         if ($scope.currentPrecision.url == 'perday') {
           time = $filter('date')(data[i].date, 'shortDate');
@@ -966,7 +968,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     if (side == 'left') {
       console.log('izquierda');
       $scope.bardata[0] = [];
-      for (var i = 6; i > 0; i--) {
+      for (var i = length-1; i > 0; i--) {
         if (data[i].data_value == null) {
           $scope.bardata[0].push(0);
         } else {
@@ -976,8 +978,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     } else {
       console.log('derecha');
       $scope.bardata[1] = [];
-
-      for (var i = 6; i > 0; i--) {
+      for (var i = length-1; i > 0; i--) {
         if (data[i].data_value == null) {
           $scope.bardata[1].push(0);
         } else {
@@ -991,12 +992,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.createBarChart = function() {
     $scope.currentBarLeft = $scope.components_server[0].device;
     $scope.currentBarRigth = $scope.components_server[0].device;
-
     $scope.barseries = [$scope.currentBarLeft.label, $scope.currentBarRigth.label];
-
-    $scope.getComponentData('left',$scope.currentBarLeft)
-    $scope.getComponentData('rigth',$scope.currentBarRigth)
-
+    //$scope.getComponentData('left',$scope.currentBarLeft)
+    //$scope.getComponentData('rigth',$scope.currentBarRigth)
   }
 
 

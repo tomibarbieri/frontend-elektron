@@ -6,7 +6,6 @@ angular
     console.log("Statistics");
 
     var url_server = 'http://158.69.223.78:8000';
-    //var url_server = 'http://192.168.0.21:8000';
 
     $scope.doughnut;
     $scope.bar;
@@ -104,6 +103,7 @@ angular
     }
 
     $scope.changeBarComponent = function(id_selected, side) {
+
       var selected = $filter('filter')($scope.components_server, {id: id_selected});
       var selectedComponent = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
 
@@ -141,9 +141,15 @@ angular
 
     $scope.graficateComponentBar = function(data, side) {
 
+      console.log($scope.barlabels.length);
+
+      var length = (data.length >= 6) ? 6 : data.length;
+      console.log(length);
+
+
       if ($scope.barlabels.length == 0) {
         console.log('preparando footer');
-        for (var i = 6; i > 0; i--) {
+        for (var i = length-1; i > 0; i--) {
           var time;
           if ($scope.currentPrecision.url == 'perday') {
             time = $filter('date')(data[i].date, 'shortDate');
@@ -161,8 +167,11 @@ angular
       if (side == 'left') {
         console.log('izquierda');
         $scope.bardata[0] = [];
-        for (var i = 6; i > 0; i--) {
+        for (var i = length-1; i > 0; i--) {
+          console.log(data);
+          console.log(i);
           if (data[i].data_value == null) {
+            console.log("vuelta");
             $scope.bardata[0].push(0);
           } else {
             $scope.bardata[0].push(data[i].data_value);
@@ -172,8 +181,9 @@ angular
         console.log('derecha');
         $scope.bardata[1] = [];
 
-        for (var i = 6; i > 0; i--) {
+        for (var i = length-1; i > 0; i--) {
           if (data[i].data_value == null) {
+            console.log("vuelta");
             $scope.bardata[1].push(0);
           } else {
             $scope.bardata[1].push(data[i].data_value);
@@ -184,8 +194,9 @@ angular
     }
 
     $scope.createBarChart = function() {
-      $scope.currentBarLeft = $scope.components_server[0].device;
-      $scope.currentBarRigth = $scope.components_server[0].device;
+
+      $scope.currentBarLeft = $scope.components_server[0];
+      $scope.currentBarRigth = $scope.components_server[0];
 
       $scope.barseries = [$scope.currentBarLeft.label, $scope.currentBarRigth.label];
 

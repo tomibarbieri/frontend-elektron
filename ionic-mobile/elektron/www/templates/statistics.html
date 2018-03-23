@@ -1,5 +1,4 @@
 <ion-view view-title="Estadisticas">
-
     <ion-content >
       <div class="item">
         <div class="button-bar">
@@ -9,7 +8,6 @@
           <a class="button button-positive" ng-show="listado == false">Graficos</a>
         </div>
       </div>
-
       <div ng-show="listado == true" class="card" ng-repeat="component in components_server">
         <div class="item item-divider">
             <b>Componente:</b> {{component.device.label}}
@@ -20,29 +18,30 @@
             <div class="item">
               <div class="row">
                 <div class="col">
-                  <span>Consumo: <b>{{component.data_sum * 1.0 | number:0}}kw</b></span>
+                  <span>Consumo: <b>{{component.data_sum | number:1 }}kw</b></span>
                 </div>
+              </div>
+              <div class="row">
                 <div class="col">
-
+                  <span class="">Costo: <b>$ {{component.total_tarifa | number:1}}</b></span>
                 </div>
+              </div>
+              <div class="row">
                 <div class="col">
-                  <span class="">Costo: <b>$ {{component.data_sum * 1.5 | number:0}}</b></span>
-                </div>
-                <div class="col">
-                  <span class="">Co2: <b>32 Kg</b></span>
+                  <span class="">Co2: <b>{{ component.total_co2 | number:1 }} Kg</b></span>
                 </div>
               </div>
             </div>
             <div class="item">
               <div class="row">
-                  <span>Última medición: <b> {{ 1288323623006 | date:'yyyy-MM-dd HH:mm' }}</b></span>
-                  <span class="badge badge-energized"><b> {{ component.last_data || 0 }}</b></span>
+                  <span>Última medición: <b> {{ component.last_data.date | date:'yyyy-MM-dd HH:mm' }}</b></span>
+                  <span class="badge badge-energized"><b> {{ component.last_data.value || 0 }}</b></span>
               </div>
             </div>
             <div class="item">
               <div class="row">
-                  <span>Último período: <b> {{ 1288323623006 | date:'yyyy-MM-dd HH:mm' }}</b></span>
-                  <span class="badge badge-light"><b>{{ component.last_data || 0 }}</b></span>
+                  <span>Último período: <b> {{ component.device.last_state_date_on | date:'yyyy-MM-dd HH:mm' }}</b></span>
+                  <span class="badge badge-light"><b>{{ component.last_data.value || 0 }}</b></span>
               </div>
             </div>
             <div class="item">
@@ -51,7 +50,6 @@
                   <span>Encendidos: <b>{{component.device.state_counter_on}}</b></span>
                 </div>
                 <div class="col">
-
                 </div>
                 <div class="col">
                   <span>Apagados: <b>{{component.device.state_counter_off}}</b></span>
@@ -60,7 +58,6 @@
             </div>
         </div>
       </div>
-
       <div ng-show="listado == false">
         <div class="card">
           <div class="item item-divider">
@@ -74,34 +71,27 @@
           <div class="item">
               <div ng-repeat="value in doughnut.config.data.labels">
                 {{ value }}
-                <!--<span class="badge" style="background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
-                  {{ value }}
-                </span>-->
               </div>
           </div>
         </div>
-
         <div class="card">
           <div class="item item-divider">
               <b>Gafico comparativo de componentes</b>
           </div>
           <div class="item">
-
             <label class="item item-input item-select">
               <div class="input-label">
                 Componente 1
               </div>
-              <select ng-model="barOptions.componentLeft" ng-change="changeLeftBarComponent()">
+              <select ng-model="barOptions.componentLeft" >
                 <option ng-repeat="component in components_totales" value="{{component.id}}">{{component.label}}</option>
               </select>
-
             </label>
-
             <label class="item item-input item-select">
               <div class="input-label">
                 Componente 2
               </div>
-              <select ng-model="barOptions.componentRight" ng-change="changeRightBarComponent()">
+              <select ng-model="barOptions.componentRight" >
                 <option ng-repeat="component in components_totales" value="{{component.id}}">{{component.label}}</option>
               </select>
             </label>
@@ -110,19 +100,13 @@
               <div class="input-label">
                 Precisión
               </div>
-              <select ng-model="barOptions.precisionSelected" ng-change="changeCriteria()">
+              <select ng-model="barOptions.precisionSelected" >
                 <option ng-repeat="prec in barPrecision" value="{{prec.url}}" >{{prec.label}}</option>
               </select>
             </label>
             <div class="item">
               <a ng-click="changeBarComponents()" class="button icon-right ion-chevron-right button-calm">Ver gráfico</a>
             </div>
-            <div class="item">
-                {{barOptions.precisionSelected}}
-                {{barOptions.componentRight}}
-                {{barOptions.componentLeft}}
-            </div>
-
           </div>
           <div class="item">
             <canvas id="bar" class="chart chart-bar"
@@ -130,9 +114,6 @@
             </canvas>
           </div>
         </div>
-
       </div>
-
-
     </ion-content>
 </ion-view>
