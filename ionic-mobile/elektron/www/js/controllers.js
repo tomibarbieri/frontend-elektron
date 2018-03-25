@@ -244,13 +244,14 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.websocket;
 
       // Grafico en tiempo real
-      $scope.line = {};
-      $scope.line.labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
-      $scope.line.series = ['Potencia'];//, 'Corriente'];
-      $scope.line.data = [
-        [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
-        //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
-      ];
+      //$scope.line = {};
+      //$scope.line.labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
+      //$scope.line.series = ['Potencia'];
+      /*$scope.line.data = [
+        [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]
+      ];*/
+
+      $scope.line = [];
 
       // Obtiene los componentes del servidor
       $http({
@@ -261,10 +262,16 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
             $scope.components_server = response.data.devices;
             $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
             $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
-            $scope.current_component = $scope.components_server_enabled[0];
-            $scope.loadWebsocket();
 
-            console.log($scope.components_server[0].label);
+            for (var component in $scope.components_server_enabled) {
+              console.log($scope.line);
+              $scope.line[$scope.components_server_enabled[component].device_mac] = {};
+              $scope.line[$scope.components_server_enabled[component].device_mac].series = ['Potencia'];
+              $scope.line[$scope.components_server_enabled[component].device_mac].labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
+              $scope.line[$scope.components_server_enabled[component].device_mac].data = [[0,0,0,0,0,0,0,0,0,0]];
+            }
+
+            $scope.loadWebsocket();
         }, function(response){
             ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
             //show an appropriate message
@@ -273,6 +280,12 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.refreshConnection = function() {
         console.log("refresh");
       }
+
+      $scope.$on('chart-create', function (evt, chart) {
+        console.log(chart);
+        $scope.chart = chart;
+        $scope.charts.push(chart);
+      });
 
       $scope.loadWebsocket = function() {
 
@@ -302,13 +315,19 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
           json = JSON.parse(message.data);
           console.log("data value mac -> " + json.device_mac);
-          console.log("current_component mac -> " + $scope.current_component.device_mac);
 
-          if (json.device_mac == $scope.current_component.device_mac) {
-            $scope.line.data[0].shift();
-            $scope.line.data[0].push(json.data_value);
+          var current_mac = json.device_mac;
+
+          if ($scope.line[current_mac].data[0].length >10) $scope.line[current_mac].data[0].splice(0,1);
+          $scope.line[current_mac].data[0].push(json.data_value)
+
+          if ($scope.chart) {
+              console.log('char created');
+              for (var i = 0; i < $scope.charts.length; i++) {
+                $scope.charts[i].update();
+              }
+              $scope.$apply()
           }
-
         });
       }
 })
@@ -584,8 +603,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         console.log(response.data);
         $scope.component_server = response.data.device;
         if ($scope.component_server.length != 0) {
+
           $scope.component_status = ($scope.component_server.devicestate.name == 'on')
-          $scope.component_activate  = ($scope.component_server.enabled == 'on')
+          $scope.component_activate  = $scope.component_server.enabled;
           $scope.currentLabel = $scope.component_server.label;
         }
     }, function(response){
