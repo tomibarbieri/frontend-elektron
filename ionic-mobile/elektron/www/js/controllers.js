@@ -332,26 +332,45 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       }
 })
 
-.controller('DatataskCtrl', function($scope, $location, $filter, $http, $stateParams, $httpParamSerializerJQLike) {
+.controller('DatataskCtrl', function($scope, $location, $filter, $http, $state, $stateParams, $httpParamSerializerJQLike) {
 
   var url_server = 'http://158.69.223.78:8000';
 
-  console.log($stateParams);
+  $scope.loadParams = function () {
 
-  if ($stateParams.task) {
-    var task = JSON.parse($stateParams.task);
-    console.log("editar");
-    console.log(task);
-    $scope.task = task;
-    $scope.editButton = true;
-    $scope.datatasktitle = "Editar tarea por consumo";
+    if ($stateParams.task != "") {
+      //console.log($stateParams.task);
+      var task = angular.fromJson($stateParams.task);
+      //console.log("editar");
+
+      //$scope.task = task;
+      $scope.task = {
+          'state': task.taskstate.id + '',
+          'function': task.taskfunction.id + '',
+          'label': task.label,
+          'description': task.description,
+          'owner':'root',
+          'repeats': task.repeats,
+          'data_value': task.data_value,
+          'comparator': task.comparator,
+          'device_mac': task.device.device_mac
+        }
+
+      $scope.editDataTaskId = task.device.id;
+
+      console.log($scope.task);
+
+      $scope.editButton = true;
+      $scope.datatasktitle = "Editar tarea por consumo";
+    }
+    else {
+      console.log("nuevo");
+      $scope.task = {};
+      $scope.editButton = false;
+      $scope.datatasktitle = "Agregar tarea por consumo";
+    }
   }
-  else {
-    console.log("nuevo");
-    $scope.task = {};
-    $scope.editButton = false;
-    $scope.datatasktitle = "Agregar tarea por consumo";
-  }
+
 
   $http({
       method:'GET',
@@ -359,11 +378,15 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   }).then(function(response){
       console.log(response.data);
       $scope.components_server = response.data.devices;
-      console.log($scope.components_server[0].label);
+      $scope.loadParams();
   }, function(response){
       ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
       //show an appropriate message
   });
+
+  $scope.editDataTask = function (task) {
+    console.log(task);
+  }
 
   $scope.addDataTask = function(task) {
     console.log(task);
@@ -377,7 +400,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       'repeats': task.repeats,
       'data_value': task.data_value,
       'comparator': task.comparator,
-      'device_mac': task.component_mac
+      'device_mac': task.device_mac
     }
 
     console.log(data_params);
@@ -398,12 +421,78 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     });
   }
 
+  $scope.editDataTask = function(task) {
+
+    var data_params = {
+      'taskstate': task.state,
+      'taskfunction': task.function,
+      'label': task.label,
+      'description': task.description,
+      'owner':'root',
+      'repeats': task.repeats,
+      'data_value': task.data_value,
+      'comparator': task.comparator,
+      'device_mac': task.device_mac
+    }
+
+    var url_task = url_server + "/tasks/datatasks/" + $scope.editDataTaskId + "/update";
+    console.log(url_task);
+    console.log(data_params);
+
+    $http({
+        method:'POST',
+        url: url_task,
+        data: $httpParamSerializerJQLike(data_params),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+        }
+    }).then(function(response){
+        console.log(response.data);
+    }, function(response){
+        console.log("problemas de conexion");
+    });
+  }
+
 })
 
-.controller('DatetimetaskCtrl', function($scope, $location, $filter, $http, $state, $httpParamSerializerJQLike) {
+.controller('DatetimetaskCtrl', function($scope, $location, $filter, $http, $state, $stateParams, $httpParamSerializerJQLike) {
 
   var url_server = 'http://158.69.223.78:8000';
-  $scope.task = {};
+
+  $scope.loadParams = function () {
+
+    if ($stateParams.task != "") {
+      //console.log($stateParams.task);
+      var task = angular.fromJson($stateParams.task);
+      console.log(task);
+
+      //$scope.task = task;
+      $scope.task = {
+          'state': task.taskstate.id,
+          'function': task.taskfunction.id,
+          'label': task.label,
+          'description': task.description,
+          'owner':'root',
+          'repeats': task.repeats,
+          'date': task.datetime,
+          'criteria': task.repeat_criteria,
+          'device_mac': task.device.device_mac
+        }
+
+      $scope.editDateTimeTaskId = task.device.id;
+
+      console.log($scope.task);
+
+      $scope.editButton = true;
+      $scope.datatasktitle = "Editar tarea por fecha y hora";
+    }
+    else {
+      console.log("nuevo");
+      $scope.task = {};
+      $scope.editButton = false;
+      $scope.datatasktitle = "Agregar tarea por fecha y hora";
+    }
+  }
 
   $http({
       method:'GET',
@@ -411,6 +500,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   }).then(function(response){
       console.log(response.data);
       $scope.components_server = response.data.devices;
+      $scope.loadParams();
       console.log($scope.components_server[0].label);
   }, function(response){
       ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
@@ -447,8 +537,38 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     }, function(response){
         console.log("problemas de conexion");
     });
+  }
 
+  $scope.editDateTimeTask = function(task) {
 
+    var data_params = {
+      'taskstate': task.state,
+      'taskfunction': task.function,
+      'label': task.label,
+      'description': task.description,
+      'owner':'root',
+      'repeats': task.repeats,
+      'datetime': task.date,
+      'repeat_criteria': task.criteria,
+      'device_mac': task.device_mac
+    }
+
+    var url_task = url_server + "/tasks/datetimetasks/" + $scope.editDateTimeTaskId + "/update";
+    console.log(url_task);
+    console.log(data_params);
+
+    $http({
+        method:'POST',
+        url: url_task,
+        data: $httpParamSerializerJQLike(data_params),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+        }
+    }).then(function(response){
+        console.log(response.data);
+    }, function(response){
+        console.log("problemas de conexion");
+    });
   }
 
 })
@@ -528,9 +648,15 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   $scope.editDataTask = function(tasky) {
     console.log(tasky);
-    $state.go("app.datatask", { 'task' : 'tasky'});
+    var t = angular.toJson(tasky);
+    $state.go("app.datatask", { 'task' : t});
   }
 
+  $scope.editDateTimeTask = function(tasky) {
+    console.log(tasky);
+    var t = angular.toJson(tasky);
+    $state.go("app.datetimetask", { 'task' : t});
+  }
 
 })
 

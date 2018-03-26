@@ -185,6 +185,8 @@ angular.module('theme.demos.tasks', [])
 
       //var data2 = {'taskstate':1, 'taskfunction':1, 'label': data.label, 'description': '', 'owner':'root', 'data_value': data.data_value, 'device_mac': 'fe:12:52:12:92'};
       var url_task = url_server + "/tasks/datatasks/" + $scope.currentDataTask.id + "/update";
+      console.log(url_task);
+      console.log(data_params);
 
       $http({
           method:'POST',

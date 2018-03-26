@@ -18,7 +18,7 @@
             Componente
           </div>
           <select ng-model="task.device_mac" >
-            <option ng-repeat="component in components_server" value="{{component.device_mac}}">{{component.label}}</option>
+            <option ng-repeat="component in components_server" ng-selected="component.device_mac == task.device_mac" value="{{component.device_mac}}">{{component.label}}</option>
           </select>
         </label>
         <label class="item item-input item-divider">
@@ -38,8 +38,8 @@
               Criterio de repetición
             </div>
             <select ng-model="task.criteria">
-              <option selected value="1" >Cada hora</option>
-              <option value="0">Cada día</option>
+              <option ng-selected="task.criteria == 1" value="1" >Cada hora</option>
+              <option ng-selected="task.criteria == 0" value="0">Cada día</option>
             </select>
           </label>
           <label class="item item-input">
@@ -57,8 +57,8 @@
               Accion
             </div>
             <select ng-model="task.function">
-              <option selected value="1" >Apagar</option>
-              <option value="2" >Encender</option>
+              <option ng-selected="task.function == 1" value="1" >Apagar</option>
+              <option ng-selected="task.function == 2" value="2" >Encender</option>
             </select>
           </label>
           <label class="item item-input item-select">
@@ -66,15 +66,18 @@
               Estado inicial
             </div>
             <select ng-model="task.state">
-              <option selected value="1" >Lista</option>
-              <option value="2">Finalizada</option>
+              <option ng-selected="task.state == 1" value="1" >Lista</option>
+              <option ng-selected="task.state == 2" value="2">Finalizada</option>
             </select>
           </label>
 
         <div class="item">
           <div class="button-bar">
-            <a ng-click="addDateTimeTask(task)" class="button button-positive icon ion-ios-bolt">
+            <a ng-show="editButton == false" ng-click="addDateTimeTask(task)" class="button button-positive icon ion-ios-bolt">
               Programar tarea
+            </a>
+            <a ng-show="editButton == true" ng-click="editDateTimeTask(task)" class="button button-positive icon ion-ios-bolt">
+              Editar tarea
             </a>
           </div>
         </div>

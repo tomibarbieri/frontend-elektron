@@ -17,8 +17,8 @@
           <div class="input-label ">
             Componente
           </div>
-          <select ng-model="task.component_mac" >
-            <option ng-repeat="component in components_server" value="{{component.device_mac}}">{{component.label}}</option>
+          <select ng-model="task.device_mac" ng-change="viewSelect(task.device_mac)" >
+            <option ng-repeat="component in components_server" ng-selected="component.device_mac == task.device_mac" value="{{component.device_mac}}">{{component.label}}</option>
           </select>
         </label>
         <label class="item item-input item-divider">
@@ -38,9 +38,9 @@
             Comparador
           </div>
           <select ng-model="task.comparator">
-            <option selected value="1" >Mayor</option>
-            <option value="-1">Menor</option>
-            <option value="0">Igual</option>
+            <option ng-selected="task.comparator == 1" value="1" >Mayor</option>
+            <option ng-selected="task.comparator == -1" value="-1">Menor</option>
+            <option ng-selected="task.comparator == 0" value="0">Igual</option>
           </select>
         </label>
         <label class="item item-input">
@@ -57,8 +57,8 @@
             Accion
           </div>
           <select ng-model="task.function">
-            <option selected value="1" >Apagar</option>
-            <option value="2" >Encender</option>
+            <option ng-selected="task.function == 1" value="1" >Apagar</option>
+            <option ng-selected="task.function == 2" value="2" >Encender</option>
           </select>
         </label>
         <label class="item item-input item-select">
@@ -66,8 +66,8 @@
             Estado inicial
           </div>
           <select ng-model="task.state">
-            <option selected value="1" >Lista</option>
-            <option value="2">Finalizada</option>
+            <option ng-selected="task.state == 1" value="1" >Lista</option>
+            <option ng-selected="task.state == 2" value="2" >Finalizada</option>
           </select>
         </label>
         <div class="item">
@@ -75,8 +75,8 @@
             <a ng-show="editButton == false" ng-click="addDataTask(task)" class="button button-positive icon ion-ios-bolt">
               Programar tarea
             </a>
-            <a ng-show="editButton == true" ng-click="addDataTask(task)" class="button button-positive icon ion-ios-bolt">
-              Programar tarea
+            <a ng-show="editButton == true" ng-click="editDataTask(task)" class="button button-positive icon ion-ios-bolt">
+              Editar tarea
             </a>
           </div>
         </div>

@@ -207,7 +207,7 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
   })
 
   .state('app.datatask', {
-    url: '/datatask',
+    url: '/datatask?task',
     views: {
       'menuContent': {
         templateUrl: 'templates/datatask.html',
@@ -217,7 +217,7 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
   })
 
   .state('app.datetimetask', {
-    url: '/datetimetask',
+    url: '/datetimetask?task',
     views: {
       'menuContent': {
         templateUrl: 'templates/datetimetask.html',
