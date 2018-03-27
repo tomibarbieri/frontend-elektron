@@ -11,11 +11,14 @@
         </div>
       </div>
       <div class="card" ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true}}">
-          <div class="item item-divider">
+          <div class="item item-divider item-icon-right">
             Componente: <b>{{component.label}}</b>
+            <i ng-if="line[component.device_mac].status == true" class="icon ion-toggle-filled balanced"></i>
+            <i ng-if="line[component.device_mac].status == false" class="icon ion-toggle assertive"></i>
           </div>
           <div class="item item-text-wrap">
-            <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+            <canvas id="{{component.device_mac}}" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
+            chart-series="line[component.device_mac].series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
           </div>
       </div>
     </ion-content>

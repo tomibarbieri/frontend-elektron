@@ -1,139 +1,49 @@
-<div id="page-heading">
-    <ol class="breadcrumb">
-        <li><a href="#/">Home</a></li>
-        <li class="active">Monitor</li>
-    </ol>
+<div ng-controller="MonitorController">
+  <div id="page-heading">
+      <ol class="breadcrumb">
+          <li><a href="#/">Home</a></li>
+          <li class="active">Monitor</li>
+      </ol>
 
-    <h1>Monitor de componentes (solo encendidos y activos)</h1>
+      <h1>Monitor de componentes | estado conexión ->
+        <button ng-show="websocketStatus == true" class="btn btn-sm btn-success">On</button>
+        <button ng-show="websocketStatus == false" class="btn btn-sm btn-danger">Off</button>
+      </h1>
 
+  </div>
+
+
+  <div class="container-fluid" >
+
+      <div class="row">
+
+          <div ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true}}" class="col-md-6">
+
+
+              <panel panel-class="panel-default no-padding" heading="{{ component.label }}">
+                  <panel-controls>
+                      <panel-control-collapse></panel-control-collapse>
+
+                      <a href="#/history" class="button-refresh btn btn-sm btn-info">Ver datos históricos</a>
+
+                      <button ng-click="refreshConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
+
+                      <button ng-show="line[component.device_mac].status == true" class="btn btn-sm btn-success"><i class="glyphicon glyphicon-asterisk"></i></button>
+                      <button ng-show="line[component.device_mac].status == false" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-asterisk"></i></button>
+
+                  </panel-controls>
+
+                  <div class="p20">
+                      <div class="row">
+
+                        <canvas id="{{component.device_mac}}" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
+                          chart-series="line[component.device_mac].series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
+                        </canvas>
+
+                      </div>
+                  </div>
+              </panel>
+          </div>
+      </div>
+  </div>
 </div>
-
-
-<div class="container-fluid" ng-controller="MonitorController">
-
-    <div class="row">
-
-        <div ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true}}" class="col-md-6">
-
-
-            <panel panel-class="panel-default no-padding" heading="{{ component.label }}">
-                <panel-controls>
-                    <panel-control-collapse></panel-control-collapse>
-
-                    <a href="#/history" class="button-refresh btn btn-sm btn-info">Ver datos históricos</a>
-
-                    <button ng-click="refreshConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
-                    <!--
-                    <span class="button-refresh" ><input type="checkbox" ng-model="switchStatus2" class="rejs-switch" ui-switch="{color: '#7dcc93', secondaryColor: '#e75a5a'}" /></span>
-                    -->
-                    <button ng-show="websocketStatus == true" class="btn btn-sm btn-success">On</button>
-                    <button ng-show="websocketStatus == false" class="btn btn-sm btn-danger">Off</button>
-
-                </panel-controls>
-
-                <div class="p20">
-                    <div class="row">
-
-                      <canvas id="{{component.device_mac}}" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
-                        chart-series="line[component.device_mac].series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
-                      </canvas>
-
-                    </div>
-                </div>
-                <!--
-                <div class="m-n panel-footer">
-
-                    <div class="row">
-                        <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
-                            <div class="sparkline-block">
-                                <span sparklines="{
-                                lineWidth: 2,
-                                type: 'line',
-                                width: '52px',
-                                height: '20px',
-                                lineColor: '#6cc7d9',
-                                fillColor: '#e2f4f7',
-                                spotColor: false,
-                                minSpotColor: false,
-                                highlightLineColor: 'rgba(0,0,0,0.1)',
-                                highlightSpotColor: '#6cc7d9',
-                                spotRadius: 3,
-                                maxSpotColor: false}" data-data="[251,933,653,759,1022,1702,565]"></span>
-                            </div>
-                            <h3 style="text-align: center; margin: 0;">{{last_value}}</h3>
-                            <p style="text-align: center; margin: 0;">Último valor medido</p>
-                            <hr class="hidden-md hidden-sm hidden-lg">
-                        </div>
-                        <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
-                            <div class="sparkline-block">
-                                <span sparklines="{
-                                lineWidth: 2,
-                                type: 'line',
-                                width: '52px',
-                                height: '20px',
-                                lineColor: '#5299cc',
-                                fillColor: '#dcebf5',
-                                spotColor: false,
-                                minSpotColor: false,
-                                highlightLineColor: 'rgba(0,0,0,0.1)',
-                                highlightSpotColor: '#5299cc',
-                                spotRadius: 3,
-                                maxSpotColor: false}" data-data="[1251,633,1653,1759,1022,1702,2565]"></span>
-                            </div>
-                            <h3 style="text-align: center; margin: 0;">12,350</h3>
-                            <p style="text-align: center; margin: 0;">Consumo total</p>
-                            <hr class="hidden-md hidden-sm hidden-lg">
-                        </div>
-                        <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
-                            <div class="sparkline-block">
-                                <span sparklines="{
-                                barWidth: 4,
-                                type: 'bar',
-                                barSpacing: 4,
-                                width: '52px',
-                                height: '20px',
-                                barColor: '#70cc87',
-                                fillColor: '#70cc87',
-                                spotColor: false,
-                                minSpotColor: false,
-                                highlightLineColor: 'rgba(0,0,0,0.1)',
-                                highlightSpotColor: '#70cc87',
-                                spotRadius: 3,
-                                maxSpotColor: false}" data-data="[345,563,747,136,356,628,534]"></span>
-                            </div>
-                            <h3 style="text-align: center; margin: 0;">$6,180</h3>
-                            <p style="text-align: center; margin: 0;">Costos</p>
-                            <hr class="hidden-md hidden-sm hidden-lg">
-                        </div>
-                        <div class="visitor-sparklines col-xs-12 col-sm-3 col-md-3">
-                            <div class="sparkline-block">
-                                <span sparklines="{
-                                barWidth: 4,
-                                type: 'bar',
-                                barSpacing: 4,
-                                width: '52px',
-                                height: '20px',
-                                barColor: '#797b80',
-                                fillColor: '#797b80',
-                                spotColor: false,
-                                minSpotColor: false,
-                                highlightLineColor: 'rgba(0,0,0,0.1)',
-                                highlightSpotColor: '#797b80',
-                                spotRadius: 3,
-                                maxSpotColor: false}" data-data="[80,143,107,216,246,128,214]"></span>
-                            </div>
-                            <h3 style="text-align: center; margin: 0;">17</h3>
-                            <p style="text-align: center; margin: 0;">Componentes</p>
-                        </div>
-                    </div>
-
-                </div>
-                -->
-            </panel>
-
-        </div>
-
-
-    </div>
-
-</div> <!-- container-fluid -->

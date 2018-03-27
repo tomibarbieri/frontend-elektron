@@ -239,19 +239,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       var url_cape = 'http://163.10.33.173:8000';
 
       $scope.websocketStatus = false;       // estado de la conexion de websocket
-      $scope.chart;                         // variable para tener guardado el grafico y refrescarlos
       $scope.current_component;             // componente que filtra los websockets
       $scope.websocket;
 
-      // Grafico en tiempo real
-      //$scope.line = {};
-      //$scope.line.labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
-      //$scope.line.series = ['Potencia'];
-      /*$scope.line.data = [
-        [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]
-      ];*/
-
-      $scope.line = [];
+      $scope.charts = [];
 
       // Obtiene los componentes del servidor
       $http({
@@ -263,18 +254,21 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
             $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
             $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
 
+            var label = $filter('date')(new Date(), "HH:mm");
+            $scope.line = {}
             for (var component in $scope.components_server_enabled) {
-              console.log($scope.line);
-              $scope.line[$scope.components_server_enabled[component].device_mac] = {};
-              $scope.line[$scope.components_server_enabled[component].device_mac].series = ['Potencia'];
-              $scope.line[$scope.components_server_enabled[component].device_mac].labels = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"];
-              $scope.line[$scope.components_server_enabled[component].device_mac].data = [[0,0,0,0,0,0,0,0,0,0]];
+              $scope.line[$scope.components_server_enabled[component].device_mac] = {
+                                                                            'series': ['Potencia'],
+                                                                            'labels': [label, label, label, label, label, label, label, label, label, label],
+                                                                            'data': [[0,0,0,0,0,0,0,0,0,0]],
+                                                                            'status': false
+                                                                          };
             }
 
             $scope.loadWebsocket();
+
         }, function(response){
             ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
-            //show an appropriate message
       });
 
       $scope.refreshConnection = function() {
@@ -282,19 +276,22 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       }
 
       $scope.$on('chart-create', function (evt, chart) {
-        console.log(chart);
-        $scope.chart = chart;
-        $scope.charts.push(chart);
+        if ($scope.components_server_enabled) {
+          if ($scope.charts.length <= $scope.components_server_enabled.length) {
+            $scope.charts.push(chart);
+            console.log('nuevo chart');
+            console.log(chart);
+            console.log($scope.charts);
+          }
+        } else {
+          $scope.charts.push(chart);
+        }
       });
 
       $scope.loadWebsocket = function() {
 
         $scope.websocket = $websocket('ws://' + ip_server +':8888/websocket');
-
-        // 158.69.223.78
-        // cambiar ip a la del servior por ejemplo 192.168.0.20
         console.log($scope.websocket);
-        var collection = [];
 
         $scope.websocket.onError(function functionName() {
           ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
@@ -314,20 +311,30 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           }
 
           json = JSON.parse(message.data);
-          console.log("data value mac -> " + json.device_mac);
+          console.log(json);
 
           var current_mac = json.device_mac;
 
-          if ($scope.line[current_mac].data[0].length >10) $scope.line[current_mac].data[0].splice(0,1);
-          $scope.line[current_mac].data[0].push(json.data_value)
+          $scope.line[current_mac].data[0].splice(0,1);
+          $scope.line[current_mac].data[0].push(json.data_value);
 
-          if ($scope.chart) {
-              console.log('char created');
+          $scope.line[current_mac].status = true;
+
+          $scope.line[current_mac].labels.splice(0,1);
+          var date = new Date(json.data_datetime);
+          console.log(date);
+          $scope.line[current_mac].labels.push($filter('date')(date, "HH:mm"));
+
+          if ($scope.charts) {
               for (var i = 0; i < $scope.charts.length; i++) {
+                console.log('antes update');
                 $scope.charts[i].update();
+                console.log('despues update');
               }
-              $scope.$apply()
-          }
+              console.log('antes apply');
+              $scope.$apply();
+              console.log('despues apply');
+          };
         });
       }
 })

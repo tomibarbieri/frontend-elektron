@@ -14,13 +14,19 @@ angular.module('theme.demos.monitor', [
     $scope.websocketStatus = false;
     $scope.switchStatus2 = 1;
 
-    $scope.chart;
     $scope.charts = [];
 
     $scope.$on('chart-create', function (evt, chart) {
-      console.log(chart);
-      $scope.chart = chart;
-      $scope.charts.push(chart);
+      if ($scope.components_server_enabled) {
+        if ($scope.charts.length <= $scope.components_server_enabled.length) {
+          $scope.charts.push(chart);
+          console.log('nuevo chart');
+          console.log(chart);
+          console.log($scope.charts);
+        }
+      } else {
+        $scope.charts.push(chart);
+      }
     });
 
     var ip_server = '158.69.223.78';
@@ -45,7 +51,13 @@ angular.module('theme.demos.monitor', [
         var label = '(' + dia + '/' + mes + ') ' + hora;
 
         for (var component in $scope.components_server_enabled) {
-          $scope.line[$scope.components_server_enabled[component].device_mac] = {'series':['Potencia'],'labels':[label,label,label,label,label,label,label,label,label,label],'data':[[0,0,0,0,0,0,0,0,0,0]]};
+          $scope.line[$scope.components_server_enabled[component].device_mac] =
+          {
+            'series':['Potencia'],
+            'labels':[label,label,label,label,label,label,label,label,label,label],
+            'data':[[0,0,0,0,0,0,0,0,0,0]],
+            'status': false
+          };
         }
 
         console.log($scope.line);
@@ -63,48 +75,6 @@ angular.module('theme.demos.monitor', [
         Notifier.simpleInfo("Conexion establecida","Ya esta establecida la conexion en tiempo real");
       }
     }
-
-/*
-    $http({
-        method:'GET',
-        url: url_server + '/devices/36/data/13/12/2017/' // data de ejemplo
-    }).then(function(response){
-        console.log(response.data.data);
-        console.log(response.data);
-
-        Notifier.simpleSuccess('Datos iniciales cargados','Datos iniciales cargados con exito');
-
-        $scope.line = {};
-
-        var data_sense = response.data.data;
-        var inicio = (data_sense.length >= 20) ? (data_sense.length - 20) : (0);
-        var fin = data_sense.length;
-
-        console.log(inicio,fin);
-
-        $scope.line.series = ['Potencia'];
-
-        $scope.line.labels = [];
-        $scope.line.data = [[]];
-
-        for (var i = inicio; i < fin; i++) {
-          console.log(data_sense[i]);
-          var hora = $filter('date')(data_sense[i].date, "HH:mm");
-          var dia = $filter('date')(data_sense[i].date, 'dd');
-          var mes = $filter('date')(data_sense[i].date, 'MM');
-
-          var data = data_sense[i].data_value;
-
-          var label = '(' + dia + '/' + mes + ') ' + hora;
-          $scope.line.labels.push(label);
-          $scope.line.data[0].push(data);
-        }
-
-    }, function(response){
-        console.log("problemas de conexion");
-        Notifier.simpleError('No se pudieron cargar los datos','No se pudieron cargar los datos iniciales de los graficos');
-    });
-    */
 
     $scope.loadWebsocket = function() {
       var url_websocket = "ws://" + ip_server + ":8888/websocket";
@@ -135,7 +105,20 @@ angular.module('theme.demos.monitor', [
           $scope.line[current_mac].data[0].splice(0,1);
           $scope.line[current_mac].data[0].push(json.data_value)
 
-          if ($scope.chart) {
+          $scope.line[current_mac].status = true;
+
+          var date = new Date(json.data_datetime);
+
+          var hora = $filter('date')(date, "HH:mm");
+          var dia = $filter('date')(date, 'dd');
+          var mes = $filter('date')(date, 'MM');
+
+          var label = '(' + dia + '/' + mes + ') ' + hora;
+
+          $scope.line[current_mac].labels.splice(0,1);
+          $scope.line[current_mac].labels.push(label);
+
+          if ($scope.charts) {
               for (var i = 0; i < $scope.charts.length; i++) {
                 $scope.charts[i].update();
               }
