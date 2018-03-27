@@ -277,14 +277,17 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
       $scope.$on('chart-create', function (evt, chart) {
         if ($scope.components_server_enabled) {
-          if ($scope.charts.length <= $scope.components_server_enabled.length) {
+          if ($scope.charts.length < $scope.components_server_enabled.length) {
             $scope.charts.push(chart);
             console.log('nuevo chart');
             console.log(chart);
             console.log($scope.charts);
+            console.log($scope.charts.length);
+            console.log($scope.components_server_enabled.length);
           }
         } else {
-          $scope.charts.push(chart);
+          console.log("no llegaron los components_server_enabled");
+          //$scope.charts.push(chart);
         }
       });
 
@@ -363,7 +366,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           'device_mac': task.device.device_mac
         }
 
-      $scope.editDataTaskId = task.device.id;
+      $scope.editDataTaskId = task.id;
 
       console.log($scope.task);
 
@@ -462,7 +465,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('DatetimetaskCtrl', function($scope, $location, $filter, $http, $state, $stateParams, $httpParamSerializerJQLike) {
+.controller('DatetimetaskCtrl', function($scope, $location, $filter, $http, $state, $stateParams, ionicToast, $httpParamSerializerJQLike) {
 
   var url_server = 'http://158.69.223.78:8000';
 
@@ -486,7 +489,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           'device_mac': task.device.device_mac
         }
 
-      $scope.editDateTimeTaskId = task.device.id;
+      $scope.editDateTimeTaskId = task.id;
 
       console.log($scope.task);
 
@@ -511,7 +514,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       console.log($scope.components_server[0].label);
   }, function(response){
       ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
-      //show an appropriate message
   });
 
   $scope.addDateTimeTask = function (task) {
@@ -555,7 +557,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       'description': task.description,
       'owner':'root',
       'repeats': task.repeats,
-      'datetime': task.date,
+      'datetime': task.date.toUTCString(),
       'repeat_criteria': task.criteria,
       'device_mac': task.device_mac
     }

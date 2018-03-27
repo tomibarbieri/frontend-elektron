@@ -60,13 +60,13 @@ angular.module('theme.demos.tasks', [])
 
     // Reemplazar por Ajax
     $scope.taskfunction = [
-      {value: 'shutdown', text: 'Apagar'},
-      {value: 'turnon', text: 'Encender'}
+      {value: '1', text: 'Apagar'},
+      {value: '2', text: 'Encender'}
     ];
 
     $scope.taskstate = [
-      {value: 'done', text: 'Finalizada'},
-      {value: 'ready', text: 'Lista'}
+      {value: '1', text: 'Lista'},
+      {value: '2', text: 'Finalizada'}
     ];
 
     $scope.repeatsCriteria = [
@@ -76,25 +76,25 @@ angular.module('theme.demos.tasks', [])
 
     // Data task select
     $scope.showDataFunction = function($index) {
-      var selected = $filter('filter')($scope.taskfunction, {value: $scope.datatasks_server[$index].taskfunction.name});
-      return ($scope.datatasks_server[$index].taskfunction.name && selected.length) ? selected[0].text : 'Not set';
+      var selected = $filter('filter')($scope.taskfunction, {value: $scope.datatasks_server[$index].taskfunction.id});
+      return ($scope.datatasks_server[$index].taskfunction.id && selected.length) ? selected[0].text : 'Not set';
     };
 
     $scope.showDataState = function($index) {
-      var selected = $filter('filter')($scope.taskstate, {value: $scope.datatasks_server[$index].taskstate.name});
-      return ($scope.datatasks_server[$index].taskstate.name && selected.length) ? selected[0].text : 'Not set';
+      var selected = $filter('filter')($scope.taskstate, {value: $scope.datatasks_server[$index].taskstate.id});
+      return ($scope.datatasks_server[$index].taskstate.id && selected.length) ? selected[0].text : 'Not set';
     };
 
 
     // Data time task select
     $scope.showDateTimeFunction = function($index) {
-      var selected = $filter('filter')($scope.taskfunction, {value: $scope.datetimetasks_server[$index].taskfunction.name});
-      return ($scope.datetimetasks_server[$index].taskfunction.name && selected.length) ? selected[0].text : 'Not set';
+      var selected = $filter('filter')($scope.taskfunction, {value: $scope.datetimetasks_server[$index].taskfunction.id});
+      return ($scope.datetimetasks_server[$index].taskfunction.id && selected.length) ? selected[0].text : 'Not set';
     };
 
     $scope.showDateTimeState = function($index) {
-      var selected = $filter('filter')($scope.taskstate, {value: $scope.datetimetasks_server[$index].taskstate.name});
-      return ($scope.datetimetasks_server[$index].taskstate.name && selected.length) ? selected[0].text : 'Not set';
+      var selected = $filter('filter')($scope.taskstate, {value: $scope.datetimetasks_server[$index].taskstate.id});
+      return ($scope.datetimetasks_server[$index].taskstate.id && selected.length) ? selected[0].text : 'Not set';
     };
 
     $scope.showCriteriaTime = function($index) {
@@ -116,7 +116,7 @@ angular.module('theme.demos.tasks', [])
           'component': null,
           'device_mac': null,
           'max_value': null,
-          'action': null,
+          'function': null,
           'state': null,
           'repeats': null,
           'comparator': null
@@ -248,8 +248,8 @@ angular.module('theme.demos.tasks', [])
         'component': selectedDataTask.device.id,
         'device_mac': selectedDataTask.device.device_mac,
         'max_value': parseInt(selectedDataTask.data_value),
-        'action': selectedDataTask.taskfunction.name,
-        'state': selectedDataTask.taskstate.name,
+        'function': selectedDataTask.taskfunction.id,
+        'state': selectedDataTask.taskstate.id,
         'repeats': selectedDataTask.repeats,
         'comparator': selectedDataTask.comparator
       }
@@ -295,7 +295,7 @@ angular.module('theme.demos.tasks', [])
         'component': null,
         'device_mac': null,
         'date': null,
-        'action': null,
+        'function': null,
         'repeats': null,
         'criteria': null
       }
@@ -319,7 +319,7 @@ angular.module('theme.demos.tasks', [])
         'owner':'root',
         'repeats': $scope.currentDateTimeTask.repeats,
         'repeat_criteria': $scope.currentDateTimeTask.criteria,
-        'datetime': $scope.currentDateTimeTask.date.toUTCString(),
+        'datetime': (new Date($scope.currentDateTimeTask.date)).toUTCString(),
         'device_mac': selectedComponent.device_mac
       }
 
@@ -360,7 +360,7 @@ angular.module('theme.demos.tasks', [])
         'owner':'root',
         'repeats': $scope.currentDateTimeTask.repeats,
         'repeat_criteria': $scope.currentDateTimeTask.criteria,
-        'datetime': $scope.currentDateTimeTask.date.toUTCString(),
+        'datetime': (new Date($scope.currentDateTimeTask.date)).toUTCString(),
         'device_mac': $scope.currentDateTimeTask.device_mac
       }
 
@@ -428,8 +428,8 @@ angular.module('theme.demos.tasks', [])
         'component': selectedDateTimeTask.device.id,
         'device_mac': selectedDateTimeTask.device.device_mac,
         'date': selectedDateTimeTask.datetime,
-        'action': selectedDateTimeTask.taskfunction.name,
-        'state': selectedDateTimeTask.taskstate.name,
+        'function': selectedDateTimeTask.taskfunction.id,
+        'state': selectedDateTimeTask.taskstate.id,
         'repeats': selectedDateTimeTask.repeats,
         'criteria': selectedDateTimeTask.repeat_criteria
       }

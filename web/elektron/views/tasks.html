@@ -133,7 +133,7 @@
               <div class="form-group">
                 <label class="col-sm-3 control-label">Accion a realizar</label>
                 <div class="col-sm-6">
-                  <select ng-model="currentDataTask.action" class="form-control" >
+                  <select ng-model="currentDataTask.function" class="form-control" >
                     <optgroup label="Acciones disponibles">
                       <option ng-repeat="function in taskfunction" value="{{function.value}}">{{function.text}}</option>
                     </optgroup>
@@ -323,7 +323,7 @@
               <div class="form-group">
                 <label class="col-sm-3 control-label">Accion a realizar</label>
                 <div class="col-sm-6">
-                  <select ng-model="currentDateTimeTask.action" class="form-control" >
+                  <select ng-model="currentDateTimeTask.function" class="form-control" >
                     <optgroup label="Acciones disponibles">
                       <option ng-repeat="function in taskfunction" value="{{function.value}}">{{function.text}}</option>
                     </optgroup>

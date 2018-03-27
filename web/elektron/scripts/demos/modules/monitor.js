@@ -18,7 +18,7 @@ angular.module('theme.demos.monitor', [
 
     $scope.$on('chart-create', function (evt, chart) {
       if ($scope.components_server_enabled) {
-        if ($scope.charts.length <= $scope.components_server_enabled.length) {
+        if ($scope.charts.length < $scope.components_server_enabled.length) {
           $scope.charts.push(chart);
           console.log('nuevo chart');
           console.log(chart);
