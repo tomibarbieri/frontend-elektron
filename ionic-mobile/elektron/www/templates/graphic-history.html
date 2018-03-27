@@ -7,6 +7,11 @@
       <div class="item item-text-wrap">
         <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
       </div>
+      <div class="button-bar bar-stable">
+        <a ng-disabled="previousbutton" class="button button-small icon-left ion-chevron-left"></a>
+        <a ng-repeat="page in current_pages" ng-disabled="{{page.disable}}" class="button button-small">{{page.id}}</a>
+        <a ng-disabled="nextbutton" class="button button-small icon-right ion-chevron-right"></a>
+      </div>
       <div class="item item-divider">
         <span>Detalles:</span>
       </div>
@@ -15,6 +20,9 @@
       </div>
       <div date class="item">
         <span class=""><b>Hasta</b>: {{dateTo| date: "shortDate"}} - Hora: {{timeTo| date: "shortTime"}}</span>
+      </div>
+      <div class="item">
+        <span class=""><b>Precisión</b>: {{precision}}</span>
       </div>
       <div class="item">
         <span class=""><b>Componente</b>: {{component_details.label}}</span>

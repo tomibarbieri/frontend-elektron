@@ -187,7 +187,7 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
   })
 
   .state('app.graphic-history', {
-    url: '/graphic-history/{componentId}?dateFrom&timeFrom$dateTo&timeTo',
+    url: '/graphic-history/{componentId}?dateFrom&timeFrom$dateTo&timeTo&precision',
     views: {
       'menuContent': {
         templateUrl: 'templates/graphic-history.html',

@@ -1152,21 +1152,40 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.components_server = response.data.devices;
       console.log($scope.components_server[0].label);
   }, function(response){
-      ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
-      //show an appropriate message
+      ionicToast.show('Error de conexión con el servidor al traer los componentes.', 'bottom', false, 5000);
   });
 
 })
 
 .controller('GraphicHistoryCtrl', function($scope, $stateParams, $http, $filter, ionicToast) {
 
-    console.log($stateParams.componentId);
-    $scope.componentId = $stateParams.componentId;
-    $scope.dateFrom = new Date($stateParams.dateFrom);
-    $scope.timeFrom = new Date($stateParams.timeFrom);
-    $scope.dateTo = new Date($stateParams.dateTo);
-    $scope.timeTo = new Date($stateParams.timeTo);
+  var url_server = 'http://158.69.223.78:8000';
 
+  console.log($stateParams);
+  $scope.componentId = $stateParams.componentId;
+  $scope.dateFrom = new Date($stateParams.dateFrom);
+  $scope.timeFrom = new Date($stateParams.timeFrom);
+  $scope.dateTo = new Date($stateParams.dateTo);
+  $scope.timeTo = new Date($stateParams.timeTo);
+  $scope.precision = $stateParams.precision;
+
+  $scope.current_pages = [{
+    'id':'3',
+    'disable':false
+  },{
+    'id':'2',
+    'disable':false
+  },{
+    'id':'1',
+    'disable':true
+  }];
+
+  $scope.nextbutton = true;
+  $scope.previousbutton = false;
+
+
+
+  $scope.loadUrl = function () {
     // armando la url
     var id = $scope.componentId;
     var from = $filter('date')($scope.dateFrom, 'ddMMyy');
@@ -1201,20 +1220,27 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
     var dateT = day + "/" + month + "/" + year + '/' + hourto;
 
-    var url_server = 'http://158.69.223.78:8000';
-    var url = url_server + '/devices/' + $scope.componentId + '/data/' + dateF + '/' + dateT + '/';
+    if ($scope.precision == 'normal') {
+      var precision = '/1/10/1/';
+    }
+    else {
+      var precision = $scope.precision + '/1/10/1/';
+    }
 
-    console.log(url);
+    $scope.url = url_server + '/devices/' + $scope.componentId + '/data/' + dateF + '/' + dateT + '/' + precision;
+    console.log($scope.url);
+  }
 
+  $scope.loadData = function() {
     $http({
         method:'GET',
-        url: url,
+        url: $scope.url,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
         }
     }).then(function(response){
+        console.log(response);
         $scope.data = response.data.data;
-        console.log($scope.data);
         if ($scope.data.length > 0) {
           $scope.loadChart();
         }
@@ -1226,28 +1252,32 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
         //show an appropriate message
     });
+  }
 
-    // Fin de consulta
+  $scope.loadChart = function () {
 
-    $scope.loadChart = function () {
+    console.log('loadChart');
 
-      $scope.line = {};
-      $scope.line.series = ['Potencia'];
-      $scope.line.labels = [];
-      $scope.line.data = [[]];
+    $scope.line = {};
+    $scope.line.series = ['Potencia'];
+    $scope.line.labels = [];
+    $scope.line.data = [[]];
 
-      $scope.chartlength = 0;
-      ($scope.data.length > 10) ? $scope.chartlenght = 10 : $scope.chartlength = $scope.data.length;
+    for (var i = $scope.data.length-1; i >= 0; i--) {
 
-      for (var i = 0; i < $scope.chartlenght; i++) {
-
-        var label = '' + $filter('date')($scope.data[i].date, "HH:mm");
-
-        $scope.line.labels.push(label)
-        $scope.line.data[0].push($scope.data[i].data_value)
+      if ($scope.precision == 'perday') {
+        var label = '' + $filter('date')($scope.data[i].date, 'dd') + '/' + $filter('date')($scope.data[i].date, 'MM');
       }
-    }
+      else {
+        var label = '' + $filter('date')($scope.data[i].date, "HH:mm");
+      }
+      $scope.line.labels.push(label)
+      $scope.line.data[0].push($scope.data[i].data_value)
 
+    }
+  }
+
+  $scope.loadComponent = function () {
     $http({
         method:'GET',
         url:'http://158.69.223.78:8000/devices/' + $scope.componentId + '/'
@@ -1258,5 +1288,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
         //show an appropriate message
     });
+  };
+
+  $scope.loadUrl();
+  $scope.loadData();
+  $scope.loadComponent();
 
 });

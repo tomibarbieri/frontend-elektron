@@ -28,7 +28,20 @@
             </div>
           </div>
           <div class="item item-divider">
-              <span>Elegir componente</span>
+              <span>Elegir precisión</span>
+          </div>
+          <label class="item item-input item-select">
+            <div class="input-label">
+              Precisión
+            </div>
+            <select ng-model="precision">
+              <option value="perhour" >Por hora</option>
+              <option value="perday" >Por dia</option>
+              <option value="normal" >Normal</option>
+            </select>
+          </label>
+          <div class="item item-divider">
+            <span>Elegir componente</span>
           </div>
           <label class="item item-input item-select">
             <div class="input-label">
@@ -38,20 +51,9 @@
               <option ng-repeat="component in components_server" value="{{component.id}}" >{{component.label}}</option>
             </select>
           </label>
-          <div class="item item-divider">
-              <span>Elegir precisión</span>
-          </div>
-          <label class="item item-input item-select">
-            <div class="input-label">
-              Precisión
-            </div>
-            <select ng-model="pepe">
-              <option ng-repeat="component in components_server" value="" >Todos</option>
-            </select>
-          </label>
           <div class="item">
             <div class="button-bar">
-              <a ui-sref="app.graphic-history({ componentId: device_id, dateFrom: dateFrom, timeFrom: timeFrom, dateTo:dateTo, timeTo:timeTo })" class="button button-positive icon ion-stats-bars">
+              <a ui-sref="app.graphic-history({ componentId: device_id, dateFrom: dateFrom, timeFrom: timeFrom, dateTo:dateTo, timeTo:timeTo, precision:precision })" class="button button-positive icon ion-stats-bars">
                 Ver datos históricos
               </a>
             </div>
