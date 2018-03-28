@@ -1,16 +1,19 @@
 <ion-view view-title="Datos historicos para {{component_details.label}}">
   <ion-content>
     <div class="card">
-      <div class="item item-divider">
+      <div class="item item-divider item-icon-right">
           <span>Datos históricos en el periodo</span>
+          <div ng-show="showiconloading"><i class="icon ion-loop calm"></i></div>
       </div>
       <div class="item item-text-wrap">
         <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
       </div>
       <div class="button-bar bar-stable">
-        <a ng-disabled="previousbutton" class="button button-small icon-left ion-chevron-left"></a>
-        <a ng-repeat="page in current_pages" ng-disabled="{{page.disable}}" class="button button-small">{{page.id}}</a>
-        <a ng-disabled="nextbutton" class="button button-small icon-right ion-chevron-right"></a>
+        <a ng-disabled="previousbutton" ng-click="loadPage('last')" class="button button-small icon-left ion-chevron-left"></a>
+        <select class="button button-small" ng-model="current_page" ng-change="loadPage(current_page)"
+                ng-options="page for page in number_pages" >
+        </select>
+        <a ng-disabled="nextbutton" ng-click="loadPage(1)" class="button button-small icon-right ion-chevron-right"></a>
       </div>
       <div class="item item-divider">
         <span>Detalles:</span>

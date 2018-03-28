@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datetime-picker','ionic-toast'])
+angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datetime-picker','ionic-toast','ionic'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout,  $location, $ionicPopup) {
 
@@ -1169,24 +1169,95 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.timeTo = new Date($stateParams.timeTo);
   $scope.precision = $stateParams.precision;
 
-  $scope.current_pages = [{
-    'id':'3',
-    'disable':false
-  },{
-    'id':'2',
-    'disable':false
-  },{
-    'id':'1',
-    'disable':true
-  }];
-
+  // Variables para el paginado
   $scope.nextbutton = true;
   $scope.previousbutton = false;
+  $scope.inLastPage = false;
+  $scope.inFirstPage = true;
+  $scope.showiconloading = false;
 
+  $scope.calculatePages = function () {
 
+    $scope.number_pages = [];
+    $scope.current_page = 1;
+    for (var i = 1; i <= $scope.pagesdata.pages; i++) {
+      $scope.number_pages.push(i);
+    }
+  }
+
+  $scope.loadPage = function (page_id) {
+    $scope.showiconloading = true;
+    console.log(page_id);
+    console.log(typeof page_id);
+    // procesa la ultima pagina
+    console.log($scope.pagesdata);
+    if (page_id == 'last') {
+      if ($scope.current_page != $scope.pagesdata.pages) {
+        var offset = '' + (($scope.pagesdata.pages -1) * 10 + 1) + '/' + ($scope.pagesdata.total_data) + '/1/' ;
+        console.log(offset);
+        $scope.loadDataPage(offset,true,false,$scope.pagesdata.pages);
+      }
+    }
+    // procesa la primer pagina
+    else if (page_id == 1) {
+      if ($scope.current_page != 1) {
+        var offset = '1/10/1/';
+        console.log(offset);
+        $scope.loadDataPage(offset,false,true,page_id);
+      }
+    }
+    // procesa todos los demas casos
+    else {
+      var offset = '';
+      // para el caso que la pagina sea la final
+      if (page_id == $scope.pagesdata.pages) {
+        console.log('ultima pagina');
+        offset = '' + (($scope.pagesdata.pages -1) * 10 + 1) + '/' + ($scope.pagesdata.total_data) + '/1/' ;
+        console.log(offset);
+        $scope.loadDataPage(offset,true,false,page_id);
+      }
+      // para el resto de los casos
+      else {
+        offset = '' + ((page_id -1) * 10 + 1) + '/' + (page_id * 10) + '/1/';
+        console.log(offset);
+        $scope.loadDataPage(offset,false,false,page_id);
+      }
+    }
+  }
+
+  $scope.loadDataPage = function(offset,previousbutton,nextbutton,page_id) {
+    $http({
+        method:'GET',
+        url: $scope.url + offset,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+        }
+    }).then(function(response){
+        console.log(response);
+        $scope.data = response.data.data;
+        if ($scope.data.length > 0) {
+          $scope.loadChart();
+          $scope.previousbutton = previousbutton;
+          $scope.nextbutton = nextbutton;
+          $scope.current_page = page_id;
+
+          console.log($scope.current_page);
+        }
+        else {
+          ionicToast.show('No hay datos para ese período seleccionado.', 'top', false, 5000);
+          $scope.showiconloading = false;
+        }
+    }, function(response){
+        console.log("problemas");
+        $scope.showiconloading = false;
+        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
+    });
+  }
 
   $scope.loadUrl = function () {
     // armando la url
+    $scope.showiconloading = true;
+
     var id = $scope.componentId;
     var from = $filter('date')($scope.dateFrom, 'ddMMyy');
     var to = $filter('date')($scope.dateTo, 'ddMMyy');
@@ -1206,26 +1277,28 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     // Otra forma de armar el date
     var dateObj = $scope.dateFrom;
 
-    var month = '0'+ (dateObj.getUTCMonth() + 1); //months from 1-12
-    var day = dateObj.getUTCDate();
-    var year = dateObj.getUTCFullYear();
+    var month = $filter('date')($scope.dateFrom, 'MM');//'0'+ (dateObj.getUTCMonth() + 1); //months from 1-12
+    var day = $filter('date')($scope.dateFrom, 'dd');//dateObj.getUTCDate();
+    var year = $filter('date')($scope.dateFrom, 'yyyy');//dateObj.getUTCFullYear();
 
     var dateF = day + "/" + month + "/" + year + '/' + hourfrom;
 
     var dateObj = $scope.dateTo;
 
-    var month = '0'+ (dateObj.getUTCMonth() + 1); //months from 1-12
-    var day = dateObj.getUTCDate();
-    var year = dateObj.getUTCFullYear();
+    var month = $filter('date')($scope.dateTo, 'MM');//'0'+ (dateObj.getUTCMonth() + 1); //months from 1-12
+    var day = $filter('date')($scope.dateTo, 'dd');//dateObj.getUTCDate();
+    var year = $filter('date')($scope.dateTo, 'yyyy');//dateObj.getUTCFullYear();
 
     var dateT = day + "/" + month + "/" + year + '/' + hourto;
 
     if ($scope.precision == 'normal') {
-      var precision = '/1/10/1/';
+      var precision = '';
     }
     else {
-      var precision = $scope.precision + '/1/10/1/';
+      var precision = $scope.precision + '/';
     }
+
+    $scope.offset = '1/10/1/';
 
     $scope.url = url_server + '/devices/' + $scope.componentId + '/data/' + dateF + '/' + dateT + '/' + precision;
     console.log($scope.url);
@@ -1234,15 +1307,17 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.loadData = function() {
     $http({
         method:'GET',
-        url: $scope.url,
+        url: $scope.url + $scope.offset,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
         }
     }).then(function(response){
         console.log(response);
         $scope.data = response.data.data;
+        $scope.pagesdata = response.data;
         if ($scope.data.length > 0) {
           $scope.loadChart();
+          $scope.calculatePages();
         }
         else {
           ionicToast.show('No hay datos para ese período seleccionado.', 'top', false, 5000);
@@ -1255,6 +1330,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   }
 
   $scope.loadChart = function () {
+
+    $scope.showiconloading = false;
 
     console.log('loadChart');
 
