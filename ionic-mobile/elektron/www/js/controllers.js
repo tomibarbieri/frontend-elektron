@@ -1019,7 +1019,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   $scope.createDoughnutChart = function() {
     for (var i = 0; i < $scope.components_statistics.length; i++) {
-      var percent = ($scope.components_statistics[i].prom_total) ? $filter('number')($scope.components_statistics[i].prom_total, 2) : 0;
+      var percent = ($scope.components_statistics[i].device_percent) ? $filter('number')($scope.components_statistics[i].device_percent, 2) : 0;
       var label = $scope.components_statistics[i].device.label + ' (' + percent + '%)';
       $scope.doughnutlabels.push(label);
       $scope.doughnutdata.push(percent);

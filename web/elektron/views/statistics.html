@@ -25,10 +25,10 @@
 					<tr style="font-weight: bold">
 						<td style="width:10%">Nombre</td>
 						<td style="width:3%">Estado</td>
-            <td style="width:8%">Consumo total</td>
+            <td style="width:10%">Consumo total</td>
             <td style="width:8%">Costo aproximado</td>
-            <td style="width:8%">Co2 producido</td>
-						<td style="width:8%">Ultima medicion</td>
+            <td style="width:6%">Co2 producido</td>
+						<td style="width:8%">Última medicion (último valor)</td>
             <td style="width:8%">Período actividad</td>
             <td style="width:8%">Consumo Período actual</td>
             <td style="width:8%">Nº encendidos y apagados</td>
@@ -52,26 +52,26 @@
             <td>
 						<!-- editable status (select-local) -->
 						<span e-form="rowform" e-required>
-						  {{component.data_sum * 1.0 | number:0}}kw (15%)
+						  {{component.data_sum * 1.0 | number:0}}kw ({{ component.device_percent || 0 | number:1 }}%)
 						</span>
 					  </td>
 
             <td>
 						<!-- editable status (select-local) -->
 						<span e-form="rowform" e-required>
-						  $ {{component.data_sum * 1.5 | number:0}}
+						  $ {{component.total_tarifa | number:1}}
 						</span>
 					  </td>
             <td>
 						<!-- editable status (select-local) -->
 						<span e-form="rowform" e-required>
-						  0.2 Kg
+						  {{ component.total_co2 | number:1 }} Kg
 						</span>
 					  </td>
 					  <td>
 						<!-- editable group (select-remote) -->
 						<span e-name="last" e-form="rowform" e-required>
-              04/12 09:45
+              {{ component.last_data.date | date:'dd/MM/yyyy HH:mm' }} ({{ component.last_data.value || 0 }}w)
 						</span>
 					  </td>
 
