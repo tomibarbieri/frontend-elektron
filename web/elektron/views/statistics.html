@@ -78,14 +78,14 @@
             <td>
 						<!-- editable group (select-remote) -->
 						<span e-name="last" e-form="rowform" e-required>
-              13:45hs
+              Último período: desde {{ component.state_period_from | date:'dd/MM/yyyy HH:mm' }} hasta {{ component.state_period_to | date:'dd/MM/yyyy HH:mm' }}
 						</span>
 					  </td>
 
             <td>
 						<!-- editable group (select-remote) -->
 						<span e-name="last" e-form="rowform" e-required>
-              35 kw
+              {{ component.data_list_sum_states || 0 }} w
 						</span>
 					  </td>
 

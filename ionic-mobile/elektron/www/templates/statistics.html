@@ -34,14 +34,14 @@
             </div>
             <div class="item">
               <div class="row">
-                  <span>Última medición: <b> {{ component.last_data.date | date:'yyyy-MM-dd HH:mm' }}</b></span>
+                  <span>Última medición: <b> {{ component.last_data.date | date:'dd/MM/yyyy HH:mm' }}</b></span>
                   <span class="badge badge-energized"><b> {{ component.last_data.value || 0 }}</b></span>
               </div>
             </div>
             <div class="item">
               <div class="row">
-                  <span>Último período: <b> {{ component.device.last_state_date_on | date:'yyyy-MM-dd HH:mm' }}</b></span>
-                  <span class="badge badge-light"><b>{{ component.last_data.value || 0 }}</b></span>
+                  <span class="elipsis">Último período:<br><b>desde</b> {{ component.state_period_from | date:'dd/MM/yyyy HH:mm' }}<br><b>hasta</b> {{ component.state_period_to | date:'dd/MM/yyyy HH:mm' }}.</span>
+                  <span class="badge badge-light"><b>{{ component.data_list_sum_states || 0 }}</b></span>
               </div>
             </div>
             <div class="item">

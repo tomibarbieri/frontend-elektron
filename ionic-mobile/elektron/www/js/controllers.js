@@ -347,37 +347,38 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   var url_server = 'http://158.69.223.78:8000';
 
   $scope.loadParams = function () {
+    if ($stateParams.task) {
+      if ($stateParams.task != "") {
+        console.log($stateParams.task);
+        var task = angular.fromJson($stateParams.task);
+        //console.log("editar");
 
-    if ($stateParams.task != "") {
-      //console.log($stateParams.task);
-      var task = angular.fromJson($stateParams.task);
-      //console.log("editar");
+        //$scope.task = task;
+        $scope.task = {
+            'state': task.taskstate.id + '',
+            'function': task.taskfunction.id + '',
+            'label': task.label,
+            'description': task.description,
+            'owner':'root',
+            'repeats': task.repeats,
+            'data_value': task.data_value,
+            'comparator': task.comparator,
+            'device_mac': task.device.device_mac
+          }
 
-      //$scope.task = task;
-      $scope.task = {
-          'state': task.taskstate.id + '',
-          'function': task.taskfunction.id + '',
-          'label': task.label,
-          'description': task.description,
-          'owner':'root',
-          'repeats': task.repeats,
-          'data_value': task.data_value,
-          'comparator': task.comparator,
-          'device_mac': task.device.device_mac
-        }
+        $scope.editDataTaskId = task.id;
 
-      $scope.editDataTaskId = task.id;
+        console.log($scope.task);
 
-      console.log($scope.task);
-
-      $scope.editButton = true;
-      $scope.datatasktitle = "Editar tarea por consumo";
-    }
-    else {
-      console.log("nuevo");
-      $scope.task = {};
-      $scope.editButton = false;
-      $scope.datatasktitle = "Agregar tarea por consumo";
+        $scope.editButton = true;
+        $scope.datatasktitle = "Editar tarea por consumo";
+      }
+      else {
+        console.log("nuevo");
+        $scope.task = {};
+        $scope.editButton = false;
+        $scope.datatasktitle = "Agregar tarea por consumo";
+      }
     }
   }
 
@@ -470,33 +471,39 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   var url_server = 'http://158.69.223.78:8000';
 
   $scope.loadParams = function () {
+    if ($stateParams.task) {
+      if ($stateParams.task != "") {
+        //console.log($stateParams.task);
+        var task = angular.fromJson($stateParams.task);
+        console.log(task);
 
-    if ($stateParams.task != "") {
-      //console.log($stateParams.task);
-      var task = angular.fromJson($stateParams.task);
-      console.log(task);
+        //$scope.task = task;
+        $scope.task = {
+            'state': task.taskstate.id,
+            'function': task.taskfunction.id,
+            'label': task.label,
+            'description': task.description,
+            'owner':'root',
+            'repeats': task.repeats,
+            'date': task.datetime,
+            'criteria': task.repeat_criteria,
+            'device_mac': task.device.device_mac
+          }
 
-      //$scope.task = task;
-      $scope.task = {
-          'state': task.taskstate.id,
-          'function': task.taskfunction.id,
-          'label': task.label,
-          'description': task.description,
-          'owner':'root',
-          'repeats': task.repeats,
-          'date': task.datetime,
-          'criteria': task.repeat_criteria,
-          'device_mac': task.device.device_mac
-        }
+        $scope.editDateTimeTaskId = task.id;
 
-      $scope.editDateTimeTaskId = task.id;
+        console.log($scope.task);
 
-      console.log($scope.task);
-
-      $scope.editButton = true;
-      $scope.datatasktitle = "Editar tarea por fecha y hora";
-    }
-    else {
+        $scope.editButton = true;
+        $scope.datatasktitle = "Editar tarea por fecha y hora";
+      }
+      else {
+        console.log("nuevo");
+        $scope.task = {};
+        $scope.editButton = false;
+        $scope.datatasktitle = "Agregar tarea por fecha y hora";
+      }
+    }else {
       console.log("nuevo");
       $scope.task = {};
       $scope.editButton = false;
@@ -972,6 +979,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   }, function(response){
       ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
   })
+
+  $scope.calculateDatesFromtoLastPeriod = function () {
+
+  }
 
   $scope.changeToCharts = function() {
     $scope.listado = false;

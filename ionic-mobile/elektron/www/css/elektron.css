@@ -14,6 +14,10 @@
   padding: 0px !important;
 }
 
+.elipsis {
+  text-overflow: ellipsis;
+}
+
 .logout-spinner-text{
   color: white;
   font-weight: lighter;
