@@ -1,4 +1,4 @@
-<ion-view view-title="Nueva tarea por fecha y hora">
+<ion-view view-title="{{datatasktitle}}">
   <ion-content >
     <div class="card">
         <div class="item item-divider">
@@ -67,14 +67,14 @@
             </div>
             <select ng-model="task.state">
               <option ng-selected="task.state == 1" value="1" >Lista</option>
-              <option ng-selected="task.state == 2" value="2">Finalizada</option>
+              <option ng-selected="task.state == 2" value="2" >Finalizada</option>
             </select>
           </label>
 
         <div class="item">
           <div class="button-bar">
             <a ng-show="editButton == false" ng-click="addDateTimeTask(task)" class="button button-positive icon ion-ios-bolt">
-              Programar tarea
+              Agregar tarea
             </a>
             <a ng-show="editButton == true" ng-click="editDateTimeTask(task)" class="button button-positive icon ion-ios-bolt">
               Editar tarea

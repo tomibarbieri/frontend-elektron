@@ -347,6 +347,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   var url_server = 'http://158.69.223.78:8000';
 
   $scope.loadParams = function () {
+
+    $scope.task = {};
+    $scope.editButton = false;
+    $scope.datatasktitle = "Agregar tarea por consumo";
+
     if ($stateParams.task) {
       if ($stateParams.task != "") {
         console.log($stateParams.task);
@@ -372,12 +377,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
         $scope.editButton = true;
         $scope.datatasktitle = "Editar tarea por consumo";
-      }
-      else {
-        console.log("nuevo");
-        $scope.task = {};
-        $scope.editButton = false;
-        $scope.datatasktitle = "Agregar tarea por consumo";
       }
     }
   }
@@ -427,8 +426,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     }).then(function(response){
         console.log(response.data);
         $state.go( "app.tasks" );
+        ionicToast.show('Se agrego la tarea exitosamente.', 'bottom', false, 5000);
     }, function(response){
         console.log("problemas de conexion");
+        ionicToast.show('Hubo un error al agregar la tarea.', 'bottom', false, 5000);
     });
   }
 
@@ -459,8 +460,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         }
     }).then(function(response){
         console.log(response.data);
+        $state.go( "app.tasks" );
+        ionicToast.show('Se editó la tarea exitosamente.', 'bottom', false, 5000);
     }, function(response){
         console.log("problemas de conexion");
+        ionicToast.show('Hubo un error al editar la tarea.', 'bottom', false, 5000);
     });
   }
 
@@ -471,6 +475,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   var url_server = 'http://158.69.223.78:8000';
 
   $scope.loadParams = function () {
+
+    $scope.task = {};
+    $scope.editButton = false;
+    $scope.datatasktitle = "Agregar tarea por fecha y hora";
+
     if ($stateParams.task) {
       if ($stateParams.task != "") {
         //console.log($stateParams.task);
@@ -491,23 +500,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           }
 
         $scope.editDateTimeTaskId = task.id;
-
-        console.log($scope.task);
-
         $scope.editButton = true;
         $scope.datatasktitle = "Editar tarea por fecha y hora";
+
       }
-      else {
-        console.log("nuevo");
-        $scope.task = {};
-        $scope.editButton = false;
-        $scope.datatasktitle = "Agregar tarea por fecha y hora";
-      }
-    }else {
-      console.log("nuevo");
-      $scope.task = {};
-      $scope.editButton = false;
-      $scope.datatasktitle = "Agregar tarea por fecha y hora";
     }
   }
 
@@ -550,8 +546,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         }
     }).then(function(response){
         console.log(response.data);
+        $state.go( "app.tasks" );
+        ionicToast.show('Se agrego la tarea exitosamente.', 'bottom', false, 5000);
     }, function(response){
         console.log("problemas de conexion");
+        ionicToast.show('Hubo un error al agregar la tarea.', 'bottom', false, 5000);
     });
   }
 
@@ -582,8 +581,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         }
     }).then(function(response){
         console.log(response.data);
-    }, function(response){
+        $state.go( "app.tasks" );
+        ionicToast.show('Se editó la tarea exitosamente.', 'bottom', false, 5000);
+  }, function(response){
         console.log("problemas de conexion");
+        ionicToast.show('Hubo un error al editar la tarea.', 'bottom', false, 5000);
     });
   }
 
