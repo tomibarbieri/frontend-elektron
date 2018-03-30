@@ -9,8 +9,10 @@
         </ion-toggle>
       </div>
       <div class="item item-text-wrap">
-        <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
-          <!--<canvas id="line" class="chart chart-line" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>-->
+        <div ng-show="spinner == true" class="center-spinner">
+          <ion-spinner icon="android"></ion-spinner>
+        </div>
+        <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
       </div>
 
       <div class="item item-divider">

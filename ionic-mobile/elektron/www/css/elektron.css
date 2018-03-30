@@ -14,6 +14,31 @@
   padding: 0px !important;
 }
 
+.center-spinner {
+  padding-top: 20%;
+  padding-bottom: 20%;
+  text-align: center;
+}
+
+.align-right-text {
+  text-align: right;
+}
+
+.text-center-statistics {
+  text-align: center;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.idem-padding-statistics {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.badge-statistics-last {
+  font-size: 0.6em !important;
+}
+
 .elipsis {
   text-overflow: ellipsis;
 }
@@ -32,7 +57,7 @@
   display: inline !important;
   font-size: 0.7em;
   /*right: inherit !important;*/
-  margin-right: 8px;
+  /*margin-right: 8px;*/
   margin-left: 10px;
 }
 
