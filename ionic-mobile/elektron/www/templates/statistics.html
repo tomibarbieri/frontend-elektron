@@ -134,6 +134,13 @@
               chart-data="bardata" chart-labels="barlabels" chart-series="barseries">
             </canvas>
           </div>
+          <div class="button-bar bar-calm">
+            <a ng-disabled="previousbutton" ng-click="loadPage('last')" class="button button-small icon-left ion-chevron-left"></a>
+            <select class="button button-small" ng-model="current_page" ng-change="loadPage(current_page)"
+                    ng-options="page for page in number_pages" >
+            </select>
+            <a ng-disabled="nextbutton" ng-click="loadPage(1)" class="button button-small icon-right ion-chevron-right"></a>
+          </div>
         </div>
       </div>
     </ion-content>

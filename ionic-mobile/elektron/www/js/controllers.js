@@ -222,7 +222,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
             if (json.device_mac == $scope.current_component.device_mac) {
 
-              var hora = $filter('date')(json.date, "HH:mm");
+              var hora = $filter('date')(json.data_datetime, "HH:mm");
               var label = '' + hora;
               $scope.line.labels.shift();
               $scope.line.labels.push(label);
@@ -261,13 +261,20 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
             $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
             $scope.spinner = false;
 
-            var label = $filter('date')(new Date(), "HH:mm");
             $scope.line = {}
             for (var component in $scope.components_server_enabled) {
+              var labels = [];
+              var data = [[]];
+              for (var i = 0; i < 10; i++) {
+                labels.push($filter('date')($scope.components_server_enabled[component].lastdata[i].date, "HH:mm"));
+                data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
+              }
+              console.log(labels);
+              console.log(data);
               $scope.line[$scope.components_server_enabled[component].device_mac] = {
                                                                             'series': ['Potencia'],
-                                                                            'labels': [label, label, label, label, label, label, label, label, label, label],
-                                                                            'data': [[0,0,0,0,0,0,0,0,0,0]],
+                                                                            'labels': labels,
+                                                                            'data': data,
                                                                             'status': false
                                                                           };
             }
@@ -286,15 +293,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         if ($scope.components_server_enabled) {
           if ($scope.charts.length < $scope.components_server_enabled.length) {
             $scope.charts.push(chart);
-            console.log('nuevo chart');
-            console.log(chart);
-            console.log($scope.charts);
-            console.log($scope.charts.length);
-            console.log($scope.components_server_enabled.length);
           }
         } else {
           console.log("no llegaron los components_server_enabled");
-          //$scope.charts.push(chart);
+          scope.charts.push(chart);
         }
       });
 
@@ -570,7 +572,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       'description': task.description,
       'owner':'root',
       'repeats': task.repeats,
-      'datetime': task.date.toUTCString(),
+      'datetime': new Date(task.date).toUTCString(),
       'repeat_criteria': task.criteria,
       'device_mac': task.device_mac
     }
@@ -954,14 +956,20 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('ConfigurationCtrl', function($scope) {
-
-})
+.controller('ConfigurationCtrl', function($scope) {})
 
 .controller('StatisticsCtrl', function($scope, $http, $filter, $timeout, ionicToast) {
 
   $scope.listado = true;
   $scope.spinner = true;
+
+  // Variables para el paginado
+  $scope.nextbutton = true;
+  $scope.previousbutton = false;
+  $scope.inLastPage = false;
+  $scope.inFirstPage = true;
+  $scope.number_pages;
+
   var url_server = 'http://158.69.223.78:8000';
 
   $http({
@@ -989,10 +997,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
   })
 
-  $scope.calculateDatesFromtoLastPeriod = function () {
-
-  }
-
   $scope.changeToCharts = function() {
     $scope.listado = false;
     $timeout(function() { $scope.$apply(); }, 2000);
@@ -1018,18 +1022,14 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.barOptions = {};
 
   $scope.barPrecision = [{
-    'id': 0,
-    'label': 'Por día',
-    'url': 'perday'
-  }, {
-    'id': 1,
-    'label': 'Por hora',
-    'url': 'perhour'
-  }, {
-    'id': 2,
-    'label': 'Cada 5 seg',
-    'url': 'normal'
-  }];
+      'id': 0,
+      'label': 'Por día',
+      'url': 'perday'
+    }, {
+      'id': 1,
+      'label': 'Por hora',
+      'url': 'perhour'
+    }];
 
   $scope.currentPrecision = {
     'id': 0,
@@ -1046,11 +1046,117 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     }
   }
 
-  $scope.changeBarComponents = function(){
-    console.log($scope.barOptions.componentLeft);
-    console.log($scope.barOptions.componentRight);
-    console.log($scope.barOptions.precisionSelected);
+  $scope.calculatePages = function () {
 
+    if ($scope.number_pages == undefined) {$scope.number_pages = []};
+    $scope.current_page = 1;
+    if ($scope.pagesdata.pages > $scope.number_pages.length) {
+      $scope.number_pages = [];
+      for (var i = 1; i <= $scope.pagesdata.pages; i++) {
+        $scope.number_pages.push(i);
+      }
+    }
+  }
+
+  $scope.loadPage = function (page_id) {
+    $scope.showiconloading = true;
+    console.log(page_id);
+    // procesa la ultima pagina
+    if (page_id == 'last') {
+      if ($scope.current_page != $scope.pagesdata.pages) {
+        var offset = '' + (($scope.pagesdata.pages -1) * 5 + 1) + '/' + ($scope.pagesdata.total_data) + '/1/' ;
+        console.log(offset);
+        $scope.loadDataPage('left',$scope.barOptions.componentLeft,offset,true,false,$scope.pagesdata.pages);
+        $scope.loadDataPage('right',$scope.barOptions.componentRight,offset,true,false,$scope.pagesdata.pages);
+      }
+    }
+    // procesa la primer pagina
+    else if (page_id == 1) {
+      if ($scope.current_page != 1) {
+        var offset = '1/5/1/';
+        console.log(offset);
+        $scope.loadDataPage('left',$scope.barOptions.componentLeft,offset,false,true,page_id);
+        $scope.loadDataPage('right',$scope.barOptions.componentRight,offset,false,true,page_id);
+      }
+    }
+    // procesa todos los demas casos
+    else {
+      var offset = '';
+      // para el caso que la pagina sea la final
+      if (page_id == $scope.pagesdata.pages) {
+        console.log('ultima pagina');
+        offset = '' + (($scope.pagesdata.pages -1) * 5 + 1) + '/' + ($scope.pagesdata.total_data) + '/1/' ;
+        console.log(offset);
+        $scope.loadDataPage('left',$scope.barOptions.componentLeft,offset,true,false,page_id);
+        $scope.loadDataPage('right',$scope.barOptions.componentRight,offset,true,false,page_id);
+      }
+      // para el resto de los casos
+      else {
+        offset = '' + ((page_id -1) * 5 + 1) + '/' + (page_id * 5) + '/1/';
+        console.log(offset);
+        $scope.loadDataPage('left',$scope.barOptions.componentLeft,offset,false,false,page_id);
+        $scope.loadDataPage('right',$scope.barOptions.componentRight,offset,false,false,page_id);
+      }
+    }
+  }
+
+  $scope.loadDataPage = function(side,component,offset,previousbutton,nextbutton,page_id) {
+
+    console.log('loadDataPage');
+    console.log(component);
+    console.log(page_id);
+
+    var selected = $filter('filter')($scope.components_server, {id: component});
+    var selectedComponent = (component.toString() && selected.length) ? selected[0] : 'Not set';
+
+    var month_to = $filter('date')(new Date(), 'MM');
+    var day_to = $filter('date')(new Date(), 'dd');
+    var year_to = $filter('date')(new Date(), 'yyyy');
+    var hour_to = $filter('date')(new Date(), 'hh');
+
+    var date_to = '' + day_to + '/' + month_to + '/' + year_to + '/' + hour_to + '/';
+
+    var month_from = $filter('date')(new Date(selectedComponent.created), 'MM');
+    var day_from = $filter('date')(new Date(selectedComponent.created), 'dd');
+    var year_from = $filter('date')(new Date(selectedComponent.created), 'yyyy');
+    var hour_from = $filter('date')(new Date(selectedComponent.created), 'hh');
+
+    var date_from = '' + day_from + '/' + month_from + '/' + year_from + '/' + hour_from + '/';
+
+    var url_ = url_server + '/devices/' + component + '/data/' + date_from + date_to + $scope.barOptions.precisionSelected + '/' + offset;
+
+    console.log("processing");
+
+    $http({
+        method:'GET',
+        url: url_,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+        }
+    }).then(function(response){
+        console.log(response);
+        $scope.data = response.data.data;
+        if ($scope.data.length > 0) {
+          $scope.previousbutton = previousbutton;
+          $scope.nextbutton = nextbutton;
+          $scope.current_page = page_id;
+          console.log($scope.current_page);
+          $scope.barlabels = [];
+          $scope.graficateComponentBar(response.data.data, side);
+        }
+        else {
+          $scope.graficateComponentBar([{'data_value':0},{'data_value':0},{'data_value':0},{'data_value':0},{'data_value':0}], side);
+          ionicToast.show('El componente de la ' + side + ' no tiene datos.', 'top', false, 5000);
+          $scope.showiconloading = false;
+        }
+    }, function(response){
+        console.log("problemas");
+        $scope.showiconloading = false;
+        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
+    });
+  }
+
+  $scope.changeBarComponents = function(){
     $scope.changeLeftBarComponent($scope.barOptions.componentLeft);
     $scope.changeRigthBarComponent($scope.barOptions.componentRight);
   }
@@ -1068,52 +1174,64 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     var selected = $filter('filter')($scope.components_server, {id: id_selected});
     var selectedComponent = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
 
-    $scope.getComponentData(side,id_selected);
+    $scope.getComponentData(side,id_selected,selectedComponent);
 
+    console.log(selectedComponent);
     if (side == 'left') {
       $scope.currentBarLeft = selectedComponent;
-      $scope.barseries[0] = $scope.barOptions.componentLeft.label;
+      $scope.barseries[0] = selectedComponent.label;
     }
     else {
       $scope.currentBarRigth = selectedComponent;
-      $scope.barseries[1] = $scope.barOptions.componentRight.label;
+      $scope.barseries[1] = selectedComponent.label;
     }
   }
 
-  $scope.getComponentData = function(side, component) {
+  $scope.getComponentData = function(side, component, selectedComponent) {
+
+    var offset = '/1/5/1/';
+
+    var month_to = $filter('date')(new Date(), 'MM');
+    var day_to = $filter('date')(new Date(), 'dd');
+    var year_to = $filter('date')(new Date(), 'yyyy');
+    var hour_to = $filter('date')(new Date(), 'hh');
+
+    var date_to = '' + day_to + '/' + month_to + '/' + year_to + '/' + hour_to + '/';
+
+    var month_from = $filter('date')(new Date(selectedComponent.created), 'MM');
+    var day_from = $filter('date')(new Date(selectedComponent.created), 'dd');
+    var year_from = $filter('date')(new Date(selectedComponent.created), 'yyyy');
+    var hour_from = $filter('date')(new Date(selectedComponent.created), 'hh');
+
+    var date_from = '' + day_from + '/' + month_from + '/' + year_from + '/' + hour_from + '/';
 
     $http({
         method:'GET',
-        url: url_server + '/devices/' + component + '/data/' + $scope.barOptions.precisionSelected // modificar la URL /devices/id/data/perhour
+        url: url_server + '/devices/' + component + '/data/' + date_from + date_to + $scope.barOptions.precisionSelected + offset
     }).then(function(response){
-        console.log(response.data.data);
-        //$scope.components_server = response.data.devices;
-        //Notifier.simpleSuccess('Tabla comparativa','Datos cargados con exito para el componente');
+        console.log(response.data);
+        $scope.pagesdata = response.data;
         $scope.graficateComponentBar(response.data.data, side);
+        $scope.calculatePages();
 
     }, function(response){
         console.log("problemas de conexion");
-        //Notifier.simpleError("Tabla comparativa - Error","No se pudo traer la informacion del componente por problemas de conexión");
     });
   }
 
   $scope.graficateComponentBar = function(data, side) {
 
-    console.log($scope.barlabels.length);
-
     var length = (data.length >= 6) ? 6 : data.length;
-    console.log(length);
-
 
     if ($scope.barlabels.length == 0) {
       console.log('preparando footer');
-      for (var i = length-1; i > 0; i--) {
+      for (var i = length-1; i >= 0; i--) {
         var time;
         if ($scope.currentPrecision.url == 'perday') {
-          time = $filter('date')(data[i].date, 'shortDate');
+          time = $filter('date')(data[i].date, 'dd/MM');
         } else {
           if ($scope.currentPrecision.url == 'perhour') {
-            time = $filter('date')(data[i].date, 'shortTime')
+            time = $filter('date')(data[i].date, 'HH')
           } else {
             console.log('chicharitoo');
           }
@@ -1125,7 +1243,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     if (side == 'left') {
       console.log('izquierda');
       $scope.bardata[0] = [];
-      for (var i = length-1; i > 0; i--) {
+      for (var i = length-1; i >= 0; i--) {
         if (data[i].data_value == null) {
           $scope.bardata[0].push(0);
         } else {
@@ -1135,7 +1253,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     } else {
       console.log('derecha');
       $scope.bardata[1] = [];
-      for (var i = length-1; i > 0; i--) {
+      for (var i = length-1; i >= 0; i--) {
         if (data[i].data_value == null) {
           $scope.bardata[1].push(0);
         } else {
@@ -1153,16 +1271,14 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.barseries = [];
       $scope.bardata = [[],[]];
     }
+
     ionicToast.show('Cargando tabla comparativa.', 'bottom', false, 3000);
     $scope.changeBarComponents();
   }
 
-
-
-
 })
 
-.controller('HistoryCtrl', function($scope, $http) {
+.controller('HistoryCtrl', function($scope, $http, ionicToast) {
 
   $http({
       method:'GET',
@@ -1196,10 +1312,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.previousbutton = false;
   $scope.inLastPage = false;
   $scope.inFirstPage = true;
+
   $scope.showiconloading = false;
 
   $scope.calculatePages = function () {
-
     $scope.number_pages = [];
     $scope.current_page = 1;
     for (var i = 1; i <= $scope.pagesdata.pages; i++) {
@@ -1387,7 +1503,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         console.log($scope.component_details);
     }, function(response){
         ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
-        //show an appropriate message
     });
   };
 

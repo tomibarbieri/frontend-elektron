@@ -9,9 +9,9 @@
         <div ng-show="spinner == true" class="center-spinner">
           <ion-spinner icon="android"></ion-spinner>
         </div>
-        <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+        <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
       </div>
-      <div class="button-bar bar-stable">
+      <div class="button-bar bar-calm">
         <a ng-disabled="previousbutton" ng-click="loadPage('last')" class="button button-small icon-left ion-chevron-left"></a>
         <select class="button button-small" ng-model="current_page" ng-change="loadPage(current_page)"
                 ng-options="page for page in number_pages" >
