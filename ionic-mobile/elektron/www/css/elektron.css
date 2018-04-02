@@ -5,6 +5,14 @@
   margin-right: 10px;
 }
 
+.badge-letter {
+  font-size: 0.85em !important;
+}
+
+.badge-letter-9 {
+  font-size: 0.85em !important;
+}
+
 .logout-spinner{
   text-align: center;
   margin-top: 10px;
@@ -36,7 +44,7 @@
 }
 
 .badge-statistics-last {
-  font-size: 0.6em !important;
+  font-size: 0.73em !important;
 }
 
 .elipsis {
@@ -91,4 +99,8 @@
 .task-float-right {
   float: right;
   margin-left: 5px;
+}
+
+.task-float-right-first {
+  margin-right: 20px;
 }

@@ -5,8 +5,11 @@
         <ion-toggle  ng-model="component_status" class="toogle-assertive"
                     ng-change="changeStatus()"
                    ng-checked="component_status">
-                   <span>Consumo de <b>{{component_server.label}}</b></span>
+                   <span>Detalle de <b>{{component_server.label}}</b></span>
         </ion-toggle>
+      </div>
+      <div class="item item-divider text-center">
+        <span>Ultimo consumo</span>
       </div>
       <div class="item item-text-wrap">
         <div ng-show="spinner == true" class="center-spinner">
@@ -15,12 +18,12 @@
         <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
       </div>
 
-      <div class="item item-divider">
-        <span>Detalles:</span>
+      <div class="item item-divider text-center">
+        <span>Detalles</span>
       </div>
       <div class="item">
-        <span class=""><b>Label: </b>
-          <span class="badge badge-light">{{currentLabel}}
+        <span class=""><b class="badge-letter">Etiqueta: </b>
+          <span class="badge badge-light badge-letter">{{currentLabel}}
             <a ng-click="openModal()" class="edit-component-label">
               <i class="icon positive ion-compose"></i>
             </a>
@@ -29,23 +32,23 @@
 
       </div>
       <div class="item">
-        <span class=""><b>Estado: </b>
-          <span ng-if="component_status == true" class="badge badge-balanced">encendido</span>
-          <span ng-if="component_status == false" class="badge badge-assertive">apagado</span>
+        <span class=""><b class="badge-letter">Estado: </b>
+          <span ng-if="component_status == true" class="badge badge-balanced badge-letter">encendido</span>
+          <span ng-if="component_status == false" class="badge badge-assertive badge-letter">apagado</span>
         </span>
       </div>
       <div class="item">
-        <span class=""><b>Último consumo</b>: </span>
-        <span class="badge badge-calm">{{last_data}} w</span>
+        <span class=""><b class="badge-letter">Último consumo</b>: </span>
+        <span class="badge badge-calm badge-letter">{{last_data}} w</span>
       </div>
       <div class="item">
-        <span class=""><b>IP</b>:
-          <span class="badge badge-light">{{component_server.device_ip}}</span>
+        <span class=""><b class="badge-letter">IP</b>:
+          <span class="badge badge-light badge-letter">{{component_server.device_ip}}</span>
         </span>
       </div>
       <div class="item">
-        <span class=""><b>MAC</b>:
-          <span class="badge badge-light">{{component_server.device_mac}}</span>
+        <span class=""><b class="badge-letter">MAC</b>:
+          <span class="badge badge-light badge-letter">{{component_server.device_mac}}</span>
         <span>
       </div>
       <div class="item-divider">
@@ -54,15 +57,15 @@
       <ion-toggle  ng-model="component_activate"
                     ng-change="activateComponent()"
                    ng-checked="component_activate">
-                   <span><b>Activo:</b></span>
+                   <span><b class="badge-letter">Activo:</b></span>
       </ion-toggle>
       <div class="item">
-        <span class=""><b>Enchufado</b>:
-          <span ng-if="component_server.pluged == true" class="badge badge-positive">enchufado</span>
-          <span ng-if="component_server.pluged == false" class="badge badge-black">desenchufado</span>
+        <span class=""><b class="badge-letter">Enchufado</b>:
+          <span ng-if="component_server.pluged == true" class="badge badge-positive badge-letter">enchufado</span>
+          <span ng-if="component_server.pluged == false" class="badge badge-black badge-letter">desenchufado</span>
         </span>
       </div>
-      <div class="item item-divider">
+      <div class="item item-divider text-center">
         <span>Configurar componente por</span>
       </div>
       <div class="item">

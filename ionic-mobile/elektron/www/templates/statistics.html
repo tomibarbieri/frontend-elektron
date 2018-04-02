@@ -22,36 +22,27 @@
             <span ng-if="component.device.devicestate.name == 'on'" class="badge-component badge badge-balanced">encendido</span>
             <span ng-if="component.device.devicestate.name == 'off'" class="badge-component badge badge-assertive">apagado</span>
         </div>
-        <div class="list">
-            <div class="item idem-padding-statistics">
-              <div class="row">
-                <div class="col">
-                  <span>Consumo: <b>{{component.data_sum | number:1 }} W ({{ component.device_percent || 0 | number:1 }}% del total)</b></span>
+            <div class="item ">
+                <div class="row">
+                  <div class="col">
+                    <span class="badge-letter">Consumo: <b>{{component.data_sum | number:1 }} W ({{ component.device_percent || 0 | number:1 }}% del total)</b></span>
+                    <br><span class="badge-letter">Costo: <b>$ {{component.total_tarifa | number:1}}</b></span>
+                    <br><span class="badge-letter">Co2: <b>{{ component.total_co2 | number:1 }} Kg</b></span>
+                  </div>
+                  <span class="badge badge-positive badge-statistics-last">Último: {{ component.last_data.value || 0 }} w</span>
                 </div>
               </div>
-              <div class="row">
-                <div class="col">
-                  <span class="">Costo: <b>$ {{component.total_tarifa | number:1}}</b></span>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <span class="">Co2: <b>{{ component.total_co2 | number:1 }} Kg</b></span>
-                </div>
-              </div>
-              <span class="badge badge-positive badge-statistics-last">Último: {{ component.last_data.value || 0 }} w</span>
-            </div>
             <div class="item text-center-statistics">
               <span>Último período</span>
             </div>
             <div class="item">
               <div class="row">
                 <div class="col">
-                  <span class="elipsis"><b>Desde</b> {{ component.state_period_from | date:'dd/MM/yyyy HH:mm' }}<br><b>Hasta</b> {{ component.state_period_to | date:'dd/MM/yyyy HH:mm' }}.</span>
+                  <span class="badge-letter elipsis"><b>Desde</b> {{ component.state_period_from | date:'dd/MM/yyyy HH:mm' }}<br><b>Hasta</b> {{ component.state_period_to | date:'dd/MM/yyyy HH:mm' }}.</span>
                 </div>
                 <div class="col align-right-text">
-                  <b>Consumo período</b><br>
-                  <b class="positive">{{ component.data_list_sum_states || 0 }} w</b>
+                  <b class="badge-letter">Consumo período</b><br>
+                  <b class="badge-letter positive">{{ component.data_list_sum_states || 0 }} w</b>
                 </div>
               </div>
             </div>
@@ -85,7 +76,7 @@
 
               </div>
               <div class="col">
-                <div ng-repeat="value in doughnut.config.data.labels" style="text-align:center; font-size:0.7em; border-radius: 25px;background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
+                <div ng-repeat="value in doughnut.config.data.labels" style="margin-bottom:3px; text-align:center; font-size:0.65em; border-radius: 25px;background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
                   <span>{{ value }}</span>
                 </div>
               </div>

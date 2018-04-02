@@ -35,27 +35,27 @@
               </div>
               <div class="item">
                 <span>Componentes: </span>
-                <span class="badge badge-positive">{{components_server.length}}</span>
+                <span class="badge badge-positive badge-letter">{{components_server.length}}</span>
               </div>
               <div class="item">
                 <span>Componentes conectados: </span>
-                <span class="badge badge-balanced">{{components_server_enabled.length}}</span>
+                <span class="badge badge-balanced badge-letter">{{components_server_enabled.length}}</span>
               </div>
               <div class="item">
                 <span>Componentes desconectados: </span>
-                <span class="badge badge-assertive">{{components_server_not_enabled.length}}</span>
+                <span class="badge badge-assertive badge-letter">{{components_server_not_enabled.length}}</span>
               </div>
               <div class="item">
                 <span>Tareas programadas: </span>
-                <span class="badge badge-dark">{{components_server.length}}</span>
+                <span class="badge badge-dark badge-letter">{{components_server.length}}</span>
               </div>
               <div class="item">
                 <span>Consumo total: </span>
-                <span class="badge badge-positive"> {{ general_data.total_watts | number : 2 }} w </span>
+                <span class="badge badge-positive badge-letter"> {{ general_data.total_watts | number : 2 }} w </span>
               </div>
               <div class="item">
                 <span>Costo aproximado: </span>
-                <span class="badge badge-calm"> $ {{ general_data.total_tax | number : 2 }} </span>
+                <span class="badge badge-calm badge-letter"> $ {{ general_data.total_tax | number : 2 }} </span>
               </div>
         </div>
         <div class="list">
@@ -68,8 +68,8 @@
           </div>
           <div class="item" ng-repeat="component in components_server | limitTo:quantity">
             <span>{{component.label}}</span>
-            <span ng-if="component.devicestate.name == 'on'" class="badge badge-balanced">encendido</span>
-            <span ng-if="component.devicestate.name == 'off'" class="badge badge-assertive">apagado</span>
+            <span ng-if="component.devicestate.name == 'on'" class="badge badge-balanced badge-letter">encendido</span>
+            <span ng-if="component.devicestate.name == 'off'" class="badge badge-assertive badge-letter">apagado</span>
           </div>
           <div class="row item item-divider">
             <div class="col col-50 title-components"><b>Estadisticas</b></div>

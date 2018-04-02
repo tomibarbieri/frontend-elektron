@@ -221,13 +221,12 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
             console.log("current_component mac -> " + $scope.current_component.device_mac);
 
             if (json.device_mac == $scope.current_component.device_mac) {
-
-              var hora = $filter('date')(json.data_datetime, "HH:mm");
+              var hora = $filter('date')(new Date(json.data_datetime), "HH:mm");
               var label = '' + hora;
+              console.log(label);
               $scope.line.labels.shift();
-              $scope.line.labels.push(label);
-
               $scope.line.data[0].shift();
+              $scope.line.labels.push(label);
               $scope.line.data[0].push(json.data_value);
             }
           }
@@ -317,36 +316,36 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
         $scope.websocket.onMessage(function(message) {
 
-          if ($scope.websocketStatus == false) {
-            $scope.websocketStatus = true;
-            $scope.$apply();
-          }
-
-          json = JSON.parse(message.data);
-          console.log(json);
-
-          var current_mac = json.device_mac;
-
-          $scope.line[current_mac].data[0].splice(0,1);
-          $scope.line[current_mac].data[0].push(json.data_value);
-
-          $scope.line[current_mac].status = true;
-
-          $scope.line[current_mac].labels.splice(0,1);
-          var date = new Date(json.data_datetime);
-          console.log(date);
-          $scope.line[current_mac].labels.push($filter('date')(date, "HH:mm"));
-
-          if ($scope.charts) {
-              for (var i = 0; i < $scope.charts.length; i++) {
-                console.log('antes update');
-                $scope.charts[i].update();
-                console.log('despues update');
-              }
-              console.log('antes apply');
+            if ($scope.websocketStatus == false) {
+              $scope.websocketStatus = true;
               $scope.$apply();
-              console.log('despues apply');
-          };
+            }
+
+            json = JSON.parse(message.data);
+            console.log(json);
+
+            var current_mac = json.device_mac;
+
+            $scope.line[current_mac].data[0].splice(0,1);
+            $scope.line[current_mac].data[0].push(json.data_value);
+
+            $scope.line[current_mac].status = true;
+
+            $scope.line[current_mac].labels.splice(0,1);
+            var date = new Date(json.data_datetime);
+            $scope.line[current_mac].labels.push($filter('date')(date, "HH:mm"));
+            console.log($scope.line[current_mac]);
+
+            if ($scope.charts) {
+              console.log($scope.charts);
+              for (var i = 0; i < $scope.charts.length; i++) {
+                //console.log('antes update');
+                $scope.charts[i].update();
+              }
+              //console.log('antes apply');
+              //$scope.$apply();
+            };
+
         });
       }
 })
@@ -725,7 +724,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.line.labels = [];
 
       console.log($scope.component_data);
-      var length = $scope.component_data.length - 1;
+      var length = $scope.component_data.length - 11;
 
       for (var i = length; i >= 0; i--) {
         $scope.line.data[0].push($scope.component_data[i].data_value);

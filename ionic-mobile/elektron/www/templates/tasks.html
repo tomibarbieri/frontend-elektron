@@ -2,10 +2,10 @@
   <ion-content>
     <div class="item">
       <div class="button-bar">
-        <a class="button button-positive" ng-show="porconsumo == true">Por consumo</a>
-        <a class="button" ng-show="porconsumo == false" ng-click="changeToConsume()">Por consumo</a>
-        <a class="button" ng-show="porconsumo == true" ng-click="changeToDate()">Por fecha y hora</a>
-        <a class="button button-positive" ng-show="porconsumo == false">Por fecha y hora</a>
+        <a class="button button-positive" ng-show="porconsumo == true">Listar por consumo</a>
+        <a class="button" ng-show="porconsumo == false" ng-click="changeToConsume()">Listar por consumo</a>
+        <a class="button" ng-show="porconsumo == true" ng-click="changeToDate()">Listar por fecha y hora</a>
+        <a class="button button-positive" ng-show="porconsumo == false">Lisar por fecha y hora</a>
       </div>
     </div>
     <!-- Por Consumo -->
@@ -24,16 +24,16 @@
         <div class="list">
             <div class="item item-divider">
                 <b>Tarea:</b> {{task.label}}
-                <span ng-show="task.taskstate.name == 'done'" class="badge badge-assertive">Terminada</span>
-                <span ng-show="task.taskstate.name == 'ready'" class="badge badge-balanced">Lista</span>
+                <span ng-show="task.taskstate.name == 'done'" class="badge badge-assertive badge-letter">Terminada</span>
+                <span ng-show="task.taskstate.name == 'ready'" class="badge badge-balanced badge-letter">Lista</span>
             </div>
             <div class="item">
-              <span><b>Componente:</b> {{task.device.label}}</span>
-              <span ng-show="task.taskfunction.name == 'turnon'" class="badge badge-light">Tarea: Encender</span>
-              <span ng-show="task.taskfunction.name == 'shutdown'" class="badge badge-light">Tarea: Apagar</span>
+              <span class="badge-letter"><b>Componente:</b> {{task.device.label}}</span>
+              <span ng-show="task.taskfunction.name == 'turnon'" class="badge badge-light badge-letter">Tarea: Encender</span>
+              <span ng-show="task.taskfunction.name == 'shutdown'" class="badge badge-light badge-letter">Tarea: Apagar</span>
             </div>
             <div class="item ">
-              <span><b>Consumo:</b>
+              <span class="badge-letter-9"><b>Consumo:</b>
               <span ng-show="task.comparator == '0'">
                 Mayor a
               </span>
@@ -45,11 +45,11 @@
               </span>
               <b>{{task.data_value}}</b>
               </span>
-              <span class="badge badge-light">Repeticiones: {{task.repeats}}</span>
+              <span class="badge badge-light badge-letter-9">Repeticiones: {{task.repeats}}</span>
             </div>
             <div class="item">
-              <b>Última ejecución:</b> {{task.last_run | date: "shortDate"}} ({{task.last_run | date: "shortTime"}})
-              <a ng-click="deleteTask(task.id,'datatasks')" class="task-float-right button button-small button-assertive">
+              <span class="badge-letter"><b>Última ejecución:</b> {{task.last_run | date: "shortDate"}} ({{task.last_run | date: "shortTime"}})</span>
+              <a ng-click="deleteTask(task.id,'datatasks')" class="task-float-right task-float-right-first button button-small button-assertive">
                 <i class="icon ion-trash-b"></i>
               </a>
               <a ng-click="editDataTask(task)" class="task-float-right button button-small button-positive">
@@ -73,24 +73,24 @@
         <div class="list">
             <div class="item item-divider">
                 <b>Tarea:</b> {{task.label}}
-                <span ng-show="task.taskstate.name == 'done'" class="badge badge-assertive">Terminada</span>
-                <span ng-show="task.taskstate.name == 'ready'" class="badge badge-balanced">Lista</span>
+                <span ng-show="task.taskstate.name == 'done'" class="badge badge-assertive badge-letter">Terminada</span>
+                <span ng-show="task.taskstate.name == 'ready'" class="badge badge-balanced badge-letter">Lista</span>
             </div>
             <div class="item">
-              <span>Componente: {{task.device.label}}</span>
-              <span ng-show="task.taskfunction.name == 'turnon'" class="badge badge-light">Tarea: Encender</span>
-              <span ng-show="task.taskfunction.name == 'shutdown'" class="badge badge-light">Tarea: Apagar</span>
+              <span class="badge-letter">Componente: {{task.device.label}}</span>
+              <span ng-show="task.taskfunction.name == 'turnon'" class="badge badge-light badge-letter">Tarea: Encender</span>
+              <span ng-show="task.taskfunction.name == 'shutdown'" class="badge badge-light badge-letter">Tarea: Apagar</span>
             </div>
             <div class="item ">
-              <span><b>Dia:</b> {{task.datetime | date: "shortDate"}}</span>
-              <span><b>Hora:</b> {{task.datetime | date: "shortTime"}}</span>
-              <span ng-show="task.repeat_criteria == '0'" class="badge badge-light">Criterio: Hora</span>
-              <span ng-show="task.repeat_criteria == '1'" class="badge badge-light">Criterio: Dia</span>
+              <span class="badge-letter"><b>Dia:</b> {{task.datetime | date: "shortDate"}}</span>
+              <span class="badge-letter"><b>Hora:</b> {{task.datetime | date: "shortTime"}}</span>
+              <span ng-show="task.repeat_criteria == '0'" class="badge badge-light badge-letter">Criterio: Hora</span>
+              <span ng-show="task.repeat_criteria == '1'" class="badge badge-light badge-letter">Criterio: Dia</span>
             </div>
             <div class="item">
-              <b>Repeticiones:</b> {{task.repeats}}
+              <span class="badge-letter"><b>Repeticiones:</b> {{task.repeats}}</span>
 
-              <a ng-click="deleteTask(task.id,'datetimetasks')" class="task-float-right button button-small button-assertive">
+              <a ng-click="deleteTask(task.id,'datetimetasks')" class="task-float-right task-float-right-first button button-small button-assertive">
                 <i class="icon ion-trash-b"></i>
               </a>
               <a ng-click="editDateTimeTask(task)" class="task-float-right button button-small button-positive">
