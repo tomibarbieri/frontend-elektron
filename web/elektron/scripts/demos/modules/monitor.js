@@ -6,17 +6,22 @@ angular.module('theme.demos.monitor', [
     'chart.js'
     ])
 
-  .controller('MonitorController', ['$scope', '$timeout', '$window', '$http', '$filter', 'Notifier', function($scope, $timeout, $window, $http, $filter, Notifier, $websocket) {
+  .controller('MonitorController', ['$scope', '$timeout', '$window', '$http', '$filter', '$rootScope', 'Notifier', function($scope, $timeout, $window, $http, $filter, $rootScope, Notifier) {
     'use strict';
     var moment = $window.moment;
     var _ = $window._;
 
     $scope.websocketStatus = false;
     $scope.switchStatus2 = 1;
+    $scope.websocketplay = true;
 
     $scope.charts = [];
 
-    $scope.$on('chart-create', function (evt, chart) {
+    var ip_server = '158.69.223.78';
+    var url_server = 'http://158.69.223.78:8000';
+    var url_cape = 'http://163.10.33.173:8000';
+
+    /*$scope.$on('chart-create', function (evt, chart) {
       if ($scope.components_server_enabled) {
         if ($scope.charts.length < $scope.components_server_enabled.length) {
           $scope.charts.push(chart);
@@ -27,16 +32,21 @@ angular.module('theme.demos.monitor', [
       } else {
         $scope.charts.push(chart);
       }
-    });
+    });*/
 
-    var ip_server = '158.69.223.78';
-    var url_server = 'http://158.69.223.78:8000';
-    var url_cape = 'http://163.10.33.173:8000';
+    $scope.pauseWebsocket = function () {
+      $scope.websocketplay = false;
+    }
+
+    $scope.playWebsocket = function () {
+      $scope.websocketplay = true;
+    }
 
     $http({
         method:'GET',
         url: url_server + '/devices/'
     }).then(function(response){
+
         console.log(response.data);
         $scope.components_server = response.data.devices;
         $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
@@ -51,78 +61,107 @@ angular.module('theme.demos.monitor', [
         var label = '(' + dia + '/' + mes + ') ' + hora;
 
         for (var component in $scope.components_server_enabled) {
-          $scope.line[$scope.components_server_enabled[component].device_mac] =
-          {
-            'series':['Potencia'],
-            'labels':[label,label,label,label,label,label,label,label,label,label],
-            'data':[[0,0,0,0,0,0,0,0,0,0]],
-            'status': false
-          };
-        }
+          var labels = [];
+          var data = [[]];
+          for (var i = 0; i < 10; i++) {
+            var date = $scope.components_server_enabled[component].lastdata[i].date;
+            var hora = $filter('date')(date, "HH:mm");
+            var dia = $filter('date')(date, 'dd');
+            var mes = $filter('date')(date, 'MM');
 
-        console.log($scope.line);
+            var label = '(' + dia + '/' + mes + ') ' + hora;
+            labels.push(label);
+            data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
+          }
+
+          $scope.line[$scope.components_server_enabled[component].device_mac] = {
+                                                                        'series': ['Potencia'],
+                                                                        'labels': labels,
+                                                                        'data': data,
+                                                                        'status': false
+                                                                      };
+        }
 
         $scope.loadWebsocket();
 
     }, function(response){
+        Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
         console.log("problemas de conexion");
     });
 
     $scope.refreshConnection = function(){
-      if ($scope.websocketStatus == false) {
-        $scope.loadWebsocketConnection();
-      } else {
-        Notifier.simpleInfo("Conexion establecida","Ya esta establecida la conexion en tiempo real");
+      if ($rootScope.ws) {
+        $scope.websocketStatus = false;
+        $rootScope.ws.close();
       }
+      $rootScope.ws = undefined;
+      console.log("refresh");
+      $scope.loadWebsocket();
     }
 
     $scope.loadWebsocket = function() {
-      var url_websocket = "ws://" + ip_server + ":8888/websocket";
-      console.log(url_websocket);
-      var ws = new WebSocket(url_websocket);
 
-      ws.onopen = function() {
-        ws.send("Hello, world");
+      Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente elegido inicialmente.");
+
+      if ($rootScope.ws == undefined) {
+        var url_websocket = "ws://" + ip_server + ":8888/websocket";
+        $rootScope.ws = new WebSocket(url_websocket);
+        console.log("nuevo ws");
+      } else {
+        console.log("recuperando ws");
+      }
+
+      $rootScope.ws.onopen = function() {
         $scope.websocketStatus = true;
+        Notifier.simpleSuccess('Conexion establecida','Se ha establecido la conexion para la vision de datos en tiempo real.')
         $scope.$apply();
       };
 
-      ws.onclose = function() {
+      $rootScope.ws.onclose = function() {
         $scope.websocketStatus = false;
       }
 
-      ws.onerror = function() {
+      $rootScope.ws.onerror = function() {
         $scope.websocketStatus = false;
+        Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion para la vision de datos en tiempo real.')
       }
 
-      ws.onmessage = function(message) {
-          console.log(message.data);
+      $rootScope.ws.onmessage = function(message) {
+
+          $scope.websocketStatus = true;
 
           var json = JSON.parse(message.data);
-          $scope.last_value = json.data_value;
-          var current_mac = json.device_mac;
 
-          $scope.line[current_mac].data[0].splice(0,1);
-          $scope.line[current_mac].data[0].push(json.data_value)
+          if (json != undefined && $scope.websocketplay == true) {
 
-          $scope.line[current_mac].status = true;
+            console.log(json);
+            $scope.last_value = json.data_value;
 
-          var date = new Date(json.data_datetime);
+            var current_mac = json.device_mac;
 
-          var hora = $filter('date')(date, "HH:mm");
-          var dia = $filter('date')(date, 'dd');
-          var mes = $filter('date')(date, 'MM');
+            var date = new Date(json.data_datetime);
 
-          var label = '(' + dia + '/' + mes + ') ' + hora;
+            var hora = $filter('date')(date, "HH:mm");
+            var dia = $filter('date')(date, 'dd');
+            var mes = $filter('date')(date, 'MM');
 
-          $scope.line[current_mac].labels.splice(0,1);
-          $scope.line[current_mac].labels.push(label);
+            var label = '(' + dia + '/' + mes + ') ' + hora;
 
-          if ($scope.charts) {
-              for (var i = 0; i < $scope.charts.length; i++) {
-                $scope.charts[i].update();
-              }
-              $scope.$apply()
+            $scope.line[current_mac].labels.splice(0,1);
+            $scope.line[current_mac].labels.push(label);
+
+            $scope.line[current_mac].data[0].splice(0,1);
+            $scope.line[current_mac].data[0].push(json.data_value)
+
+            $scope.line[current_mac].status = true;
+
+            /*if ($scope.charts) {
+                for (var i = 0; i < $scope.charts.length; i++) {
+                  $scope.charts[i].update();
+                }
+                $scope.$apply()
+            }*/
+            $scope.$apply();
           }
         };
     }

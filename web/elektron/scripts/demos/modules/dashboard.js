@@ -6,7 +6,7 @@ angular.module('theme.demos.dashboard', [
     'chart.js'
     ])
 
-  .controller('DashboardController', ['$scope', '$timeout', '$window', '$http', '$filter', 'Notifier', function($scope, $timeout, $window, $http, $filter, Notifier, $websocket) {
+  .controller('DashboardController', ['$scope', '$timeout', '$window', '$http', '$filter', '$rootScope', 'Notifier', function($scope, $timeout, $window, $http, $filter, $rootScope, Notifier, $websocket) {
     'use strict';
     var moment = $window.moment;
     var _ = $window._;
@@ -18,6 +18,7 @@ angular.module('theme.demos.dashboard', [
     $scope.websocketStatus = false;       // estado de la conexion de websocket
     $scope.chart;                         // variable para tener guardado el grafico y refrescarlos
     $scope.current_component;             // componente que filtra los websockets
+    $scope.websocketplay = true;
 
     // Funcion para asociar la creacion del chart y guardar la variable
     $scope.$on('chart-create', function (evt, chart) {
@@ -168,48 +169,57 @@ angular.module('theme.demos.dashboard', [
     };
 
     $scope.refreshConnection = function(){
-      // falta ver como hacer
-      if ($scope.websocketStatus == false) {
-        $scope.openWebsocketConnection();
+      if ($rootScope.ws) {
+        $rootScope.ws.close();
       }
+      $scope.websocketStatus = false;
+      $rootScope.ws = undefined;
+      console.log("refresh");
+      $scope.openWebsocketConnection();
+    }
+
+    $scope.pauseWebsocket = function () {
+      $scope.websocketplay = false;
+    }
+
+    $scope.playWebsocket = function () {
+      $scope.websocketplay = true;
     }
 
     // funcion para abrir una conexion ws
     $scope.openWebsocketConnection = function() {
 
-      // si existe una conexion actual la cierra y abre otra
-      if ($scope.ws) {
-        //$scope.ws.terminate();
-        //console.log("Regenerate WS connection");
-        //Notifier.simpleInfo("Regenerando conexion en tiempo real", "Para el componente X");
-      } else {
-        //Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente X");
+      if ($rootScope.ws == undefined) {
+        var url_websocket = "ws://" + ip_server + ":8888/websocket";
+        $rootScope.ws = new WebSocket(url_websocket);
+        console.log("nuevo ws");
       }
+      else {
+        console.log("recuperando ws");
+      }
+
       Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente elegido inicialmente.");
 
-      var url_websocket = "ws://" + ip_server + ":8888/websocket";
-      $scope.ws = new WebSocket(url_websocket);
+      //var url_websocket = "ws://" + ip_server + ":8888/websocket";
+      //$scope.ws = new WebSocket(url_websocket);
 
-      $scope.ws.onopen = function() {
-        //ws.send("Conectado");
+      $rootScope.ws.onopen = function() {
         console.log("on open");
         $scope.websocketStatus = true;
         $scope.$apply();
         Notifier.simpleSuccess('Conexion establecida','Se ha establecido la conexion para la vision de datos en tiempo real.')
       };
 
-      $scope.ws.onclose = function() {
+      $rootScope.ws.onclose = function() {
         $scope.websocketStatus = false;
-        $scope.ws = null;
-        //Notifier.simpleInfo('Conexion cerrada','Se ha cerrado la conexion de tiempo real.')
       };
 
-      $scope.ws.onerror = function() {
+      $rootScope.ws.onerror = function() {
         $scope.websocketStatus = false;
         Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion para la vision de datos en tiempo real.')
       };
 
-      $scope.ws.onmessage = function(message) {
+      $rootScope.ws.onmessage = function(message) {
 
 
           var data = JSON.parse(message.data);
@@ -217,12 +227,12 @@ angular.module('theme.demos.dashboard', [
           // chequea que el dato sea del componente elegido y lo muestra
           if ($scope.current_component) {
 
-            if (data.device_mac == $scope.current_component.device_mac) {
+            if (data.device_mac == $scope.current_component.device_mac && $scope.websocketplay == true) {
               // Saca el primero del arreglo y pone uno nuevo al final
 
               console.log(data);
 
-              var date = new Date();
+              var date = new Date(data.data_datetime);
 
               var hora = $filter('date')(date, "HH:mm");
               var dia = $filter('date')(date, 'dd');
@@ -247,7 +257,7 @@ angular.module('theme.demos.dashboard', [
 
 
       };
-      console.log($scope.ws);
+      console.log($rootScope.ws);
     };
 
   }]);

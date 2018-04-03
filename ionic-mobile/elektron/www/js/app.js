@@ -7,7 +7,7 @@
 
 angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
 
-.run(function($ionicPlatform , $http, $rootScope, $timeout, $location, $state, LoginService) {
+.run(function($ionicPlatform , $http, $rootScope, $timeout, $location, $window, $state, $websocket, LoginService) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -22,7 +22,24 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   });
 
-  $rootScope.authStatus = LoginService.isAuthenticated() || false;
+  //$rootScope.authStatus = LoginService.isAuthenticated() || false;
+
+  var ip_server = '158.69.223.78';
+  var url_server = 'http://158.69.223.78:8000';
+  $rootScope.ws = undefined;//$websocket('ws://' + ip_server +':8888/websocket');
+
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+    console.log("statechange");
+    if ($rootScope.ws != undefined && (toState.name == "app.dashboard" || toState.name == "app.monitor")) {
+      $rootScope.ws.close();
+      $rootScope.ws = undefined;
+      console.log("closing ws");
+      $window.location.reload();
+    }
+    else {
+      console.log("reloading");
+    }
+  });
 
   // CORS
   //$http.defaults.headers.common['Access-Control-Allow-Origin'] = '*';

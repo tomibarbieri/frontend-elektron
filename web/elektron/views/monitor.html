@@ -5,10 +5,7 @@
           <li class="active">Monitor</li>
       </ol>
 
-      <h1>Monitor de componentes | estado conexión ->
-        <button ng-show="websocketStatus == true" class="btn btn-sm btn-success">On</button>
-        <button ng-show="websocketStatus == false" class="btn btn-sm btn-danger">Off</button>
-      </h1>
+      <h1>Monitor de componentes</h1>
 
   </div>
 
@@ -17,6 +14,24 @@
 
       <div class="row">
 
+        <div class="col-md-12 animated-content">
+          <panel panel-class="panel-default no-padding" heading="Conexion en tiempo real">
+              <panel-controls>
+                  <panel-control-collapse></panel-control-collapse>
+
+                  <a ng-href="#/history" class="button-refresh btn btn-sm btn-info">Ver datos históricos</a>
+
+                  <button ng-click="refreshConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
+                  <button ng-click="pauseWebsocket()" ng-show="websocketplay == true" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-pause"></i></button>
+                  <button ng-click="playWebsocket()" ng-show="websocketplay == false" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-play"></i></button>
+
+                  <button ng-show="websocketStatus == true" class="btn btn-sm btn-success">On</button>
+                  <button ng-show="websocketStatus == false" class="btn btn-sm btn-danger">Off</button>
+
+              </panel-controls>
+          </panel>
+        </div>
+
           <div ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true}}" class="col-md-6">
 
 
@@ -24,20 +39,16 @@
                   <panel-controls>
                       <panel-control-collapse></panel-control-collapse>
 
-                      <a href="#/history" class="button-refresh btn btn-sm btn-info">Ver datos históricos</a>
-
-                      <button ng-click="refreshConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
-
-                      <button ng-show="line[component.device_mac].status == true" class="btn btn-sm btn-success"><i class="glyphicon glyphicon-asterisk"></i></button>
-                      <button ng-show="line[component.device_mac].status == false" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-asterisk"></i></button>
+                      <i ng-show="line[component.device_mac].status == true" class="glyphicon text-success glyphicon-ok"></i></button>
+                      <i ng-show="line[component.device_mac].status == false" class="glyphicon text-danger glyphicon-remove"></i></button>
 
                   </panel-controls>
 
                   <div class="p20">
                       <div class="row">
 
-                        <canvas id="{{component.device_mac}}" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
-                          chart-series="line[component.device_mac].series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
+                        <canvas id="component.device_mac" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
+                          chart-series="line[component.device_mac].series" >
                         </canvas>
 
                       </div>

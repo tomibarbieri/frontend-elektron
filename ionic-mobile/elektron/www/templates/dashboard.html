@@ -5,8 +5,12 @@
         <div class="list">
               <div class="row item-divider item item-icon-right">
                 <div class="col col-50 title-components"><b>Consumo en tiempo real</b></div>
-                <i ng-if="websocketStatus == true" ng-click="refreshConnection()" class="icon ion-refresh balanced"></i>
-                <i ng-if="websocketStatus == false" ng-click="refreshConnection()" class="icon ion-refresh assertive"></i>
+
+                <i ng-if="websocketplay == true" ng-click="pauseWebsocket()" class="icon ion-pause positive icon-letter play-pause-icon"></i>
+                <i ng-if="websocketplay == false" ng-click="playWebsocket()" class="icon ion-play positive icon-letter play-pause-icon"></i>
+
+                <i ng-if="websocketStatus == true" ng-click="refreshConnection()" class="icon icon-letter ion-refresh balanced"></i>
+                <i ng-if="websocketStatus == false" ng-click="refreshConnection()" class="icon icon-letter ion-refresh assertive"></i>
               </div>
         </div>
       </div>

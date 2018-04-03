@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datetime-picker','ionic-toast','ionic'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout,  $location, $ionicPopup) {
+.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout, $location, $ionicPopup) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -60,7 +60,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   };
 })
 
-.controller('DashCtrl', function($scope, $filter, $websocket, $http, ionicToast) {
+.controller('DashCtrl', function($scope, $filter, $websocket, $http, $rootScope, ionicToast) {
 
       var ip_server = '158.69.223.78';
       var url_server = 'http://158.69.223.78:8000';
@@ -71,15 +71,18 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.current_component;             // componente que filtra los websockets
       $scope.websocket;
       $scope.spinner = true;
+      $scope.websocketplay = true;
 
       // Muestra los primeros 4 componentes de la lista
       $scope.quantity = 4;
 
       $scope.refreshConnection = function() {
-        console.log("refresh");
-        if ($scope.websocketStatus == false) {
-          $scope.websocket.close();
+        if ($rootScope.ws) {
+          $rootScope.ws.close();
         }
+        $scope.websocketStatus = false;
+        $rootScope.ws = undefined;
+        console.log("refresh");
         $scope.openWebsocketConnection();
       }
 
@@ -101,6 +104,14 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.changeCurrentComponent = function(component) {
         $scope.current_component = component;
       };
+
+      $scope.pauseWebsocket = function () {
+        $scope.websocketplay = false;
+      }
+
+      $scope.playWebsocket = function () {
+        $scope.websocketplay = true;
+      }
 
       // Obtiene los componentes del servidor
       $http({
@@ -188,24 +199,31 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
       $scope.openWebsocketConnection = function() {
 
-        $scope.websocket = $websocket('ws://' + ip_server +':8888/websocket');
+        if ($rootScope.ws == undefined) {
+          $rootScope.ws = $websocket('ws://' + ip_server +':8888/websocket');
+          console.log("nuevo ws");
+        }
+        else {
+          console.log("recuperando ws");
+        }
+        $scope.websocket = $rootScope.ws;
 
-        console.log($scope.websocket);
+        console.log($rootScope.ws);
 
         var collection = [];
 
-        $scope.websocket.onError(function functionName() {
+        $rootScope.ws.onError(function functionName() {
           ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
         });
 
-        $scope.websocket.onopen = function() {
+        $rootScope.ws.onopen = function() {
           console.log("on open");
           ionicToast.show('Conexion en tiempo real iniciada', 'bottom', false, 8000);
           $scope.websocketStatus = true;
           $scope.$apply();
         };
 
-        $scope.websocket.onMessage(function(message) {
+        $rootScope.ws.onMessage(function(message) {
 
           if ($scope.websocketStatus == false) {
             $scope.websocketStatus = true;
@@ -215,19 +233,20 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           json = JSON.parse(message.data);
           console.log(json);
 
-          if ($scope.current_component) {
-
-            console.log("data value mac -> " + json.device_mac);
-            console.log("current_component mac -> " + $scope.current_component.device_mac);
+          if ($scope.current_component && $scope.websocketplay == true) {
 
             if (json.device_mac == $scope.current_component.device_mac) {
               var hora = $filter('date')(new Date(json.data_datetime), "HH:mm");
               var label = '' + hora;
-              console.log(label);
-              $scope.line.labels.shift();
-              $scope.line.data[0].shift();
+
+              $scope.line.labels.splice(0,1);
+              $scope.line.data[0].splice(0,1);
               $scope.line.labels.push(label);
               $scope.line.data[0].push(json.data_value);
+
+              /*if ($scope.chart) {
+                $scope.chart.update();
+              }*/
             }
           }
         })
@@ -236,7 +255,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('MonitorCtrl', function($scope, $filter, $websocket, $http, ionicToast) {
+.controller('MonitorCtrl', function($scope, $filter, $websocket,$rootScope, $http, ionicToast) {
+
+      console.log("Loading monitor...");
 
       var ip_server = '158.69.223.78';
       var url_server = 'http://158.69.223.78:8000';
@@ -246,8 +267,17 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.current_component;             // componente que filtra los websockets
       $scope.websocket;
       $scope.spinner = true;
+      $scope.websocketplay = true;
 
       $scope.charts = [];
+
+      $scope.pauseWebsocket = function () {
+        $scope.websocketplay = false;
+      }
+
+      $scope.playWebsocket = function () {
+        $scope.websocketplay = true;
+      }
 
       // Obtiene los componentes del servidor
       $http({
@@ -268,8 +298,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
                 labels.push($filter('date')($scope.components_server_enabled[component].lastdata[i].date, "HH:mm"));
                 data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
               }
-              console.log(labels);
-              console.log(data);
+
               $scope.line[$scope.components_server_enabled[component].device_mac] = {
                                                                             'series': ['Potencia'],
                                                                             'labels': labels,
@@ -285,11 +314,22 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       });
 
       $scope.refreshConnection = function() {
+        if ($rootScope.ws) {
+          $rootScope.ws.close();
+        }
+        $scope.websocketStatus = false;
+        $rootScope.ws = undefined;
         console.log("refresh");
+        $scope.loadWebsocket();
       }
 
-      $scope.$on('chart-create', function (evt, chart) {
+      /*$scope.$on('chart-create', function (evt, chart) {
+        console.log(chart);
+        console.log(evt);
+        $scope.charts.push(chart);
+        console.log(chart);
         if ($scope.components_server_enabled) {
+
           if ($scope.charts.length < $scope.components_server_enabled.length) {
             $scope.charts.push(chart);
           }
@@ -297,24 +337,32 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           console.log("no llegaron los components_server_enabled");
           scope.charts.push(chart);
         }
-      });
+      });*/
 
       $scope.loadWebsocket = function() {
 
-        $scope.websocket = $websocket('ws://' + ip_server +':8888/websocket');
-        console.log($scope.websocket);
+        if ($rootScope.ws == undefined) {
+          $rootScope.ws = $websocket('ws://' + ip_server +':8888/websocket');
+          console.log("nuevo ws");
+        } else {
+          console.log("recuperando ws");
+        }
 
-        $scope.websocket.onError(function functionName() {
+        $scope.websocket = $rootScope.ws;
+
+        console.log($rootScope.ws);
+
+        $rootScope.ws.onError(function functionName() {
           ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
         });
 
-        $scope.websocket.onopen = function() {
+        $rootScope.ws.onopen = function() {
           console.log("on open");
           $scope.websocketStatus = true;
           $scope.$apply();
         };
 
-        $scope.websocket.onMessage(function(message) {
+        $rootScope.ws.onMessage(function(message) {
 
             if ($scope.websocketStatus == false) {
               $scope.websocketStatus = true;
@@ -324,27 +372,32 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
             json = JSON.parse(message.data);
             console.log(json);
 
-            var current_mac = json.device_mac;
+            if (json != undefined && $scope.websocketplay == true) {
 
-            $scope.line[current_mac].data[0].splice(0,1);
-            $scope.line[current_mac].data[0].push(json.data_value);
+              var current_mac = json.device_mac;
 
-            $scope.line[current_mac].status = true;
+              $scope.line[current_mac].data[0].splice(0,1);
+              $scope.line[current_mac].data[0].push(json.data_value);
 
-            $scope.line[current_mac].labels.splice(0,1);
-            var date = new Date(json.data_datetime);
-            $scope.line[current_mac].labels.push($filter('date')(date, "HH:mm"));
-            console.log($scope.line[current_mac]);
+              $scope.line[current_mac].status = true;
 
-            if ($scope.charts) {
-              console.log($scope.charts);
+              $scope.line[current_mac].labels.splice(0,1);
+
+              var date = new Date(json.data_datetime);
+              $scope.line[current_mac].labels.push($filter('date')(date, "HH:mm"));
+
+            }
+
+            /*if ($scope.charts) {
+              //console.log($scope.charts);
               for (var i = 0; i < $scope.charts.length; i++) {
                 //console.log('antes update');
-                $scope.charts[i].update();
+                console.log($scope.charts[i]);
+                //$scope.charts[i].update();
               }
               //console.log('antes apply');
               //$scope.$apply();
-            };
+            };*/
 
         });
       }

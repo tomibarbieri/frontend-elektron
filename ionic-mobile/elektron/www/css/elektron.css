@@ -9,8 +9,16 @@
   font-size: 0.85em !important;
 }
 
+.icon-letter {
+  font-size: 1.1em !important;
+}
+
 .badge-letter-9 {
   font-size: 0.85em !important;
+}
+
+.play-pause-icon {
+  right: 46px !important;
 }
 
 .logout-spinner{

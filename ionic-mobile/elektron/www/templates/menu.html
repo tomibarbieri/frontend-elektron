@@ -19,14 +19,14 @@
     </ion-header-bar>
     <ion-content >
       <ion-list id="menuLinks">
-        <ion-item menu-close href="#/app/dashboard"><i class="icon ion-home"></i> Inicio</ion-item>
-        <ion-item menu-close href="#/app/components"><i class="icon ion-cube"></i> Componentes </ion-item>
-        <ion-item menu-close href="#/app/monitor"><i class="icon ion-compass"></i> Monintor </ion-item>
-        <ion-item menu-close href="#/app/tasks"><i class="icon ion-clipboard"></i> Tareas </ion-item>
-        <ion-item menu-close href="#/app/statistics"><i class="icon ion-arrow-graph-up-right"></i> Estadísticas </ion-item>
-        <ion-item menu-close href="#/app/history"><i class="icon ion-cloud"></i> Datos históricos </ion-item>
-        <ion-item menu-close href="#/app/configuration"><i class="icon ion-gear-a"></i> Configuración </ion-item>
-        <ion-item menu-close href="#/app/logout"><i class="icon ion-log-out"></i> Cerrar sesion </ion-item>
+        <ion-item menu-close ui-sref="app.dashboard" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-home"></i> Inicio</ion-item>
+        <ion-item menu-close ui-sref="app.components" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-cube"></i> Componentes </ion-item>
+        <ion-item menu-close ui-sref="app.monitor" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-compass"></i> Monintor </ion-item>
+        <ion-item menu-close ui-sref="app.tasks" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-clipboard"></i> Tareas </ion-item>
+        <ion-item menu-close ui-sref="app.statistics" ><i class="icon ion-arrow-graph-up-right"></i> Estadísticas </ion-item>
+        <ion-item menu-close ui-sref="app.history" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-cloud"></i> Datos históricos </ion-item>
+        <ion-item menu-close ui-sref="app.configuration" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-gear-a"></i> Configuración </ion-item>
+        <ion-item menu-close ui-sref="app.logout" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-log-out"></i> Cerrar sesion </ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

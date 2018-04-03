@@ -5,8 +5,11 @@
         <div class="list">
               <div class="row item-divider item item-icon-right">
                 <div class="col col-50 title-components"><b>Monitor de componentes</b></div>
-                <i ng-if="websocketStatus == true" ng-click="refreshConnection()" class="icon ion-refresh balanced"></i>
-                <i ng-if="websocketStatus == false" ng-click="refreshConnection()" class="icon ion-refresh assertive"></i>
+                <i ng-if="websocketplay == true" ng-click="pauseWebsocket()" class="icon ion-pause positive icon-letter play-pause-icon"></i>
+                <i ng-if="websocketplay == false" ng-click="playWebsocket()" class="icon ion-play positive icon-letter play-pause-icon"></i>
+
+                <i ng-if="websocketStatus == true" ng-click="refreshConnection()" class="icon icon-letter ion-refresh balanced"></i>
+                <i ng-if="websocketStatus == false" ng-click="refreshConnection()" class="icon icon-letter ion-refresh assertive"></i>
               </div>
         </div>
       </div>
@@ -20,8 +23,8 @@
             <i ng-if="line[component.device_mac].status == false" class="icon ion-toggle assertive"></i>
           </div>
           <div class="item item-text-wrap">
-            <canvas id="{{component.device_mac}}" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
-            chart-series="line[component.device_mac].series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+            <canvas id="component.device_mac" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
+            chart-series="line[component.device_mac].series"></canvas>
           </div>
       </div>
     </ion-content>
