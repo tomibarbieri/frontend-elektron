@@ -17,6 +17,10 @@
   font-size: 11px;
 }
 
+.panel-footer {
+  padding-bottom: 9px;
+}
+
 .boxes-body {
   padding: 15px;
   font-weight: 300;

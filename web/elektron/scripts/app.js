@@ -19,13 +19,15 @@ angular
       console.log("statechange");
       console.log(next.params.templateFile);
       console.log($rootScope.ws);
-      if ($rootScope.ws != undefined && (next.params.templateFile == "monitor" || next.params.templateFile == "index")) {
+
+      if ($rootScope.ws != undefined) {
         $rootScope.ws.close();
         $rootScope.ws = undefined;
         console.log("closing ws");
       }
-      else {
-        console.log("reloading");
+
+      if ($rootScope.ws != undefined && (next.params.templateFile == "monitor" || next.params.templateFile == "index")) {
+        $window.location.reload();
       }
     });
 
@@ -70,6 +72,6 @@ angular
         //controller: 'DashboardController'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/#/index'
       });
   }]);

@@ -55,6 +55,17 @@
                   </div>
               </panel>
           </div>
+
+          <div class="col-md-12">
+            <panel panel-class="panel-footer panel-default no-padding" heading="Ultimo dato medido">
+                <panel-controls>
+
+                    <span ng-show="current_data != undefined">Valor: <b>{{current_data.data_value}}</b> ({{ current_data_date | date:'HH:mm:ss' }} Hs) MAC Componente: <b>{{current_data.device_mac}}</b></span>
+
+                </panel-controls>
+            </panel>
+          </div>
+
       </div>
   </div>
 </div>

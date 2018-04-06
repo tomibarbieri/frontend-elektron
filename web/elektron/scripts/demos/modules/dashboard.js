@@ -47,6 +47,18 @@ angular.module('theme.demos.dashboard', [
           Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
     });
 
+    $http({
+        method:'GET',
+        url:'http://158.69.223.78:8000/data/totalwattstaxco2'
+    }).then(function(response){
+        console.log("general data");
+        console.log(response.data);
+        $scope.general_data = response.data;
+    }, function(response){
+        //Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
+        //show an appropriate message
+    });
+
     // Obtiene los data tasks para contarlos y ponerlos en el box
     $http({
           method:'GET',
@@ -216,13 +228,14 @@ angular.module('theme.demos.dashboard', [
 
       $rootScope.ws.onerror = function() {
         $scope.websocketStatus = false;
-        Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion para la vision de datos en tiempo real.')
+        //Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion para la vision de datos en tiempo real.')
       };
 
       $rootScope.ws.onmessage = function(message) {
 
 
           var data = JSON.parse(message.data);
+          console.log(data);
 
           // chequea que el dato sea del componente elegido y lo muestra
           if ($scope.current_component) {
@@ -230,7 +243,9 @@ angular.module('theme.demos.dashboard', [
             if (data.device_mac == $scope.current_component.device_mac && $scope.websocketplay == true) {
               // Saca el primero del arreglo y pone uno nuevo al final
 
-              console.log(data);
+              $scope.current_data = data;
+              $scope.current_data_date = new Date(data.data_datetime);
+              $scope.$apply();
 
               var date = new Date(data.data_datetime);
 

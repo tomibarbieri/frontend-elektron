@@ -63,7 +63,10 @@ angular.module('theme.demos.monitor', [
         for (var component in $scope.components_server_enabled) {
           var labels = [];
           var data = [[]];
-          for (var i = 0; i < 10; i++) {
+          console.log($scope.components_server_enabled);
+          var last = ($scope.components_server_enabled[component].lastdata.length > 10)? 10 : $scope.components_server_enabled[component].lastdata.length;
+          console.log(last);
+          for (var i = 0; i < last; i++) {
             var date = $scope.components_server_enabled[component].lastdata[i].date;
             var hora = $filter('date')(date, "HH:mm");
             var dia = $filter('date')(date, 'dd');
@@ -131,6 +134,10 @@ angular.module('theme.demos.monitor', [
           $scope.websocketStatus = true;
 
           var json = JSON.parse(message.data);
+
+          $scope.current_data = json;
+          $scope.current_data_date = new Date(json.data_datetime);
+          $scope.$apply();
 
           if (json != undefined && $scope.websocketplay == true) {
 

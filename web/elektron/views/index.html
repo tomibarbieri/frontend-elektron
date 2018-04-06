@@ -1,6 +1,6 @@
 <div id="page-heading">
     <ol class="breadcrumb">
-        <li><a href="#/">Home</a></li>
+        <li><a href="#/">Inicio</a></li>
         <li class="active">Dashboard</li>
     </ol>
 
@@ -44,34 +44,44 @@
         </div>
         <div class="col-md-4 animated-content">
             <div class="row">
-                <div class="col-xs-6">
-                  <a href="#/components" class="boxes-a boxes-success" >
-                    <div class="boxes-title">
-                        <div class="text-center">Componentes conectados</div>
-                    </div>
-                    <div class="boxes-body">
-                        <div class="text-center">{{ components_server_enabled.length || 0 }}</div>
-                    </div>
-                  </a>
-                </div>
-
-                <div class="col-xs-6">
+                <div class="col-xs-12">
                   <a href="#/components" class="boxes-a boxes-dark" >
                     <div class="boxes-title">
-                        <div class="text-center">Componentes desconectados</div>
+                        <div class="text-center">Ultimo dato medido</div>
                     </div>
                     <div class="boxes-body">
-                        <div class="text-center">{{ components_server_not_enabled.length || 0 }}</div>
+                        <div class="text-center"><span ng-show="current_data != undefined"><b>{{current_data.data_value}}</b> ({{ current_data_date | date:'HH:mm:ss' }} Hs)</span></div>
                     </div>
                   </a>
                 </div>
-                <!--<div class="col-xs-6">
-                    <tile-simple data="{ title: 'Componentes', href: '#/ui-tiles',text: '8', color: 'success'}"></tile-simple>
-                </div>-->
-                <!--<div class="col-xs-6">
-                    <tile-simple data="{ title: 'Tareas programadas', href: '#/ui-tiles',text: '17', color: 'midnightblue'}"></tile-simple>
-                </div>-->
             </div>
+
+            <div class="row">
+
+              <div class="col-xs-6">
+                <a href="#/components" class="boxes-a boxes-indigo" >
+                  <div class="boxes-title">
+                      <div class="text-center">Consumo total</div>
+                  </div>
+                  <div class="boxes-body">
+                      <div class="text-center">{{ general_data.total_watts / 1000 | number : 0 }} Kw</div>
+                  </div>
+                </a>
+              </div>
+
+              <div class="col-xs-6">
+                <a href="#/components" class="boxes-a boxes-success" >
+                  <div class="boxes-title">
+                      <div class="text-center">Componentes conectados</div>
+                  </div>
+                  <div class="boxes-body">
+                      <div class="text-center">{{ components_server_enabled.length || 0 }}/{{components_server.length || 0}} </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+
             <div class="row">
                 <div class="col-xs-6">
                     <a href="#/tasks" class="boxes-a boxes-orange" >
@@ -93,23 +103,9 @@
                       </div>
                     </a>
                 </div>
-
-                <!--<div class="col-xs-6">
-                    <tile-simple data="{ title: 'Maximo consumo planificado', href: '#/ui-tiles',text: '733 Kw', color: 'danger'}"></tile-simple>
-                </div>-->
             </div>
-            <div class="row">
 
-              <div class="col-xs-6">
-                <a href="#/components" class="boxes-a boxes-indigo" >
-                  <div class="boxes-title">
-                      <div class="text-center">Consumo total</div>
-                  </div>
-                  <div class="boxes-body">
-                      <div class="text-center">233kw</div>
-                  </div>
-                </a>
-              </div>
+            <div class="row">
 
               <div class="col-xs-6">
                 <a href="#/components" class="boxes-a boxes-danger" >
@@ -117,38 +113,23 @@
                       <div class="text-center">Costo aproximado</div>
                   </div>
                   <div class="boxes-body">
-                      <div class="text-center">$ 1.100</div>
+                      <div class="text-center">$ {{ general_data.total_tax | number : 0 }} </div>
                   </div>
                 </a>
               </div>
-              <!--  <div class="col-xs-6">
-                    <tile-simple data="{ title: 'Consumo actual', href: '#/ui-tiles',text: '161 kw', color: 'primary'}"></tile-simple>
-                </div>
-                <div class="col-xs-6">
-                    <tile-simple data="{ title: 'Costo aproximado', href: '#/ui-tiles',text: '$1.138', color: 'danger'}"></tile-simple>
-                </div-->
+
+              <div class="col-xs-6">
+                <a href="#/components" class="boxes-a boxes-indigo" >
+                  <div class="boxes-title">
+                      <div class="text-center">Contaminación Co2</div>
+                  </div>
+                  <div class="boxes-body">
+                      <div class="text-center">{{ general_data.total_co2 | number : 0 }} Kg</div>
+                  </div>
+                </a>
+              </div>
+
             </div>
-            <!--
-            <div class="row">
-                <div class="col-md-6">
-                    <tile type="default" heading="Limite ocupado">
-                        <div easypiechart class="easypiechart"
-                            data-percent="25"
-                            data-options="epDiskSpace"><span class="percent">25</span>
-                        </div>
-                    </tile>
-                </div>
-                <div class="col-md-6" ng-drop="true">
-                    <tile type="default" heading="Capacidad componentes" ng-drag="true">
-                        <div easypiechart class="easypiechart"
-                            data-percent="23"
-                            data-options="epBandwidth"><span class="percent">23</span>
-                        </div>
-                    </tile>
-                </div>
-            </div>
-            -->
         </div>
     </div>
-
-</div> <!-- container-fluid -->
+</div>
