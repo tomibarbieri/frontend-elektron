@@ -98,14 +98,7 @@ angular
     //$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     $routeProvider
       .when('/', {
-        templateUrl: 'views/index.html',
-        resolve: {
-          loadCalendar: ['$ocLazyLoad', function($ocLazyLoad) {
-            return $ocLazyLoad.load([
-              'bower_components/fullcalendar/fullcalendar.js',
-            ]);
-          }]
-        }
+        redirectTo: '/index'
       })
       .when('/:templateFile', {
         templateUrl: function(param) {
@@ -119,6 +112,6 @@ angular
         //controller: 'DashboardController'
       })
       .otherwise({
-        redirectTo: '/#/index'
+        redirectTo: '/index'
       });
   }]);

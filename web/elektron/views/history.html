@@ -3,26 +3,22 @@
         <li><a href="#/">Inicio</a></li>
         <li class="active">Datos históricos</li>
     </ol>
-
 </div>
-
-
 <div class="container-fluid" ng-controller="HistoryController">
-
     <div class="row">
-
         <div ng-show="selectedperiod == true" id="panel-chart" class="col-md-8 animated-content">
           <panel panel-class="panel-default no-padding" heading="Datos visualizados para el periodo elegido">
               <panel-controls>
                   <panel-control-collapse></panel-control-collapse>
-
-                  <form class="pull-right mr10 hidden-xs" name="myForm">
-
-                    <button ng-disabled="previousbutton" type="submit" ng-disabled="previousPageDisable" ng-click="loadPage('last')" class="btn btn-sm btn-info">
-                      20 finales
+                  <form class="pull-right mr10">
+                    <button ng-disabled="lastbutton" ng-disabled="previousPageDisable" ng-click="loadPage('last')" class="btn btn-sm btn-info">
+                      Final
+                    </button>
+                    <button ng-disabled="previousbutton" ng-disabled="previousPageDisable" ng-click="loadPage(current_page + 1)" class="btn btn-sm btn-info">
+                      20 anteriores
                     </button>
                     <div class="btn-group" dropdown>
-                      <button type="button" class="btn btn-sm btn-info">{{ current_page }}</button>
+                      <button type="button" class="btn btn-sm btn-info">{{ current_page || 0 }}</button>
                       <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                         <i class="caret"></i>
                       </button>
@@ -32,20 +28,22 @@
                         </li>
                       </ul>
                     </div>
-                    <button ng-disabled="nextbutton" type="button" ng-disabled="nextPageDisable" ng-click="loadPage(1)" class="btn btn-sm btn-info">
-                      20 iniciales
+                    <button ng-disabled="nextbutton" ng-disabled="nextPageDisable" ng-click="loadPage(current_page - 1)" class="btn btn-sm btn-info">
+                      20 siguientes
+                    </button>
+                    <button ng-disabled="indexbutton" ng-disabled="nextPageDisable" ng-click="loadPage(1)" class="btn btn-sm btn-info">
+                      Inicio
                     </button>
                   </form>
-
               </panel-controls>
-
               <div class="p20">
                   <div class="row">
-
-                    <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
+                    <div class="spinner-container" ng-show="spinner == true">
+                      <div class="loader-spinner"></div>
+                    </div>
+                    <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
                       chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
                     </canvas>
-
                   </div>
               </div>
           </panel>

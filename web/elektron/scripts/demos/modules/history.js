@@ -20,7 +20,7 @@ angular.module('theme.demos.history', [
     $scope.currentDataIndex = 0;
     $scope.previousPageDisable = false;
     $scope.nextPageDisable = false;
-    //$scope.current_component;
+    $scope.spinner = false;
     $scope.current_period;
     $scope.configuration = {
 
@@ -83,7 +83,9 @@ angular.module('theme.demos.history', [
 
     // Variables para el paginado
     $scope.nextbutton = true;
+    $scope.indexbutton = true;
     $scope.previousbutton = false;
+    $scope.lastbutton = false;
     $scope.inLastPage = false;
     $scope.inFirstPage = true;
 
@@ -191,11 +193,12 @@ angular.module('theme.demos.history', [
 
     // cuando cambiamos la pagina con los botones
     $scope.loadPage = function (page_id) {
-        $scope.showiconloading = true;
+        Notifier.simpleInfo("Buscando los datos de la pagina", "Conectando con el servidor");
         console.log(page_id);
         console.log(typeof page_id);
         // procesa la ultima pagina
         console.log($scope.pagesdata);
+        $scope.spinner = true;
         if (page_id == 'last') {
           if ($scope.current_page != $scope.pagesdata.pages) {
             var offset = '' + (($scope.pagesdata.pages -1) * 20 + 1) + '/' + ($scope.pagesdata.total_data) + '/1/' ;
@@ -247,7 +250,9 @@ angular.module('theme.demos.history', [
 
               $scope.graficate();
               $scope.previousbutton = previousbutton;
+              $scope.lastbutton = previousbutton;
               $scope.nextbutton = nextbutton;
+              $scope.indexbutton = nextbutton;
               $scope.current_page = page_id;
 
             }
@@ -265,6 +270,8 @@ angular.module('theme.demos.history', [
     // funcion final que le llega la data para graficar
     $scope.graficate = function() {
       console.log("updating chart");
+
+      $scope.spinner = false;
 
       $scope.line = {};
       $scope.line.series = ['Potencia'];
@@ -501,6 +508,7 @@ Notifier.simpleError("Error al traer los datos", "Problemas de conexion");
         $scope.loadUrl();
         $scope.loadData();
         $scope.selectedperiod = true;
+        $scope.spinner = true;
       }
       else {
         // aclarar en el form cuales son
