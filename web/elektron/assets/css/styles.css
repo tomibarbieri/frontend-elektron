@@ -102,3 +102,7 @@
 .float-right {
   float: right;
 }
+
+.date-form {
+  position: relative !important;
+}

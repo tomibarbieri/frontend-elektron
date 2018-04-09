@@ -28,7 +28,7 @@ angular.module('theme.demos.dashboard', [
     // Obtiene todos los dispositivos para mostrarlos
     $http({
           method:'GET',
-          url: url_server + '/devices/'
+          url: url_server + '/devices/',
       }).then(function(response){
           console.log(response.data);
 

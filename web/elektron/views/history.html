@@ -10,119 +10,33 @@
 <div class="container-fluid" ng-controller="HistoryController">
 
     <div class="row">
-        <div class="col-md-12 animated-content">
-          <panel panel-class="panel-default no-padding" heading="Ver datos históricos">
-              <panel-controls>
-                  <panel-control-collapse></panel-control-collapse>
-              </panel-controls>
-              <div class="p20">
-                  <div class="row">
-                    <div class="mr10 hidden-xs">
 
-                        <table class="table table-bordered table-condensed">
-              					<tr style="font-weight: bold">
-                          <td style="width:15%">Dispositivo</td>
-                          <td style="width:15%">Fecha desde</td>
-              						<td style="width:15%">Hora desde</td>
-                          <td style="width:15%">Fecha hasta</td>
-                          <td style="width:15%">Hora hasta</td>
-                          <td style="width:15%">Precision</td>
-                          <td style="width:10%">Acciones</td>
-              					</tr>
-              					<tr >
-                          <td>
-                						<!-- Listado de dispositivos -->
-                						<span editable-select="components.label" e-ng-options="c.id as c.label for c in components" e-name="component" e-form="rowform" e-required>
-                						  {{ showComponentsFunction() }}
-                						</span>
-              					  </td>
-              					  <td>
-                						<!-- Fecha desde -->
-                						<span editable-bsdate="date_config.dateFrom" e-datepicker-popup="dd/MM/yyyy" e-name="dateFrom" e-form="rowform" e-required>
-                						  {{ (date_config.dateFrom | date:"dd/MM/yyyy") || 'empty' }}
-                						</span>
-              					  </td>
-              					  <td>
-                						<!-- Hora desde -->
-                						<span editable-bstime="date_config.timeFrom" e-show-meridian="false" e-name="timeFrom" e-form="rowform" e-required>
-                						  {{ (date_config.timeFrom | date:"HH:mm") || 'empty' }}
-                						</span>
-              					  </td>
-                          <td>
-                						<!-- Fecha hasta -->
-                						<span editable-bsdate="date_config.dateTo" e-datepicker-popup="dd/MM/yyyy" e-name="dateTo" e-form="rowform" e-required>
-                                {{ (date_config.dateTo | date:"dd/MM/yyyy") || 'empty' }}
-                						</span>
-              					  </td>
-                          <td>
-                						<!-- Hora hasta -->
-                						<span editable-bstime="date_config.timeTo" e-show-meridian="false" e-name="timeTo" e-form="rowform" e-required>
-                                {{ (date_config.timeTo | date:"HH:mm") || 'empty' }}
-                						</span>
-              					  </td>
-                          <td>
-                            <!-- Listado de dispositivos -->
-                            <span editable-select="components.label" e-ng-options="c.id as c.label for c in components" e-name="component" e-form="rowform" e-required>
-                              {{ showComponentsFunction() }}
-                            </span>
-                          </td>
-              					  <td style="white-space: nowrap">
-              						<!-- form -->
-              						<form editable-form name="rowform" onbeforesave="updateChart($data)" ng-show="rowform.$visible" class="buttons-grid form-buttons form-inline" shown="inserted == date_config">
-              						  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
-              							  Mostrar
-              						  </button>
-              						  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
-              							  Volver
-              						  </button>
-              						</form>
-              						<div class="buttons buttons-grid" ng-show="!rowform.$visible">
-              						  <button class="btn btn-sm btn-primary" ng-click="rowform.$show()">Configurar</button>
-              						</div>
-              					  </td>
-              					</tr>
-                      </table>
-
-                    </div>
-                  </div>
-              </div>
-          </panel>
-        </div>
-
-        <div class="col-md-8 animated-content">
-          <panel panel-class="panel-default no-padding" heading="Periodo elegido">
+        <div ng-show="selectedperiod == true" id="panel-chart" class="col-md-8 animated-content">
+          <panel panel-class="panel-default no-padding" heading="Datos visualizados para el periodo elegido">
               <panel-controls>
                   <panel-control-collapse></panel-control-collapse>
 
                   <form class="pull-right mr10 hidden-xs" name="myForm">
 
+                    <button ng-disabled="previousbutton" type="submit" ng-disabled="previousPageDisable" ng-click="loadPage('last')" class="btn btn-sm btn-info">
+                      20 finales
+                    </button>
                     <div class="btn-group" dropdown>
-                      <button type="button" class="btn btn-sm btn-info">{{ current_period.name }}</button>
+                      <button type="button" class="btn btn-sm btn-info">{{ current_page }}</button>
                       <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                         <i class="caret"></i>
                       </button>
                       <ul class="dropdown-menu pull-right">
-                        <li ng-repeat="period in periods">
-                          <a ng-click="changeCurrentPeriod(period.id)">{{ period.name }}</a>
+                        <li ng-repeat="page in number_pages">
+                          <a ng-click="loadPage(page)">{{ page }}</a>
                         </li>
                       </ul>
                     </div>
-
-                    <!--
-                    <label for="repeatSelect"> Mostrar datos: </label>
-                    <select name="mySelect" id="mySelect"
-                      ng-options="option.name for option in select_data.availableOptions track by option.id"
-                      ng-model="select_data.selectedOption"
-                      ng-change="executeSelect()">
-                    </select>
-                  -->
-                    <button type="submit" ng-disabled="previousPageDisable" ng-click="previousPage()" class="btn btn-sm btn-primary">
-                      20 previos
-                    </button>
-                    <button type="button" ng-disabled="nextPageDisable" ng-click="nextPage()" class="btn btn-sm btn-primary">
-                      20 siguientes
+                    <button ng-disabled="nextbutton" type="button" ng-disabled="nextPageDisable" ng-click="loadPage(1)" class="btn btn-sm btn-info">
+                      20 iniciales
                     </button>
                   </form>
+
               </panel-controls>
 
               <div class="p20">
@@ -137,95 +51,174 @@
           </panel>
         </div>
 
-        <div class="col-md-4">
-            <div class="row">
-                <div class="col-xs-6">
-                  <a class="boxes-a boxes-success" >
-                    <div class="boxes-title">
-                        <div class="text-center">Datos desde</div>
-                    </div>
-                    <div class="boxes-body">
-                        <div class="text-center">01/12/2017 8:00</div>
-                    </div>
-                  </a>
-                </div>
-                <div class="col-xs-6">
-                  <a class="boxes-a boxes-green" >
-                    <div class="boxes-title">
-                        <div class="text-center">Datos hasta</div>
-                    </div>
-                    <div class="boxes-body">
-                        <div class="text-center">05/12/2017 23:00</div>
-                    </div>
-                  </a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-6">
-                  <a class="boxes-a boxes-orange" >
-                    <div class="boxes-title">
-                        <div class="text-center">Cantidad de datos sensados</div>
-                    </div>
-                    <div class="boxes-body">
-                        <div class="text-center">{{datos_medidos}}</div>
-                    </div>
-                  </a>
-                </div>
-                <div class="col-xs-6">
-                  <a class="boxes-a boxes-indigo" >
-                    <div class="boxes-title">
-                        <div class="text-center">Total de consumo período</div>
-                    </div>
-                    <div class="boxes-body">
-                        <div class="text-center">{{total_datos}}wts</div>
-                    </div>
-                  </a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-6">
-                    <a class="boxes-a boxes-dark" >
-                      <div class="boxes-title">
-                          <div class="text-center">Componente seleccionado</div>
-                      </div>
-                      <div class="boxes-body">
-                          <div class="text-center">{{selectedComponent.label || 'Todos'}}</div>
-                      </div>
-                    </a>
-                </div>
-                <div class="col-xs-6">
-                    <a class="boxes-a boxes-green" >
-                      <div class="boxes-title">
-                          <div class="text-center">Costo periodo seleccionado</div>
-                      </div>
-                      <div class="boxes-body">
-                          <div class="text-center">${{costo_estimado}}</div>
-                      </div>
-                    </a>
-                </div>
-            </div>
-            <!--
-            <div class="row">
-                <div class="col-md-6">
-                    <tile type="default" heading="Comparacion al total de consumo del sistema">
-                        <div easypiechart class="easypiechart"
-                            data-percent="12"
-                            data-options="epDiskSpace"><span class="percent">12</span>
-                        </div>
-                    </tile>
-                </div>
-                <div class="col-md-6" ng-drop="true">
-                    <tile type="default" heading="Comparacion al consumo del componente" ng-drag="true">
-                        <div easypiechart class="easypiechart"
-                            data-percent="23"
-                            data-options="epBandwidth"><span class="percent">23</span>
-                        </div>
-                    </tile>
-                </div>
+        <div ng-show="selectedperiod == true" class="col-md-4">
 
-            </div>
-            -->
+          <div class="row">
+              <div class="col-xs-12">
+                  <a class="boxes-a boxes-dark" >
+                    <div class="boxes-title">
+                        <div class="text-center">Componente seleccionado</div>
+                    </div>
+                    <div class="boxes-body">
+                        <div class="text-center">{{selectedComponent.label || 'Todos'}}</div>
+                    </div>
+                  </a>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-xs-6">
+                <a class="boxes-a boxes-success" >
+                  <div class="boxes-title">
+                      <div class="text-center">Datos desde</div>
+                  </div>
+                  <div class="boxes-body">
+                      <div class="text-center">{{configuration.dateFrom}} a las {{configuration.timeFrom}}</div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-xs-6">
+                <a class="boxes-a boxes-green" >
+                  <div class="boxes-title">
+                      <div class="text-center">Datos hasta</div>
+                  </div>
+                  <div class="boxes-body">
+                      <div class="text-center">{{configuration.dateTo}} a las {{configuration.timeTo}}</div>
+                  </div>
+                </a>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-xs-6">
+                <a class="boxes-a boxes-orange" >
+                  <div class="boxes-title">
+                      <div class="text-center">Cantidad de datos sensados</div>
+                  </div>
+                  <div class="boxes-body">
+                      <div class="text-center">{{total_data || 0}}</div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-xs-6">
+                <a class="boxes-a boxes-indigo" >
+                  <div class="boxes-title">
+                      <div class="text-center">Total de consumo período</div>
+                  </div>
+                  <div class="boxes-body">
+                      <div class="text-center">{{total_data/1000 || 0 }}wts</div>
+                  </div>
+                </a>
+              </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 animated-content">
+          <panel panel-class="panel-default no-padding" heading="Configurar periodo de datos historicos">
+              <panel-controls>
+                  <panel-control-collapse></panel-control-collapse>
+              </panel-controls>
+              <div class="p20">
+                  <div class="row">
+                    <div class="mr10 hidden-xs">
+
+                        <table class="table table-bordered table-condensed">
+                        <tr style="font-weight: bold">
+                          <td style="width:15%">Dispositivo</td>
+                          <td style="width:15%">Fecha desde</td>
+                          <td style="width:15%">Hora desde</td>
+                          <td style="width:15%">Fecha hasta</td>
+                          <td style="width:15%">Hora hasta</td>
+                          <td style="width:15%">Precision</td>
+                          <td style="width:10%">Acciones</td>
+                        </tr>
+                        <tr >
+                          <td class="text-center">
+                            <!-- Listado de dispositivos -->
+                            <div class="btn-group" dropdown>
+                              <button type="button" class="btn btn-sm btn-basic">{{ selectedComponent.label || 'Cargando..' }}</button>
+                              <button type="button" class="button-refresh btn btn-sm btn-basic dropdown-toggle" dropdown-toggle>
+                                <i class="caret"></i>
+                              </button>
+                              <ul class="dropdown-menu pull-right">
+                                <li ng-repeat="component in components">
+                                  <a ng-click="updateCurrentComponent(component)">{{ component.label }}</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                          <td>
+                            <!-- Fecha desde -->
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control" ng-model="configuration.dateFrom">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                          </td>
+                          <td>
+                            <!-- Hora desde -->
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <input id="timepicker1" type="text" class="form-control input-small" ng-model="configuration.timeFrom">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                            </div>
+
+                            <script type="text/javascript">
+                                $('#timepicker1').timepicker({'defaultTime':'current','maxhours':24,'showMeridian':false});
+                            </script>
+                          </td>
+                          <td>
+                            <!-- Fecha hasta -->
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control" ng-model="configuration.dateTo">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                          </td>
+                          <td>
+                            <!-- Hora hasta -->
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <input id="timepicker2" type="text" class="form-control input-small" ng-model="configuration.timeTo">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                            </div>
+
+                            <script type="text/javascript">
+                                $('#timepicker2').timepicker({'defaultTime':'current','maxhours':24,'showMeridian':false});
+                            </script>
+                          </td>
+                          <td class="text-center">
+                            <!-- Listado de precisiones -->
+                            <div class="btn-group" dropdown>
+                              <button type="button" class="btn btn-sm btn-basic">{{ selectedPrecision.label }}</button>
+                              <button type="button" class="button-refresh btn btn-sm btn-basic dropdown-toggle" dropdown-toggle>
+                                <i class="caret"></i>
+                              </button>
+                              <ul class="dropdown-menu pull-right">
+                                <li ng-repeat="precision in precisions">
+                                  <a ng-click="updateCurrentPrecision(precision)">{{ precision.label }}</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                          <td style="white-space: nowrap">
+                          <!-- form -->
+                          <form editable-form name="rowform" onbeforesave="updateChart($data)" ng-show="rowform.$visible" class="buttons-grid form-buttons form-inline" shown="inserted == date_config">
+                            <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
+                              Mostrar
+                            </button>
+                            <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
+                              Volver
+                            </button>
+                          </form>
+                          <div class="buttons buttons-grid" ng-show="!rowform.$visible">
+                            <button class="btn btn-sm btn-primary" ng-click="updateChart()">Ver datos</button>
+                          </div>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+              </div>
+          </panel>
         </div>
     </div>
-
-</div> <!-- container-fluid -->
+</div>

@@ -41,7 +41,7 @@ angular
           //$scope.error = 'usuario o contraseña incorrecta';
           console.log("Incorrect username/password !");
         }
-      },3000);
+      },5000);
     };
 
   }]);

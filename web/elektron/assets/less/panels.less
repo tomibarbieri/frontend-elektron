@@ -11,11 +11,11 @@ panel { display: block; }
   background-color      : #fff;
 
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 -1px 0px 0 rgba(0, 0, 0, 0.03);
-  
+
   //Panel Heading styles
 
   .panel-heading {
-    padding     : 0px 20px 0px 20px;  
+    padding     : 0px 20px 0px 20px;
     line-height : 48px;
     border-radius: 2px;
     h2, .panel-title {
@@ -66,11 +66,11 @@ panel { display: block; }
       &.button-icon-bg .has-bg {
         .rgba(black,0.08);
         border-radius: @border-radius-base;
-        
+
         &:hover {
           .rgba(black,0.16);
         }
-      } 
+      }
     }
     .panel-loader{
       width               : 14px;
@@ -183,7 +183,7 @@ panel { display: block; }
   li {
     margin-right: 2px;
     span {
-      border-radius: 10px; 
+      border-radius: 10px;
       display: inline-block;
     }
   }
@@ -215,11 +215,11 @@ panel { display: block; }
 // span[data-style="panel-toyo"]       {background-color: @brand-toyo; border: 1px solid darken(@brand-toyo,2%);}
 // span[data-style="panel-alizarin"]     {background-color: @brand-alizarin; border: 1px solid darken(@brand-alizarin,2%);}
 
- // Timestamp ----------- 
+ // Timestamp -----------
 
 .panel-timestamp { }
 
- // Fullscreen ----------- 
+ // Fullscreen -----------
 
 body.nooverflow{
   overflow : hidden;
@@ -232,9 +232,9 @@ body.nooverflow{
   position : fixed;
   top      : 0;
   left     : 0;
-  z-index  : 99999;
+  z-index  : 999;
   background: @panel-bg;
-  
+
   .panel {
     margin                : 0;
     border-radius         : 0 !important;
@@ -247,14 +247,14 @@ body.nooverflow{
   }
   .panel-body {
     overflow-y            : scroll;
-    border-radius         : 0;  
+    border-radius         : 0;
   }
   > div > .panel-heading{
     cursor : default;
   }
 }
 
-// Separator ----------- 
+// Separator -----------
 
 .panel-heading i.separator {
   height: 28px;
@@ -270,9 +270,9 @@ body.nooverflow{
   margin: 10px 15px;
 }
 
-// Styling ----------- 
+// Styling -----------
 
-.panel {  
+.panel {
   background-color  : #fff;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 -1px 0px 0 rgba(0, 0, 0, 0.03);
   .panel-heading{
@@ -290,7 +290,7 @@ body.nooverflow{
     h2 > ul.nav-tabs,
     .panel-title > ul.nav-tabs {
       li {margin-bottom: 0 !important;}
-      margin: -14px 0px -14px -20px;  
+      margin: -14px 0px -14px -20px;
       li.active a {font-weight: 700 !important;}
       li.tabdrop + li a, li:first-child a {
         //box-shadow: 0 0px 0 0 #ffffff, 0 0 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.1);
@@ -300,7 +300,7 @@ body.nooverflow{
         border-bottom-right-radius: @border-radius-base !important;
         border-bottom-left-radius: 0 !important;
       }
-      li.tabdrop a, li.active a {  
+      li.tabdrop a, li.active a {
         border-bottom-right-radius: @border-radius-base;
         border-bottom-left-radius: @border-radius-base;
       }
@@ -336,7 +336,7 @@ body.nooverflow{
       min-width: 200px;
     }
   }
-  
+
   .panel-body{
     background-color : #fff;
   }
@@ -361,7 +361,7 @@ body.nooverflow{
       &.active>a {color: #fff !important; background: @heading-background-color;}
       &.active:hover>a {color: #fff !important; background: @heading-background-color;}
     }
-    
+
     .panel-ctrls .button-icon {
       color: @heading-text-color;
       color: rgba(red(@heading-text-color),green(@heading-text-color),blue(@heading-text-color),0.5);
@@ -371,11 +371,11 @@ body.nooverflow{
     .panel-ctrls.button-icon-bg  .has-bg {
         .rgba(white,0.2);
         border-radius: @border-radius-base;
-        
+
         &:hover {
           .rgba(white,0.4);
         }
-      } 
+      }
   }
 
 }
@@ -402,11 +402,11 @@ body.nooverflow{
   &.panel-alizarin   {.panel-variated(@brand-alizarin, @brand-alizarin);}
 }
 
- // RTL support ----------- 
+ // RTL support -----------
 
 .rtl {
   .panel .panel-heading {
-    padding : 0 7px 0 0;  
+    padding : 0 7px 0 0;
     h2, .panel-title {
       float      : right;
       text-align : right
@@ -474,7 +474,7 @@ body.nooverflow{
     border-bottom: none;
     li {
       i {margin: 0 !important;}
-      a { 
+      a {
         border: 0;
         border-radius: 0 0 @border-radius-base @border-radius-base !important;
         //color:rgba(255,255,255,0.8);
@@ -532,7 +532,7 @@ body.nooverflow{
             }
             &.active a {
               color: @gray-darker !important;
-              
+
               font-weight: 700;
 
             }
@@ -551,7 +551,7 @@ body.nooverflow{
   border-bottom-right-radius: @border-radius-base;
   border-bottom-left-radius: @border-radius-base;
   box-shadow: 0 -2px 0 0 #fff;
-  //border-top: 1px solid @border-lighter;  
+  //border-top: 1px solid @border-lighter;
 }
 .panel-body .panel-footer {
   margin: 0 -20px -20px;
@@ -583,9 +583,9 @@ body.nooverflow{
 
   .panel-heading a:after {
       font-family: 'FontAwesome';
-      content: "\f107";    
-      float: right; 
-      color: grey; 
+      content: "\f107";
+      float: right;
+      color: grey;
   }
   .panel-heading a.collapsed:after {
       content: "\f104";
@@ -644,7 +644,7 @@ body.nooverflow{
   .panel-toggle-btn, .panel-fullscreen-btn {
     .rgba(black,0.08);
     border-radius: @border-radius-base;
-    
+
     &:hover {
       .rgba(black,0.16);
     }

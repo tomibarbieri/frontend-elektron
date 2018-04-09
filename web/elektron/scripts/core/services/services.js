@@ -65,6 +65,7 @@ angular
               console.log($cookies);
               isAuthenticated = (response.status == 200);
           }, function(response){
+              console.log("no tamo piola");
               console.log(response);
               isAuthenticated = (response.status == 200);
               console.log("problemas de conexion");

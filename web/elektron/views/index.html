@@ -50,7 +50,10 @@
                         <div class="text-center">Ultimo dato medido</div>
                     </div>
                     <div class="boxes-body">
-                        <div class="text-center"><span ng-show="current_data != undefined"><b>{{current_data.data_value}}</b> ({{ current_data_date | date:'HH:mm:ss' }} Hs)</span></div>
+                        <div class="text-center">
+                          <span ng-show="current_data != undefined"><b>{{current_data.data_value}}</b> ({{ current_data_date | date:'HH:mm:ss' }} Hs)</span>
+                          <span ng-show="current_data == undefined">No hay datos aún</span>
+                        </div>
                     </div>
                   </a>
                 </div>

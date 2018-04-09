@@ -1359,13 +1359,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.timeTo = new Date($stateParams.timeTo);
   $scope.precision = $stateParams.precision;
 
+  $scope.showiconloading = false;
+
   // Variables para el paginado
   $scope.nextbutton = true;
   $scope.previousbutton = false;
   $scope.inLastPage = false;
   $scope.inFirstPage = true;
-
-  $scope.showiconloading = false;
 
   $scope.calculatePages = function () {
     $scope.number_pages = [];
