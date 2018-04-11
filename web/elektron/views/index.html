@@ -18,7 +18,7 @@
                 <panel-controls>
                     <panel-control-collapse></panel-control-collapse>
                     <div class="btn-group" dropdown>
-                      <button type="button" class="btn btn-sm btn-info">{{ current_component.label }}</button>
+                      <button type="button" class="btn btn-sm btn-info">{{ current_component.label || 'Cargando..' }}</button>
                       <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                         <i class="caret"></i>
                       </button>
@@ -35,7 +35,10 @@
                 </panel-controls>
                 <div class="p20">
                     <div class="row">
-                      <canvas id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
+                      <div class="spinner-container" ng-show="spinner == true">
+                        <div class="loader-spinner"></div>
+                      </div>
+                      <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
                         chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
                       </canvas>
                     </div>
@@ -64,7 +67,7 @@
               <div class="col-xs-6">
                 <a href="#/components" class="boxes-a boxes-indigo" >
                   <div class="boxes-title">
-                      <div class="text-center">Consumo total</div>
+                      <div class="text-center">Consumo total del sistema</div>
                   </div>
                   <div class="boxes-body">
                       <div class="text-center">{{ general_data.total_watts / 1000 | number : 0 }} Kw</div>

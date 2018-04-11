@@ -19,6 +19,7 @@ angular.module('theme.demos.dashboard', [
     $scope.chart;                         // variable para tener guardado el grafico y refrescarlos
     $scope.current_component;             // componente que filtra los websockets
     $scope.websocketplay = true;
+    $scope.spinner = true;
 
     // Funcion para asociar la creacion del chart y guardar la variable
     $scope.$on('chart-create', function (evt, chart) {
@@ -33,10 +34,8 @@ angular.module('theme.demos.dashboard', [
           console.log(response.data);
 
           $scope.components_server = response.data.devices;
-
           $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
           $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
-
           $scope.current_component = $scope.components_server_enabled[0];
 
           $scope.loadInitialData();
@@ -108,6 +107,8 @@ angular.module('theme.demos.dashboard', [
 
     $scope.graficate = function(data){
 
+        $scope.spinner = false;
+
         $scope.line = {};
 
         var data_sense = data;
@@ -137,6 +138,7 @@ angular.module('theme.demos.dashboard', [
 
     // funcion que se ejecuta cuando se selecciona un componente
     $scope.changeCurrentComponent = function(ids) {
+      $scope.spinner = true;
       console.log(ids);
       var selected = $filter('filter')($scope.components_server, {id: ids})[0];
       console.log(selected);
@@ -181,6 +183,7 @@ angular.module('theme.demos.dashboard', [
     };
 
     $scope.refreshConnection = function(){
+      $scope.spinner = true;
       if ($rootScope.ws) {
         $rootScope.ws.close();
       }
@@ -218,6 +221,7 @@ angular.module('theme.demos.dashboard', [
       $rootScope.ws.onopen = function() {
         console.log("on open");
         $scope.websocketStatus = true;
+        $scope.spinner = false;
         $scope.$apply();
         Notifier.simpleSuccess('Conexion establecida','Se ha establecido la conexion para la vision de datos en tiempo real.')
       };
@@ -228,6 +232,7 @@ angular.module('theme.demos.dashboard', [
 
       $rootScope.ws.onerror = function() {
         $scope.websocketStatus = false;
+        $scope.spinner = false;
         //Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion para la vision de datos en tiempo real.')
       };
 

@@ -107,10 +107,16 @@
   position: relative !important;
 }
 
+.spinner-container-components {
+  min-height: 200px;
+  margin-left: 45%;
+  margin-top: 10%;
+}
+
 .spinner-container {
   min-height: 200px;
   margin-left: 45%;
-  margin-top: 14%;
+  margin-top: 20%;
 }
 
 .loader-spinner {

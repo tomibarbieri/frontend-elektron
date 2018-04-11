@@ -3,6 +3,12 @@ angular
   .controller('ComponentsController', ['$scope', '$http','Notifier', function($scope, $http, Notifier) {
     'use strict';
 
+    $scope.spinner = true;
+    $scope.onbutton = false;
+    $scope.offbutton = false;
+    $scope.activatebutton = false;
+    $scope.desactivatebutton = false;
+
     var url_server = 'http://158.69.223.78:8000';
     var url_cape = 'http://163.10.33.173:8000';
 
@@ -11,6 +17,7 @@ angular
         url: url_server + '/devices/'
     }).then(function(response){
         console.log(response.data);
+        $scope.spinner = false;
         $scope.components_server = response.data.devices;
         Notifier.simpleSuccess("Componentes cargados", "Se han cargado con exito un total de " + response.data.devices.length + " componentes.");
     }, function(response){
@@ -51,6 +58,8 @@ angular
     };
 
     $scope.turnOnComponent = function(index,id) {
+      $scope.onbutton = true;
+      $scope.offbutton = true;
       var url = url_server + '/devices/' + id + '/turnon';
       var send = $http({
         method: 'GET',
@@ -63,6 +72,8 @@ angular
       send.then(
         function(response){
           console.log(response);
+          $scope.offbutton = false;
+          $scope.onbutton = false;
           $scope.components_server[index].devicestate.name = 'on';
           Notifier.simpleSuccess('Componente encendido','El componente se ha encendido con éxito');
       }, function(response){
@@ -72,6 +83,8 @@ angular
     };
 
     $scope.turnOffComponent = function(index,id) {
+      $scope.offbutton = true;
+      $scope.onbutton = true;
       var url = url_server + '/devices/' + id + '/shutdown';
       var send = $http({
         method: 'GET',
@@ -84,6 +97,8 @@ angular
       send.then(
         function(response){
           console.log(response);
+          $scope.offbutton = false;
+          $scope.onbutton = false;
           $scope.components_server[index].devicestate.name = 'off';
           Notifier.simpleSuccess('Componente apagado','El componente se ha apagado con éxito');
       }, function(response){
@@ -93,6 +108,8 @@ angular
     };
 
     $scope.enableComponent = function(index,id) {
+      $scope.desactivatebutton = true;
+      $scope.activatebutton = true;
       var url = url_server + '/devices/' + id + '/enable';
       var send = $http({
         method: 'POST',
@@ -105,6 +122,8 @@ angular
       send.then(
         function(response){
           console.log(response);
+          $scope.activatebutton = false;
+          $scope.desactivatebutton = false;
           $scope.components_server[index].enabled = 'true';
           Notifier.simpleSuccess('Componente activado','El componente se ha activado con éxito');
       }, function(response){
@@ -114,6 +133,8 @@ angular
     };
 
     $scope.disableComponent = function(index,id) {
+      $scope.desactivatebutton = true;
+      $scope.activatebutton = true;
       var url = url_server + '/devices/' + id + '/disable';
       var send = $http({
         method: 'POST',
@@ -126,6 +147,8 @@ angular
       send.then(
         function(response){
           console.log(response);
+          $scope.desactivatebutton = false;
+          $scope.activatebutton = false;
           $scope.components_server[index].enabled = 'false';
           Notifier.simpleSuccess('Componente desactivado','El componente se ha desactivado con éxito');
       }, function(response){

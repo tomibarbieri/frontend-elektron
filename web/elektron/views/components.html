@@ -14,68 +14,67 @@
 			<panel panel-class="panel-primary" data-heading="Componentes conectados">
 				  <panel-controls>
   					<panel-control-collapse></panel-control-collapse>
-  					<!--
-              <button class="button-icon"><i class="glyphicon glyphicon-cog"></i></button>
-  					   <button class="button-icon"><i class="glyphicon glyphicon-wrench"></i></button>
-            -->
 				  </panel-controls>
-				  <table class="table table-bordered table-condensed">
-					<tr style="font-weight: bold">
-						<td style="width:20%">Nombre</td>
-						<td style="width:20%">IP</td>
-            <td style="width:20%">Mac</td>
-						<td style="width:20%">Encendido/apagado</td>
-						<td style="width:20%">Modificar/estado</td>
-					</tr>
-					<tr ng-repeat="component in components_server">
-					  <td>
-						<!-- editable username (text with validation) -->
-						<span editable-text="component.label" e-name="name" e-form="rowform" e-required>
-						  {{ component.label }}
-						</span>
-					  </td>
-					  <td>
-						<!-- editable status (select-local) -->
-						<span e-name="ip" e-form="rowform" e-required>
-						  {{ component.device_ip }}
-						</span>
-					  </td>
-            <td>
-						<!-- editable status (select-local) -->
-						<span e-form="rowform" e-required>
-						  {{ component.device_mac }}
-						</span>
-					  </td>
-					  <td>
-						<!-- editable group (select-remote) -->
-						<span e-name="last" e-form="rowform" e-required>
-              <div style="margin-left:3px;" ng-switch on="component.devicestate.name">
-                  <button ng-switch-when="on" class="btn btn-sm btn-danger" ng-click="turnOffComponent($index,component.id)">Apagar</button>
-                  <button ng-switch-when="off" class="btn btn-sm btn-success" ng-click="turnOnComponent($index,component.id)">Prender</button>
-              </div>
-						</span>
-					  </td>
-					  <td style="white-space: nowrap">
-						<!-- form -->
-						<form editable-form name="rowform" onbeforesave="saveComponent($data, component.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == component">
-						  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
-							Guardar
-						  </button>
-						  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
-							Cancelar
-						  </button>
-						</form>
-						<div class="buttons" style="display:flex;" ng-show="!rowform.$visible">
-						  <button class="btn btn-sm btn-primary" ng-click="rowform.$show()">Editar</button>
-              <div style="margin-left:3px;" ng-switch on="component.enabled">
-                  <button ng-switch-when="true" class="btn btn-sm btn-danger" ng-click="disableComponent($index,component.id)">Desactivar</button>
-                  <button ng-switch-when="false" class="btn btn-sm btn-success" ng-click="enableComponent($index,component.id)">Activar</button>
-              </div>
-						</div>
-					  </td>
-					</tr>
-        </table>
-				  <!--<button class="btn btn-default" ng-click="addComponent()">Agregar componente</button>-->
+          <div class="spinner-container-components" ng-show="spinner == true">
+            <div class="loader-spinner"></div>
+          </div>
+				  <table ng-show="spinner == false" class="table table-bordered table-condensed">
+  					<tr style="font-weight: bold">
+  						<td style="width:20%">Nombre</td>
+  						<td style="width:20%">IP</td>
+              <td style="width:20%">Mac</td>
+  						<td style="width:20%">Encendido/apagado</td>
+  						<td style="width:20%">Modificar/estado</td>
+  					</tr>
+  					<tr ng-repeat="component in components_server">
+  					  <td>
+  						<!-- editable username (text with validation) -->
+  						<span editable-text="component.label" e-name="name" e-form="rowform" e-required>
+  						  {{ component.label }}
+  						</span>
+  					  </td>
+  					  <td>
+  						<!-- editable status (select-local) -->
+  						<span e-name="ip" e-form="rowform" e-required>
+  						  {{ component.device_ip }}
+  						</span>
+  					  </td>
+              <td>
+  						<!-- editable status (select-local) -->
+  						<span e-form="rowform" e-required>
+  						  {{ component.device_mac }}
+  						</span>
+  					  </td>
+  					  <td>
+  						<!-- editable group (select-remote) -->
+  						<span e-name="last" e-form="rowform" e-required>
+                <div style="margin-left:3px;" ng-switch on="component.devicestate.name">
+                    <button ng-disabled="offbutton" ng-switch-when="on" class="btn btn-sm btn-danger" ng-click="turnOffComponent($index,component.id)">Apagar</button>
+                    <button ng-disabled="onbutton" ng-switch-when="off" class="btn btn-sm btn-success" ng-click="turnOnComponent($index,component.id)">Prender</button>
+                </div>
+  						</span>
+  					  </td>
+  					  <td style="white-space: nowrap">
+  						<!-- form -->
+  						<form editable-form name="rowform" onbeforesave="saveComponent($data, component.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == component">
+  						  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
+  							Guardar
+  						  </button>
+  						  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
+  							Cancelar
+  						  </button>
+  						</form>
+  						<div class="buttons" style="display:flex;" ng-show="!rowform.$visible">
+  						  <button class="btn btn-sm btn-primary" ng-click="rowform.$show()">Editar</button>
+                <div style="margin-left:3px;" ng-switch on="component.enabled">
+                    <button ng-disabled="desactivatebutton" ng-switch-when="true" class="btn btn-sm btn-danger" ng-click="disableComponent($index,component.id)">Desactivar</button>
+                    <button ng-disabled="activatebutton" ng-switch-when="false" class="btn btn-sm btn-success" ng-click="enableComponent($index,component.id)">Activar</button>
+                </div>
+  						</div>
+  					  </td>
+  					</tr>
+          </table>
+
 			</panel>
 		</div>
 	</div>
