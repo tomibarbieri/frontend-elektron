@@ -107,7 +107,6 @@ angular.module('theme.demos.dashboard', [
 
     $scope.graficate = function(data){
 
-        $scope.spinner = false;
 
         $scope.line = {};
 
@@ -115,12 +114,12 @@ angular.module('theme.demos.dashboard', [
         var inicio = (data_sense.length >= 20) ? (data_sense.length - 20) : (0);
         var fin = data_sense.length;
 
-        console.log(inicio,fin);
-
         $scope.line.series = ['Potencia'];
 
         $scope.line.labels = [];
         $scope.line.data = [[]];
+
+        $scope.spinner = false;
 
         for (var i = inicio; i < fin; i++) {
 
@@ -183,7 +182,6 @@ angular.module('theme.demos.dashboard', [
     };
 
     $scope.refreshConnection = function(){
-      $scope.spinner = true;
       if ($rootScope.ws) {
         $rootScope.ws.close();
       }
@@ -204,6 +202,8 @@ angular.module('theme.demos.dashboard', [
     // funcion para abrir una conexion ws
     $scope.openWebsocketConnection = function() {
 
+      $scope.loading = true;
+
       if ($rootScope.ws == undefined) {
         var url_websocket = "ws://" + ip_server + ":8888/websocket";
         $rootScope.ws = new WebSocket(url_websocket);
@@ -221,23 +221,23 @@ angular.module('theme.demos.dashboard', [
       $rootScope.ws.onopen = function() {
         console.log("on open");
         $scope.websocketStatus = true;
-        $scope.spinner = false;
+        $scope.loading = false;
         $scope.$apply();
         Notifier.simpleSuccess('Conexion establecida','Se ha establecido la conexion para la vision de datos en tiempo real.')
       };
 
       $rootScope.ws.onclose = function() {
+        $scope.loading = false;
         $scope.websocketStatus = false;
       };
 
       $rootScope.ws.onerror = function() {
+        $scope.loading = false;
         $scope.websocketStatus = false;
-        $scope.spinner = false;
         //Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion para la vision de datos en tiempo real.')
       };
 
       $rootScope.ws.onmessage = function(message) {
-
 
           var data = JSON.parse(message.data);
           console.log(data);

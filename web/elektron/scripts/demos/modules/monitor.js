@@ -14,6 +14,8 @@ angular.module('theme.demos.monitor', [
     $scope.websocketStatus = false;
     $scope.switchStatus2 = 1;
     $scope.websocketplay = true;
+    $scope.spinner = true;
+    $scope.loading = false;
 
     $scope.charts = [];
 
@@ -46,6 +48,8 @@ angular.module('theme.demos.monitor', [
         method:'GET',
         url: url_server + '/devices/'
     }).then(function(response){
+
+        $scope.spinner = false;
 
         console.log(response.data);
         $scope.components_server = response.data.devices;
@@ -104,6 +108,7 @@ angular.module('theme.demos.monitor', [
 
     $scope.loadWebsocket = function() {
 
+      $scope.loading = true;
       Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente elegido inicialmente.");
 
       if ($rootScope.ws == undefined) {
@@ -115,18 +120,21 @@ angular.module('theme.demos.monitor', [
       }
 
       $rootScope.ws.onopen = function() {
+        $scope.loading = false;
         $scope.websocketStatus = true;
         Notifier.simpleSuccess('Conexion establecida','Se ha establecido la conexion para la vision de datos en tiempo real.')
         $scope.$apply();
       };
 
       $rootScope.ws.onclose = function() {
+        $scope.loading = false;
         $scope.websocketStatus = false;
       }
 
       $rootScope.ws.onerror = function() {
+        $scope.loading = false;
         $scope.websocketStatus = false;
-        Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion para la vision de datos en tiempo real.')
+        //Notifier.simpleError('Error en la conexion','Se ha detectado un error en la conexion para la vision de datos en tiempo real.')
       }
 
       $rootScope.ws.onmessage = function(message) {

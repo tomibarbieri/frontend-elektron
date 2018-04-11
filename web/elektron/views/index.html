@@ -29,9 +29,11 @@
                     <button ng-click="refreshConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
                     <button ng-click="pauseWebsocket()" ng-show="websocketplay == true" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-pause"></i></button>
                     <button ng-click="playWebsocket()" ng-show="websocketplay == false" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-play"></i></button>
-
-                    <button ng-show="websocketStatus == true" class="btn btn-sm btn-success">On</button>
-                    <button ng-show="websocketStatus == false" class="btn btn-sm btn-danger">Off</button>
+                    <button ng-show="(websocketStatus == true) && (loading == false)" class="btn btn-sm btn-success">On</button>
+                    <button ng-show="(websocketStatus == false) && (loading == false)" class="btn btn-sm btn-danger">Off</button>
+                    <button ng-show="loading == true" class="button-spinner btn btn-sm btn-default">
+                      <div class="loader-spinner-small"></div>
+                    </button>
                 </panel-controls>
                 <div class="p20">
                     <div class="row">

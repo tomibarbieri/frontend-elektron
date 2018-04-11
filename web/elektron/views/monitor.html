@@ -4,68 +4,52 @@
           <li><a href="#/">Home</a></li>
           <li class="active">Monitor</li>
       </ol>
-
       <h1>Monitor de componentes</h1>
-
   </div>
-
-
   <div class="container-fluid" >
-
       <div class="row">
-
         <div class="col-md-12 animated-content">
           <panel panel-class="panel-default no-padding" heading="Conexion en tiempo real">
               <panel-controls>
                   <panel-control-collapse></panel-control-collapse>
-
                   <a ng-href="#/history" class="button-refresh btn btn-sm btn-info">Ver datos históricos</a>
-
                   <button ng-click="refreshConnection()" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-refresh"></i></button>
                   <button ng-click="pauseWebsocket()" ng-show="websocketplay == true" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-pause"></i></button>
                   <button ng-click="playWebsocket()" ng-show="websocketplay == false" class="button-refresh btn btn-sm btn-positive"><i class="glyphicon glyphicon-play"></i></button>
-
-                  <button ng-show="websocketStatus == true" class="btn btn-sm btn-success">On</button>
-                  <button ng-show="websocketStatus == false" class="btn btn-sm btn-danger">Off</button>
-
+                  <button ng-show="(websocketStatus == true) && (loading == false)" class="btn btn-sm btn-success">On</button>
+                  <button ng-show="(websocketStatus == false) && (loading == false)" class="btn btn-sm btn-danger">Off</button>
+                  <button ng-show="loading == true" class="button-spinner btn btn-sm btn-default">
+                    <div class="loader-spinner-small"></div>
+                  </button>
               </panel-controls>
           </panel>
         </div>
-
-          <div ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true}}" class="col-md-6">
-
-
-              <panel panel-class="panel-default no-padding" heading="{{ component.label }}">
-                  <panel-controls>
-                      <panel-control-collapse></panel-control-collapse>
-
-                      <i ng-show="line[component.device_mac].status == true" class="glyphicon text-success glyphicon-ok"></i></button>
-                      <i ng-show="line[component.device_mac].status == false" class="glyphicon text-danger glyphicon-remove"></i></button>
-
-                  </panel-controls>
-
-                  <div class="p20">
-                      <div class="row">
-
-                        <canvas id="component.device_mac" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
-                          chart-series="line[component.device_mac].series" >
-                        </canvas>
-
-                      </div>
-                  </div>
-              </panel>
-          </div>
-
-          <div class="col-md-12">
+        <div class="spinner-container" ng-show="spinner == true">
+          <div class="loader-spinner"></div>
+        </div>
+        <div ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true}}" class="col-md-6">
+            <panel panel-class="panel-default no-padding" heading="{{ component.label }}">
+                <panel-controls>
+                    <panel-control-collapse></panel-control-collapse>
+                    <i ng-show="line[component.device_mac].status == true" class="glyphicon text-success glyphicon-ok"></i></button>
+                    <i ng-show="line[component.device_mac].status == false" class="glyphicon text-danger glyphicon-remove"></i></button>
+                </panel-controls>
+                <div class="p20">
+                    <div class="row">
+                      <canvas id="component.device_mac" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
+                        chart-series="line[component.device_mac].series" >
+                      </canvas>
+                    </div>
+                </div>
+            </panel>
+        </div>
+        <div class="col-md-12">
             <panel panel-class="panel-footer panel-default no-padding" heading="Ultimo dato medido">
                 <panel-controls>
-
                     <span ng-show="current_data != undefined">Valor: <b>{{current_data.data_value}}</b> ({{ current_data_date | date:'HH:mm:ss' }} Hs) MAC Componente: <b>{{current_data.device_mac}}</b></span>
-
                 </panel-controls>
             </panel>
           </div>
-
       </div>
   </div>
 </div>

@@ -13,6 +13,9 @@
 
 			<panel panel-class="panel-primary" data-heading="Componentes conectados">
 				  <panel-controls>
+            <button ng-show="loading == true" class="button-spinner btn btn-sm btn-default">
+              <div class="loader-spinner-small"></div>
+            </button>
   					<panel-control-collapse></panel-control-collapse>
 				  </panel-controls>
           <div class="spinner-container-components" ng-show="spinner == true">
