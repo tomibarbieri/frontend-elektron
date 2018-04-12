@@ -9,6 +9,10 @@ angular
 
     $scope.doughnut;
     $scope.bar;
+    $scope.loadingbar = false;
+    $scope.spinnerbar = false;
+    $scope.spinnerdoughnout = false;
+    $scope.spinnerstatistics = false;
 
     $scope.$on('chart-create', function (evt, chart) {
       console.log(chart);
@@ -37,10 +41,6 @@ angular
       'id': 1,
       'label': 'Por hora',
       'url': 'perhour'
-    }, {
-      'id': 2,
-      'label': 'Cada 5 seg',
-      'url': 'normal'
     }];
 
     $scope.currentPrecision = {
@@ -49,6 +49,9 @@ angular
       'url': 'perday'
     };
 
+    $scope.spinnerbar = true;
+    $scope.spinnerdoughnout = true;
+    $scope.spinnerstatistics = true;
 
     $http({
         method:'GET',
@@ -56,7 +59,10 @@ angular
     }).then(function(response){
         console.log(response.data);
 
+        Notifier.simpleSuccess('Componentes cargados con exito','Desde el servidor con los datos.')
         $scope.components_statistics = response.data.devices;
+        $scope.spinnerstatistics = false;
+        $scope.$apply();
 
         $scope.createBarChart();
         $scope.createDoughnutChart();
@@ -72,32 +78,30 @@ angular
     }).then(function(response){
         console.log(response.data);
         $scope.components_server = response.data.devices;
-        Notifier.simpleSuccess('Datos cargados con exito','Desde el servidor')
 
     }, function(response){
         console.log("problemas de conexion");
-        Notifier.simpleError("Error de conexión","No se pudo traer la informacion de los componentes del servidor");
+        Notifier.simpleError("Error de conexión","No se pudo traer la información de los componentes del servidor");
     });
 
     $scope.changeCriteria = function(id_selected) {
+      $scope.loadingbar = true;
       var selected = $filter('filter')($scope.barPrecision, {id: id_selected});
       var selectedPrecision = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
-
       $scope.currentPrecision = selectedPrecision;
-
       $scope.barlabels = [];
-
       $scope.getComponentData('left',$scope.currentBarLeft);
       $scope.getComponentData('right',$scope.currentBarRigth);
-
     }
 
     $scope.changeLeftBarComponent = function(id) {
+      $scope.loadingbar = true;
       console.log(id);
       $scope.changeBarComponent(id,'left');
     }
 
     $scope.changeRigthBarComponent = function(id) {
+      $scope.loadingbar = true;
       console.log(id);
       $scope.changeBarComponent(id,'right');
     }
@@ -140,6 +144,9 @@ angular
     }
 
     $scope.graficateComponentBar = function(data, side) {
+
+      $scope.spinnerbar = false;
+      $scope.loadingbar = false;
 
       var length = (data.length >= 6) ? 6 : data.length;
 
@@ -186,15 +193,11 @@ angular
     }
 
     $scope.createBarChart = function() {
-
       $scope.currentBarLeft = $scope.components_server[0];
       $scope.currentBarRigth = $scope.components_server[0];
-
       $scope.barseries = [$scope.currentBarLeft.label, $scope.currentBarRigth.label];
-
-      $scope.getComponentData('left',$scope.currentBarLeft)
-      $scope.getComponentData('rigth',$scope.currentBarRigth)
-
+      $scope.getComponentData('left',$scope.currentBarLeft);
+      $scope.getComponentData('rigth',$scope.currentBarRigth);
     }
 
     $scope.createDoughnutChart = function() {
@@ -204,45 +207,6 @@ angular
         $scope.doughnutlabels.push(label);
         $scope.doughnutdata.push(percent);
       }
+      $scope.spinnerdoughnout = false;
     }
-
-    $scope.turnOnComponent = function(index,id) {
-      var url = url_server + '/devices/' + id + '/turnon';
-      var send = $http({
-        method: 'GET',
-        url: url,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
-      console.log(send);
-      send.then(
-        function(response){
-          console.log(response);
-          $scope.components_server[index].devicestate.name = 'on';
-      }, function(response){
-          console.log("problemas de conexion");
-      });
-    };
-
-    $scope.turnOffComponent = function(index,id) {
-      var url = url_server + '/devices/' + id + '/shutdown';
-      var send = $http({
-        method: 'GET',
-        url: url,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
-      console.log(send);
-      send.then(
-        function(response){
-          console.log(response);
-          $scope.components_server[index].devicestate.name = 'off';
-      }, function(response){
-          console.log("problemas de conexion");
-      });
-    };
-
-
 }]);

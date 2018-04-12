@@ -313,21 +313,21 @@ angular.module('theme.demos.history', [
     headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
-}).then(function(response){
+  }).then(function(response){
 
-//Notifier.simpleSuccess('Datos cargados con exito','Se han traido ' + response.data.data.length + ' datos.')
+  //Notifier.simpleSuccess('Datos cargados con exito','Se han traido ' + response.data.data.length + ' datos.')
 
-//console.log(response.data.data);
-//console.log(response.data);
-$scope.currentData = response.data.data;
-Notifier.simpleSuccess('Datos cargados con éxito', 'Los datos (' + response.data.data + ') fueron obtenidos con éxito y se estan ubicando en el gráfico');
-$scope.graficate(response.data.data);
+  //console.log(response.data.data);
+  //console.log(response.data);
+  $scope.currentData = response.data.data;
+  Notifier.simpleSuccess('Datos cargados con éxito', 'Los datos (' + response.data.data + ') fueron obtenidos con éxito y se estan ubicando en el gráfico');
+  $scope.graficate(response.data.data);
 
-}, function(response){
-console.log("problemas de conexion");
-Notifier.simpleError("Error al traer los datos", "Problemas de conexion");
-});
-}
+  }, function(response){
+  console.log("problemas de conexion");
+  Notifier.simpleError("Error al traer los datos", "Problemas de conexion");
+  });
+  }
 
     // Busca los datos entre dos fechas
     $scope.loadDayToDay = function(day_from, day_to) {

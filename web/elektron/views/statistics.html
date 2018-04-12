@@ -16,12 +16,11 @@
 			<panel panel-class="panel-primary" data-heading="Detalles de componentes">
 				  <panel-controls>
   					<panel-control-collapse></panel-control-collapse>
-  					<!--
-              <button class="button-icon"><i class="glyphicon glyphicon-cog"></i></button>
-  					   <button class="button-icon"><i class="glyphicon glyphicon-wrench"></i></button>
-            -->
 				  </panel-controls>
-				  <table class="table table-bordered table-condensed">
+          <div class="spinner-container" ng-show="spinnerstatistics == true">
+            <div class="loader-spinner"></div>
+          </div>
+				  <table ng-show="spinnerstatistics == false" class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
 						<td style="width:10%">Nombre</td>
 						<td style="width:3%">Estado</td>
@@ -33,7 +32,7 @@
             <td style="width:8%">Consumo Período actual</td>
             <td style="width:8%">Nº encendidos y apagados</td>
 					</tr>
-					<tr ng-repeat="component in components_statistics">
+          <tr ng-repeat="component in components_statistics">
 					  <td>
 						<!-- editable username (text with validation) -->
 						<span editable-text="component.device.label" e-name="name" e-form="rowform" e-required>
@@ -114,12 +113,13 @@
 
             <div class="p20">
                 <div class="row">
-
-                  <canvas id="doughnut" height="150" class="chart chart-doughnut"
+                  <div class="spinner-container" ng-show="spinnerdoughnout == true">
+                    <div class="loader-spinner"></div>
+                  </div>
+                  <canvas ng-show="spinnerdoughnout == false" id="doughnut" height="150" class="chart chart-doughnut"
                     chart-data="doughnutdata" chart-labels="doughnutlabels">
                   </canvas>
-
-                  <div style="margin-top:10px;">
+                  <div ng-show="spinnerdoughnout == false" style="margin-top:10px;">
                     <div ng-repeat="value in doughnut.config.data.labels" style="margin:5px;float:left;">
                       <span class="badge" style="background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
                         {{ value }}
@@ -130,23 +130,21 @@
                 </div>
             </div>
             <div class="m-n panel-footer">
-
-
-
             </div>
-
         </panel>
-
     </div>
-
     <div class="col-md-6">
 
         <panel panel-class="panel-default no-padding" heading="Comparación">
             <panel-controls>
                 <panel-control-collapse></panel-control-collapse>
 
+                <button ng-show="loadingbar == true" class="button-spinner btn btn-sm btn-default">
+                  <div class="loader-spinner-small"></div>
+                </button>
+
                 <div class="btn-group" dropdown>
-                  <button type="button" class="btn btn-sm btn-info">{{ currentPrecision.label }}</button>
+                  <button type="button" class="btn btn-sm btn-info">{{ currentPrecision.label || 'Cargando..'}}</button>
                   <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                     <i class="caret"></i>
                   </button>
@@ -158,7 +156,7 @@
                 </div>
 
                 <div class="btn-group" dropdown>
-                  <button type="button" class="btn btn-sm btn-info">{{currentBarLeft.label}}</button>
+                  <button type="button" class="btn btn-sm btn-info">{{currentBarLeft.label || 'Cargando..'}}</button>
                   <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                     <i class="caret"></i>
                   </button>
@@ -170,7 +168,8 @@
                 </div>
 
                 <div class="btn-group" dropdown>
-                  <button type="button" class="btn btn-sm btn-info">{{currentBarRigth.label}}</button>
+
+                  <button type="button" class="btn btn-sm btn-info">{{currentBarRigth.label || 'Cargando..' }}</button>
                   <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                     <i class="caret"></i>
                   </button>
@@ -184,13 +183,46 @@
 
             <div class="p20">
                 <div class="row">
-
-                  <canvas id="bar" class="chart chart-bar"
+                  <div class="spinner-container" ng-show="spinnerbar == true">
+                    <div class="loader-spinner"></div>
+                  </div>
+                  <canvas ng-show="spinnerbar == false" id="bar" class="chart chart-bar"
                     chart-data="bardata" chart-labels="barlabels" chart-series="barseries">
                   </canvas>
-
                 </div>
             </div>
+
+            <panel-footer ng-show="spinnerbar == false">
+
+              <div class="footer-bar">
+
+                <button ng-disabled="lastbutton" ng-disabled="previousPageDisable" ng-click="loadPage('last')" class="btn btn-sm btn-info">
+                  Final
+                </button>
+                <button ng-disabled="previousbutton" ng-disabled="previousPageDisable" ng-click="loadPage(current_page + 1)" class="btn btn-sm btn-info">
+                  20 anteriores
+                </button>
+                <div class="btn-group" dropdown>
+                  <button type="button" class="btn btn-sm btn-info">{{ current_page || 0 }}</button>
+                  <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+                    <i class="caret"></i>
+                  </button>
+                  <ul class="dropdown-menu pull-right">
+                    <li ng-repeat="page in number_pages">
+                      <a ng-click="loadPage(page)">{{ page }}</a>
+                    </li>
+                  </ul>
+                </div>
+                <button ng-disabled="nextbutton" ng-disabled="nextPageDisable" ng-click="loadPage(current_page - 1)" class="btn btn-sm btn-info">
+                  20 siguientes
+                </button>
+                <button ng-disabled="indexbutton" ng-disabled="nextPageDisable" ng-click="loadPage(1)" class="btn btn-sm btn-info">
+                  Inicio
+                </button>
+
+              </div>
+
+            </panel-footer>
 
         </panel>
 
