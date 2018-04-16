@@ -12,11 +12,18 @@
 	<div class="row">
 
 		<div class="col-md-12">
+
 			<panel panel-class="panel-primary" data-heading="Tareas por consumo">
 				  <panel-controls>
+					<button ng-show="deletedatataskloading == true" class="button-spinner btn btn-sm btn-default">
+						<div class="loader-spinner-small"></div>
+					</button>
 					<panel-control-collapse></panel-control-collapse>
 				  </panel-controls>
-				  <table class="table table-bordered table-condensed">
+					<div class="spinner-container-components" ng-show="spinnerDataTask == true">
+						<div class="loader-spinner"></div>
+					</div>
+				  <table ng-show="spinnerDataTask == false" class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
 						<td style="width:16%">Nombre y descripción (<span class="glyphicon glyphicon-file"></span>)</td>
 						<td style="width:15%">Dipositivo</td>
@@ -93,6 +100,7 @@
 
       <panel id="panelDataTask" ng-show="blockdatataskdiv == false" panel-class="panel-primary" data-heading="{{dataTaskDiv}}">
             <panel-controls>
+							<button ng-click="closeBoxDataTask()" class="btn-default btn">Cancelar</button>
               <panel-control-collapse></panel-control-collapse>
             </panel-controls>
 
@@ -158,7 +166,6 @@
                   <input ng-model="currentDataTask.repeats" class="form-control" type="number" value="3" id="example-number-input">
                 </div>
               </div>
-
               <div class="form-group">
                 <label class="col-sm-3 control-label">Comparador</label>
                 <div class="col-sm-6">
@@ -171,7 +178,6 @@
                   </select>
                 </div>
               </div>
-
             </form>
             <div class="panel-footer">
       			<div class="row">
@@ -179,20 +185,24 @@
       					<div class="btn-toolbar">
       						<button ng-show="createDataTaskButton" ng-click="createDataTask()" class="btn-success btn"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea</button>
                   <button ng-show="editDataTaskButton" ng-click="editDataTask()" class="btn-primary btn"><span class="glyphicon glyphicon-plus-sign"></span> Editar tarea</button>
-
       						<button ng-click="closeBoxDataTask()" class="btn-default btn">Cancelar</button>
       					</div>
       				</div>
       			</div>
       		</div>
-
       </panel>
 
       <panel panel-class="panel-primary" data-heading="Tareas por fecha y hora">
 				  <panel-controls>
+					<button ng-show="deletedatetimeloading == true" class="button-spinner btn btn-sm btn-default">
+						<div class="loader-spinner-small"></div>
+					</button>
 					<panel-control-collapse></panel-control-collapse>
 				  </panel-controls>
-				  <table class="table table-bordered table-condensed">
+					<div class="spinner-container-components" ng-show="spinnerDateTime == true">
+						<div class="loader-spinner"></div>
+					</div>
+				  <table ng-show="spinnerDateTime == false" class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
 						<td style="width:16%">Nombre y descripción (<span class="glyphicon glyphicon-file"></span>)</td>
 						<td style="width:14%">Dipositivo</td>
@@ -270,12 +280,13 @@
 						</div>
 					  </td>
 					</tr>
-        </table>
-        <a ng-click="addBoxDateTimeTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha</a>
-			</panel>
+	        </table>
+	        <a ng-click="addBoxDateTimeTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha</a>
+				</panel>
 
       <panel id="panelDateTimeTask" ng-show="blockdatetimetaskdiv == false" panel-class="panel-primary" data-heading="{{dateTimeTaskDiv}}">
             <panel-controls>
+							<button ng-click="closeBoxDateTimeTask()" class="btn-default btn">Cancelar</button>
               <panel-control-collapse></panel-control-collapse>
             </panel-controls>
 

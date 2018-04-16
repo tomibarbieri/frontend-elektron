@@ -63,10 +63,16 @@ angular
       console.log(next.params.templateFile);
       console.log($rootScope.ws);
 
-      if ($rootScope.ws != undefined) {
-        $rootScope.ws.close();
+      try {
+        if ($rootScope.ws != undefined) {
+          $rootScope.ws.close();
+          $rootScope.ws = undefined;
+          console.log("closing ws");
+        }
+      }
+      catch(err) {
+        console.log("No fue establecida la conexion antes de querer cerrarla.");
         $rootScope.ws = undefined;
-        console.log("closing ws");
       }
 
       if ($rootScope.ws != undefined && (next.params.templateFile == "monitor" || next.params.templateFile == "index")) {

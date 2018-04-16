@@ -33,7 +33,7 @@ angular
     }, {
       label: 'Configuración',
       iconClasses: 'glyphicon glyphicon-cog',
-      url: ''
+      url: '#/config'
     }, {
       label: 'Cerrar sesión',
       iconClasses: 'glyphicon glyphicon-log-out',

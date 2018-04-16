@@ -9,6 +9,12 @@ angular.module('theme.demos.tasks', [])
     $scope.blockdatataskdiv = true;
     $scope.blockdatetimetaskdiv = true;
 
+    $scope.spinnerDataTask = false;
+    $scope.spinnerDateTime = false;
+
+    $scope.deletedatataskloading = false;
+    $scope.deletedatetimeloading = false;
+
     $scope.datatasks_server = [];
     $scope.datetimetasks_server = [];
 
@@ -32,12 +38,13 @@ angular.module('theme.demos.tasks', [])
           url: url_server + '/tasks/datatasks'
       }).then(function(response){
           console.log(response.data);
+          $scope.spinnerDataTask = false;
           $scope.datatasks_server = response.data.datatasks;
           console.log($scope.datatasks_server);
       }, function(response){
+          $scope.spinnerDataTask = false;
           console.log("problemas de conexion");
           Notifier.simpleError("Error de conexión","No se pudo traer la informacion de las tareas del servidor");
-
       });
     }
 
@@ -47,12 +54,17 @@ angular.module('theme.demos.tasks', [])
           url: url_server + '/tasks/datetimetasks'
       }).then(function(response){
           console.log(response.data);
+          $scope.spinnerDateTime = false;
           $scope.datetimetasks_server = response.data.datetimetasks;
           console.log($scope.datetimetasks_server);
       }, function(response){
+          $scope.spinnerDateTime = false;
           console.log("problemas de conexion");
       });
     }
+
+    $scope.spinnerDataTask = true;
+    $scope.spinnerDateTime = true;
 
     $scope.getDataTasks();
     $scope.getDateTimeTasks();
@@ -127,6 +139,7 @@ angular.module('theme.demos.tasks', [])
 
     // add data task to server
     $scope.createDataTask = function() {
+      $scope.spinnerDataTask = true;
       $scope.blockdatataskdiv = true;
       console.log($scope.currentDataTask);
 
@@ -164,11 +177,12 @@ angular.module('theme.demos.tasks', [])
           console.log("problemas de conexion");
           Notifier.simpleError('Error al crear','Su tarea ' + $scope.currentDataTask.label + ' no ha sido creada por problemas de conexión');
           $scope.blockdatataskdiv = false;
+          $scope.spinnerDataTask = false;
       });
     };
 
     $scope.editDataTask = function() {
-
+      $scope.spinnerDataTask = true;
       $scope.blockdatataskdiv = true;
 
       var data_params = {
@@ -196,14 +210,15 @@ angular.module('theme.demos.tasks', [])
               'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
           }
       }).then(function(response){
+          $scope.getDataTasks();
           console.log(response.data);
           Notifier.simpleSuccess('Tarea guardada','Su tarea ' + $scope.currentDataTask.label + ' ha sido guardada con exito');
           $scope.clearCurrendDataTask();
-          $scope.getDataTasks();
       }, function(response){
           console.log("problemas de conexion");
           Notifier.simpleError('Error al guardar','Su tarea ' + $scope.currentDataTask.label + ' no ha sido guardada por problemas de conexión');
           $scope.blockdatataskdiv = false;
+          $scope.spinnerDataTask = false;
       });
 
     };
@@ -213,18 +228,18 @@ angular.module('theme.demos.tasks', [])
 
       $bootbox.confirm('¿Segundo querés borrar?', function(result) {
         if (result) {
-          $scope.datatasks_server.splice(index, 1);
-          console.log(index);
-          console.log(id);
+          $scope.deletedatataskloading = true;
           var url_task = url_server + "/tasks/datatasks/" + id + "/remove";
-          console.log(url_task);
           $http({
               method:'GET',
               url: url_task
           }).then(function(response){
               console.log(response.data);
+              $scope.datatasks_server.splice(index, 1);
+              $scope.deletedatataskloading = false;
               Notifier.simpleSuccess('Tarea borrada','Su tarea ha sido borrada con exito');
           }, function(response){
+              $scope.deletedatataskloading = false;
               console.log("problemas de conexion");
               Notifier.simpleError('Error al borrar','Su tarea no se pudo borrar por problemas de conexión');
           });
@@ -305,6 +320,7 @@ angular.module('theme.demos.tasks', [])
 
     $scope.createDateTimeTask = function() {
 
+      $scope.spinnerDateTime = true;
       $scope.blockdatetimetaskdiv = true;
       console.log($scope.currentDateTimeTask);
 
@@ -342,6 +358,7 @@ angular.module('theme.demos.tasks', [])
       }, function(response){
           console.log("problemas de conexion");
           Notifier.simpleError('Error al crear','Su tarea ' + $scope.currentDateTimeTask.label + ' no ha sido creada por problemas de conexión');
+          $scope.spinnerDateTime = false;
           $scope.blockdatetimetaskdiv = false;
       });
 
@@ -350,6 +367,7 @@ angular.module('theme.demos.tasks', [])
     // Data time tasks
     $scope.editDateTimeTask = function() {
 
+      $scope.spinnerDateTime = true;
       $scope.blockdatetimetaskdiv = true;
 
       var data_params = {
@@ -374,14 +392,15 @@ angular.module('theme.demos.tasks', [])
               'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
           }
       }).then(function(response){
+          $scope.getDateTimeTasks();
           console.log(response.data);
           Notifier.simpleSuccess('Tarea editada','Su tarea ' + $scope.currentDateTimeTask.label + ' ha sido editada con exito');
           $scope.clearCurrendDateTimeTask();
-          $scope.getDateTimeTasks();
       }, function(response){
           console.log("problemas de conexion");
           Notifier.simpleError('Error al editar','Su tarea ' + $scope.currentDateTimeTask.label + ' no ha sido editada por problemas de conexión');
           $scope.blockdatetimetaskdiv = false;
+          $scope.spinnerDateTime = false;
       });
     };
 
@@ -390,15 +409,18 @@ angular.module('theme.demos.tasks', [])
 
       $bootbox.confirm('¿Seguro querés borrar?', function(result) {
         if (result) {
+          $scope.deletedatetimeloading = true;
           var url_task = "http://158.69.223.78:8000/tasks/datetimetasks/" + id + "/remove";
           $http({
               method:'GET',
               url: url_task
           }).then(function(response){
               console.log(response.data);
-              Notifier.simpleSuccess('Tarea borrada','Su tarea ha sido borrada con exito');
               $scope.datetimetasks_server.splice(index, 1);
+              $scope.deletedatetimeloading = false;
+              Notifier.simpleSuccess('Tarea borrada','Su tarea ha sido borrada con exito');
           }, function(response){
+              $scope.deletedatetimeloading = false;
               console.log("problemas de conexion");
               Notifier.simpleError('Error al borrar','Su tarea no se pudo borrar por problemas de conexión');
           });

@@ -115,8 +115,30 @@
 
 .spinner-container {
   min-height: 200px;
+  text-align: center;
   margin-left: 45%;
   margin-top: 20%;
+}
+
+.error-container {
+  min-height: 200px;
+  text-align: center;
+  margin-top: 20%;
+}
+
+.error-button {
+  background-color: transparent !important;
+  border: none !important;
+  /* color: transparent !important; */
+  border-color: transparent !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.history-footer-container {
+  min-height: 130px;
+  margin-top: 28%;
+  text-align: center;
 }
 
 .loader-spinner {

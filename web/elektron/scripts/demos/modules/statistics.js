@@ -1,6 +1,6 @@
 angular
   .module('theme.demos.statistics', ['chart.js'])
-  .controller('StatisticsController', ['$scope', '$http', '$filter', 'Notifier', function($scope, $http, $filter, Notifier) {
+  .controller('StatisticsController', ['$scope', '$http', '$filter', 'Notifier', '$window', function($scope, $http, $filter, Notifier, $window) {
     'use strict';
 
     console.log("Statistics");
@@ -13,6 +13,8 @@ angular
     $scope.spinnerbar = false;
     $scope.spinnerdoughnout = false;
     $scope.spinnerstatistics = false;
+    $scope.statisticserror = false;
+    $scope.barerror = false;
 
     $scope.$on('chart-create', function (evt, chart) {
       console.log(chart);
@@ -49,39 +51,48 @@ angular
       'url': 'perday'
     };
 
+    $scope.reloadpage = function () {
+      $window.location.reload();
+    }
+
     $scope.spinnerbar = true;
     $scope.spinnerdoughnout = true;
     $scope.spinnerstatistics = true;
 
     $http({
         method:'GET',
-        url: url_server + '/devices/statistics'
+        url: url_server + '/devices/statistic'
     }).then(function(response){
         console.log(response.data);
 
         Notifier.simpleSuccess('Componentes cargados con exito','Desde el servidor con los datos.')
         $scope.components_statistics = response.data.devices;
+        console.log($scope.components_statistics);
         $scope.spinnerstatistics = false;
         $scope.$apply();
 
-        $scope.createBarChart();
         $scope.createDoughnutChart();
 
     }, function(response){
+        $scope.statisticserror = true;
+        $scope.spinnerstatistics = false;
+        $scope.spinnerdoughnout = false;
         console.log("problemas de conexion");
+        Notifier.simpleError("Error de conexión","No se pudo traer la información de los componentes del servidor");
     });
 
 
     $http({
         method:'GET',
-        url: url_server + '/devices/'
+        url: url_server + '/devic/'
     }).then(function(response){
         console.log(response.data);
         $scope.components_server = response.data.devices;
-
+        $scope.createBarChart();
     }, function(response){
+        $scope.spinnerbar = false;
+        $scope.barerror = true;
         console.log("problemas de conexion");
-        Notifier.simpleError("Error de conexión","No se pudo traer la información de los componentes del servidor");
     });
 
     $scope.changeCriteria = function(id_selected) {
@@ -140,6 +151,9 @@ angular
       }, function(response){
           console.log("problemas de conexion");
           Notifier.simpleError("Tabla comparativa - Error","No se pudo traer la informacion del componente por problemas de conexión");
+          $scope.spinnerbar = false;
+          $scope.barerror = true;
+          $scope.loadingbar = false;
       });
     }
 
