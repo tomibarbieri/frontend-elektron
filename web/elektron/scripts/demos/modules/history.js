@@ -24,6 +24,8 @@ angular.module('theme.demos.history', [
     $scope.current_period;
     $scope.configuration = {};
     $scope.selectedperiod = false;
+    $scope.selectedComponent = {};
+    $scope.components = [];
     $scope.historyerror = false;
 
     $scope.costo_estimado = 1245;
@@ -43,13 +45,11 @@ angular.module('theme.demos.history', [
         'id':'perday'
       }];
 
-    $scope.selectedPrecision = {
+    /*$scope.selectedPrecision = {
       'label':'Por hora',
       'id':'perday'
-    }
+    }*/
 
-    $scope.components = [];
-    $scope.selectedComponent = {};
 
     $scope.reloadpage = function () {
       $window.location.reload();
@@ -112,7 +112,7 @@ angular.module('theme.demos.history', [
           console.log(response.data.devices);
           if (response.data.devices.length > 0) {
             $scope.components_server = response.data.devices;
-            $scope.selectedComponent = $scope.components_server[0];
+            //$scope.selectedComponent = $scope.components_server[0];
             $scope.components.push.apply($scope.components, $scope.components_server);
             console.log($scope.components);
           }
@@ -185,10 +185,12 @@ angular.module('theme.demos.history', [
           }
           else {
             Notifier.simpleError("No hay datos para el periodo seleccionado", "Problemas de conexion");
+            $scope.errormessage = "No hay datos para ese periodo";
             $scope.historyerror = true;
             $scope.spinner = false;
           }
       }, function(response){
+          $scope.errormessage = "Error de conexion en el servidor";
           $scope.historyerror = true;
           $scope.spinner = false;
           console.log("problemas");
@@ -266,10 +268,12 @@ angular.module('theme.demos.history', [
             else {
               Notifier.simpleError("No hay datos para esa pagina", "Hubo un error al seleccionar la pagina");
               $scope.spinner = false;
+              $scope.errormessage = "No hay datos para esa pagina seleccionada";
               $scope.historyerror = true;
             }
         }, function(response){
             console.log("problemas");
+            $scope.errormessage = "Error de conexion en el servidor";
             $scope.historyerror = true;
             $scope.spinner = false;
             Notifier.simpleError("Error al traer los datos de esa pagina", "Problemas de conexion");
