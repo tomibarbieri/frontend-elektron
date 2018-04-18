@@ -57,7 +57,7 @@
             <td>
 						<!-- editable status (select-local) -->
 						<span e-form="rowform" e-required>
-						  {{component.data_sum * 1.0 | number:0}}kw ({{ component.device_percent || 0 | number:1 }}%)
+						  {{component.data_sum/1000 * 1.0 | number:0 }} kw ({{ component.device_percent || 0 | number:1 }}%)
 						</span>
 					  </td>
 
@@ -90,7 +90,7 @@
             <td>
 						<!-- editable group (select-remote) -->
 						<span e-name="last" e-form="rowform" e-required>
-              {{ component.data_list_sum_states || 0 }} w
+              {{ component.data_list_sum_states/1000 || 0 | number:0 }} Kw
 						</span>
 					  </td>
 

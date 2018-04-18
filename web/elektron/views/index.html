@@ -40,7 +40,13 @@
                       <div class="spinner-container" ng-show="spinner == true">
                         <div class="loader-spinner"></div>
                       </div>
-                      <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
+                      <div ng-show="dashboarderror == true" class="error-container">
+                        <span>Error de conexion en el servidor </span>
+                        <button ng-click="reloadpage()" class="error-button btn btn-sm btn-default">
+                          <span class="glyphicon glyphicon-refresh"></span>
+                        </button>
+                      </div>
+                      <canvas ng-show="(spinner == false) && (dashboarderror == false)" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
                         chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
                       </canvas>
                     </div>

@@ -23,7 +23,13 @@
 					<div class="spinner-container-components" ng-show="spinnerDataTask == true">
 						<div class="loader-spinner"></div>
 					</div>
-				  <table ng-show="spinnerDataTask == false" class="table table-bordered table-condensed">
+					<div ng-show="datataskerror == true" class="task-error-container">
+						<span>Error de conexion en el servidor </span>
+						<button ng-click="reloadpage()" class="error-button btn btn-sm btn-default">
+							<span class="glyphicon glyphicon-refresh"></span>
+						</button>
+					</div>
+				  <table ng-show="(spinnerDataTask == false) && (datataskerror == false)" class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
 						<td style="width:16%">Nombre y descripción (<span class="glyphicon glyphicon-file"></span>)</td>
 						<td style="width:15%">Dipositivo</td>
@@ -63,7 +69,7 @@
             <td>
             <!-- editable status (select-local) -->
             <span editable-text="task.repeats" e-name="repeats" e-form="rowform" e-required>
-              {{ task.repeats }} ()
+              {{ task.repeats }} ({{task.repetitions_done}})
             </span>
             </td>
             <td>
@@ -95,7 +101,7 @@
 					  </td>
 					</tr>
         </table>
-        <a ng-click="addBoxDataTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por consumo</a>
+        <a ng-show="datataskerror == false" ng-click="addBoxDataTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por consumo</a>
 			</panel>
 
       <panel id="panelDataTask" ng-show="blockdatataskdiv == false" panel-class="panel-primary" data-heading="{{dataTaskDiv}}">
@@ -202,14 +208,20 @@
 					<div class="spinner-container-components" ng-show="spinnerDateTime == true">
 						<div class="loader-spinner"></div>
 					</div>
-				  <table ng-show="spinnerDateTime == false" class="table table-bordered table-condensed">
+					<div ng-show="datetimetaskerror == true" class="task-error-container">
+						<span>Error de conexion en el servidor </span>
+						<button ng-click="reloadpage()" class="error-button btn btn-sm btn-default">
+							<span class="glyphicon glyphicon-refresh"></span>
+						</button>
+					</div>
+				  <table ng-show="(spinnerDateTime == false) && (datetimetaskerror == false)" class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
 						<td style="width:16%">Nombre y descripción (<span class="glyphicon glyphicon-file"></span>)</td>
 						<td style="width:14%">Dipositivo</td>
-            <td style="width:9%">Fecha</td>
+            <td style="width:9%">Fecha (criterio)</td>
             <td style="width:7%">Hora</td>
             <td style="width:11%">Estado</td>
-            <td style="width:11%">Repeticiones (Criterio)</td>
+            <td style="width:11%">Repeticiones (Realizadas)</td>
             <td style="width:13%">Última repetición</td>
 						<td style="width:10%">Función</td>
 						<td style="width:10%">Modificar</td>
@@ -231,7 +243,7 @@
             <td>
 						<!-- editable status (select-local) -->
 						<span editable-bsdate="task.datetime" e-datepicker-popup="shortDate" e-name="data_value" e-form="rowform" e-required>
-                {{ (task.datetime | date:"shortDate") || 'empty' }}
+                {{ (task.datetime | date:"shortDate") || 'empty' }} (Cada {{showCriteriaTime($index)}})
 						</span>
 					  </td>
             <td>
@@ -249,7 +261,7 @@
             <td>
 						<!-- editable status (select-local) -->
 						<span editable-text="task.repeats" e-name="repeats" e-form="rowform" e-required>
-						  {{ task.repeats }} (Cada {{showCriteriaTime($index)}})
+						  {{ task.repeats }} ({{task.repetitions_done}})
 						</span>
 					  </td>
             <td>
@@ -281,7 +293,7 @@
 					  </td>
 					</tr>
 	        </table>
-	        <a ng-click="addBoxDateTimeTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha</a>
+	        <a ng-show="datetimetaskerror == false" ng-click="addBoxDateTimeTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha</a>
 				</panel>
 
       <panel id="panelDateTimeTask" ng-show="blockdatetimetaskdiv == false" panel-class="panel-primary" data-heading="{{dateTimeTaskDiv}}">

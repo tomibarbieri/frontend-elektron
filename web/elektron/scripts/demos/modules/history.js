@@ -22,10 +22,9 @@ angular.module('theme.demos.history', [
     $scope.nextPageDisable = false;
     $scope.spinner = false;
     $scope.current_period;
-    $scope.configuration = {
-
-    };
+    $scope.configuration = {};
     $scope.selectedperiod = false;
+    $scope.historyerror = false;
 
     $scope.costo_estimado = 1245;
 
@@ -51,6 +50,10 @@ angular.module('theme.demos.history', [
 
     $scope.components = [];
     $scope.selectedComponent = {};
+
+    $scope.reloadpage = function () {
+      $window.location.reload();
+    }
 
     $scope.updateCurrentComponent = function (component) {
       $scope.selectedComponent = component;
@@ -182,8 +185,12 @@ angular.module('theme.demos.history', [
           }
           else {
             Notifier.simpleError("No hay datos para el periodo seleccionado", "Problemas de conexion");
+            $scope.historyerror = true;
+            $scope.spinner = false;
           }
       }, function(response){
+          $scope.historyerror = true;
+          $scope.spinner = false;
           console.log("problemas");
           Notifier.simpleError("Error al traer los datos del periodo", "Problemas de conexion");
           //show an appropriate message
@@ -258,11 +265,13 @@ angular.module('theme.demos.history', [
             }
             else {
               Notifier.simpleError("No hay datos para esa pagina", "Hubo un error al seleccionar la pagina");
-              $scope.showiconloading = false;
+              $scope.spinner = false;
+              $scope.historyerror = true;
             }
         }, function(response){
             console.log("problemas");
-            $scope.showiconloading = false;
+            $scope.historyerror = true;
+            $scope.spinner = false;
             Notifier.simpleError("Error al traer los datos de esa pagina", "Problemas de conexion");
         });
     }

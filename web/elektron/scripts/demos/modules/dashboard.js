@@ -20,11 +20,16 @@ angular.module('theme.demos.dashboard', [
     $scope.current_component;             // componente que filtra los websockets
     $scope.websocketplay = true;
     $scope.spinner = true;
+    $scope.dashboarderror = false;
 
     // Funcion para asociar la creacion del chart y guardar la variable
     $scope.$on('chart-create', function (evt, chart) {
       $scope.chart = chart;
     });
+
+    $scope.reloadpage = function () {
+      $window.location.reload();
+    }
 
     // Obtiene todos los dispositivos para mostrarlos
     $http({
@@ -42,6 +47,9 @@ angular.module('theme.demos.dashboard', [
           $scope.openWebsocketConnection();
 
       }, function(response){
+          $scope.loading = false;
+          $scope.spinner = false;
+          $scope.dashboarderror = false;
           console.log("problemas de conexion");
           Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
     });
@@ -100,6 +108,9 @@ angular.module('theme.demos.dashboard', [
             }
 
         }, function(response){
+            $scope.loading = false;
+            $scope.spinner = false;
+            $scope.dashboarderror = true;
             console.log("problemas de conexion");
             Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar la información');
       });
@@ -176,6 +187,9 @@ angular.module('theme.demos.dashboard', [
             }
 
         }, function(response){
+            $scope.loading = false;
+            $scope.spinner = false;
+            $scope.dashboarderror = true;
             console.log("problemas de conexion");
             Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion');
       });

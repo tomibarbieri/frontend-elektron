@@ -16,8 +16,13 @@ angular.module('theme.demos.monitor', [
     $scope.websocketplay = true;
     $scope.spinner = true;
     $scope.loading = false;
+    $scope.monitorserror = false;
 
     $scope.charts = [];
+
+    $scope.reloadpage = function () {
+      $window.location.reload();
+    }
 
     var ip_server = '158.69.223.78';
     var url_server = 'http://158.69.223.78:8000';
@@ -92,6 +97,8 @@ angular.module('theme.demos.monitor', [
         $scope.loadWebsocket();
 
     }, function(response){
+        $scope.monitorserror = true;
+        $scope.spinner = false;
         Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
         console.log("problemas de conexion");
     });

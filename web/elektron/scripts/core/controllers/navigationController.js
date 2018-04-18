@@ -3,7 +3,7 @@ angular
   .controller('NavigationController', ['$scope', '$location', '$timeout', function($scope, $location, $timeout) {
     'use strict';
     $scope.menu = [{
-      label: 'Overview',
+      label: 'Secciones del sistema',
       iconClasses: '',
       separator: true
     }, {
@@ -30,10 +30,6 @@ angular
       label: 'Datos históricos',
       iconClasses: 'glyphicon glyphicon-time',
       url: '#/history'
-    }, {
-      label: 'Configuración',
-      iconClasses: 'glyphicon glyphicon-cog',
-      url: '#/config'
     }, {
       label: 'Cerrar sesión',
       iconClasses: 'glyphicon glyphicon-log-out',

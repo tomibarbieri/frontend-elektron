@@ -1,5 +1,5 @@
 angular.module('theme.demos.tasks', [])
-  .controller('TasksController', ['$scope', '$http', '$filter', 'Notifier', '$bootbox', function($scope, $http, $filter, Notifier, $bootbox) {
+  .controller('TasksController', ['$scope', '$http', '$filter', 'Notifier', '$bootbox', '$window', function($scope, $http, $filter, Notifier, $bootbox, $window) {
     'use strict';
     $scope.newTaskTitle = '';
     $scope.newTaskLabelText = '';
@@ -17,6 +17,13 @@ angular.module('theme.demos.tasks', [])
 
     $scope.datatasks_server = [];
     $scope.datetimetasks_server = [];
+
+    $scope.datataskerror = false;
+    $scope.datetimetaskerror = false;
+
+    $scope.reloadpage = function () {
+      $window.location.reload();
+    }
 
     var url_server = 'http://158.69.223.78:8000';
     //var url_server = 'http://192.168.0.21:8000';
@@ -42,6 +49,7 @@ angular.module('theme.demos.tasks', [])
           $scope.datatasks_server = response.data.datatasks;
           console.log($scope.datatasks_server);
       }, function(response){
+          $scope.datataskerror = true;
           $scope.spinnerDataTask = false;
           console.log("problemas de conexion");
           Notifier.simpleError("Error de conexión","No se pudo traer la informacion de las tareas del servidor");
@@ -58,6 +66,7 @@ angular.module('theme.demos.tasks', [])
           $scope.datetimetasks_server = response.data.datetimetasks;
           console.log($scope.datetimetasks_server);
       }, function(response){
+          $scope.datetimetaskerror = true;
           $scope.spinnerDateTime = false;
           console.log("problemas de conexion");
       });
@@ -212,11 +221,11 @@ angular.module('theme.demos.tasks', [])
       }).then(function(response){
           $scope.getDataTasks();
           console.log(response.data);
-          Notifier.simpleSuccess('Tarea guardada','Su tarea ' + $scope.currentDataTask.label + ' ha sido guardada con exito');
+          Notifier.simpleSuccess('Tarea editada','Su tarea ' + $scope.currentDataTask.label + ' ha sido editada con exito');
           $scope.clearCurrendDataTask();
       }, function(response){
           console.log("problemas de conexion");
-          Notifier.simpleError('Error al guardar','Su tarea ' + $scope.currentDataTask.label + ' no ha sido guardada por problemas de conexión');
+          Notifier.simpleError('Error al editar tarea','Su tarea ' + $scope.currentDataTask.label + ' no ha sido editada por problemas de conexión');
           $scope.blockdatataskdiv = false;
           $scope.spinnerDataTask = false;
       });

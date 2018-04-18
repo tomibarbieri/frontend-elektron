@@ -1,6 +1,6 @@
 angular
   .module('theme.demos.components', [])
-  .controller('ComponentsController', ['$scope', '$http','Notifier', function($scope, $http, Notifier) {
+  .controller('ComponentsController', ['$scope', '$http','Notifier', '$window', function($scope, $http, Notifier, $window) {
     'use strict';
 
     $scope.spinner = true;
@@ -9,9 +9,14 @@ angular
     $scope.activatebutton = false;
     $scope.desactivatebutton = false;
     $scope.loading = false;
+    $scope.componentserror = false;
 
     var url_server = 'http://158.69.223.78:8000';
     var url_cape = 'http://163.10.33.173:8000';
+
+    $scope.reloadpage = function () {
+      $window.location.reload();
+    }
 
     $http({
         method:'GET',
@@ -22,6 +27,8 @@ angular
         $scope.components_server = response.data.devices;
         Notifier.simpleSuccess("Componentes cargados", "Se han cargado con exito un total de " + response.data.devices.length + " componentes.");
     }, function(response){
+        $scope.spinner = false;
+        $scope.componentserror = true;
         console.log("problemas de conexion");
         Notifier.simpleError("Error de conexión","No se pudo traer la informacion de los componentes del servidor");
     });

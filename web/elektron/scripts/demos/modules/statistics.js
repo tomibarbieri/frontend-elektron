@@ -61,7 +61,7 @@ angular
 
     $http({
         method:'GET',
-        url: url_server + '/devices/statistic'
+        url: url_server + '/devices/statistics'
     }).then(function(response){
         console.log(response.data);
 
@@ -84,7 +84,7 @@ angular
 
     $http({
         method:'GET',
-        url: url_server + '/devic/'
+        url: url_server + '/devices/'
     }).then(function(response){
         console.log(response.data);
         $scope.components_server = response.data.devices;
@@ -144,10 +144,8 @@ angular
           url: url_server + '/devices/' + c.id + '/data/' + $scope.currentPrecision.url // modificar la URL /devices/id/data/perhour
       }).then(function(response){
           console.log(response.data.data);
-          //$scope.components_server = response.data.devices;
           Notifier.simpleSuccess('Tabla comparativa','Datos cargados con exito para el componente');
           $scope.graficateComponentBar(response.data.data, side);
-
       }, function(response){
           console.log("problemas de conexion");
           Notifier.simpleError("Tabla comparativa - Error","No se pudo traer la informacion del componente por problemas de conexión");

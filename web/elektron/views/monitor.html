@@ -27,6 +27,12 @@
         <div class="spinner-container" ng-show="spinner == true">
           <div class="loader-spinner"></div>
         </div>
+        <div ng-show="monitorserror == true" class="error-container">
+          <span>Error de conexion en el servidor </span>
+          <button ng-click="reloadpage()" class="error-button btn btn-sm btn-default">
+            <span class="glyphicon glyphicon-refresh"></span>
+          </button>
+        </div>
         <div ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true}}" class="col-md-6">
             <panel panel-class="panel-default no-padding" heading="{{ component.label }}">
                 <panel-controls>

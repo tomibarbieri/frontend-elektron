@@ -126,6 +126,12 @@
   margin-top: 20%;
 }
 
+.task-error-container {
+  min-height: 160px;
+  text-align: center;
+  margin-top: 10%;
+}
+
 .error-button {
   background-color: transparent !important;
   border: none !important;
