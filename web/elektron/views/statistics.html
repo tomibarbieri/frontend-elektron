@@ -160,7 +160,7 @@
                   </button>
                   <ul class="dropdown-menu pull-right">
                     <li>
-                      <a ng-repeat="precision in barPrecision" ng-click="changeCriteria(precision.id)">{{precision.label}}</a>
+                      <a ng-repeat="precision in barPrecision" ng-click="changeCriteria(precision)">{{precision.label}}</a>
                     </li>
                   </ul>
                 </div>
@@ -172,7 +172,7 @@
                   </button>
                   <ul class="dropdown-menu pull-right">
                     <li>
-                      <a ng-repeat="component in components_server" ng-click="changeLeftBarComponent(component.id)">{{ component.label }}</a>
+                      <a ng-repeat="component in components_server" ng-click="changeLeftBarComponent(component)">{{ component.label }}</a>
                     </li>
                   </ul>
                 </div>
@@ -185,10 +185,12 @@
                   </button>
                   <ul class="dropdown-menu pull-right">
                     <li>
-                      <a ng-repeat="component in components_server" ng-click="changeRigthBarComponent(component.id)">{{ component.label }}</a>
+                      <a ng-repeat="component in components_server" ng-click="changeRigthBarComponent(component)">{{ component.label }}</a>
                     </li>
                   </ul>
                 </div>
+								<button ng-click="changeBarChart()" class="button-refresh btn btn-sm btn-info"><i class="glyphicon glyphicon-refresh"></i></button>
+
             </panel-controls>
 
             <div class="p20">

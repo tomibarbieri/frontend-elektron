@@ -391,6 +391,8 @@ angular.module('theme.demos.tasks', [])
         'device_mac': $scope.currentDateTimeTask.device_mac
       }
 
+      console.log(data_params);
+
       var url_task = url_server + "/tasks/datetimetasks/" + $scope.currentDateTimeTask.id + "/update";
 
       $http({

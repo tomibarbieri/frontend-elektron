@@ -20,6 +20,7 @@ angular.module('theme.demos.dashboard', [
     $scope.current_component;             // componente que filtra los websockets
     $scope.websocketplay = true;
     $scope.spinner = true;
+    $scope.loading = true;
     $scope.dashboarderror = false;
 
     // Funcion para asociar la creacion del chart y guardar la variable
@@ -49,7 +50,7 @@ angular.module('theme.demos.dashboard', [
       }, function(response){
           $scope.loading = false;
           $scope.spinner = false;
-          $scope.dashboarderror = false;
+          $scope.dashboarderror = true;
           console.log("problemas de conexion");
           Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
     });

@@ -55,11 +55,11 @@
               </div>
               <div class="item">
                 <span>Consumo total: </span>
-                <span class="badge badge-positive badge-letter"> {{ general_data.total_watts | number : 2 }} w </span>
+                <span class="badge badge-positive badge-letter"> {{ general_data.total_watts / 1000 | number : 0 }} Kw </span>
               </div>
               <div class="item">
                 <span>Costo aproximado: </span>
-                <span class="badge badge-calm badge-letter"> $ {{ general_data.total_tax | number : 2 }} </span>
+                <span class="badge badge-calm badge-letter"> $ {{ general_data.total_tax | number : 0 }} </span>
               </div>
         </div>
         <div class="list">
