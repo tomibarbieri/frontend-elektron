@@ -157,6 +157,14 @@
   animation: spin 2s linear infinite;
 }
 
+.footer-bar {
+  width: 100%;
+  max-height: 100px;
+  height: 105px;
+  text-align: center;
+  padding-top: 20px;
+}
+
 .loader-spinner-small {
   border: 4px solid #f3f3f3;
   border-radius: 50%;
@@ -175,24 +183,6 @@
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
 }
-
-.button-spinner : hover {
-  background-color: transparent !important;
-  color: transparent !important;
-  border: none !important;
-  border-color: transparent !important;
-  -webkit-box-shadow: none !important;
-  box-shadow: none !important;
-}
-
-.footer-bar {
-  width: 100%;
-  max-height: 100px;
-  height: 105px;
-  text-align: center;
-  padding-top: 20px;
-}
-
 
 /* Safari */
 @-webkit-keyframes spin {

@@ -112,3 +112,30 @@
 .task-float-right-first {
   margin-right: 20px;
 }
+
+.align-center {
+  text-align: center;
+}
+
+.doughnut-spans {
+  color: white;
+  font-weight: bold;
+}
+
+.spinner-header {
+  float: right;
+}
+
+.spinner-dash {
+  margin-right: 20px;
+  margin-top: 9px;
+}
+
+.small-font {
+  font-size: 0.9em;
+}
+
+.spinner-header svg {
+  width: 20px;
+  height: 20px;
+}

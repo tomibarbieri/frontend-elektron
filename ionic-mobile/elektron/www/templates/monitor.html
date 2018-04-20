@@ -27,5 +27,11 @@
             chart-series="line[component.device_mac].series"></canvas>
           </div>
       </div>
+      <div ng-show="last_value != undefined" class="card">
+        <div class="item small-font">
+            <span>Ultimo dato: </span>
+            <span class="badge badge-light badge-letter">{{current_component}} - {{last_value}} ({{last_date}})</span>
+        </div>
+      </div>
     </ion-content>
 </ion-view>

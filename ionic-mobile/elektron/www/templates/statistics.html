@@ -76,7 +76,7 @@
 
               </div>
               <div class="col">
-                <div ng-repeat="value in doughnut.config.data.labels" style="margin-bottom:3px; text-align:center; font-size:0.65em; border-radius: 25px;background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
+                <div ng-repeat="value in doughnut.config.data.labels" style="color: white; font-weight: bold; margin-bottom:3px; text-align:center; font-size:0.65em; border-radius: 25px;background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
                   <span>{{ value }}</span>
                 </div>
               </div>
@@ -89,6 +89,7 @@
         <div class="card">
           <div class="item item-divider">
               <b>Gafico comparativo de componentes</b>
+              <ion-spinner class="spinner-header spinner-balanced" ng-show="spinnerbar == true" icon="spiral"></ion-spinner>
           </div>
           <div class="item">
             <label class="item item-input item-select">
@@ -116,16 +117,18 @@
                 <option ng-repeat="prec in barPrecision" value="{{prec.url}}" >{{prec.label}}</option>
               </select>
             </label>
-            <div class="item">
-              <a ng-click="createBarChart()" class="button icon-right ion-chevron-right button-calm">Ver gráfico</a>
+            <div class="item align-center">
+              <button ng-click="createBarChart()" class="button button-calm">
+                Ver tabla
+              </button>
             </div>
           </div>
-          <div class="item">
+          <div ng-show="barselected == true" class="item">
             <canvas id="bar" class="chart chart-bar"
               chart-data="bardata" chart-labels="barlabels" chart-series="barseries">
             </canvas>
           </div>
-          <div class="button-bar bar-calm">
+          <div ng-show="barselected == true" class="button-bar bar-calm">
             <a ng-disabled="previousbutton" ng-click="loadPage('last')" class="button button-small icon-left ion-chevron-left"></a>
             <select class="button button-small" ng-model="current_page" ng-change="loadPage(current_page)"
                     ng-options="page for page in number_pages" >

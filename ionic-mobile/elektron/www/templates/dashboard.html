@@ -4,13 +4,21 @@
       <div class="card">
         <div class="list">
               <div class="row item-divider item item-icon-right">
-                <div class="col col-50 title-components"><b>Consumo en tiempo real</b></div>
+                <div class="col col-50 title-components">
+                  <b>Consumo en tiempo real</b>
+                </div>
+                <div class="col col-50">
 
-                <i ng-if="websocketplay == true" ng-click="pauseWebsocket()" class="icon ion-pause positive icon-letter play-pause-icon"></i>
-                <i ng-if="websocketplay == false" ng-click="playWebsocket()" class="icon ion-play positive icon-letter play-pause-icon"></i>
+                  <i title="Conexion funcionando" ng-if="(websocketplay == true) && (spinnerdash == false)" ng-click="pauseWebsocket()" class="icon ion-pause positive icon-letter play-pause-icon"></i>
+                  <i title="Conexion pausada" ng-if="(websocketplay == false) && (spinnerdash == false)" ng-click="playWebsocket()" class="icon ion-play positive icon-letter play-pause-icon"></i>
 
-                <i ng-if="websocketStatus == true" ng-click="refreshConnection()" class="icon icon-letter ion-refresh balanced"></i>
-                <i ng-if="websocketStatus == false" ng-click="refreshConnection()" class="icon icon-letter ion-refresh assertive"></i>
+                  <i title="Conexión establecida: apretar para reiniciar" ng-if="(websocketStatus == true) && (spinnerdash == false)" ng-click="refreshConnection()" class="icon icon-letter ion-refresh balanced"></i>
+                  <i title="Falla en la conexión: apretar para reiniciar" ng-if="(websocketStatus == false) && (spinnerdash == false)" ng-click="refreshConnection()" class="icon icon-letter ion-refresh assertive"></i>
+
+                  <ion-spinner title="Cargando conexion en tiempo real" class="spinner-header spinner-dash spinner-balanced" ng-show="spinnerdash == true" icon="spiral"></ion-spinner>
+
+                </div>
+
               </div>
         </div>
       </div>
@@ -30,6 +38,10 @@
               <ion-spinner icon="android"></ion-spinner>
             </div>
             <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+          </div>
+          <div ng-show="last_value != undefined" class="item small-font">
+              <span>Ultimo dato: </span>
+              <span class="badge badge-light badge-letter">{{current_component.label}} - {{last_value}} ({{last_date}})</span>
           </div>
       </div>
       <div class="card">

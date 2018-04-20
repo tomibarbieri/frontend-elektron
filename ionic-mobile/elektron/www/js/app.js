@@ -29,15 +29,20 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
   $rootScope.ws = undefined;//$websocket('ws://' + ip_server +':8888/websocket');
 
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-    console.log("statechange");
-    if ($rootScope.ws != undefined && (toState.name == "app.dashboard" || toState.name == "app.monitor")) {
-      $rootScope.ws.close();
-      $rootScope.ws = undefined;
-      console.log("closing ws");
-      $window.location.reload();
+    console.log($rootScope.ws);
+    try {
+      if ($rootScope.ws != undefined) {
+        $rootScope.ws.close();
+        $rootScope.ws = undefined;
+        console.log("closing ws");
+      }
     }
-    else {
-      console.log("reloading");
+    catch(err) {
+      console.log("No fue establecida la conexion antes de querer cerrarla.");
+      $rootScope.ws = undefined;
+    }
+    if ($rootScope.ws != undefined && (next.params.templateFile == "monitor" || next.params.templateFile == "index")) {
+      $window.location.reload();
     }
   });
 

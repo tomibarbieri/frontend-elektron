@@ -60,7 +60,6 @@ angular
       }*/
 
       console.log("statechange");
-      console.log(next.params.templateFile);
       console.log($rootScope.ws);
 
       try {

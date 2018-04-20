@@ -71,12 +71,15 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.current_component;             // componente que filtra los websockets
       $scope.websocket;
       $scope.spinner = true;
+      $scope.spinnerdash = true;
       $scope.websocketplay = true;
+      $scope.last_value = undefined;
 
       // Muestra los primeros 4 componentes de la lista
       $scope.quantity = 4;
 
       $scope.refreshConnection = function() {
+        $scope.spinnerdash = true;
         if ($rootScope.ws) {
           $rootScope.ws.close();
         }
@@ -102,6 +105,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       ];*/
 
       $scope.changeCurrentComponent = function(component) {
+        $scope.last_value = undefined;
         $scope.current_component = component;
       };
 
@@ -118,17 +122,18 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           method:'GET',
           url:'http://158.69.223.78:8000/devices/'
       }).then(function(response){
+
           console.log(response.data);
           $scope.components_server = response.data.devices;
           $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
           $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
           $scope.current_component = $scope.components_server_enabled[0];
 
-          $scope.loadInitialData();
           $scope.openWebsocketConnection();
+          $scope.loadInitialData();
 
       }, function(response){
-          ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
+          ionicToast.show('Error de conexión al traer componentes.', 'top', false, 3000);
           $scope.spinner = false;
           //show an appropriate message
       });
@@ -213,15 +218,17 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         var collection = [];
 
         $rootScope.ws.onError(function functionName() {
+          $scope.spinnerdash = false;
           ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
         });
 
-        $rootScope.ws.onopen = function() {
+        $rootScope.ws.onOpen(function() {
           console.log("on open");
+          $scope.spinnerdash = false;
           ionicToast.show('Conexion en tiempo real iniciada', 'bottom', false, 8000);
           $scope.websocketStatus = true;
           $scope.$apply();
-        };
+        });
 
         $rootScope.ws.onMessage(function(message) {
 
@@ -236,8 +243,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           if ($scope.current_component && $scope.websocketplay == true) {
 
             if (json.device_mac == $scope.current_component.device_mac) {
+
+
               var hora = $filter('date')(new Date(json.data_datetime), "HH:mm");
               var label = '' + hora;
+
+              $scope.last_value = json.data_value;
+              $scope.last_date = label;
 
               $scope.line.labels.splice(0,1);
               $scope.line.data[0].splice(0,1);
@@ -268,6 +280,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.websocket;
       $scope.spinner = true;
       $scope.websocketplay = true;
+      $scope.last_value = undefined;
 
       $scope.charts = [];
 
@@ -374,6 +387,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
             if (json != undefined && $scope.websocketplay == true) {
 
+
               var current_mac = json.device_mac;
 
               $scope.line[current_mac].data[0].splice(0,1);
@@ -384,7 +398,12 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
               $scope.line[current_mac].labels.splice(0,1);
 
               var date = new Date(json.data_datetime);
-              $scope.line[current_mac].labels.push($filter('date')(date, "HH:mm"));
+              var label = $filter('date')(date, "HH:mm")
+              $scope.line[current_mac].labels.push(label);
+
+              $scope.last_value = json.data_value;
+              $scope.last_date = label;
+              $scope.current_component = current_mac;
 
             }
 
@@ -1014,6 +1033,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   $scope.listado = true;
   $scope.spinner = true;
+  $scope.spinnerbar = false;
+  $scope.barselected = false;
 
   // Variables para el paginado
   $scope.nextbutton = true;
@@ -1267,6 +1288,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         $scope.calculatePages();
 
     }, function(response){
+        $scope.spinnerbar = false;
         console.log("problemas de conexion");
     });
   }
@@ -1274,6 +1296,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.graficateComponentBar = function(data, side) {
 
     var length = (data.length >= 6) ? 6 : data.length;
+    $scope.spinnerbar = false;
+    $scope.barselected = true;
 
     if ($scope.barlabels.length == 0) {
       console.log('preparando footer');
@@ -1317,6 +1341,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   }
 
   $scope.createBarChart = function() {
+    $scope.spinnerbar = true;
+    $scope.barselected = false;
     if ($scope.bar == undefined) {
       $scope.bar;
       $scope.barlabels = [];
