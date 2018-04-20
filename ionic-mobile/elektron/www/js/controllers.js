@@ -279,6 +279,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.current_component;             // componente que filtra los websockets
       $scope.websocket;
       $scope.spinner = true;
+      $scope.spinnermonitor = true;
       $scope.websocketplay = true;
       $scope.last_value = undefined;
 
@@ -367,13 +368,16 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
         $rootScope.ws.onError(function functionName() {
           ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 8000);
+          $scope.spinnermonitor = false;
         });
 
-        $rootScope.ws.onopen = function() {
+        $rootScope.ws.onOpen(function() {
           console.log("on open");
           $scope.websocketStatus = true;
+          ionicToast.show('Conexion en tiempo real iniciada', 'top', false, 3000);
+          $scope.spinnermonitor = false;
           $scope.$apply();
-        };
+        });
 
         $rootScope.ws.onMessage(function(message) {
 
@@ -403,7 +407,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
               $scope.last_value = json.data_value;
               $scope.last_date = label;
-              $scope.current_component = current_mac;
+              $scope.current_component = json.device_label;
 
             }
 
@@ -422,7 +426,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       }
 })
 
-.controller('DatataskCtrl', function($scope, $location, $filter, $http, $state, $stateParams, $httpParamSerializerJQLike) {
+.controller('DatataskCtrl', function($scope, $location, $filter, $http, $state, $stateParams, $httpParamSerializerJQLike, ionicToast) {
 
   var url_server = 'http://158.69.223.78:8000';
 

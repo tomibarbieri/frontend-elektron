@@ -1,9 +1,13 @@
 <ion-view view-title="Datos historicos para {{component_details.label}}">
   <ion-content>
     <div class="card">
-      <div class="item item-divider item-icon-right">
-          <span>Datos históricos en el periodo</span>
-          <div ng-show="showiconloading"><i class="icon ion-loop calm"></i></div>
+      <div class="row item item-divider">
+          <div class="col col-50 title-components">
+            <b>Datos históricos en el periodo</b>
+          </div>
+          <div class="col col-50">
+            <ion-spinner title="Cargando conexion en tiempo real" class="spinner-header spinner-dash spinner-balanced" ng-show="showiconloading == true" icon="spiral"></ion-spinner>
+          </div>
       </div>
       <div class="item item-text-wrap">
         <div ng-show="spinner == true" class="center-spinner">

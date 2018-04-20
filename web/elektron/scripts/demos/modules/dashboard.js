@@ -32,7 +32,7 @@ angular.module('theme.demos.dashboard', [
       $window.location.reload();
     }
 
-    // Obtiene todos los dispositivos para mostrarlos
+    // Obtiene todos los componentes para mostrarlos
     $http({
           method:'GET',
           url: url_server + '/devices/',
@@ -52,7 +52,7 @@ angular.module('theme.demos.dashboard', [
           $scope.spinner = false;
           $scope.dashboarderror = true;
           console.log("problemas de conexion");
-          Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
+          Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los componentes');
     });
 
     $http({
@@ -63,7 +63,7 @@ angular.module('theme.demos.dashboard', [
         console.log(response.data);
         $scope.general_data = response.data;
     }, function(response){
-        //Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
+        //Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los componentes');
         //show an appropriate message
     });
 
