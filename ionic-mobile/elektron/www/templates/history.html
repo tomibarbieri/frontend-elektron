@@ -52,7 +52,7 @@
           </label>
           <div class="item">
             <div class="button-bar">
-              <a ui-sref="app.graphic-history({ componentId: device_id, dateFrom: dateFrom, timeFrom: timeFrom, dateTo:dateTo, timeTo:timeTo, precision:precision })" class="button button-dark icon ion-stats-bars">
+              <a ng-disabled="(dateFrom == undefined) || (timeFrom == undefined) || (timeTo == undefined) || (dateTo == undefined) || (device_id == undefined) || (precision == undefined)" ui-sref="app.graphic-history({ componentId: device_id, dateFrom: dateFrom, timeFrom: timeFrom, dateTo:dateTo, timeTo:timeTo, precision:precision })" class="button button-dark icon ion-stats-bars">
                 Ver datos históricos
               </a>
             </div>

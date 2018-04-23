@@ -17,8 +17,11 @@
           </a>
         </div>
       </div>
-      <div ng-show="spinner == true" class="center-spinner">
+      <div ng-show="(spinner == true) && (datataskerror == false)" class="center-spinner">
         <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
+      </div>
+      <div ng-show="datataskerror == true" class="errormessage center-spinner">
+        <span>{{datataskerrormessage}} <i ng-click="reloadpage()" class="icon ion-refresh"></i></span>
       </div>
       <div class="card" ng-repeat="task in datatasks_server">
         <div class="list">
@@ -68,6 +71,12 @@
             Agregar nueva tarea por fecha
           </a>
         </div>
+      </div>
+      <div ng-show="(spinner == true) && (datataskerror == false)" class="center-spinner">
+        <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
+      </div>
+      <div ng-show="datetimetaskerror == true" class="errormessage center-spinner">
+        <span>{{datetimetaskerrormessage}} <i ng-click="reloadpage()" class="icon ion-refresh"></i></span>
       </div>
       <div class="card" ng-repeat="task in datetimetasks_server">
         <div class="list">

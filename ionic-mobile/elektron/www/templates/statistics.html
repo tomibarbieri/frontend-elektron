@@ -9,13 +9,15 @@
         </div>
       </div>
 
-      <div ng-show="spinner == true" class="center-spinner">
-
+      <div ng-show="(spinner == true) && (statisticserror == false)" class="center-spinner">
         <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
-
       </div>
 
-      <div ng-show="(listado == true) && (spinner == false)" class="card" ng-repeat="component in components_statistics">
+      <div ng-show="statisticserror == true" class="errormessage center-spinner">
+        <span>{{statisticserrormessage}} <i ng-click="reloadpage()" class="icon ion-refresh"></i></span>
+      </div>
+
+      <div ng-show="(listado == true) && (spinner == false) && (statisticserror == false)" class="card" ng-repeat="component in components_statistics">
 
         <div class="item item-divider">
             <b>Componente:</b> {{component.device.label}}
@@ -27,7 +29,7 @@
                   <div class="col">
                     <span class="badge-letter">Consumo: <b>{{component.data_sum / 1000 | number:0 }} Kw ({{ component.device_percent || 0 | number:1 }}% del total)</b></span>
                     <br><span class="badge-letter">Costo: <b>$ {{component.total_tarifa | number:1}}</b></span>
-                    <span class="badge-letter">Co2: <b>{{ component.total_co2 | number:1 }} Kg</b></span>
+                    <span class="second-span badge-letter">Co2: <b>{{ component.total_co2 | number:1 }} Kg</b></span>
                     <br><span class="badge-letter">Último dato medido: <b>{{ component.last_data.value || 0 }} w</b></span>
                   </div>
                 </div>
@@ -60,7 +62,7 @@
             </div>
         </div>
       </div>
-      <div ng-show="(listado == false) && (spinner == false)">
+      <div ng-show="(listado == false) && (spinner == false) && (statisticserror == false)">
         <div class="card">
           <div class="item item-divider">
               <b>Porcentaje de consumo de componentes</b>

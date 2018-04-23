@@ -9,8 +9,8 @@
                 </div>
                 <div class="col col-50">
 
-                  <i title="Conexion funcionando" ng-if="(websocketplay == true) && (spinnerdash == false)" ng-click="pauseWebsocket()" class="icon ion-pause positive icon-letter play-pause-icon"></i>
-                  <i title="Conexion pausada" ng-if="(websocketplay == false) && (spinnerdash == false)" ng-click="playWebsocket()" class="icon ion-play positive icon-letter play-pause-icon"></i>
+                  <i title="Conexion funcionando" ng-if="(websocketplay == true) && (spinnerdash == false)" ng-click="pauseWebsocket()" class="icon ion-pause dark icon-letter play-pause-icon"></i>
+                  <i title="Conexion pausada" ng-if="(websocketplay == false) && (spinnerdash == false)" ng-click="playWebsocket()" class="icon ion-play dark icon-letter play-pause-icon"></i>
 
                   <i title="Conexión establecida: apretar para reiniciar" ng-if="(websocketStatus == true) && (spinnerdash == false)" ng-click="refreshConnection()" class="icon icon-letter ion-refresh balanced"></i>
                   <i title="Falla en la conexión: apretar para reiniciar" ng-if="(websocketStatus == false) && (spinnerdash == false)" ng-click="refreshConnection()" class="icon icon-letter ion-refresh assertive"></i>
@@ -34,10 +34,13 @@
             </label>
           </div>
           <div class="item item-text-wrap">
-            <div ng-show="spinner == true" class="center-spinner">
+            <div ng-show="(spinner == true) && (dasherror == false)" class="center-spinner">
               <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
             </div>
-            <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+            <div ng-show="dasherror == true" class="errormessage center-spinner">
+              <span>{{errormessage}} <i ng-click="reloadpage()" class="icon ion-refresh"></i></span>
+            </div>
+            <canvas ng-show="(spinner == false) && (dasherror == false)" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
           </div>
           <div ng-show="last_value != undefined" class="item small-font">
               <span>Ultimo dato: </span>
@@ -79,7 +82,7 @@
             <div class="col col-50 title-components"><b>Componentes</b></div>
             <div class="col"></div>
             <div class="col">
-              <a ui-sref="app.components" class="button button-small button-positive">Ver todos</a>
+              <a ui-sref="app.components" class="button button-small button-dark">Ver todos</a>
             </div>
           </div>
           <div class="item" ng-repeat="component in components_server | limitTo:quantity">
@@ -91,7 +94,7 @@
             <div class="col col-50 title-components"><b>Estadisticas</b></div>
             <div class="col"></div>
             <div class="col">
-              <a ui-sref="app.statistics" class="button button-small button-positive">Ver estadisticas</a>
+              <a ui-sref="app.statistics" class="button button-small button-dark">Ver estadisticas</a>
             </div>
           </div>
         </div>

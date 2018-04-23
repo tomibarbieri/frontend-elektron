@@ -1,19 +1,19 @@
 <ion-view view-title="{{datatasktitle}}">
   <ion-content >
-    <div class="card">
+    <div ng-show="(spinner == false)" class="card">
         <div class="item item-divider">
             <span>Nombre y descripción</span>
         </div>
-        <label class="item item-input">
+        <label class="item item-input tasks-select">
           <input ng-model="task.label" type="text" placeholder="Nombre">
         </label>
-        <label class="item item-input">
+        <label class="item item-input tasks-select">
           <input ng-model="task.description" type="text" placeholder="Descripción">
         </label>
         <div class="item item-divider">
             <span>Elegir componente</span>
         </div>
-        <label class="item item-input item-select">
+        <label class="item item-input item-select tasks-select">
           <div class="input-label ">
             Componente
           </div>
@@ -33,8 +33,8 @@
             <i class="icon ion-ios-bolt"></i>
           </div>
         </div>
-        <label class="item item-input item-select">
-          <div class="input-label ">
+        <label class="item item-input item-select tasks-select">
+          <div class="input-label">
             Comparador
           </div>
           <select ng-model="task.comparator">
@@ -43,7 +43,7 @@
             <option ng-selected="task.comparator == 0" value="0">Igual</option>
           </select>
         </label>
-        <label class="item item-input">
+        <label class="item item-input tasks-select">
           <div class="input-label">
             Repeticiones
           </div>
@@ -52,7 +52,7 @@
         <div class="item item-divider">
             <span>Accion a realizar</span>
         </div>
-        <label class="item item-input item-select">
+        <label class="item item-input item-select tasks-select">
           <div class="input-label ">
             Accion
           </div>
@@ -61,7 +61,7 @@
             <option ng-selected="task.function == 2" value="2" >Encender</option>
           </select>
         </label>
-        <label class="item item-input item-select">
+        <label class="item item-input item-select tasks-select">
           <div class="input-label ">
             Estado inicial
           </div>
@@ -82,6 +82,8 @@
         </div>
 
     </div>
-
+    <div ng-show="(spinner == true)" class="center-spinner">
+      <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
+    </div>
   </ion-content>
 </ion-view>

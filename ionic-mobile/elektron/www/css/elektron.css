@@ -1,6 +1,15 @@
 
 /* CSS especifico de la aplicacion de elektron */
 
+.errormessage {
+  font-size: 0.8em;
+  color: red;
+}
+
+.infomessage {
+  font-size: 0.8em;
+}
+
 .color-menu {
   background-color: #37444e !important;
   color: #d5dce2;
@@ -48,15 +57,24 @@
 }
 
 .badge-letter {
-  font-size: 0.85em !important;
+  font-size: 0.75em !important;
 }
 
 .icon-letter {
   font-size: 1.1em !important;
 }
 
+.tasks-select div, input {
+  font-size: 0.8em !important;
+  color:#444 !important;
+}
+
+.second-span {
+  margin-left: 20px;
+}
+
 .badge-letter-9 {
-  font-size: 0.85em !important;
+  font-size: 0.75em !important;
 }
 
 .play-pause-icon {
@@ -178,7 +196,7 @@
 }
 
 .task-font a {
-  font-size: 0.85em;
+  font-size: 0.75em;
   border-width: 1px 1px 1px 1px !important;
 }
 

@@ -1,6 +1,6 @@
-<ion-view view-title="Datos historicos para {{component_details.label}}">
+<ion-view view-title="Datos historicos">
   <ion-content>
-    <div class="card">
+    <div ng-show="historyerror == false" class="card">
       <div class="row item item-divider">
           <div class="col col-50 title-components">
             <b>Datos históricos en el periodo</b>
@@ -39,6 +39,9 @@
       <div class="item">
         <span class=""><b>Componente</b>: {{component_details.label}}</span>
       </div>
+    </div>
+    <div ng-show="historyerror == true" class="errormessage center-spinner">
+      <span>{{historyerrormessage}} <i ng-click="reloadpage()" class="icon ion-refresh"></i></span>
     </div>
   </ion-content>
 </ion-view>

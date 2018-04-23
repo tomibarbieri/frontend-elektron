@@ -1,19 +1,19 @@
 <ion-view view-title="{{datatasktitle}}">
   <ion-content >
-    <div class="card">
+    <div ng-show="(spinner == false)" class="card">
         <div class="item item-divider">
             <span>Nombre y descripción</span>
         </div>
-        <label class="item item-input">
+        <label class="item item-input tasks-select">
           <input ng-model="task.label" type="text" placeholder="Nombre">
         </label>
-        <label class="item item-input">
+        <label class="item item-input tasks-select">
           <input ng-model="task.description" type="text" placeholder="Descripción">
         </label>
         <div class="item item-divider">
             <span>Elegir componente</span>
         </div>
-        <label class="item item-input item-select">
+        <label class="item item-input item-select tasks-select">
           <div class="input-label ">
             Componente
           </div>
@@ -24,52 +24,52 @@
         <label class="item item-input item-divider">
           <span class="input-label">Por fecha</span>
         </label>
-        <div>
+        <div class="tasks-select">
           <div class="item item-icon-left" ion-datetime-picker ng-model="task.date">
               <i class="icon ion-ios-calendar dark"></i>
               Fecha y hora
               <strong>{{task.date| date: "yyyy-MM-dd H:mm"}}</strong>
           </div>
-          <div class="item item-divider">
-              <span>Repeticiones</span>
+        </div>
+        <div class="item item-divider">
+            <span>Repeticiones</span>
+        </div>
+        <label class="item item-input item-select tasks-select">
+          <div class="input-label ">
+            Criterio de repetición
           </div>
-          <label class="item item-input item-select">
-            <div class="input-label ">
-              Criterio de repetición
-            </div>
-            <select ng-model="task.criteria">
-              <option ng-selected="task.criteria == 1" value="1" >Cada hora</option>
-              <option ng-selected="task.criteria == 0" value="0">Cada día</option>
-            </select>
-          </label>
-          <label class="item item-input">
-            <div class="input-label">
-              Repeticiones
-            </div>
-            <input ng-model="task.repeats" class="repeticiones-input" type="number" placeholder="1">
-          </label>
+          <select ng-model="task.criteria">
+            <option ng-selected="task.criteria == 1" value="1" >Cada hora</option>
+            <option ng-selected="task.criteria == 0" value="0">Cada día</option>
+          </select>
+        </label>
+        <label class="item item-input tasks-select">
+          <div class="input-label">
+            Repeticiones
           </div>
-          <div class="item item-divider">
-              <span>Accion a realizar</span>
+          <input ng-model="task.repeats" class="repeticiones-input" type="number" placeholder="1">
+        </label>
+        <div class="item item-divider">
+            <span>Accion a realizar</span>
+        </div>
+        <label class="item item-input item-select tasks-select">
+          <div class="input-label ">
+            Accion
           </div>
-          <label class="item item-input item-select">
-            <div class="input-label ">
-              Accion
-            </div>
-            <select ng-model="task.function">
-              <option ng-selected="task.function == 1" value="1" >Apagar</option>
-              <option ng-selected="task.function == 2" value="2" >Encender</option>
-            </select>
-          </label>
-          <label class="item item-input item-select">
-            <div class="input-label ">
-              Estado inicial
-            </div>
-            <select ng-model="task.state">
-              <option ng-selected="task.state == 1" value="1" >Lista</option>
-              <option ng-selected="task.state == 2" value="2" >Finalizada</option>
-            </select>
-          </label>
+          <select ng-model="task.function">
+            <option ng-selected="task.function == 1" value="1" >Apagar</option>
+            <option ng-selected="task.function == 2" value="2" >Encender</option>
+          </select>
+        </label>
+        <label class="item item-input item-select tasks-select">
+          <div class="input-label ">
+            Estado inicial
+          </div>
+          <select ng-model="task.state">
+            <option ng-selected="task.state == 1" value="1" >Lista</option>
+            <option ng-selected="task.state == 2" value="2" >Finalizada</option>
+          </select>
+        </label>
 
         <div class="item">
           <div class="button-bar">
@@ -83,6 +83,8 @@
         </div>
 
     </div>
-
+    <div ng-show="(spinner == true)" class="center-spinner">
+      <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
+    </div>
   </ion-content>
 </ion-view>

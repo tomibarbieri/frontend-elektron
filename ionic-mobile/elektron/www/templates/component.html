@@ -1,6 +1,6 @@
-<ion-view view-title="{{component.label}}">
+<ion-view view-title="{{component_server.label || 'Componente'}}">
   <ion-content>
-    <div class="card">
+    <div ng-show="(componenterror == false)" class="card">
       <div class="item">
         <ion-toggle  ng-model="component_status" class="toogle-assertive"
                     ng-change="changeStatus()"
@@ -12,10 +12,13 @@
         <span>Último consumo</span>
       </div>
       <div class="item item-text-wrap">
-        <div ng-show="spinner == true" class="center-spinner">
+        <div ng-show="(spinner == true) && (datamessage == false)" class="center-spinner">
           <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
         </div>
-        <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+        <div ng-show="datamessage == true" class="infomessage center-spinner">
+          <span>El componente no tiene datos para mostrar</span>
+        </div>
+        <canvas ng-show="(spinner == false) && (datamessage == false)" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
       </div>
 
       <div class="item item-divider text-center">
@@ -77,6 +80,11 @@
             Consumo
           </a>
         </div>
+      </div>
+    </div>
+    <div class="card">
+      <div ng-show="componenterror == true" class="errormessage center-spinner">
+        <span>{{errormessage}} <i ng-click="reloadpage()" class="icon ion-refresh"></i></span>
       </div>
     </div>
   </ion-content>

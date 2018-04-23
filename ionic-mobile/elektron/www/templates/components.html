@@ -4,7 +4,7 @@
       <div class="item item-divider">
           Componentes
       </div>
-      <div class="list list-components">
+      <div ng-show="(spinner == false) && (componentserror == false)" class="list list-components">
           <div class="item item-button-right" ng-repeat="component in components_server">
             <span><b>{{component.label}}</b> <span class="mac-components">({{component.device_mac}})</span>
               <span ng-if="component.devicestate.name == 'on'" class="badge-component badge badge-balanced"><i class="icon ion-power"></i></span>
@@ -16,7 +16,10 @@
           </div>
       </div>
     </div>
-    <div ng-show="spinner == true" class="center-spinner">
+    <div ng-show="componentserror == true" class="errormessage center-spinner">
+      <span>{{errormessage}} <i ng-click="reloadpage()" class="icon ion-refresh"></i></span>
+    </div>
+    <div ng-show="(spinner == true) && (componentserror == false)" class="center-spinner">
       <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
     </div>
   </ion-content>

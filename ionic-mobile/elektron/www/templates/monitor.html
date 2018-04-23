@@ -8,8 +8,8 @@
                   <b>Monitor de componentes</b>
                 </div>
                 <div class="col col-50">
-                  <i title="Conexion activada" ng-if="(websocketplay == true) && (spinnermonitor == false)" ng-click="pauseWebsocket()" class="icon ion-pause dark icon-letter play-pause-icon"></i>
-                  <i title="Conexion pausada" ng-if="(websocketplay == false) && (spinnermonitor == false)" ng-click="playWebsocket()" class="icon ion-play dark icon-letter play-pause-icon"></i>
+                  <i title="Conexion activada" ng-if="(websocketplay == true) && (spinnermonitor == false) && (monitorerror == false)" ng-click="pauseWebsocket()" class="icon ion-pause dark icon-letter play-pause-icon"></i>
+                  <i title="Conexion pausada" ng-if="(websocketplay == false) && (spinnermonitor == false) && (monitorerror == false)" ng-click="playWebsocket()" class="icon ion-play dark icon-letter play-pause-icon"></i>
 
                   <i title="Conexión establecida: apretar para reiniciar" ng-if="(websocketStatus == true) && (spinnermonitor == false)" ng-click="refreshConnection()" class="icon icon-letter ion-refresh balanced"></i>
                   <i title="Falla en la conexión: apretar para reiniciar" ng-if="(websocketStatus == false) && (spinnermonitor == false)" ng-click="refreshConnection()" class="icon icon-letter ion-refresh assertive"></i>
@@ -20,10 +20,13 @@
               </div>
         </div>
       </div>
-      <div ng-show="spinner == true" class="center-spinner">
+      <div ng-show="(spinner == true) && (monitorerror == false)" class="center-spinner">
         <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
       </div>
-      <div class="card" ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true && component.pluged==true}}">
+      <div ng-show="monitorerror == true" class="errormessage center-spinner">
+        <span>{{errormessage}} <i ng-click="reloadpage()" class="icon ion-refresh"></i></span>
+      </div>
+      <div class="card" ng-repeat="component in components_server_enabled">
           <div class="item item-divider item-icon-right">
             Componente: <b>{{component.label}}</b>
             <i ng-if="line[component.device_mac].status == true" class="icon ion-toggle-filled balanced"></i>

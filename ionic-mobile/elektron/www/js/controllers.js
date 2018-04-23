@@ -60,7 +60,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   };
 })
 
-.controller('DashCtrl', function($scope, $filter, $websocket, $http, $rootScope, ionicToast) {
+.controller('DashCtrl', function($scope, $filter, $websocket, $http, $rootScope, $window, ionicToast) {
 
       var ip_server = '158.69.223.78';
       var url_server = 'http://158.69.223.78:8000';
@@ -74,6 +74,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.spinnerdash = true;
       $scope.websocketplay = true;
       $scope.last_value = undefined;
+      $scope.dasherror = false;
 
       // Muestra los primeros 4 componentes de la lista
       $scope.quantity = 4;
@@ -117,6 +118,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         $scope.websocketplay = true;
       }
 
+      $scope.reloadpage = function () {
+        $window.location.reload();
+      }
+
       // Obtiene los componentes del servidor
       $http({
           method:'GET',
@@ -134,7 +139,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           $scope.loadInitialData();
 
       }, function(response){
-          ionicToast.show('Error de conexión al traer componentes.', 'top', false, 3000);
+          ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 3000);
+          $scope.dasherror = true;
+          $scope.errormessage = "No se pudieron traer los componentes";
           $scope.spinner = false;
           //show an appropriate message
       });
@@ -268,7 +275,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('MonitorCtrl', function($scope, $filter, $websocket,$rootScope, $http, ionicToast) {
+.controller('MonitorCtrl', function($scope, $filter, $websocket, $window, $rootScope, $http, ionicToast) {
 
       console.log("Loading monitor...");
 
@@ -283,6 +290,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.spinnermonitor = true;
       $scope.websocketplay = true;
       $scope.last_value = undefined;
+      $scope.monitorerror = false;
+
+      $scope.reloadpage = function () {
+        $window.location.reload();
+      }
 
       $scope.charts = [];
 
@@ -331,7 +343,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
             $scope.loadWebsocket();
 
         }, function(response){
-            ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
+          $scope.spinner = false;
+          $scope.monitorerror = true;
+          $scope.errormessage = "Error al traer los componentes";
+          $scope.spinnermonitor = false;
+          ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
       });
 
       $scope.refreshConnection = function() {
@@ -437,11 +453,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   var url_server = 'http://158.69.223.78:8000';
 
+  $scope.spinner = true;
+
   $scope.loadParams = function () {
 
     $scope.task = {};
     $scope.editButton = false;
-    $scope.datatasktitle = "Agregar tarea por consumo";
+    $scope.datatasktitle = "Agregar tarea";
 
     if ($stateParams.task) {
       if ($stateParams.task != "") {
@@ -467,11 +485,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         console.log($scope.task);
 
         $scope.editButton = true;
-        $scope.datatasktitle = "Editar tarea por consumo";
+        $scope.datatasktitle = "Editar tarea";
       }
     }
-  }
 
+    $scope.spinner = false;
+
+  }
 
   $http({
       method:'GET',
@@ -564,12 +584,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 .controller('DatetimetaskCtrl', function($scope, $location, $filter, $http, $state, $stateParams, ionicToast, $httpParamSerializerJQLike) {
 
   var url_server = 'http://158.69.223.78:8000';
+  $scope.spinner = true;
 
   $scope.loadParams = function () {
 
     $scope.task = {};
     $scope.editButton = false;
-    $scope.datatasktitle = "Agregar tarea por fecha y hora";
+    $scope.datatasktitle = "Agregar tarea";
 
     if ($stateParams.task) {
       if ($stateParams.task != "") {
@@ -592,10 +613,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
         $scope.editDateTimeTaskId = task.id;
         $scope.editButton = true;
-        $scope.datatasktitle = "Editar tarea por fecha y hora";
+        $scope.datatasktitle = "Editar tarea";
 
       }
     }
+    $scope.spinner = false
   }
 
   $http({
@@ -682,15 +704,18 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('TasksCtrl', function($scope, $http, $state, $stateParams, $ionicPopup) {
+.controller('TasksCtrl', function($scope, $http, $state, $window, $stateParams, $ionicPopup, ionicToast) {
 
-  var params = $stateParams;
-  console.log(params);
+  $scope.reloadpage = function () {
+    $window.location.reload();
+  }
 
   $scope.datatasks_server = [];
   $scope.datetimetasks_server = [];
   $scope.porconsumo = true;
   $scope.spinner = true;
+  $scope.datataskerror = false;
+  $scope.datetimetaskerror = false;
 
   var url_server = 'http://158.69.223.78:8000';
   //var url_server = 'http://192.168.0.21:8000';
@@ -705,9 +730,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         $scope.spinner = false;
 
     }, function(response){
-        //console.log("problemas de conexion");
-        ionicToast.show('Error al traer las tareas del servidor.', 'bottom', false, 5000);
-        $scope.spinner = true;
+        ionicToast.show('Error al traer las tareas por consumo', 'bottom', false, 5000);
+        $scope.spinner = false;
+        $scope.datataskerror = true;
+        $scope.datataskerrormessage = "No se pudieron traer las tareas por consumo";
     });
   }
 
@@ -716,12 +742,15 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         method:'GET',
         url: url_server + '/tasks/datetimetasks'
     }).then(function(response){
-        //console.log(response.data);
+        console.log(response.data);
         $scope.datetimetasks_server = response.data.datetimetasks;
-        //console.log($scope.datetimetasks_server);
+        $scope.spinner = false;
+
     }, function(response){
-        ionicToast.show('Error de conexión al traer tareas por fecha y hora.', 'bottom', false, 5000);
-        //console.log("problemas de conexion");
+        $scope.spinner = false;
+        ionicToast.show('Error de conexión al traer tareas por fecha y hora', 'bottom', false, 5000);
+        $scope.datetimetaskerror = true;
+        $scope.datetimetaskerrormessage = "No se pudieron traer las tareas por fecha y hora";
     });
   }
 
@@ -779,7 +808,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('ComponentsCtrl', function($scope, $websocket, $http, ionicToast) {
+.controller('ComponentsCtrl', function($scope, $window, $http, ionicToast) {
+
+    $scope.componentserror = false;
+
+    $scope.reloadpage = function () {
+      $window.location.reload();
+    }
 
     $scope.spinner = true;
     $http({
@@ -791,17 +826,25 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         $scope.spinner = false;
         console.log($scope.components_server[0].label);
     }, function(response){
-        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
+        ionicToast.show('Error al traer los componentes.', 'bottom', false, 5000);
+        $scope.errormessage = "Error al traer los componentes";
+        $scope.componentserror = true;
         $scope.spinner = false;
     });
 })
 
-.controller('ComponentCtrl', function($scope, $stateParams, $http, $filter, $ionicModal, $httpParamSerializerJQLike, ionicToast) {
+.controller('ComponentCtrl', function($scope, $stateParams, $http, $filter, $window, $ionicModal, $httpParamSerializerJQLike, ionicToast) {
 
     $scope.componentId = $stateParams.componentId;
     $scope.component_activate;
     $scope.currentLabel = 'Por defecto';
     $scope.spinner = true;
+    $scope.componenterror = false;
+    $scope.datamessage = false;
+
+    $scope.reloadpage = function () {
+      $window.location.reload();
+    }
 
     $scope.createChart = function() {
       $scope.line = {};
@@ -812,14 +855,19 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       console.log($scope.component_data);
       var length = $scope.component_data.length - 11;
 
-      for (var i = length; i >= 0; i--) {
-        $scope.line.data[0].push($scope.component_data[i].data_value);
-        $scope.line.labels.push($filter('date')($scope.component_data[i].date, "HH:mm"));
+      if ($scope.component_data.length >=10) {
+        for (var i = length; i >= 0; i--) {
+          $scope.line.data[0].push($scope.component_data[i].data_value);
+          $scope.line.labels.push($filter('date')($scope.component_data[i].date, "HH:mm"));
+        }
       }
+      else {
+        $scope.datamessage = true;
+      }
+
     }
 
     var url_device = 'http://158.69.223.78:8000/devices/' + $scope.componentId + '/';
-    var url_server = 'http://158.69.223.78:8000';
 
     $http({
         method:'GET',
@@ -846,7 +894,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
         }
     }, function(response){
-        ionicToast.show('Error al traer .', 'bottom', false, 5000);
+        ionicToast.show('Error al traer los datos del componente', 'bottom', false, 5000);
+        $scope.componenterror = true;
+        $scope.errormessage = "Error al traer los datos del componente";
         $scope.spinner = false;
     });
 
@@ -1043,12 +1093,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 .controller('ConfigurationCtrl', function($scope) {})
 
-.controller('StatisticsCtrl', function($scope, $http, $filter, $timeout, ionicToast) {
+.controller('StatisticsCtrl', function($scope, $http, $filter, $window, $timeout, ionicToast) {
 
   $scope.listado = true;
   $scope.spinner = true;
   $scope.spinnerbar = false;
   $scope.barselected = false;
+  $scope.statisticserror = false;
 
   // Variables para el paginado
   $scope.nextbutton = true;
@@ -1062,6 +1113,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   var url_server = 'http://158.69.223.78:8000';
 
+  $scope.reloadpage = function () {
+    $window.location.reload();
+  }
+
   $http({
       method:'GET',
       url: url_server + '/devices/statistics'
@@ -1073,8 +1128,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       //$scope.createBarChart();
       console.log($scope.components_statistics[0].device.label);
   }, function(response){
-      ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 5000);
+      ionicToast.show('Error de conexión al traer las estadísticas.', 'bottom', false, 5000);
       $scope.spinner = false;
+      $scope.statisticserror = true;
+      $scope.statisticserrormessage = "Error al traer las estadísticas del servidor";
   })
 
   $http({
@@ -1144,6 +1201,14 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.number_pages = [];
       for (var i = 1; i <= $scope.pagesdata.pages; i++) {
         $scope.number_pages.push(i);
+      }
+      if ($scope.number_pages.length <= 1) {
+        $scope.previousbutton = true;
+        $scope.lastbutton = true;
+      }
+      else {
+        $scope.previousbutton = false;
+        $scope.lastbutton = false;
       }
     }
   }
@@ -1390,7 +1455,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('GraphicHistoryCtrl', function($scope, $stateParams, $http, $filter, ionicToast) {
+.controller('GraphicHistoryCtrl', function($scope, $window, $stateParams, $http, $filter, ionicToast) {
 
   var url_server = 'http://158.69.223.78:8000';
 
@@ -1415,11 +1480,21 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.inLastPage = false;
   $scope.inFirstPage = true;
 
+  $scope.historyerror = false;
+
+  $scope.reloadpage = function () {
+    $window.location.reload();
+  }
+
   $scope.calculatePages = function () {
     $scope.number_pages = [];
     $scope.current_page = 1;
     for (var i = 1; i <= $scope.pagesdata.pages; i++) {
       $scope.number_pages.push(i);
+    }
+    if ($scope.number_pages.length <= 1) {
+      $scope.previousbutton = true;
+      $scope.lastbutton = true;
     }
   }
 
@@ -1556,8 +1631,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         $scope.pagesdata = response.data;
         $scope.spinner = false;
         if ($scope.data.length > 0) {
-          $scope.loadChart();
           $scope.calculatePages();
+          $scope.loadChart();
         }
         else {
           ionicToast.show('No hay datos para ese período seleccionado.', 'top', false, 5000);
@@ -1565,8 +1640,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     }, function(response){
         console.log("problemas");
         $scope.spinner = false;
-        ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
-        //show an appropriate message
+        $scope.historyerror = true;
+        $scope.historyerrormessage = "Error al traer los datos historicos del componente";
+        ionicToast.show('Error al traer los datos historicos del componente', 'bottom', false, 5000);
     });
   }
 
