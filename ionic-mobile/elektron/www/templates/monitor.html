@@ -23,7 +23,7 @@
       <div ng-show="spinner == true" class="center-spinner">
         <ion-spinner icon="android"></ion-spinner>
       </div>
-      <div class="card" ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true}}">
+      <div class="card" ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true && component.pluged==true}}">
           <div class="item item-divider item-icon-right">
             Componente: <b>{{component.label}}</b>
             <i ng-if="line[component.device_mac].status == true" class="icon ion-toggle-filled balanced"></i>

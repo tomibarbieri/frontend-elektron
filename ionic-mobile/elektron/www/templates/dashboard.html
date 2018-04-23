@@ -28,7 +28,7 @@
               <div class="input-label">
                 Componente
               </div>
-              <select ng-options="c.label for c in components_server_enabled"
+              <select ng-options="component.label for component in components_server_enabled"
                     ng-model="current_component" ng-change="changeCurrentComponent(current_component)">
               </select>
             </label>

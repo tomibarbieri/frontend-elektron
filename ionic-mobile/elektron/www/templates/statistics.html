@@ -1,11 +1,11 @@
-<ion-view view-title="Estadisticas">
+<ion-view view-title="Estadísticas">
     <ion-content >
       <div class="item">
-        <div class="button-bar">
+        <div class="button-bar task-font">
           <a class="button button-positive" ng-show="listado == true">Listado</a>
           <a class="button" ng-show="listado == false" ng-click="changeToList()">Listado</a>
-          <a class="button" ng-show="listado == true" ng-click="changeToCharts()">Graficos</a>
-          <a class="button button-positive" ng-show="listado == false">Graficos</a>
+          <a class="button" ng-show="listado == true" ng-click="changeToCharts()">Gráficos</a>
+          <a class="button button-positive" ng-show="listado == false">Gráficos</a>
         </div>
       </div>
 
@@ -15,7 +15,7 @@
 
       </div>
 
-      <div ng-show="listado == true" class="card" ng-repeat="component in components_statistics">
+      <div ng-show="(listado == true) && (spinner == false)" class="card" ng-repeat="component in components_statistics">
 
         <div class="item item-divider">
             <b>Componente:</b> {{component.device.label}}
@@ -25,7 +25,7 @@
             <div class="item ">
                 <div class="row">
                   <div class="col">
-                    <span class="badge-letter">Consumo: <b>{{component.data_sum | number:1 }} W ({{ component.device_percent || 0 | number:1 }}% del total)</b></span>
+                    <span class="badge-letter">Consumo: <b>{{component.data_sum / 1000 | number:0 }} Kw ({{ component.device_percent || 0 | number:1 }}% del total)</b></span>
                     <br><span class="badge-letter">Costo: <b>$ {{component.total_tarifa | number:1}}</b></span>
                     <br><span class="badge-letter">Co2: <b>{{ component.total_co2 | number:1 }} Kg</b></span>
                   </div>
@@ -60,7 +60,7 @@
             </div>
         </div>
       </div>
-      <div ng-show="listado == false">
+      <div ng-show="(listado == false) && (spinner == false)">
         <div class="card">
           <div class="item item-divider">
               <b>Porcentaje de consumo de componentes</b>
@@ -76,7 +76,7 @@
 
               </div>
               <div class="col">
-                <div ng-repeat="value in doughnut.config.data.labels" style="color: white; font-weight: bold; margin-bottom:3px; text-align:center; font-size:0.65em; border-radius: 25px;background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
+                <div ng-repeat="value in doughnut.config.data.labels" style="min-width: 160px;color: white; font-weight: bold; margin-bottom:3px; text-align:center; font-size:0.65em; border-radius: 25px;background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
                   <span>{{ value }}</span>
                 </div>
               </div>
@@ -88,7 +88,7 @@
         </div>
         <div class="card">
           <div class="item item-divider">
-              <b>Gafico comparativo de componentes</b>
+              <b>Gráfico comparativo de componentes</b>
               <ion-spinner class="spinner-header spinner-balanced" ng-show="spinnerbar == true" icon="spiral"></ion-spinner>
           </div>
           <div class="item">
@@ -118,7 +118,7 @@
               </select>
             </label>
             <div class="item align-center">
-              <button ng-click="createBarChart()" class="button button-calm">
+              <button ng-disabled="(barOptions.precisionSelected == undefined) || (barOptions.componentLeft == undefined) || (barOptions.componentRight == undefined)" ng-click="createBarChart()" class="button button-calm">
                 Ver tabla
               </button>
             </div>

@@ -125,8 +125,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
           console.log(response.data);
           $scope.components_server = response.data.devices;
-          $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
-          $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
+          $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { ready: false }, true);
+          $scope.components_server_enabled = $filter('filter')($scope.components_server, { ready: true }, true);
+
           $scope.current_component = $scope.components_server_enabled[0];
 
           $scope.openWebsocketConnection();
@@ -300,17 +301,23 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         }).then(function(response){
             console.log(response.data);
             $scope.components_server = response.data.devices;
-            $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
-            $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
+            $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { ready: false }, true);
+            $scope.components_server_enabled = $filter('filter')($scope.components_server, { ready: true }, true);
             $scope.spinner = false;
 
             $scope.line = {}
             for (var component in $scope.components_server_enabled) {
               var labels = [];
               var data = [[]];
-              for (var i = 0; i < 10; i++) {
-                labels.push($filter('date')($scope.components_server_enabled[component].lastdata[i].date, "HH:mm"));
-                data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
+              if ($scope.components_server_enabled[component].lastdata.length >= 10) {
+                for (var i = 0; i < 10; i++) {
+                  labels.push($filter('date')($scope.components_server_enabled[component].lastdata[i].date, "HH:mm"));
+                  data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
+                }
+              }
+              else {
+                labels.push(0,1,2,3,4,5,6,7,8,9);
+                data[0].push(0,0,0,0,0,0,0,0,0,0);
               }
 
               $scope.line[$scope.components_server_enabled[component].device_mac] = {
@@ -509,7 +516,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         }
     }).then(function(response){
         console.log(response.data);
-        $state.go( "app.tasks" );
+        $state.go( "app.tasks", { 'update' : true, 'task':'datatask'});
         ionicToast.show('Se agrego la tarea exitosamente.', 'bottom', false, 5000);
     }, function(response){
         console.log("problemas de conexion");
@@ -544,7 +551,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         }
     }).then(function(response){
         console.log(response.data);
-        $state.go( "app.tasks" );
+        $state.go( "app.tasks", { 'update' : true, 'task':'datatask'} );
         ionicToast.show('Se editó la tarea exitosamente.', 'bottom', false, 5000);
     }, function(response){
         console.log("problemas de conexion");
@@ -630,7 +637,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         }
     }).then(function(response){
         console.log(response.data);
-        $state.go( "app.tasks" );
+        $state.go( "app.tasks", { 'update' : true, 'task':'datetimetask'} );
         ionicToast.show('Se agrego la tarea exitosamente.', 'bottom', false, 5000);
     }, function(response){
         console.log("problemas de conexion");
@@ -665,7 +672,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         }
     }).then(function(response){
         console.log(response.data);
-        $state.go( "app.tasks" );
+        $state.go( "app.tasks", { 'update' : true, 'task':'datetimetask'} );
         ionicToast.show('Se editó la tarea exitosamente.', 'bottom', false, 5000);
   }, function(response){
         console.log("problemas de conexion");
@@ -675,7 +682,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 })
 
-.controller('TasksCtrl', function($scope, $http, $state, $ionicPopup) {
+.controller('TasksCtrl', function($scope, $http, $state, $stateParams, $ionicPopup) {
+
+   $stateParams
 
   $scope.datatasks_server = [];
   $scope.datetimetasks_server = [];

@@ -40,8 +40,8 @@ angular.module('theme.demos.dashboard', [
           console.log(response.data);
 
           $scope.components_server = response.data.devices;
-          $scope.components_server_enabled = $filter('filter')($scope.components_server, { enabled: true }, true);
-          $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { enabled: false }, true);
+          $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { ready: false }, true);
+          $scope.components_server_enabled = $filter('filter')($scope.components_server, { ready: true }, true);
           $scope.current_component = $scope.components_server_enabled[0];
 
           $scope.loadInitialData();
