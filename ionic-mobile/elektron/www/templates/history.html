@@ -7,22 +7,22 @@
           </div>
           <div "">
             <div class="item item-icon-left" ion-datetime-picker date ng-model="dateFrom">
-                <i class="icon ion-ios-calendar positive"></i>
+                <i class="icon ion-ios-calendar dark"></i>
                 Desde
                 <strong>{{dateFrom| date: "yyyy-MM-dd"}}</strong>
             </div>
             <div class="item item-icon-left" ion-datetime-picker time ng-model="timeFrom">
-                <i class="icon ion-ios-clock positive"></i>
+                <i class="icon ion-ios-clock dark"></i>
                 Hora
                 <strong>{{timeFrom| date: "H:mm"}}</strong>
             </div>
             <div class="item item-icon-left" ion-datetime-picker date ng-model="dateTo">
-                <i class="icon ion-ios-calendar-outline positive"></i>
+                <i class="icon ion-ios-calendar-outline dark"></i>
                 Hasta
                 <strong>{{dateTo| date: "yyyy-MM-dd"}}</strong>
             </div>
             <div class="item item-icon-left" ion-datetime-picker time ng-model="timeTo">
-                <i class="icon ion-ios-clock positive"></i>
+                <i class="icon ion-ios-clock dark"></i>
                 Hora
                 <strong>{{timeTo| date: "H:mm"}}</strong>
             </div>
@@ -52,7 +52,7 @@
           </label>
           <div class="item">
             <div class="button-bar">
-              <a ui-sref="app.graphic-history({ componentId: device_id, dateFrom: dateFrom, timeFrom: timeFrom, dateTo:dateTo, timeTo:timeTo, precision:precision })" class="button button-positive icon ion-stats-bars">
+              <a ui-sref="app.graphic-history({ componentId: device_id, dateFrom: dateFrom, timeFrom: timeFrom, dateTo:dateTo, timeTo:timeTo, precision:precision })" class="button button-dark icon ion-stats-bars">
                 Ver datos históricos
               </a>
             </div>

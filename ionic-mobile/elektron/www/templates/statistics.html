@@ -2,16 +2,16 @@
     <ion-content >
       <div class="item">
         <div class="button-bar task-font">
-          <a class="button button-positive" ng-show="listado == true">Listado</a>
+          <a class="button button-dark" ng-show="listado == true">Listado</a>
           <a class="button" ng-show="listado == false" ng-click="changeToList()">Listado</a>
           <a class="button" ng-show="listado == true" ng-click="changeToCharts()">Gráficos</a>
-          <a class="button button-positive" ng-show="listado == false">Gráficos</a>
+          <a class="button button-dark" ng-show="listado == false">Gráficos</a>
         </div>
       </div>
 
       <div ng-show="spinner == true" class="center-spinner">
 
-        <ion-spinner icon="android"></ion-spinner>
+        <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
 
       </div>
 
@@ -19,17 +19,17 @@
 
         <div class="item item-divider">
             <b>Componente:</b> {{component.device.label}}
-            <span ng-if="component.device.devicestate.name == 'on'" class="badge-component badge badge-balanced">encendido</span>
-            <span ng-if="component.device.devicestate.name == 'off'" class="badge-component badge badge-assertive">apagado</span>
+            <span ng-if="component.device.devicestate.name == 'on'" class="badge-component badge badge-balanced"><i class="icon ion-power"></i></span>
+            <span ng-if="component.device.devicestate.name == 'off'" class="badge-component badge badge-assertive"><i class="icon ion-power"></i></span>
         </div>
             <div class="item ">
                 <div class="row">
                   <div class="col">
                     <span class="badge-letter">Consumo: <b>{{component.data_sum / 1000 | number:0 }} Kw ({{ component.device_percent || 0 | number:1 }}% del total)</b></span>
                     <br><span class="badge-letter">Costo: <b>$ {{component.total_tarifa | number:1}}</b></span>
-                    <br><span class="badge-letter">Co2: <b>{{ component.total_co2 | number:1 }} Kg</b></span>
+                    <span class="badge-letter">Co2: <b>{{ component.total_co2 | number:1 }} Kg</b></span>
+                    <br><span class="badge-letter">Último dato medido: <b>{{ component.last_data.value || 0 }} w</b></span>
                   </div>
-                  <span class="badge badge-positive badge-statistics-last">Último: {{ component.last_data.value || 0 }} w</span>
                 </div>
               </div>
             <div class="item text-center-statistics">
@@ -129,11 +129,13 @@
             </canvas>
           </div>
           <div ng-show="barselected == true" class="button-bar bar-calm">
-            <a ng-disabled="previousbutton" ng-click="loadPage('last')" class="button button-small icon-left ion-chevron-left"></a>
+            <a ng-disabled="lastbutton" ng-click="loadPage('last')" class="button button-small icon-left ion-chevron-left"></a>
+            <a ng-disabled="previousbutton" ng-click="loadPage(current_page + 1)" class="button button-small icon-left ion-chevron-left">10</a>
             <select class="button button-small" ng-model="current_page" ng-change="loadPage(current_page)"
                     ng-options="page for page in number_pages" >
             </select>
-            <a ng-disabled="nextbutton" ng-click="loadPage(1)" class="button button-small icon-right ion-chevron-right"></a>
+            <a ng-disabled="nextbutton" ng-click="loadPage(current_page - 1)" class="button button-small icon-right ion-chevron-right">10</a>
+            <a ng-disabled="indexbutton" ng-click="loadPage(1)" class="button button-small icon-right ion-chevron-right"></a>
           </div>
         </div>
       </div>

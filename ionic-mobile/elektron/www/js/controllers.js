@@ -516,7 +516,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         }
     }).then(function(response){
         console.log(response.data);
-        $state.go( "app.tasks", { 'update' : true, 'task':'datatask'});
+        $state.go( "app.tasks", { reload: true, inherit: true, notify: true });
         ionicToast.show('Se agrego la tarea exitosamente.', 'bottom', false, 5000);
     }, function(response){
         console.log("problemas de conexion");
@@ -551,7 +551,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         }
     }).then(function(response){
         console.log(response.data);
-        $state.go( "app.tasks", { 'update' : true, 'task':'datatask'} );
+        $state.go( "app.tasks", { reload: true, inherit: true, notify: true } );
         ionicToast.show('Se editó la tarea exitosamente.', 'bottom', false, 5000);
     }, function(response){
         console.log("problemas de conexion");
@@ -684,7 +684,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
 .controller('TasksCtrl', function($scope, $http, $state, $stateParams, $ionicPopup) {
 
-   $stateParams
+  var params = $stateParams;
+  console.log(params);
 
   $scope.datatasks_server = [];
   $scope.datetimetasks_server = [];
@@ -1051,7 +1052,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   // Variables para el paginado
   $scope.nextbutton = true;
+  $scope.indexbutton = true;
   $scope.previousbutton = false;
+  $scope.lastbutton = false;
+
   $scope.inLastPage = false;
   $scope.inFirstPage = true;
   $scope.number_pages;
@@ -1145,7 +1149,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   }
 
   $scope.loadPage = function (page_id) {
-    $scope.showiconloading = true;
+    $scope.spinnerbar = true;
+    ionicToast.show('Cargando pagina ' + page_id, 'bottom', false, 4000);
     console.log(page_id);
     // procesa la ultima pagina
     if (page_id == 'last') {
@@ -1211,8 +1216,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
     var url_ = url_server + '/devices/' + component + '/data/' + date_from + date_to + $scope.barOptions.precisionSelected + '/' + offset;
 
-    console.log("processing");
-
     $http({
         method:'GET',
         url: url_,
@@ -1224,8 +1227,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         $scope.data = response.data.data;
         if ($scope.data.length > 0) {
           $scope.previousbutton = previousbutton;
+          $scope.lastbutton = previousbutton;
           $scope.nextbutton = nextbutton;
+          $scope.indexbutton = nextbutton;
           $scope.current_page = page_id;
+
           console.log($scope.current_page);
           $scope.barlabels = [];
           $scope.graficateComponentBar(response.data.data, side);
@@ -1233,11 +1239,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         else {
           $scope.graficateComponentBar([{'data_value':0},{'data_value':0},{'data_value':0},{'data_value':0},{'data_value':0}], side);
           ionicToast.show('El componente de la ' + side + ' no tiene datos.', 'top', false, 5000);
-          $scope.showiconloading = false;
+          $scope.spinnerbar = false;
         }
     }, function(response){
         console.log("problemas");
-        $scope.showiconloading = false;
+        $scope.spinnerbar = false;
         ionicToast.show('Error de conexión con el servidor.', 'bottom', false, 5000);
     });
   }
@@ -1401,8 +1407,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.showiconloading = false;
 
   // Variables para el paginado
-  $scope.nextbutton = true;
+  $scope.lastbutton = false;
   $scope.previousbutton = false;
+  $scope.nextbutton = true;
+  $scope.indexbutton = true;
+
   $scope.inLastPage = false;
   $scope.inFirstPage = true;
 
@@ -1467,9 +1476,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         if ($scope.data.length > 0) {
           $scope.loadChart();
           $scope.previousbutton = previousbutton;
+          $scope.lastbutton = previousbutton;
           $scope.nextbutton = nextbutton;
+          $scope.indexbutton = nextbutton;
           $scope.current_page = page_id;
-
           console.log($scope.current_page);
         }
         else {
@@ -1580,7 +1590,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         var label = '' + $filter('date')($scope.data[i].date, "HH:mm");
       }
       $scope.line.labels.push(label)
-      $scope.line.data[0].push($scope.data[i].data_value)
+      $scope.line.data[0].push($scope.data[i].data_value/1000)
 
     }
   }

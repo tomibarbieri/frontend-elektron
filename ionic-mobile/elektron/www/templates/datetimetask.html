@@ -26,7 +26,7 @@
         </label>
         <div>
           <div class="item item-icon-left" ion-datetime-picker ng-model="task.date">
-              <i class="icon ion-ios-calendar positive"></i>
+              <i class="icon ion-ios-calendar dark"></i>
               Fecha y hora
               <strong>{{task.date| date: "yyyy-MM-dd H:mm"}}</strong>
           </div>
@@ -73,10 +73,10 @@
 
         <div class="item">
           <div class="button-bar">
-            <a ng-show="editButton == false" ng-click="addDateTimeTask(task)" class="button button-positive icon ion-ios-bolt">
+            <a ng-show="editButton == false" ng-click="addDateTimeTask(task)" class="button button-dark icon ion-ios-bolt">
               Agregar tarea
             </a>
-            <a ng-show="editButton == true" ng-click="editDateTimeTask(task)" class="button button-positive icon ion-ios-bolt">
+            <a ng-show="editButton == true" ng-click="editDateTimeTask(task)" class="button button-dark icon ion-ios-bolt">
               Editar tarea
             </a>
           </div>

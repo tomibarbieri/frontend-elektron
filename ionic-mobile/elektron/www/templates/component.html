@@ -13,7 +13,7 @@
       </div>
       <div class="item item-text-wrap">
         <div ng-show="spinner == true" class="center-spinner">
-          <ion-spinner icon="android"></ion-spinner>
+          <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
         </div>
         <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
       </div>
@@ -25,7 +25,7 @@
         <span class=""><b class="badge-letter">Etiqueta: </b>
           <span class="badge badge-light badge-letter">{{currentLabel}}
             <a ng-click="openModal()" class="edit-component-label">
-              <i class="icon positive ion-compose"></i>
+              <i class="icon dark ion-compose"></i>
             </a>
           </span>
         </span>
@@ -61,8 +61,8 @@
       </ion-toggle>
       <div class="item">
         <span class=""><b class="badge-letter">Enchufado</b>:
-          <span ng-if="component_server.pluged == true" class="badge badge-positive badge-letter">enchufado</span>
-          <span ng-if="component_server.pluged == false" class="badge badge-black badge-letter">desenchufado</span>
+          <span ng-if="component_server.pluged == true" class="badge badge-letter">enchufado</span>
+          <span ng-if="component_server.pluged == false" class="badge badge-letter">desenchufado</span>
         </span>
       </div>
       <div class="item item-divider text-center">
@@ -70,10 +70,10 @@
       </div>
       <div class="item">
         <div class="button-bar">
-          <a ui-sref="app.tasks" class="button button-positive icon ion-gear-a">
+          <a ui-sref="app.tasks" class="button button-dark icon ion-gear-a">
             Tiempo
           </a>
-          <a ui-sref="app.tasks" class="button button-positive icon ion-gear-a">
+          <a ui-sref="app.tasks" class="button button-dark icon ion-gear-a">
             Consumo
           </a>
         </div>
@@ -83,7 +83,7 @@
 
   <script id="templates/modal.html" type="text/ng-template">
     <ion-modal-view>
-      <ion-header-bar class="bar bar-header bar-positive">
+      <ion-header-bar class="bar bar-header bar-dark">
         <h1 class="title">Editar nombre</h1>
         <button class="button button-clear button-primary" ng-click="modal.hide()">Cancelar</button>
       </ion-header-bar>
@@ -93,7 +93,7 @@
             <span class="input-label">Label:</span>
             <input ng-model="newName" placeholder="{{currentLabel}}" type="text">
           </label>
-          <button class="button button-full button-positive" ng-click="saveLabel(newName)">Guardar</button>
+          <button class="button button-full button-dark" ng-click="saveLabel(newName)">Guardar</button>
         </div>
       </ion-content>
     </ion-modal-view>

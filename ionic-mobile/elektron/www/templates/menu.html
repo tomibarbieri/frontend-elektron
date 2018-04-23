@@ -1,6 +1,6 @@
 <ion-side-menus enable-menu-with-back-views="false" >
   <ion-side-menu-content>
-    <ion-nav-bar class="bar-stable bar-positive">
+    <ion-nav-bar class="color-menu">
       <ion-nav-back-button>
       </ion-nav-back-button>
 
@@ -14,19 +14,18 @@
   </ion-side-menu-content>
 
   <ion-side-menu side="left" class="loginBg" >
-    <ion-header-bar class="bar-stable bar-positive">
+    <ion-header-bar class="color-logo color-menu">
       <h1 class="title"><i class="icon ion-leaf"></i> Elektron</h1>
     </ion-header-bar>
-    <ion-content >
-      <ion-list id="menuLinks">
-        <ion-item menu-close ui-sref="app.dashboard" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-home"></i> Inicio</ion-item>
-        <ion-item menu-close ui-sref="app.components" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-cube"></i> Componentes </ion-item>
-        <ion-item menu-close ui-sref="app.monitor" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-compass"></i> Monintor </ion-item>
-        <ion-item menu-close ui-sref="app.tasks" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-clipboard"></i> Tareas </ion-item>
-        <ion-item menu-close ui-sref="app.statistics" ><i class="icon ion-arrow-graph-up-right"></i> Estadísticas </ion-item>
-        <ion-item menu-close ui-sref="app.history" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-cloud"></i> Datos históricos </ion-item>
-        <ion-item menu-close ui-sref="app.configuration" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-gear-a"></i> Configuración </ion-item>
-        <ion-item menu-close ui-sref="app.logout" ui-sref-opts="{reload: true, cache: false}"><i class="icon ion-log-out"></i> Cerrar sesion </ion-item>
+    <ion-content class="color-backend" >
+      <ion-list id="menuLinks" class="color-options">
+        <ion-item menu-close ui-sref="app.dashboard" ui-sref-opts="{reload: true, cache: false}"><i class="icon-menu icon ion-home"></i> Inicio</ion-item>
+        <ion-item menu-close ui-sref="app.components" ui-sref-opts="{reload: true, cache: false}"><i class="icon-menu icon ion-cube"></i> Componentes </ion-item>
+        <ion-item menu-close ui-sref="app.monitor" ui-sref-opts="{reload: true, cache: false}"><i class="icon-menu icon ion-compass"></i> Monitor </ion-item>
+        <ion-item menu-close ui-sref="app.tasks" ui-sref-opts="{reload: true, cache: false}"><i class="icon-menu icon ion-clipboard"></i> Tareas </ion-item>
+        <ion-item menu-close ui-sref="app.statistics" ><i class="icon-menu icon ion-arrow-graph-up-right"></i> Estadísticas </ion-item>
+        <ion-item menu-close ui-sref="app.history" ui-sref-opts="{reload: true, cache: false}"><i class="icon-menu icon ion-cloud"></i> Datos históricos </ion-item>
+        <ion-item menu-close ui-sref="app.logout" ui-sref-opts="{reload: true, cache: false}"><i class="icon-menu icon ion-log-out"></i> Cerrar sesion </ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

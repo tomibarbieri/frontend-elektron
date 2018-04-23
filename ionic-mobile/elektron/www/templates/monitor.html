@@ -8,8 +8,8 @@
                   <b>Monitor de componentes</b>
                 </div>
                 <div class="col col-50">
-                  <i title="Conexion activada" ng-if="(websocketplay == true) && (spinnermonitor == false)" ng-click="pauseWebsocket()" class="icon ion-pause positive icon-letter play-pause-icon"></i>
-                  <i title="Conexion pausada" ng-if="(websocketplay == false) && (spinnermonitor == false)" ng-click="playWebsocket()" class="icon ion-play positive icon-letter play-pause-icon"></i>
+                  <i title="Conexion activada" ng-if="(websocketplay == true) && (spinnermonitor == false)" ng-click="pauseWebsocket()" class="icon ion-pause dark icon-letter play-pause-icon"></i>
+                  <i title="Conexion pausada" ng-if="(websocketplay == false) && (spinnermonitor == false)" ng-click="playWebsocket()" class="icon ion-play dark icon-letter play-pause-icon"></i>
 
                   <i title="Conexión establecida: apretar para reiniciar" ng-if="(websocketStatus == true) && (spinnermonitor == false)" ng-click="refreshConnection()" class="icon icon-letter ion-refresh balanced"></i>
                   <i title="Falla en la conexión: apretar para reiniciar" ng-if="(websocketStatus == false) && (spinnermonitor == false)" ng-click="refreshConnection()" class="icon icon-letter ion-refresh assertive"></i>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div ng-show="spinner == true" class="center-spinner">
-        <ion-spinner icon="android"></ion-spinner>
+        <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
       </div>
       <div class="card" ng-repeat="component in components_server" ng-show="{{ component.devicestate.name == 'on' && component.enabled==true && component.pluged==true}}">
           <div class="item item-divider item-icon-right">

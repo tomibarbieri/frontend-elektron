@@ -91,7 +91,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+    controller: 'AppCtrl',
+    //cache: false
   })
 
   .state('app.login', {
@@ -102,7 +103,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         controller: 'LoginCtrl'
       }
     },
-	authStatus: false
+  	authStatus: false,
+    cache: false
   })
 
   .state('app.logout', {
@@ -113,6 +115,7 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         controller: 'LogoutCtrl'
       }
     },
+    cache: false
   })
 
   .state('app.signup', {
@@ -123,7 +126,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         controller: 'RegisterCtrl'
       }
     },
-    authStatus: false
+    authStatus: false,
+    cache: false
   })
 
   .state('app.dashboard', {
@@ -134,7 +138,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         controller: 'DashCtrl'
       }
     },
-    authStatus: true
+    authStatus: true,
+    cache: false
   })
 
   .state('app.monitor', {
@@ -145,7 +150,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         controller: 'MonitorCtrl'
       }
     },
-    authStatus: true
+    authStatus: true,
+    cache: false
   })
 
   .state('app.profiles', {
@@ -155,7 +161,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/profiles.html',
         controller: 'ProfilesCtrl'
       }
-    }
+    },
+    cache: false
   })
 
   .state('app.components', {
@@ -165,7 +172,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/components.html',
         controller: 'ComponentsCtrl'
       }
-    }
+    },
+    cache: false
   })
 
   .state('app.component', {
@@ -175,7 +183,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/component.html',
         controller: 'ComponentCtrl'
       }
-    }
+    },
+    cache: false
   })
 
   .state('app.statistics', {
@@ -185,7 +194,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/statistics.html',
         controller: 'StatisticsCtrl'
       }
-    }
+    },
+    cache: false
   })
 
   .state('app.history', {
@@ -195,7 +205,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/history.html',
         controller: 'HistoryCtrl'
       }
-    }
+    },
+    cache: false
   })
 
   .state('app.configuration', {
@@ -205,7 +216,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/configuration.html',
         controller: 'ConfigurationCtrl'
       }
-    }
+    },
+    cache: false
   })
 
   .state('app.graphic-history', {
@@ -215,7 +227,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/graphic-history.html',
         controller: 'GraphicHistoryCtrl'
       }
-    }
+    },
+    cache: false
   })
 
   .state('app.tasks', {
@@ -225,7 +238,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/tasks.html',
         controller: 'TasksCtrl'
       }
-    }
+    },
+    cache: false
   })
 
   .state('app.datatask', {
@@ -235,7 +249,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/datatask.html',
         controller: 'DatataskCtrl'
       }
-    }
+    },
+    cache: false
   })
 
   .state('app.datetimetask', {
@@ -245,7 +260,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/datetimetask.html',
         controller: 'DatetimetaskCtrl'
       }
-    }
+    },
+    cache: false
   })
 
   .state('app.profile', {
@@ -255,7 +271,8 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
         templateUrl: 'templates/profile-detail.html',
         controller: 'ProfileCtrl'
       }
-    }
+    },
+    cache: false
   });
 
   // if none of the above states are matched, use this as the fallback

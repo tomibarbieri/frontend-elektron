@@ -1,6 +1,48 @@
 
 /* CSS especifico de la aplicacion de elektron */
 
+.color-menu {
+  background-color: #37444e !important;
+  color: #d5dce2;
+}
+
+.color-logo h1 {
+  color:#38a085 !important;
+}
+
+.color-backend {
+  background-color: #d5dce2;
+}
+
+.list-components span {
+  font-size: 0.8em;
+}
+
+.icon-menu {
+  margin-right: 7px;
+}
+
+/*.color-options ion-item, ion-list, a {
+  color: #262d33; !important;
+  background-color: white !important;
+  font-weight: bold;
+}*/
+
+.color-menu {
+  background-color: #37444e !important;
+  background: #37444e !important;
+  color: #d5dce2 !important;
+  border-color: #d5dce2 !important;
+}
+
+.color-menu ion-item, ion-list, a : hover {
+  color: #37444e !important;
+  background: #d5dce2 !important;
+  background-color: #d5dce2 !important;
+  border-color: #d5dce2 !important;
+}
+
+
 .elektronstatisticsspan {
   margin-right: 10px;
 }

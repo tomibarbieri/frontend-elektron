@@ -24,9 +24,24 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#499bea', end
 .remvoeBP{ padding-bottom:0px;}
 .removePM{ margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
 
-#menuLinks .list .item{ border-color:#479CF7;}
-#menuLinks .list .item a{ background:#387EF5; color:#fff;}
+/*#menuLinks .list .item{ border-color:#479CF7;}
+#menuLinks .list .item a{ background:#387EF5; color:#fff;}*/
 
+#menuLinks .list .items {
+  border-color: none;
+}
+#menuLinks .list .item a {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.75em;
+  color:#707980;
+  background-color: #F6FAFE;
+}
+
+#menuLinks .list .item a :hover {
+  color:#262d33;
+  background-color: white;
+}
 /*
   Aca van todas las clases personalizadas
 */

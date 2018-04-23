@@ -2,10 +2,10 @@
   <ion-content>
     <div class="item">
       <div class="button-bar task-font">
-        <a class="button button-positive" ng-show="porconsumo == true">Listar por consumo</a>
+        <a class="button button-dark" ng-show="porconsumo == true">Listar por consumo</a>
         <a class="button" ng-show="porconsumo == false" ng-click="changeToConsume()">Listar por consumo</a>
         <a class="button" ng-show="porconsumo == true" ng-click="changeToDate()">Listar por fecha y hora</a>
-        <a class="button button-positive" ng-show="porconsumo == false">Lisar por fecha y hora</a>
+        <a class="button button-dark" ng-show="porconsumo == false">Listar por fecha y hora</a>
       </div>
     </div>
     <!-- Por Consumo -->
@@ -18,7 +18,7 @@
         </div>
       </div>
       <div ng-show="spinner == true" class="center-spinner">
-        <ion-spinner icon="android"></ion-spinner>
+        <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
       </div>
       <div class="card" ng-repeat="task in datatasks_server">
         <div class="list">
@@ -52,7 +52,7 @@
               <a ng-click="deleteTask(task.id,'datatasks')" class="task-float-right task-float-right-first button button-small button-assertive">
                 <i class="icon ion-trash-b"></i>
               </a>
-              <a ng-click="editDataTask(task)" class="task-float-right button button-small button-positive">
+              <a ng-click="editDataTask(task)" class="task-float-right button button-small button-dark">
                 <i class="icon ion-edit"></i>
               </a>
             </div>
@@ -93,7 +93,7 @@
               <a ng-click="deleteTask(task.id,'datetimetasks')" class="task-float-right task-float-right-first button button-small button-assertive">
                 <i class="icon ion-trash-b"></i>
               </a>
-              <a ng-click="editDateTimeTask(task)" class="task-float-right button button-small button-positive">
+              <a ng-click="editDateTimeTask(task)" class="task-float-right button button-small button-dark">
                 <i class="icon ion-edit"></i>
               </a>
 
