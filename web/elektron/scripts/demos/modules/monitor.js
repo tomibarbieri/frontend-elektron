@@ -17,6 +17,7 @@ angular.module('theme.demos.monitor', [
     $scope.spinner = true;
     $scope.loading = false;
     $scope.monitorserror = false;
+    $scope.components_charts = {};
 
     $scope.charts = [];
 
@@ -28,8 +29,14 @@ angular.module('theme.demos.monitor', [
     var url_server = 'http://158.69.223.78:8000';
     var url_cape = 'http://163.10.33.173:8000';
 
-    /*$scope.$on('chart-create', function (evt, chart) {
-      if ($scope.components_server_enabled) {
+    $scope.$on('chart-create', function (evt, chart) {
+      $scope.charts.push(chart);
+      $scope.components_charts[chart.chart.canvas.id].chart = chart;
+      $scope.components_charts[chart.chart.canvas.id].status = false;
+
+      console.log($scope.charts);
+      console.log($scope.components_charts);
+      /*if ($scope.components_server_enabled) {
         if ($scope.charts.length < $scope.components_server_enabled.length) {
           $scope.charts.push(chart);
           console.log('nuevo chart');
@@ -37,9 +44,8 @@ angular.module('theme.demos.monitor', [
           console.log($scope.charts);
         }
       } else {
-        $scope.charts.push(chart);
-      }
-    });*/
+      }*/
+    });
 
     $scope.pauseWebsocket = function () {
       $scope.websocketplay = false;
@@ -72,9 +78,7 @@ angular.module('theme.demos.monitor', [
         for (var component in $scope.components_server_enabled) {
           var labels = [];
           var data = [[]];
-          console.log($scope.components_server_enabled);
           var last = ($scope.components_server_enabled[component].lastdata.length > 10)? 10 : $scope.components_server_enabled[component].lastdata.length;
-          console.log(last);
           for (var i = 0; i < last; i++) {
             var date = $scope.components_server_enabled[component].lastdata[i].date;
             var hora = $filter('date')(date, "HH:mm");
@@ -85,13 +89,14 @@ angular.module('theme.demos.monitor', [
             labels.push(label);
             data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
           }
-
+          $scope.components_charts[$scope.components_server_enabled[component].device_mac] = {};
           $scope.line[$scope.components_server_enabled[component].device_mac] = {
                                                                         'series': ['Potencia'],
                                                                         'labels': labels,
                                                                         'data': data,
                                                                         'status': false
                                                                       };
+
         }
 
         $scope.loadWebsocket();
@@ -149,6 +154,7 @@ angular.module('theme.demos.monitor', [
           $scope.websocketStatus = true;
 
           var json = JSON.parse(message.data);
+          console.log(json);
 
           $scope.current_data = json;
           $scope.current_data_date = new Date(json.data_datetime);
@@ -156,9 +162,7 @@ angular.module('theme.demos.monitor', [
 
           if (json != undefined && $scope.websocketplay == true) {
 
-            console.log(json);
             $scope.last_value = json.data_value;
-
             var current_mac = json.device_mac;
 
             var date = new Date(json.data_datetime);
@@ -169,21 +173,25 @@ angular.module('theme.demos.monitor', [
 
             var label = '(' + dia + '/' + mes + ') ' + hora;
 
-            $scope.line[current_mac].labels.splice(0,1);
-            $scope.line[current_mac].labels.push(label);
+            $scope.components_charts[current_mac].status = true;
 
-            $scope.line[current_mac].data[0].splice(0,1);
-            $scope.line[current_mac].data[0].push(json.data_value)
+            var labels = Array.from($scope.components_charts[current_mac].chart.chart.config.data.labels);
+            var datas = Array.from($scope.components_charts[current_mac].chart.config.data.datasets[0].data);
 
-            $scope.line[current_mac].status = true;
+            labels.splice(0,1);
+            labels.push(label);
 
-            /*if ($scope.charts) {
-                for (var i = 0; i < $scope.charts.length; i++) {
-                  $scope.charts[i].update();
-                }
-                $scope.$apply()
-            }*/
-            $scope.$apply();
+            datas.splice(0,1);
+            datas.push(json.data_value.toString());
+
+            if ($scope.components_charts[current_mac].chart) {
+
+              $scope.components_charts[current_mac].chart.config.data.datasets[0].data = datas;
+              $scope.components_charts[current_mac].chart.config.data.labels = labels;
+
+              $scope.components_charts[current_mac].chart.update();
+
+            }
           }
         };
     }

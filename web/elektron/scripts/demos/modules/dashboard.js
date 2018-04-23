@@ -25,7 +25,20 @@ angular.module('theme.demos.dashboard', [
 
     // Funcion para asociar la creacion del chart y guardar la variable
     $scope.$on('chart-create', function (evt, chart) {
+      if ($scope.chart == undefined) {
+      }
       $scope.chart = chart;
+      console.log("chart-create");
+      //console.log($scope.chart);
+      //console.log("creating chart");
+      //console.log(evt);
+      //console.log(chart);
+    });
+
+    $scope.$on('chart-update', function (evt, chart) {
+      console.log("chart-update");
+      //console.log(evt);
+      //console.log(chart);
     });
 
     $scope.reloadpage = function () {
@@ -101,6 +114,9 @@ angular.module('theme.demos.dashboard', [
 
             console.log(response.data.data);
 
+            var myElement = angular.element( document.querySelector( '#line' ) );
+            console.log(myElement);
+
             if (response.data.data.length > 0) {
               Notifier.simpleSuccess('Datos cargados', 'Los datos para el componente X fueron cargados con exito');
               $scope.graficate(response.data.data);
@@ -131,9 +147,11 @@ angular.module('theme.demos.dashboard', [
         $scope.line.labels = [];
         $scope.line.data = [[]];
 
-        $scope.spinner = false;
+        var labels = new Array();
+        var datas = new Array();
 
-        for (var i = inicio; i < fin; i++) {
+
+        for (var i = fin - 1; i >= inicio; i--) {
 
           var hora = $filter('date')(data_sense[i].date, "HH:mm");
           var dia = $filter('date')(data_sense[i].date, 'dd');
@@ -142,9 +160,16 @@ angular.module('theme.demos.dashboard', [
           var label = '(' + dia + '/' + mes + ') ' + hora;
           var data = data_sense[i].data_value;
 
-          $scope.line.labels.push(label);
-          $scope.line.data[0].push(data);
+          labels.push(label);
+          datas.push(data);
+
         }
+
+        $scope.spinner = false;
+
+        $scope.line.labels = labels;
+        $scope.line.data[0] = datas;
+
     }
 
     // funcion que se ejecuta cuando se selecciona un componente
@@ -255,13 +280,13 @@ angular.module('theme.demos.dashboard', [
       $rootScope.ws.onmessage = function(message) {
 
           var data = JSON.parse(message.data);
-          console.log(data);
 
           // chequea que el dato sea del componente elegido y lo muestra
           if ($scope.current_component) {
 
             if (data.device_mac == $scope.current_component.device_mac && $scope.websocketplay == true) {
               // Saca el primero del arreglo y pone uno nuevo al final
+              console.log(data);
 
               $scope.current_data = data;
               $scope.current_data_date = new Date(data.data_datetime);
@@ -275,19 +300,26 @@ angular.module('theme.demos.dashboard', [
 
               var label = '(' + dia + '/' + mes + ') ' + hora;
 
-              $scope.line.labels.splice(0,1);
-              $scope.line.labels.push(label);
+              var labels = Array.from($scope.chart.config.data.labels);
+              var datas = Array.from($scope.chart.config.data.datasets[0].data);
 
-              $scope.line.data[0].splice(0,1);
-              $scope.line.data[0].push(data.data_value);
+              labels.splice(0,1);
+              labels.push(label);
 
+              datas.splice(0,1);
+              datas.push(data.data_value.toString());
 
               if ($scope.chart) {
-                  $scope.chart.update();
+
+                $scope.chart.config.data.datasets[0].data = datas;
+                $scope.chart.config.data.labels = labels;
+
+                $scope.chart.update();
+
               }
             }
           } else {
-            console.log('No fue seleccionado ningun componente');
+            console.log('No fue seleccionado ningún componente');
           }
 
 
