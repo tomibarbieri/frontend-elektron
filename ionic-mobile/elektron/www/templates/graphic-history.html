@@ -37,7 +37,10 @@
         <span class=""><b>Precisión</b>: {{precision}}</span>
       </div>
       <div class="item">
-        <span class=""><b>Componente</b>: {{component_details.label}}</span>
+        <span class=""><b>Cantitdad de datos</b>: {{total_data}}</span>
+      </div>
+      <div class="item">
+        <span class=""><b>Componente</b>: {{component_details.label || componentId}}</span>
       </div>
     </div>
     <div ng-show="historyerror == true" class="errormessage center-spinner">

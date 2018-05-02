@@ -1,27 +1,36 @@
 
+<!--
 <div class="tabs-striped  tabs-background-positive tabs-color-light">
     <div class="tabs">
       <a class="tab-item active" href="#/app/login"><i class="icon ion-unlocked"></i> Ingresar</a>
       <a class="tab-item" href="#/app/signup"> <i class="icon ion-person"></i> Registrarse </a>
     </div>
  </div>
+-->
 
 <ion-view view-title="Iniciar sesion" class="loginBg" hide-nav-bar="true" >
 <!-- <ion-nav-title><img src="img/logo.png" width="40"></ion-nav-title> -->
 
   <ion-content class="padding">
 
-  <div class="row responsive-sm padding remvoeBP">
+  <div class="login row responsive-sm padding remvoeBP">
 	  <div class="col">
-			<div class="app-logo"><img class="logo-img" src="img/elektron.png"></div>
+			<div class="app-logo">
+        <img class="logo-img" src="img/elektron.png">
+      </div>
+
+      <div class="login-text">
+        <span>Elektron</span><br>
+        <span>Iniciar sesión</span>
+      </div>
 
 			<div class="list list-inset removePM">
-			  <label class="item item-input"><input type="text" ng-model="user.username" placeholder="Email" > </label>
+			  <label class="item item-input"><input type="text" ng-model="user.username" placeholder="Usuario o Email" > </label>
 			  <label class="item item-input"><input type="password" ng-model="user.password" placeholder="Contraseña" > </label>
 			</div>
 
 			<div class="loginButton">
-        <button class="button ion-unlocked button-block button-balanced" ng-click="login(user);" > Ingresar </button>
+        <button class="button button-block button-balanced" ng-click="login(user);" > Ingresar </button>
       </div>
 	  </div>
   </div>

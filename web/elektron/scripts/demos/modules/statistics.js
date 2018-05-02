@@ -359,5 +359,6 @@ angular
         $scope.doughnutdata.push(percent);
       }
       $scope.spinnerdoughnout = false;
+      $scope.$apply();
     }
 }]);

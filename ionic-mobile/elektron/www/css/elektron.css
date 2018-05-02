@@ -1,6 +1,21 @@
 
 /* CSS especifico de la aplicacion de elektron */
 
+.login {
+  margin-top: 70px;
+}
+
+.login-text {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.login-text span{
+  text-transform: uppercase;
+  font-size: 1em;
+
+}
+
 .errormessage {
   font-size: 0.8em;
   color: red;

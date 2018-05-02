@@ -18,7 +18,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 	 $scope.showAlert = function(msg) {
 	   var alertPopup = $ionicPopup.alert({
 		 title: 'Aviso',
-		 template: msg
+		 template: msg ,
+     buttons: [{
+       text: 'Cancel',
+       type: 'button-dark'
+      }]
 	   });
 	 };
 })
@@ -1628,6 +1632,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     }).then(function(response){
         console.log(response);
         $scope.data = response.data.data;
+        $scope.total_data = response.data.total_data;
         $scope.pagesdata = response.data;
         $scope.spinner = false;
         if ($scope.data.length > 0) {
@@ -1674,7 +1679,10 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.loadComponent = function () {
     $http({
         method:'GET',
-        url:'http://158.69.223.78:8000/devices/' + $scope.componentId + '/'
+        url:'http://158.69.223.78:8000/devices/' + $scope.componentId + '/',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+        }
     }).then(function(response){
         $scope.component_details = response.data.device;
         console.log($scope.component_details);
@@ -1683,8 +1691,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     });
   };
 
+  $scope.loadComponent();
   $scope.loadUrl();
   $scope.loadData();
-  $scope.loadComponent();
 
 });

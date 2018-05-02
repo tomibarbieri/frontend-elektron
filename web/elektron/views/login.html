@@ -18,14 +18,16 @@
 				</div>
 				<div class="clearfix">
 				</div>
-				<a class="btn btn-primary btn-block" ng-click="formSubmit()" data-pulsate="{reach:10, pause: 2000}">Ingresar</a>
+				<a class="btn btn-success btn-block" ng-click="formSubmit()" data-pulsate="{reach:10, pause: 2000}">Ingresar</a>
         <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)"><span ng-bind-html="alert.msg | safe_html"></span></alert>			</form>
 		</div>
+		<!--
 		<div class="panel-footer">
 
       <div class="pull-right" >
 				<a href="#/signupform" class="btn btn-default">Crear cuenta</a>
 			</div>
 		</div>
+		-->
 	</div>
  </div>

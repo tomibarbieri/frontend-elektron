@@ -57,20 +57,20 @@
             <td>
 						<!-- editable status (select-local) -->
 						<span e-form="rowform" e-required>
-						  {{component.data_sum/1000 * 1.0 | number:0 }} kw ({{ component.device_percent || 0 | number:1 }}%)
+						  {{component.data_sum/1000 | number:0 }} kw ({{ component.device_percent || 0 | number:1 }}%)
 						</span>
 					  </td>
 
             <td>
 						<!-- editable status (select-local) -->
 						<span e-form="rowform" e-required>
-						  $ {{component.total_tarifa | number:1}}
+						  $ {{component.device_tarifa | number:0 }}
 						</span>
 					  </td>
             <td>
 						<!-- editable status (select-local) -->
 						<span e-form="rowform" e-required>
-						  {{ component.total_co2 | number:1 }} Kg
+						  {{ component.device_co2 | number:0 }} Kg
 						</span>
 					  </td>
 					  <td>

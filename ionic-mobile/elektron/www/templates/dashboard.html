@@ -76,6 +76,10 @@
                 <span>Costo aproximado: </span>
                 <span class="badge badge-calm badge-letter"> $ {{ general_data.total_tax | number : 0 }} </span>
               </div>
+              <div class="item">
+                <span>Contaminacion Co2: </span>
+                <span class="badge badge-energized badge-letter"> {{ general_data.total_co2 | number : 0 }} Kg </span>
+              </div>
         </div>
         <div class="list">
           <div class="row item item-divider">
