@@ -137,17 +137,25 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { ready: false }, true);
           $scope.components_server_enabled = $filter('filter')($scope.components_server, { ready: true }, true);
 
-          $scope.current_component = $scope.components_server_enabled[0];
-
-          $scope.openWebsocketConnection();
-          $scope.loadInitialData();
+          if ($scope.components_server_enabled.length > 0) {
+            $scope.current_component = $scope.components_server_enabled[0];
+            $scope.loadInitialData();
+            $scope.openWebsocketConnection();
+          }
+          else {
+            ionicToast.show('No hay componentes habilitados para mostrar datos en tiempo real.', 'bottom', false, 3000);
+            $scope.dasherror = true;
+            $scope.errormessage = "No hay componentes habilitados para mostrar datos en tiempo real";
+            $scope.spinner = false;
+            $scope.spinnerdash = false;
+          }
 
       }, function(response){
           ionicToast.show('Error de conexión al traer componentes.', 'bottom', false, 3000);
           $scope.dasherror = true;
           $scope.errormessage = "No se pudieron traer los componentes";
           $scope.spinner = false;
-          //show an appropriate message
+          $scope.spinnerdash = false;
       });
 
       $http({

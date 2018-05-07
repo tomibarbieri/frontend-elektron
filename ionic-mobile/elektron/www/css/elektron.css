@@ -1,6 +1,7 @@
 
 /* CSS especifico de la aplicacion de elektron */
 
+
 .login {
   margin-top: 70px;
 }
@@ -44,6 +45,7 @@
 
 .icon-menu {
   margin-right: 7px;
+  font-size: 1.3em;
 }
 
 /*.color-options ion-item, ion-list, a {

@@ -74,9 +74,8 @@ angular
         $scope.components_statistics = response.data.devices;
         console.log($scope.components_statistics);
         $scope.spinnerstatistics = false;
-        $scope.$apply();
-
         $scope.createDoughnutChart();
+        $scope.$apply();
 
     }, function(response){
         $scope.statisticserror = true;
@@ -359,6 +358,5 @@ angular
         $scope.doughnutdata.push(percent);
       }
       $scope.spinnerdoughnout = false;
-      $scope.$apply();
     }
 }]);

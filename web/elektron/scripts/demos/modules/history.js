@@ -503,7 +503,6 @@ angular.module('theme.demos.history', [
     // funcion luego de elegir los campos del form de history
     $scope.updateChart = function (){
 
-      Notifier.simpleInfo('Cargando datos para el pedido seleccionado','Esperando respuesta del servidor');
 
       console.log('updateChart');
       console.log($scope.configuration);
@@ -518,6 +517,7 @@ angular.module('theme.demos.history', [
                  );
 
       if (validate) {
+        Notifier.simpleInfo('Cargando datos para el pedido seleccionado','Esperando respuesta del servidor');
         $scope.loadUrl();
         $scope.loadData();
         $scope.selectedperiod = true;

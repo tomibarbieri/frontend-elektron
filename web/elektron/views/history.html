@@ -227,7 +227,7 @@
                             </button>
                           </form>
                           <div class="buttons buttons-grid" ng-show="!rowform.$visible">
-                            <button class="btn btn-sm btn-primary" ng-click="updateChart()">Ver datos</button>
+                            <button ng-disabled="(configuration.dateFrom == undefined) || (configuration.timeFrom == undefined) || (configuration.timeTo == undefined) || (configuration.dateTo == undefined) || (configuration.component == undefined) || (configuration.precision == undefined)" class="btn btn-sm btn-primary" ng-click="updateChart()">Ver datos</button>
                           </div>
                           </td>
                         </tr>
