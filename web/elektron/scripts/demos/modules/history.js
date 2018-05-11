@@ -98,6 +98,10 @@ angular.module('theme.demos.history', [
       for (var i = 1; i <= $scope.pagesdata.pages; i++) {
         $scope.number_pages.push(i);
       }
+      if ($scope.number_pages.length <= 1) {
+        $scope.previousbutton = true;
+        $scope.lastbutton = true;
+      }
     }
 
     // FUNCIONES

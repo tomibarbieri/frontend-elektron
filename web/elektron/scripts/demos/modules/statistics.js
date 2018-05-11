@@ -109,6 +109,10 @@ angular
           $scope.number_pages.push(i);
         }
       }
+      if ($scope.number_pages.length <= 1) {
+        $scope.previousbutton = true;
+        $scope.lastbutton = true;
+      }
     }
 
     $scope.changeCriteria = function(precision) {
