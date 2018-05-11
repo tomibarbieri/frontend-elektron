@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.ionicframework.ost01638294" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>ost01</name>
+    <name>Elektron</name>
     <description>
-        An Ionic Framework and Cordova project.
+        Sistema de control y sensado de consumo eléctrico.
     </description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
+      Tomson y Agus
     </author>
     <content src="index.html" />
     <access origin="*" />
@@ -40,4 +40,5 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <plugin name="cordova-plugin-x-toast" spec="git+https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git" />
+    <engine name="android" spec="~7.0.0" />
 </widget>

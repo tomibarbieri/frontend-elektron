@@ -176,6 +176,7 @@ angular.module('theme.demos.history', [
           console.log(response);
           $scope.data = response.data.data;
           $scope.pagesdata = response.data;
+          $scope.total_watts = response.data.data_sum_period;
 
           if ($scope.data.length > 0) {
             $scope.total_data = response.data.total_data;

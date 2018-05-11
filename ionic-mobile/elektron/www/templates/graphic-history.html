@@ -27,6 +27,9 @@
       <div class="item item-divider">
         <span>Detalles:</span>
       </div>
+      <div class="item">
+        <span class=""><b>Componente</b>: {{component_details.label || componentId}}</span>
+      </div>
       <div date class="item">
         <span class=""><b>Desde</b>: {{dateFrom| date: "dd/MM"}} - Hora: {{timeFrom| date: "HH:mm"}}</span>
       </div>
@@ -34,13 +37,13 @@
         <span class=""><b>Hasta</b>: {{dateTo| date: "dd/MM"}} - Hora: {{timeTo| date: "HH:mm"}}</span>
       </div>
       <div class="item">
-        <span class=""><b>Precisión</b>: {{precision}}</span>
+        <span class=""><b>Precisión</b>: {{precision || 'Cargando..'}}</span>
       </div>
       <div class="item">
-        <span class=""><b>Cantitdad de datos</b>: {{total_data}}</span>
+        <span class=""><b>Cantitdad de datos</b>: {{total_data || 0}}</span>
       </div>
       <div class="item">
-        <span class=""><b>Componente</b>: {{component_details.label || componentId}}</span>
+        <span class=""><b>Cantitdad de Consumo</b>: {{total_watts/1000 || 0 | number:1}} Kw</span>
       </div>
     </div>
     <div ng-show="historyerror == true" class="errormessage center-spinner">

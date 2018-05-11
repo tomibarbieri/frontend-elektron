@@ -1642,6 +1642,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         $scope.data = response.data.data;
         $scope.total_data = response.data.total_data;
         $scope.pagesdata = response.data;
+        $scope.total_watts = response.data.data_sum_period;
         $scope.spinner = false;
         if ($scope.data.length > 0) {
           $scope.calculatePages();

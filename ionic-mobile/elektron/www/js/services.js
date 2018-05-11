@@ -1,15 +1,24 @@
 angular.module('starter.services', ["ngResource"])
 
 .factory('LoginService', function($rootScope) {
-    var admin = 'admin';
-    var pass = 'pass';
+    //var admin = 'admin';
+    //var pass = 'pass';
+    // 192.168.0.25
     var isAuthenticated = false;
     // Guardar en la base de datos
 
     return {
       login : function(username, password) {
-        isAuthenticated = username === admin && password === pass;
-        // aca va un ajax
+
+        $http({
+            method:'GET',
+            url:'http://158.69.223.78:8000/devices/'
+        }).then(function(response){
+
+        }, function(response){
+
+        });
+
         return isAuthenticated;
       },
       logout : function() {
@@ -19,15 +28,4 @@ angular.module('starter.services', ["ngResource"])
         return isAuthenticated;
       }
     };
-})
-
-.factory('Resource', function($resource) {
-
-  sensados = $resource("http://163.10.33.156:9292/sensor/a911/get/status");
-  return {
-    all: function() {
-      return sensados.get();
-    }
-  }
-
 });
