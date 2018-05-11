@@ -67,45 +67,57 @@ angular.module('theme.demos.monitor', [
         $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { ready: false }, true);
         $scope.components_server_enabled = $filter('filter')($scope.components_server, { ready: true }, true);
 
-        $scope.line = {};
 
-        var hora = $filter('date')(new Date(), "HH:mm");
-        var dia = $filter('date')(new Date(), 'dd');
-        var mes = $filter('date')(new Date(), 'MM');
+        if ($scope.components_server_enabled > 0) {
 
-        var label = '(' + dia + '/' + mes + ') ' + hora;
+          $scope.line = {};
 
-        for (var component in $scope.components_server_enabled) {
-          var labels = [];
-          var data = [[]];
-          var last = ($scope.components_server_enabled[component].lastdata.length > 10)? 10 : $scope.components_server_enabled[component].lastdata.length;
-          for (var i = 0; i < last; i++) {
-            var date = $scope.components_server_enabled[component].lastdata[i].date;
-            var hora = $filter('date')(date, "HH:mm");
-            var dia = $filter('date')(date, 'dd');
-            var mes = $filter('date')(date, 'MM');
+          var hora = $filter('date')(new Date(), "HH:mm");
+          var dia = $filter('date')(new Date(), 'dd');
+          var mes = $filter('date')(new Date(), 'MM');
 
-            var label = '(' + dia + '/' + mes + ') ' + hora;
-            labels.push(label);
-            data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
+          var label = '(' + dia + '/' + mes + ') ' + hora;
+
+          for (var component in $scope.components_server_enabled) {
+            var labels = [];
+            var data = [[]];
+            var last = ($scope.components_server_enabled[component].lastdata.length > 10)? 10 : $scope.components_server_enabled[component].lastdata.length;
+            for (var i = 0; i < last; i++) {
+              var date = $scope.components_server_enabled[component].lastdata[i].date;
+              var hora = $filter('date')(date, "HH:mm");
+              var dia = $filter('date')(date, 'dd');
+              var mes = $filter('date')(date, 'MM');
+
+              var label = '(' + dia + '/' + mes + ') ' + hora;
+              labels.push(label);
+              data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
+            }
+            $scope.components_charts[$scope.components_server_enabled[component].device_mac] = {};
+            $scope.line[$scope.components_server_enabled[component].device_mac] = {
+                                                                          'series': ['Potencia'],
+                                                                          'labels': labels,
+                                                                          'data': data,
+                                                                          'status': false
+                                                                        };
+
           }
-          $scope.components_charts[$scope.components_server_enabled[component].device_mac] = {};
-          $scope.line[$scope.components_server_enabled[component].device_mac] = {
-                                                                        'series': ['Potencia'],
-                                                                        'labels': labels,
-                                                                        'data': data,
-                                                                        'status': false
-                                                                      };
 
-        }
+          $scope.loadWebsocket();
 
-        $scope.loadWebsocket();
+      } else {
+        $scope.monitorserror = true;
+        $scope.spinner = false;
+        $scope.loading = false;
+        Notifier.simpleError('No hay componentes', 'No hay componentes para mostrar datos en tiempo real');
+        $scope.monitorerrormsje = 'No hay componentes para mostrar datos en tiempo real';
+      }
 
     }, function(response){
         $scope.monitorserror = true;
         $scope.spinner = false;
+        $scope.loading = false;
+        $scope.monitorerrormsje = 'Error de conexion en el servidor';
         Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los dispositivos');
-        console.log("problemas de conexion");
     });
 
     $scope.refreshConnection = function(){
