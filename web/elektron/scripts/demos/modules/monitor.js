@@ -68,7 +68,7 @@ angular.module('theme.demos.monitor', [
         $scope.components_server_enabled = $filter('filter')($scope.components_server, { ready: true }, true);
 
 
-        if ($scope.components_server_enabled > 0) {
+        if ($scope.components_server_enabled.length > 0) {
 
           $scope.line = {};
 
@@ -104,13 +104,13 @@ angular.module('theme.demos.monitor', [
 
           $scope.loadWebsocket();
 
-      } else {
-        $scope.monitorserror = true;
-        $scope.spinner = false;
-        $scope.loading = false;
-        Notifier.simpleError('No hay componentes', 'No hay componentes para mostrar datos en tiempo real');
-        $scope.monitorerrormsje = 'No hay componentes para mostrar datos en tiempo real';
-      }
+        } else {
+          $scope.monitorserror = true;
+          $scope.spinner = false;
+          $scope.loading = false;
+          Notifier.simpleError('No hay componentes', 'No hay componentes para mostrar datos en tiempo real');
+          $scope.monitorerrormsje = 'No hay componentes para mostrar datos en tiempo real';
+        }
 
     }, function(response){
         $scope.monitorserror = true;
