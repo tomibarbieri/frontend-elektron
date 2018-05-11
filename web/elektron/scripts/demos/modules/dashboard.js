@@ -55,16 +55,26 @@ angular.module('theme.demos.dashboard', [
           $scope.components_server = response.data.devices;
           $scope.components_server_not_enabled = $filter('filter')($scope.components_server, { ready: false }, true);
           $scope.components_server_enabled = $filter('filter')($scope.components_server, { ready: true }, true);
-          $scope.current_component = $scope.components_server_enabled[0];
 
-          $scope.loadInitialData();
-          $scope.openWebsocketConnection();
+          if ($scope.components_server_enabled.length > 0) {
+            $scope.current_component = $scope.components_server_enabled[0];
+            $scope.loadInitialData();
+            $scope.openWebsocketConnection();
+          } else {
+            Notifier.simpleError('No hay componentes', 'No hay componentes para mostrar datos en tiempo real');
+            $scope.dashboarderror = true;
+            $scope.current_component = {'label':'No hay'};
+            $scope.dashboarderrormsje = "No hay componentes para mostrar datos en tiempo real";
+            $scope.loading = false;
+            $scope.spinner = false;
+          }
 
       }, function(response){
           $scope.loading = false;
           $scope.spinner = false;
+          $scope.current_component = {'label':'No hay'};
           $scope.dashboarderror = true;
-          console.log("problemas de conexion");
+          $scope.dashboarderrormsje = "Error de conexion en el servidor";
           Notifier.simpleError('Error de la conexion', 'Se ha detectado un error de la conexion al buscar los componentes');
     });
 
