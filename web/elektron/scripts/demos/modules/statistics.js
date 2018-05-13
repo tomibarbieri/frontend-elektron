@@ -1,6 +1,6 @@
 angular
   .module('theme.demos.statistics', ['chart.js'])
-  .controller('StatisticsController', ['$scope', '$http', '$filter', 'Notifier', '$window', function($scope, $http, $filter, Notifier, $window) {
+  .controller('StatisticsController', ['$scope', '$http', '$filter', 'Notifier', '$timeout', '$window', function($scope, $http, $filter, Notifier, $timeout, $window) {
     'use strict';
 
     console.log("Statistics");
@@ -75,7 +75,10 @@ angular
         console.log($scope.components_statistics);
         $scope.spinnerstatistics = false;
         $scope.createDoughnutChart();
-        $scope.$apply();
+
+        $timeout( function(){
+            $scope.$apply();
+        }, 1000 );
 
     }, function(response){
         $scope.statisticserror = true;
@@ -357,7 +360,8 @@ angular
     $scope.createDoughnutChart = function() {
       for (var i = 0; i < $scope.components_statistics.length; i++) {
         var percent = ($scope.components_statistics[i].device_percent) ? $filter('number')($scope.components_statistics[i].device_percent, 2) : 0;
-        var label = $scope.components_statistics[i].device.label + ' (' + percent + '%)';
+        var total = $filter('number')($scope.components_statistics[i].device_data_sum/1000, 1);
+        var label = $scope.components_statistics[i].device.label + ' (' + total + 'Kw)';
         $scope.doughnutlabels.push(label);
         $scope.doughnutdata.push(percent);
       }

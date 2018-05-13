@@ -128,10 +128,10 @@ angular.module('theme.demos.dashboard', [
             console.log(myElement);
 
             if (response.data.data.length > 0) {
-              Notifier.simpleSuccess('Datos cargados', 'Los datos para el componente X fueron cargados con exito');
+              Notifier.simpleSuccess('Datos cargados', 'Los datos para el componente ' + $scope.current_component.label + ' fueron cargados con exito');
               $scope.graficate(response.data.data);
             } else {
-              Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado')
+              Notifier.simpleError('No hay datos','No hay datos para el componente ' + $scope.current_component.label)
             }
 
         }, function(response){
@@ -215,11 +215,10 @@ angular.module('theme.demos.dashboard', [
             console.log(response.data.data);
 
             if (response.data.data.length > 0) {
-              Notifier.simpleSuccess('Datos cargados', 'Los datos  para el componente X fueron cargados con exito');
+              Notifier.simpleSuccess('Datos cargados', 'Los datos para el componente ' + $scope.current_component.label + ' fueron cargados con exito');
               $scope.graficate(response.data.data);
             } else {
-
-              Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado')
+              Notifier.simpleError('No hay datos','No hay datos para el componente ' + $scope.current_component.label)
             }
 
         }, function(response){

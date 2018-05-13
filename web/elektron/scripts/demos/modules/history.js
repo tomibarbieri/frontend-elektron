@@ -292,7 +292,7 @@ angular.module('theme.demos.history', [
       $scope.spinner = false;
 
       $scope.line = {};
-      $scope.line.series = ['Potencia'];
+      $scope.line.series = ['Potencia en Watts'];
       $scope.line.labels = [];
       $scope.line.data = [[]];
 

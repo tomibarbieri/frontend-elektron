@@ -94,7 +94,7 @@ angular.module('theme.demos.monitor', [
             }
             $scope.components_charts[$scope.components_server_enabled[component].device_mac] = {};
             $scope.line[$scope.components_server_enabled[component].device_mac] = {
-                                                                          'series': ['Potencia'],
+                                                                          'series': ['Potencia en Watts'],
                                                                           'labels': labels,
                                                                           'data': data,
                                                                           'status': false
