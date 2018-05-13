@@ -132,6 +132,13 @@
   margin-top: 20%;
 }
 
+.no-task-container {
+  text-align: center;
+  min-height: 100px;
+  margin-top: 7%;
+}
+
+
 .task-error-container {
   min-height: 160px;
   text-align: center;

@@ -29,7 +29,10 @@
 							<span class="glyphicon glyphicon-refresh"></span>
 						</button>
 					</div>
-				  <table ng-show="(spinnerDataTask == false) && (datataskerror == false)" class="table table-bordered table-condensed">
+					<div ng-show="nodatataskinserver == true" class="no-task-container">
+						<span>No hay tareas por consumo creadas. </span>
+					</div>
+				  <table ng-show="(spinnerDataTask == false) && (datataskerror == false) && (nodatataskinserver == false)" class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
 						<td style="width:16%">Nombre y descripción (<span class="glyphicon glyphicon-file"></span>)</td>
 						<td style="width:15%">Dipositivo</td>
@@ -214,7 +217,10 @@
 							<span class="glyphicon glyphicon-refresh"></span>
 						</button>
 					</div>
-				  <table ng-show="(spinnerDateTime == false) && (datetimetaskerror == false)" class="table table-bordered table-condensed">
+					<div ng-show="nodatetimetaskinserver == true" class="no-task-container">
+						<span>No hay tareas por fecha y hora creadas. </span>
+					</div>
+				  <table ng-show="(spinnerDateTime == false) && (datetimetaskerror == false) && (nodatetimetaskinserver == false)" class="table table-bordered table-condensed">
 					<tr style="font-weight: bold">
 						<td style="width:16%">Nombre y descripción (<span class="glyphicon glyphicon-file"></span>)</td>
 						<td style="width:14%">Dipositivo</td>
@@ -293,7 +299,7 @@
 					  </td>
 					</tr>
 	        </table>
-	        <a ng-show="datetimetaskerror == false" ng-click="addBoxDateTimeTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha</a>
+	        <a ng-show="datetimetaskerror == false" ng-click="addBoxDateTimeTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha y hora</a>
 				</panel>
 
       <panel id="panelDateTimeTask" ng-show="blockdatetimetaskdiv == false" panel-class="panel-primary" data-heading="{{dateTimeTaskDiv}}">
