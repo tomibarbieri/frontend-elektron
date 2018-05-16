@@ -145,29 +145,16 @@
     </div>
     <div class="col-md-6">
 
-        <panel panel-class="panel-default no-padding" heading="Comparación">
+        <panel panel-class="panel-default no-padding" heading="Tabla">
             <panel-controls>
                 <panel-control-collapse></panel-control-collapse>
 
-                <button ng-show="(loadingbar == true) && (barerror == false)" class="button-spinner btn btn-sm btn-default">
-                  <div class="loader-spinner-small"></div>
-                </button>
-
                 <div ng-show="barerror == false" class="btn-group" dropdown>
-                  <button type="button" class="btn btn-sm btn-info">{{ currentPrecision.label || 'Cargando..'}}</button>
-                  <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
-                    <i class="caret"></i>
-                  </button>
-                  <ul class="dropdown-menu pull-right">
-                    <li>
-                      <a ng-repeat="precision in barPrecision" ng-click="changeCriteria(precision)">{{precision.label}}</a>
-                    </li>
-                  </ul>
-                </div>
-
-                <div ng-show="barerror == false" class="btn-group" dropdown>
-                  <button type="button" class="btn btn-sm btn-info">{{currentBarLeft.label || 'Cargando..'}}</button>
-                  <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+                  <button type="button" class="btn btn-sm btn-info">{{currentBarLeft.label || 'Componente 1'}}</button>
+									<button ng-show="(loadingbarc1 == true) && (barerror == false)" class="button-spinner btn btn-sm btn-info">
+										<div class="loader-spinner-small"></div>
+									</button>
+                  <button ng-show="(loadingbarc1 == false)" type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                     <i class="caret"></i>
                   </button>
                   <ul class="dropdown-menu pull-right">
@@ -179,8 +166,11 @@
 
                 <div ng-show="barerror == false" class="btn-group" dropdown>
 
-                  <button type="button" class="btn btn-sm btn-info">{{currentBarRigth.label || 'Cargando..' }}</button>
-                  <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+                  <button type="button" class="btn btn-sm btn-info">{{currentBarRigth.label || 'Componente 2' }}</button>
+									<button ng-show="(loadingbarc2 == true) && (barerror == false)" class="button-spinner btn btn-sm btn-info">
+										<div class="loader-spinner-small"></div>
+									</button>
+									<button ng-show="(loadingbarc2 == false)" type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                     <i class="caret"></i>
                   </button>
                   <ul class="dropdown-menu pull-right">
@@ -189,27 +179,44 @@
                     </li>
                   </ul>
                 </div>
-								<button ng-click="changeBarChart()" class="button-refresh btn btn-sm btn-info"><i class="glyphicon glyphicon-refresh"></i></button>
+
+								<div ng-show="barerror == false" class="btn-group" dropdown>
+									<button type="button" class="btn btn-sm btn-info">{{ currentPrecision.label || 'Precision'}}</button>
+									<button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+										<i class="caret"></i>
+									</button>
+									<ul class="dropdown-menu pull-right">
+										<li>
+											<a ng-repeat="precision in barPrecision" ng-click="changeCriteria(precision)">{{precision.label}}</a>
+										</li>
+									</ul>
+								</div>
+
+								<button ng-show="barerror == false" ng-disabled="(currentBarLeft == undefined) || (currentBarRigth == undefined) || (currentPrecision == undefined)" ng-click="changeBarChart()" class="button-refresh btn btn-sm btn-info"><i class="glyphicon glyphicon-refresh"></i></button>
 
             </panel-controls>
 
             <div class="p20">
                 <div class="row">
-                  <div class="spinner-container" ng-show="spinnerbar == true">
+                  <div class="spinner-container" ng-show="(spinnerbar == true) && (barerror == false)">
                     <div class="loader-spinner"></div>
                   </div>
-									<div ng-show="barerror == true" class="error-container">
+									<div ng-show="(spinnerbar == false) && (barerror == true) && (nocomponentsselected == false)" class="error-container">
 										<span>Error de conexion en el servidor </span>
 										<button ng-click="reloadpage()" class="error-button btn btn-sm btn-default">
 											<span class="glyphicon glyphicon-refresh"></span>
 										</button>
 									</div>
-                  <canvas ng-show="(spinnerbar == false) && (barerror == false)" id="bar" class="chart chart-bar"
+									<div ng-show="(spinnerbar == false) && (nocomponentsselected == true) && (barerror == false)" class="tabla-comparativa-container">
+										<span>Elegir los componentes y la precisión</span>
+										<span class="glyphicon glyphicon-circle-arrow-up"></span>
+									</div>
+                  <canvas ng-show="(spinnerbar == false) && (barerror == false) && (nocomponentsselected == false)" id="bar" class="chart chart-bar"
                     chart-data="bardata" chart-labels="barlabels" chart-series="barseries">
                   </canvas>
                 </div>
             </div>
-            <panel-footer ng-show="(spinnerbar == false) && (barerror == false)">
+            <panel-footer ng-show="(nocomponentsselected == false) && (spinnerbar == false) && (barerror == false)">
               <div class="footer-bar">
                 <button ng-disabled="lastbutton" ng-disabled="previousPageDisable" ng-click="loadPage('last')" class="btn btn-sm btn-info">
                   Final
@@ -218,8 +225,8 @@
                   20 anteriores
                 </button>
                 <div class="btn-group" dropdown>
-                  <button type="button" class="btn btn-sm btn-info">{{ current_page || 0 }}</button>
-                  <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+                  <button ng-disabled="(number_pages.length <= 1)" type="button" class="btn btn-sm btn-info">{{ current_page || 0 }}</button>
+                  <button ng-disabled="(number_pages.length <= 1)" type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                     <i class="caret"></i>
                   </button>
                   <ul class="dropdown-menu pull-right">

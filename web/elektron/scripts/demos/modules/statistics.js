@@ -9,12 +9,15 @@ angular
 
     $scope.doughnut;
     $scope.bar;
-    $scope.loadingbar = false;
+    $scope.loadingbarc1 = false;
+    $scope.loadingbarc2 = false;
+
     $scope.spinnerbar = false;
     $scope.spinnerdoughnout = false;
     $scope.spinnerstatistics = false;
     $scope.statisticserror = false;
     $scope.barerror = false;
+    $scope.nocomponentsselected = true;
 
     $scope.previousbutton = false;
     $scope.lastbutton = false;
@@ -50,17 +53,11 @@ angular
       'url': 'perhour'
     }];
 
-    $scope.currentPrecision = {
-      'id': 0,
-      'label': 'Por día',
-      'url': 'perday'
-    };
-
     $scope.reloadpage = function () {
       $window.location.reload();
     }
 
-    $scope.spinnerbar = true;
+    $scope.spinnerbar = false;
     $scope.spinnerdoughnout = true;
     $scope.spinnerstatistics = true;
 
@@ -95,7 +92,6 @@ angular
     }).then(function(response){
         console.log(response.data);
         $scope.components_server = response.data.devices;
-        $scope.createBarChart();
     }, function(response){
         $scope.spinnerbar = false;
         $scope.barerror = true;
@@ -106,7 +102,7 @@ angular
 
       if ($scope.number_pages == undefined) {$scope.number_pages = []};
       $scope.current_page = 1;
-      if ($scope.pagesdata.pages > $scope.number_pages.length) {
+      if ($scope.pagesdata.pages <= $scope.number_pages.length) {
         $scope.number_pages = [];
         for (var i = 1; i <= $scope.pagesdata.pages; i++) {
           $scope.number_pages.push(i);
@@ -120,43 +116,14 @@ angular
 
     $scope.changeCriteria = function(precision) {
       $scope.currentPrecision = precision;
-      //$scope.loadingbar = true;
-      //var selected = $filter('filter')($scope.barPrecision, {id: id_selected});
-      //$scope.currentPrecision = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
-      //$scope.currentPrecision = selectedPrecision;
-      //$scope.barlabels = [];
-      //$scope.getComponentData('left',$scope.currentBarLeft);
-      //$scope.getComponentData('right',$scope.currentBarRigth);
     }
 
     $scope.changeLeftBarComponent = function(component) {
       $scope.currentBarLeft = component;
-      //var selected = $filter('filter')($scope.components_server, {id: id_selected});
-      //$scope.currentBarLeft = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
     }
 
     $scope.changeRigthBarComponent = function(component) {
       $scope.currentBarRigth = component;
-      //var selected = $filter('filter')($scope.components_server, {id: id_selected});
-      //$scope.currentBarRigth = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
-    }
-
-    $scope.changeBarComponent = function(id_selected, side) {
-
-      var selected = $filter('filter')($scope.components_server, {id: id_selected});
-      var selectedComponent = (id_selected.toString() && selected.length) ? selected[0] : 'Not set';
-
-      $scope.getComponentData(side,selectedComponent);
-
-      if (side == 'left') {
-        $scope.currentBarLeft = selectedComponent;
-        $scope.barseries[0] = $scope.currentBarLeft.label;
-      }
-      else {
-        $scope.currentBarRigth = selectedComponent;
-        $scope.barseries[1] = $scope.currentBarRigth.label;
-      }
-      console.log($scope.barseries);
     }
 
     $scope.getComponentData = function(side, component, offset) {
@@ -168,14 +135,14 @@ angular
       var month_to = $filter('date')(new Date(), 'MM');
       var day_to = $filter('date')(new Date(), 'dd');
       var year_to = $filter('date')(new Date(), 'yyyy');
-      var hour_to = $filter('date')(new Date(), 'hh');
+      var hour_to = $filter('date')(new Date(), 'HH') - 1;
 
       var date_to = '' + day_to + '/' + month_to + '/' + year_to + '/' + hour_to + '/';
 
       var month_from = $filter('date')(new Date(c.created), 'MM');
       var day_from = $filter('date')(new Date(c.created), 'dd');
       var year_from = $filter('date')(new Date(c.created), 'yyyy');
-      var hour_from = $filter('date')(new Date(c.created), 'hh');
+      var hour_from = $filter('date')(new Date(c.created), 'HH');
 
       var date_from = '' + day_from + '/' + month_from + '/' + year_from + '/' + hour_from + '/';
 
@@ -185,23 +152,21 @@ angular
       }).then(function(response){
           console.log(response.data.data);
           $scope.pagesdata = response.data;
-          //Notifier.simpleSuccess('Tabla comparativa','Datos cargados con exito para el componente');
           $scope.graficateComponentBar(response.data.data, side);
           $scope.calculatePages();
-
       }, function(response){
           console.log("problemas de conexion");
           Notifier.simpleError("Tabla comparativa - Error","No se pudo traer la informacion del componente por problemas de conexión");
           $scope.spinnerbar = false;
           $scope.barerror = true;
-          $scope.loadingbar = false;
+          $scope.loadingbarc1 = false;
+          $scope.loadingbarc2 = false;
       });
     }
 
     $scope.graficateComponentBar = function(data, side) {
 
       $scope.spinnerbar = false;
-      $scope.loadingbar = false;
 
       var length = (data.length >= 6) ? 6 : data.length;
 
@@ -224,7 +189,9 @@ angular
 
       if (side == 'left') {
         console.log('izquierda');
+        $scope.loadingbarc1 = false;
         $scope.bardata[0] = [];
+        $scope.barseries[0] = $scope.currentBarLeft.label;
         for (var i = length-1; i >= 0; i--) {
           if (data[i].data_value == null) {
             $scope.bardata[0].push(0);
@@ -235,7 +202,8 @@ angular
       } else {
         console.log('derecha');
         $scope.bardata[1] = [];
-
+        $scope.loadingbarc2 = false;
+        $scope.barseries[1] = $scope.currentBarRigth.label;
         for (var i = length-1; i >= 0; i--) {
           if (data[i].data_value == null) {
             $scope.bardata[1].push(0);
@@ -244,11 +212,11 @@ angular
           }
         }
       }
-
     }
 
     $scope.loadPage = function (page_id) {
-      $scope.loadingbar = true;
+      $scope.loadingbarc1 = true;
+      $scope.loadingbarc2 = true;
       console.log(page_id);
       // procesa la ultima pagina
       if (page_id == 'last') {
@@ -289,10 +257,7 @@ angular
       }
     }
 
-
-
     $scope.loadDataPage = function(side,component,offset,previousbutton,nextbutton,page_id) {
-
       console.log('loadDataPage');
 
       var month_to = $filter('date')(new Date(), 'MM');
@@ -343,16 +308,11 @@ angular
 
     $scope.changeBarChart = function () {
       Notifier.simpleInfo('Tabla comparativa','Cargando los datos de los componentes elegidos y precision correspondiente');
-      $scope.loadingbar = true;
+      $scope.spinnerbar = true;
+      $scope.nocomponentsselected = false;
+      $scope.loadingbarc1 = true;
+      $scope.loadingbarc2 = true;
       $scope.pagesdata = 0;
-      $scope.getComponentData('left',$scope.currentBarLeft);
-      $scope.getComponentData('rigth',$scope.currentBarRigth);
-    }
-
-    $scope.createBarChart = function() {
-      $scope.currentBarLeft = $scope.components_server[0];
-      $scope.currentBarRigth = $scope.components_server[0];
-      $scope.barseries = [$scope.currentBarLeft.label, $scope.currentBarRigth.label];
       $scope.getComponentData('left',$scope.currentBarLeft);
       $scope.getComponentData('rigth',$scope.currentBarRigth);
     }

@@ -346,10 +346,6 @@ angular.module('theme.demos.tasks', [])
 
       $scope.spinnerDateTime = true;
       $scope.blockdatetimetaskdiv = true;
-      console.log($scope.currentDateTimeTask);
-
-      var selected = $filter('filter')($scope.components_server, {id: $scope.currentDateTimeTask.component});
-      var selectedComponent = ($scope.currentDateTimeTask.component && selected.length) ? selected[0] : 'Not set';
 
       var data_params = {
         'taskstate': $scope.currentDateTimeTask.state,
@@ -360,7 +356,7 @@ angular.module('theme.demos.tasks', [])
         'repeats': $scope.currentDateTimeTask.repeats,
         'repeat_criteria': $scope.currentDateTimeTask.criteria,
         'datetime': (new Date($scope.currentDateTimeTask.date)).toUTCString(),
-        'device_mac': selectedComponent.device_mac
+        'device_mac': $scope.currentDateTimeTask.device_mac
       }
 
       console.log(data_params);

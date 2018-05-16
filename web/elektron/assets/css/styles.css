@@ -132,6 +132,12 @@
   margin-top: 20%;
 }
 
+.tabla-comparativa-container {
+  min-height: 190px;
+  text-align: center;
+  margin-top: 22%;
+}
+
 .no-task-container {
   text-align: center;
   min-height: 100px;

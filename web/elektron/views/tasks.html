@@ -132,9 +132,9 @@
               <div class="form-group">
                 <label class="col-sm-3 control-label">Componente</label>
                 <div class="col-sm-6">
-                  <select ng-model="currentDataTask.component" class="form-control" >
+                  <select ng-model="currentDataTask.device_mac" class="form-control" >
                     <optgroup label="Componentes disponibles">
-                      <option ng-repeat="component in components_server" value="{{component.id}}">{{ component.label }}</option>
+                      <option ng-repeat="component in components_server" value="{{component.device_mac}}">{{ component.label }}</option>
                     </optgroup>
                   </select>
                 </div>
@@ -327,9 +327,9 @@
               <div class="form-group">
                 <label class="col-sm-3 control-label">Componente</label>
                 <div class="col-sm-6">
-                  <select ng-model="currentDateTimeTask.component" class="form-control" >
+                  <select ng-model="currentDateTimeTask.device_mac" class="form-control" >
                     <optgroup label="Componentes disponibles">
-                      <option ng-repeat="component in components_server" value="{{component.id}}">{{ component.label }}</option>
+                      <option ng-repeat="component in components_server" value="{{component.device_mac}}">{{ component.label }}</option>
                     </optgroup>
                   </select>
                 </div>
