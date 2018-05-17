@@ -25,20 +25,7 @@ angular.module('theme.demos.dashboard', [
 
     // Funcion para asociar la creacion del chart y guardar la variable
     $scope.$on('chart-create', function (evt, chart) {
-      if ($scope.chart == undefined) {
-      }
       $scope.chart = chart;
-      console.log("chart-create");
-      //console.log($scope.chart);
-      //console.log("creating chart");
-      //console.log(evt);
-      //console.log(chart);
-    });
-
-    $scope.$on('chart-update', function (evt, chart) {
-      console.log("chart-update");
-      //console.log(evt);
-      //console.log(chart);
     });
 
     $scope.reloadpage = function () {
@@ -124,9 +111,6 @@ angular.module('theme.demos.dashboard', [
 
             console.log(response.data.data);
 
-            var myElement = angular.element( document.querySelector( '#line' ) );
-            console.log(myElement);
-
             if (response.data.data.length > 0) {
               Notifier.simpleSuccess('Datos cargados', 'Los datos para el componente ' + $scope.current_component.label + ' fueron cargados con exito');
               $scope.graficate(response.data.data);
@@ -144,8 +128,6 @@ angular.module('theme.demos.dashboard', [
     }
 
     $scope.graficate = function(data){
-
-
         $scope.line = {};
 
         var data_sense = data;
@@ -176,7 +158,6 @@ angular.module('theme.demos.dashboard', [
         }
 
         $scope.spinner = false;
-
         $scope.line.labels = labels;
         $scope.line.data[0] = datas;
 

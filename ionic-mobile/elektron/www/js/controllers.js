@@ -99,19 +99,46 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       // Funcion para asociar la creacion del chart y guardar la variable
       $scope.$on('chart-create', function (evt, chart) {
         $scope.chart = chart;
+        console.log('chart create');
       });
-
-      /*$scope.line = {};
-      $scope.line.labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-      $scope.line.series = ['Potencia'];//, 'Corriente'];
-      $scope.line.data = [
-        [40, 50, 30, 70, 0, 30, 40, 30, 50, 40]//,
-        //[28, 48, 40, 19, 86, 27, 90, 45, 24, 87]
-      ];*/
 
       $scope.changeCurrentComponent = function(component) {
         $scope.last_value = undefined;
+        $scope.spinner = true;
         $scope.current_component = component;
+        // carga los datos del nuevo componente
+        $scope.changeComponentWS();
+      };
+
+      // una vez seleccionado cambia los datos
+      $scope.changeComponentWS = function(){
+        if ($scope.websocketStatus == false) {
+          $scope.openWebsocketConnection();
+        }
+        $scope.reloadData();
+      }
+
+      // Graficar
+      $scope.reloadData = function(){
+        $http({
+              method:'GET',
+              url: url_server + '/devices/' + $scope.current_component.id + '/lastdata/10/'
+          }).then(function(response){
+
+              console.log(response.data.data);
+              $scope.spinner = false;
+
+              if (response.data.data.length > 0) {
+                $scope.graficate(response.data.data);
+              } else {
+                ionicToast.show('No hay datos. No hay datos para el componente seleccionado', 'bottom', false, 8000);
+              }
+
+          }, function(response){
+              $scope.spinner = false;
+              console.log("problemas de conexion");
+              ionicToast.show('Error de conexión con el servidor. Se ha detectado un error de la conexion al buscar la información', 'bottom', false, 8000);
+        });
       };
 
       $scope.pauseWebsocket = function () {
@@ -180,7 +207,6 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
               $scope.spinner = false;
 
               if (response.data.data.length > 0) {
-                //ionicToast.show('Datos cargados. Los datos para el componente '+ $scope.current_component.label + ' fueron cargados con exito', 'bottom', false, 8000);
                 $scope.graficate(response.data.data);
               } else {
                 ionicToast.show('No hay datos. No hay datos para el componente seleccionado', 'bottom', false, 8000);
@@ -210,10 +236,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         for (var i = inicio; i < fin; i++) {
 
           var hora = $filter('date')(data_sense[i].date, "HH:mm");
-          var dia = $filter('date')(data_sense[i].date, 'dd');
-          var mes = $filter('date')(data_sense[i].date, 'MM');
 
-          //var label = '(' + dia + '/' + mes + ') ' + hora;
           var label = '' + hora;
           var data = data_sense[i].data_value;
 
@@ -264,21 +287,25 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
             if (json.device_mac == $scope.current_component.device_mac) {
 
-
               var hora = $filter('date')(new Date(json.data_datetime), "HH:mm");
               var label = '' + hora;
-
               $scope.last_value = json.data_value;
               $scope.last_date = label;
 
-              $scope.line.labels.splice(0,1);
-              $scope.line.data[0].splice(0,1);
-              $scope.line.labels.push(label);
-              $scope.line.data[0].push(json.data_value);
+              var labels = Array.from($scope.chart.config.data.labels);
+              var datas = Array.from($scope.chart.config.data.datasets[0].data);
 
-              /*if ($scope.chart) {
+              labels.splice(0,1);
+              labels.push(label);
+              datas.splice(0,1);
+              datas.push(json.data_value.toString());
+
+              if ($scope.chart) {
+                $scope.chart.config.data.datasets[0].data = datas;
+                $scope.chart.config.data.labels = labels;
                 $scope.chart.update();
-              }*/
+              }
+
             }
           }
         })
@@ -303,12 +330,12 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       $scope.websocketplay = true;
       $scope.last_value = undefined;
       $scope.monitorerror = false;
+      $scope.components_charts = {};
+      $scope.charts = [];
 
       $scope.reloadpage = function () {
         $window.location.reload();
       }
-
-      $scope.charts = [];
 
       $scope.pauseWebsocket = function () {
         $scope.websocketplay = false;
@@ -330,11 +357,13 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
             $scope.spinner = false;
 
             $scope.line = {}
+
             for (var component in $scope.components_server_enabled) {
               var labels = [];
               var data = [[]];
               if ($scope.components_server_enabled[component].lastdata.length >= 10) {
-                for (var i = 0; i < 10; i++) {
+                var last = ($scope.components_server_enabled[component].lastdata.length > 10)? 10 : $scope.components_server_enabled[component].lastdata.length;
+                for (var i = 0; i < last; i++) {
                   labels.push($filter('date')($scope.components_server_enabled[component].lastdata[i].date, "HH:mm"));
                   data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
                 }
@@ -344,8 +373,9 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
                 data[0].push(0,0,0,0,0,0,0,0,0,0);
               }
 
+              $scope.components_charts[$scope.components_server_enabled[component].device_mac] = {};
               $scope.line[$scope.components_server_enabled[component].device_mac] = {
-                                                                            'series': ['Potencia'],
+                                                                            'series': ['Potencia en Watts'],
                                                                             'labels': labels,
                                                                             'data': data,
                                                                             'status': false
@@ -372,21 +402,16 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         $scope.loadWebsocket();
       }
 
-      /*$scope.$on('chart-create', function (evt, chart) {
-        console.log(chart);
-        console.log(evt);
+      $scope.$on('chart-create', function (evt, chart) {
         $scope.charts.push(chart);
-        console.log(chart);
-        if ($scope.components_server_enabled) {
+        console.log($scope.charts);
+        console.log($scope.components_charts);
 
-          if ($scope.charts.length < $scope.components_server_enabled.length) {
-            $scope.charts.push(chart);
-          }
-        } else {
-          console.log("no llegaron los components_server_enabled");
-          scope.charts.push(chart);
-        }
-      });*/
+        $scope.components_charts[chart.chart.canvas.id].chart = chart;
+        $scope.components_charts[chart.chart.canvas.id].status = false;
+
+
+      });
 
       $scope.loadWebsocket = function() {
 
@@ -425,38 +450,31 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
             console.log(json);
 
             if (json != undefined && $scope.websocketplay == true) {
-
-
               var current_mac = json.device_mac;
-
-              $scope.line[current_mac].data[0].splice(0,1);
-              $scope.line[current_mac].data[0].push(json.data_value);
-
-              $scope.line[current_mac].status = true;
-
-              $scope.line[current_mac].labels.splice(0,1);
 
               var date = new Date(json.data_datetime);
               var label = $filter('date')(date, "HH:mm")
-              $scope.line[current_mac].labels.push(label);
 
+              $scope.components_charts[current_mac].status = true;
+
+              var labels = Array.from($scope.components_charts[current_mac].chart.chart.config.data.labels);
+              var datas = Array.from($scope.components_charts[current_mac].chart.config.data.datasets[0].data);
+
+              labels.splice(0,1);
+              labels.push(label);
+
+              datas.splice(0,1);
+              datas.push(json.data_value.toString());
+
+              if ($scope.components_charts[current_mac].chart) {
+                $scope.components_charts[current_mac].chart.config.data.datasets[0].data = datas;
+                $scope.components_charts[current_mac].chart.config.data.labels = labels;
+                $scope.components_charts[current_mac].chart.update();
+              }
               $scope.last_value = json.data_value;
               $scope.last_date = label;
               $scope.current_component = json.device_label;
-
             }
-
-            /*if ($scope.charts) {
-              //console.log($scope.charts);
-              for (var i = 0; i < $scope.charts.length; i++) {
-                //console.log('antes update');
-                console.log($scope.charts[i]);
-                //$scope.charts[i].update();
-              }
-              //console.log('antes apply');
-              //$scope.$apply();
-            };*/
-
         });
       }
 })

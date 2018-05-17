@@ -14,7 +14,6 @@
 .login-text span{
   text-transform: uppercase;
   font-size: 1em;
-
 }
 
 .errormessage {
@@ -46,6 +45,10 @@
 .icon-menu {
   margin-right: 7px;
   font-size: 1.3em;
+}
+
+.monitor-icon {
+  font-size: 1.5em !important;
 }
 
 /*.color-options ion-item, ion-list, a {
@@ -105,6 +108,11 @@
 
 .button-paginado {
   padding: 0px !important;
+}
+
+.button-dash {
+  float: right;
+  margin-right: 22%;
 }
 
 .center-spinner {

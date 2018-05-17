@@ -36,15 +36,7 @@ angular.module('theme.demos.monitor', [
 
       console.log($scope.charts);
       console.log($scope.components_charts);
-      /*if ($scope.components_server_enabled) {
-        if ($scope.charts.length < $scope.components_server_enabled.length) {
-          $scope.charts.push(chart);
-          console.log('nuevo chart');
-          console.log(chart);
-          console.log($scope.charts);
-        }
-      } else {
-      }*/
+
     });
 
     $scope.pauseWebsocket = function () {
