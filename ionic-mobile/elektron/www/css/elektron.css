@@ -16,6 +16,24 @@
   font-size: 1em;
 }
 
+.popup-buttons button:nth-child(2){
+  background-color: #444;
+  border-color: #111;
+  color: white;
+}
+
+.popup-buttons button:nth-child(2):active{
+  background-color: #111;
+  border-color: #111;
+  color: white;
+}
+
+.popup-buttons button:nth-child(2):visited{
+  background-color: #111;
+  border-color: #111;
+  color: white;
+}
+
 .errormessage {
   font-size: 0.8em;
   color: red;

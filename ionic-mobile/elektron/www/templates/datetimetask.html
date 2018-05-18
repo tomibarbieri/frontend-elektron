@@ -73,10 +73,26 @@
 
         <div class="item">
           <div class="button-bar">
-            <a ng-show="editButton == false" ng-click="addDateTimeTask(task)" class="button button-dark icon ion-ios-bolt">
+            <a ng-disabled="(task.state == undefined)
+                         || (task.function == undefined)
+                         || (task.repeats == undefined)
+                         || (task.criteria == undefined)
+                         || (task.date == undefined)
+                         || (task.device_mac == undefined)
+                         || (task.label == undefined)
+                         || (task.description == undefined)"
+              ng-show="editButton == false" ng-click="addDateTimeTask(task)" class="button button-dark icon ion-ios-bolt">
               Agregar tarea
             </a>
-            <a ng-show="editButton == true" ng-click="editDateTimeTask(task)" class="button button-dark icon ion-ios-bolt">
+            <a ng-disabled="(task.state == undefined)
+                         || (task.function == undefined)
+                         || (task.repeats == undefined)
+                         || (task.criteria == undefined)
+                         || (task.date == undefined)
+                         || (task.device_mac == undefined)
+                         || (task.label == undefined)
+                         || (task.description == undefined)"
+              ng-show="editButton == true" ng-click="editDateTimeTask(task)" class="button button-dark icon ion-ios-bolt">
               Editar tarea
             </a>
           </div>
