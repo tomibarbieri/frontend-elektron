@@ -23,7 +23,7 @@
       <div ng-show="(spinner == true) && (monitorerror == false)" class="center-spinner">
         <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
       </div>
-      <div ng-show="monitorerror == true" class="errormessage center-spinner">
+      <div ng-show="monitorerror == true" class="errormessage error-monitor center-spinner">
         <span>{{errormessage}} <i ng-click="reloadpage()" class="icon ion-refresh"></i></span>
       </div>
       <div class="card" ng-repeat="component in components_server_enabled">

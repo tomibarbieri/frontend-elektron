@@ -358,31 +358,41 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
             $scope.line = {}
 
-            for (var component in $scope.components_server_enabled) {
-              var labels = [];
-              var data = [[]];
-              if ($scope.components_server_enabled[component].lastdata.length >= 10) {
-                var last = ($scope.components_server_enabled[component].lastdata.length > 10)? 10 : $scope.components_server_enabled[component].lastdata.length;
-                for (var i = 0; i < last; i++) {
-                  labels.push($filter('date')($scope.components_server_enabled[component].lastdata[i].date, "HH:mm"));
-                  data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
+            if ($scope.components_server_enabled.length > 0) {
+
+              for (var component in $scope.components_server_enabled) {
+                var labels = [];
+                var data = [[]];
+                if ($scope.components_server_enabled[component].lastdata.length >= 10) {
+                  var last = ($scope.components_server_enabled[component].lastdata.length > 10)? 10 : $scope.components_server_enabled[component].lastdata.length;
+                  for (var i = 0; i < last; i++) {
+                    labels.push($filter('date')($scope.components_server_enabled[component].lastdata[i].date, "HH:mm"));
+                    data[0].push($scope.components_server_enabled[component].lastdata[i].data_value);
+                  }
                 }
-              }
-              else {
-                labels.push(0,1,2,3,4,5,6,7,8,9);
-                data[0].push(0,0,0,0,0,0,0,0,0,0);
+                else {
+                  labels.push(0,1,2,3,4,5,6,7,8,9);
+                  data[0].push(0,0,0,0,0,0,0,0,0,0);
+                }
+
+                $scope.components_charts[$scope.components_server_enabled[component].device_mac] = {};
+                $scope.line[$scope.components_server_enabled[component].device_mac] = {
+                                                                              'series': ['Potencia en Watts'],
+                                                                              'labels': labels,
+                                                                              'data': data,
+                                                                              'status': false
+                                                                            };
               }
 
-              $scope.components_charts[$scope.components_server_enabled[component].device_mac] = {};
-              $scope.line[$scope.components_server_enabled[component].device_mac] = {
-                                                                            'series': ['Potencia en Watts'],
-                                                                            'labels': labels,
-                                                                            'data': data,
-                                                                            'status': false
-                                                                          };
+              $scope.loadWebsocket();
+
+            } else {
+              $scope.spinner = false;
+              $scope.monitorerror = true;
+              $scope.errormessage = "No hay componentes habilitados para mostrar datos en tiempo real";
+              $scope.spinnermonitor = false;
+              ionicToast.show('No hay componentes habilitados para mostrar datos en tiempo real.', 'bottom', false, 5000);              
             }
-
-            $scope.loadWebsocket();
 
         }, function(response){
           $scope.spinner = false;

@@ -21,6 +21,10 @@
   color: red;
 }
 
+.error-monitor {
+  padding: 30px;
+}
+
 .infomessage {
   font-size: 0.8em;
 }
