@@ -39,44 +39,10 @@
 		    <a href="#/login" style="font-size: 14px"><i class="fa fa-sign-in"></i> Log in</a>
 	  </li>
 	  <li class="dropdown" ng-show="isLoggedIn" dropdown>
-		    <a href class="dropdown-toggle username" dropdown-toggle><img src="../assets/img/iconoelektron.png" alt="Userfoto" /></a>
-		<ul class="dropdown-menu animated userinfo arrow">
-		  <li class="userlinks">
-			<ul class="dropdown-menu">
-			  <li><a href="#">Edit Profile <i class="pull-right glyphicon glyphicon-pencil"></i></a></li>
-			  <li><a href="#">Account <i class="pull-right glyphicon glyphicon-user"></i></a></li>
-			  <li><a href="#">Settings <i class="pull-right glyphicon glyphicon-cog"></i></a></li>
-			  <li class="divider"></li>
-			  <li><a href="#">Earnings <i class="pull-right glyphicon glyphicon-stats"></i></a></li>
-			  <li><a href="#">Statement <i class="pull-right glyphicon glyphicon-list-alt"></i></a></li>
-			  <li><a href="#">Withdrawals <i class="pull-right glyphicon glyphicon-credit-card"></i></a></li>
-			  <li class="divider"></li>
-			  <li><a href="" class="text-right" ng-click="logOut()">Sign Out</a></li>
-			</ul>
-		  </li>
-		</ul>
+		    <a href class="dropdown-toggle username" dropdown-toggle>
+					<img src="../assets/img/iconoelektron.png" alt="Userfoto" />
+				</a>
 	  </li>
-		<ul class="dropdown-menu animated messages arrow">
-		  <li class="dd-header">
-			<span>Messages ({{unseenCount}})</span>
-			<span><a href="#"><i class="glyphicon glyphicon-cog"></i></a></span>
-		  </li>
-			  <div class="scrollthis" scrollable>
-				<li ng-repeat="item in messages">
-				  <a href="#/" ng-class="{active: !item.read}">
-					<button tooltip-placement="top" tooltip-append-to-body="true" tooltip="Mark read" class="btn-mark-read" ng-if="!item.read" ng-click="setRead(item, $event)"><i class="glyphicon glyphicon-unchecked"></i></button>
-					<button tooltip-placement="top" tooltip-append-to-body="true" tooltip="Mark unread" class="btn-mark-unread" ng-if="item.read" ng-click="setUnread(item, $event)"><i class="glyphicon glyphicon-check"></i></button>
-					<span class="time">{{item.time}}</span>
-					<img ng-src="{{item.thumb}}" alt="avatar" />
-					<div>
-					  <span class="name">{{item.name}}</span>
-					  <span class="msg">{{item.message}}</span>
-					</div>
-				  </a>
-				</li>
-			  </div>
-		  <li class="dd-footer"><a href="#" ng-click="setReadAll($event)">Mark all read</a></li>
-		</ul>
 	  </li>
 	  </li>
 	  <li class="visible-xs-block">

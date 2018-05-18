@@ -39,7 +39,7 @@ angular.module('theme.core.main_controller', ['theme.core.services'])
       'zoomInUp'
     ];
 
-    $scope.layoutLoading = true;
+    $scope.layoutLoading = false;
 
     $scope.getLayoutOption = function(key) {
       return $theme.get(key);
@@ -156,7 +156,7 @@ angular.module('theme.core.main_controller', ['theme.core.services'])
     }, {
       open: true
     }];
-
+    /*
     $scope.$on('$routeChangeStart', function() {
       if ($location.path() === '') {
         return $location.path('/');
@@ -170,4 +170,5 @@ angular.module('theme.core.main_controller', ['theme.core.services'])
         $scope.layoutLoading = false;
       }
     });
+    */
   }]);
