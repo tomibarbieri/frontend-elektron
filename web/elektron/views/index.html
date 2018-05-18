@@ -78,7 +78,7 @@
                       <div class="text-center">Consumo total del sistema</div>
                   </div>
                   <div class="boxes-body">
-                      <div class="text-center">{{ general_data.total_watts / 1000 | number : 0 }} Kw</div>
+                      <div class="text-center">{{ general_data.total_watts / 1000 || 0 | number : 0 }} Kw</div>
                   </div>
                 </a>
               </div>
@@ -127,7 +127,7 @@
                       <div class="text-center">Costo aproximado</div>
                   </div>
                   <div class="boxes-body">
-                      <div class="text-center">$ {{ general_data.total_tax | number : 0 }} </div>
+                      <div class="text-center">$ {{ general_data.total_tax || 0 | number : 0 }} </div>
                   </div>
                 </a>
               </div>
@@ -138,7 +138,7 @@
                       <div class="text-center">Contaminación Co2</div>
                   </div>
                   <div class="boxes-body">
-                      <div class="text-center">{{ general_data.total_co2 | number : 0 }} Kg</div>
+                      <div class="text-center">{{ general_data.total_co2 || 0 | number : 0 }} Kg</div>
                   </div>
                 </a>
               </div>

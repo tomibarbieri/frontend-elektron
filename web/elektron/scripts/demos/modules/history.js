@@ -108,7 +108,6 @@ angular.module('theme.demos.history', [
 
     // carga los componentes del server
     $scope.loadComponents = function() {
-      console.log("Loading components...");
       $http({
           method:'GET',
           url: url_server + '/devices/'
@@ -120,9 +119,15 @@ angular.module('theme.demos.history', [
             $scope.components.push.apply($scope.components, $scope.components_server);
             console.log($scope.components);
           }
+          else {
+            $scope.historyerror = true;
+            $scope.historyerrormessage = "No hay componentes en el sistema";
+          }
       }, function(response){
-          console.log("problemas de conexion");
-          Notifier.simpleError("Error al traer los componentes", "Problemas de conexion");
+        $scope.historyerror = true;
+        $scope.historyerrormessage = "Error de conexion en el servidor";
+        console.log("problemas de conexion");
+        Notifier.simpleError("Error al traer los componentes", "Problemas de conexion");
       });
     };
 

@@ -95,19 +95,24 @@ angular
     }, function(response){
         $scope.spinnerbar = false;
         $scope.barerror = true;
+        $scope.nocomponentsselected = false;
         console.log("problemas de conexion");
     });
 
     $scope.calculatePages = function () {
-
-      if ($scope.number_pages == undefined) {$scope.number_pages = []};
-      $scope.current_page = 1;
-      if ($scope.pagesdata.pages <= $scope.number_pages.length) {
+      if ($scope.number_pages == undefined) {
+        $scope.number_pages = [];
+        for (var i = 1; i <= $scope.pagesdata.pages; i++) {
+          $scope.number_pages.push(i);
+        }
+      };
+      if ($scope.pagesdata.pages < $scope.number_pages.length) {
         $scope.number_pages = [];
         for (var i = 1; i <= $scope.pagesdata.pages; i++) {
           $scope.number_pages.push(i);
         }
       }
+      $scope.current_page = 1;
       if ($scope.number_pages.length <= 1) {
         $scope.previousbutton = true;
         $scope.lastbutton = true;
@@ -167,12 +172,14 @@ angular
     $scope.graficateComponentBar = function(data, side) {
 
       $scope.spinnerbar = false;
-
-      var length = (data.length >= 6) ? 6 : data.length;
+      console.log($scope.bardatalength);
+      console.log(data);
+      if ($scope.bardatalength == 0) {
+        $scope.bardatalength = (data.length >= 5) ? 5 : data.length;
+      }
 
       if ($scope.barlabels.length == 0) {
-        console.log('preparando footer');
-        for (var i = length-1; i >= 0; i--) {
+        for (var i = $scope.bardatalength-1; i >= 0; i--) {
           var time;
           if ($scope.currentPrecision.url == 'perday') {
             time = $filter('date')(data[i].date, 'shortDate');
@@ -192,23 +199,33 @@ angular
         $scope.loadingbarc1 = false;
         $scope.bardata[0] = [];
         $scope.barseries[0] = $scope.currentBarLeft.label;
-        for (var i = length-1; i >= 0; i--) {
-          if (data[i].data_value == null) {
-            $scope.bardata[0].push(0);
+        for (var i = 0; i < $scope.bardatalength; i++) {
+          if (data[i] != undefined) {
+            if (data[i].data_value == null) {
+              $scope.bardata[0].unshift(0);
+            } else {
+              $scope.bardata[0].unshift(data[i].data_value);
+            }
           } else {
-            $scope.bardata[0].push(data[i].data_value);
+            $scope.bardata[0].unshift(0);
           }
+
         }
       } else {
         console.log('derecha');
         $scope.bardata[1] = [];
         $scope.loadingbarc2 = false;
         $scope.barseries[1] = $scope.currentBarRigth.label;
-        for (var i = length-1; i >= 0; i--) {
-          if (data[i].data_value == null) {
-            $scope.bardata[1].push(0);
-          } else {
-            $scope.bardata[1].push(data[i].data_value);
+        for (var i = 0; i < $scope.bardatalength; i++) {
+          if (data[i] != undefined) {
+            if (data[i].data_value == null) {
+              $scope.bardata[1].unshift(0);
+            } else {
+              $scope.bardata[1].unshift(data[i].data_value);
+            }
+          }
+          else {
+            $scope.bardata[1].unshift(0);
           }
         }
       }
@@ -217,6 +234,8 @@ angular
     $scope.loadPage = function (page_id) {
       $scope.loadingbarc1 = true;
       $scope.loadingbarc2 = true;
+      $scope.bardatalength = 0;
+      $scope.barlabels = [];
       console.log(page_id);
       // procesa la ultima pagina
       if (page_id == 'last') {
@@ -291,7 +310,6 @@ angular
             $scope.nextbutton = nextbutton;
             $scope.indexbutton = nextbutton;
             $scope.current_page = page_id;
-            $scope.barlabels = [];
             $scope.graficateComponentBar(response.data.data, side);
           }
           else {
@@ -313,6 +331,8 @@ angular
       $scope.loadingbarc1 = true;
       $scope.loadingbarc2 = true;
       $scope.pagesdata = 0;
+      $scope.bardatalength = 0;
+      $scope.barlabels = [];
       $scope.getComponentData('left',$scope.currentBarLeft);
       $scope.getComponentData('rigth',$scope.currentBarRigth);
     }

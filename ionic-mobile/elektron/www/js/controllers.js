@@ -872,6 +872,8 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     $scope.componenterror = false;
     $scope.datamessage = false;
 
+    var url_server = 'http://158.69.223.78:8000';
+
     $scope.reloadpage = function () {
       $window.location.reload();
     }
@@ -1208,16 +1210,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
       'url': 'perhour'
     }];
 
-  $scope.currentPrecision = {
-    'id': 0,
-    'label': 'Por día',
-    'url': 'perday'
-  };
-
   $scope.createDoughnutChart = function() {
     for (var i = 0; i < $scope.components_statistics.length; i++) {
       var percent = ($scope.components_statistics[i].device_percent) ? $filter('number')($scope.components_statistics[i].device_percent, 2) : 0;
-      var label = $scope.components_statistics[i].device.label + ' (' + percent + '%)';
+      var total = $filter('number')($scope.components_statistics[i].device_data_sum/1000, 1);
+      var label = $scope.components_statistics[i].device.label + ' (' + total + 'Kw)';
       $scope.doughnutlabels.push(label);
       $scope.doughnutdata.push(percent);
     }
@@ -1225,26 +1222,28 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   $scope.calculatePages = function () {
 
-    if ($scope.number_pages == undefined) {$scope.number_pages = []};
-    $scope.current_page = 1;
-    if ($scope.pagesdata.pages > $scope.number_pages.length) {
+    if ($scope.number_pages == undefined) {
       $scope.number_pages = [];
       for (var i = 1; i <= $scope.pagesdata.pages; i++) {
         $scope.number_pages.push(i);
       }
-      if ($scope.number_pages.length <= 1) {
-        $scope.previousbutton = true;
-        $scope.lastbutton = true;
+    };
+    if ($scope.pagesdata.pages < $scope.number_pages.length) {
+      $scope.number_pages = [];
+      for (var i = 1; i <= $scope.pagesdata.pages; i++) {
+        $scope.number_pages.push(i);
       }
-      else {
-        $scope.previousbutton = false;
-        $scope.lastbutton = false;
-      }
+    }
+    $scope.current_page = 1;
+    if ($scope.number_pages.length <= 1) {
+      $scope.previousbutton = true;
+      $scope.lastbutton = true;
     }
   }
 
   $scope.loadPage = function (page_id) {
     $scope.spinnerbar = true;
+    $scope.bardatalength = 0;
     ionicToast.show('Cargando pagina ' + page_id, 'bottom', false, 4000);
     console.log(page_id);
     // procesa la ultima pagina
@@ -1332,6 +1331,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
           $scope.graficateComponentBar(response.data.data, side);
         }
         else {
+          $scope.barlabels = [];
           $scope.graficateComponentBar([{'data_value':0},{'data_value':0},{'data_value':0},{'data_value':0},{'data_value':0}], side);
           ionicToast.show('El componente de la ' + side + ' no tiene datos.', 'top', false, 5000);
           $scope.spinnerbar = false;
@@ -1381,14 +1381,14 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     var month_to = $filter('date')(new Date(), 'MM');
     var day_to = $filter('date')(new Date(), 'dd');
     var year_to = $filter('date')(new Date(), 'yyyy');
-    var hour_to = $filter('date')(new Date(), 'hh');
+    var hour_to = $filter('date')(new Date(), 'HH');
 
     var date_to = '' + day_to + '/' + month_to + '/' + year_to + '/' + hour_to + '/';
 
     var month_from = $filter('date')(new Date(selectedComponent.created), 'MM');
     var day_from = $filter('date')(new Date(selectedComponent.created), 'dd');
     var year_from = $filter('date')(new Date(selectedComponent.created), 'yyyy');
-    var hour_from = $filter('date')(new Date(selectedComponent.created), 'hh');
+    var hour_from = $filter('date')(new Date(selectedComponent.created), 'HH');
 
     var date_from = '' + day_from + '/' + month_from + '/' + year_from + '/' + hour_from + '/';
 
@@ -1409,19 +1409,24 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 
   $scope.graficateComponentBar = function(data, side) {
 
-    var length = (data.length >= 6) ? 6 : data.length;
+    console.log($scope.bardatalength);
+    console.log(data);
+    if ($scope.bardatalength == 0) {
+      $scope.bardatalength = (data.length >= 5) ? 5 : data.length;
+    }
+
     $scope.spinnerbar = false;
     $scope.barselected = true;
 
     if ($scope.barlabels.length == 0) {
       console.log('preparando footer');
-      for (var i = length-1; i >= 0; i--) {
+      for (var i = $scope.bardatalength-1; i >= 0; i--) {
         var time;
-        if ($scope.currentPrecision.url == 'perday') {
+        if ($scope.barOptions.precisionSelected == 'perday') {
           time = $filter('date')(data[i].date, 'dd/MM');
         } else {
-          if ($scope.currentPrecision.url == 'perhour') {
-            time = $filter('date')(data[i].date, 'HH')
+          if ($scope.barOptions.precisionSelected == 'perhour') {
+            time = $filter('date')(data[i].date, 'shortTime')
           } else {
             console.log('chicharitoo');
           }
@@ -1433,21 +1438,33 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
     if (side == 'left') {
       console.log('izquierda');
       $scope.bardata[0] = [];
-      for (var i = length-1; i >= 0; i--) {
-        if (data[i].data_value == null) {
-          $scope.bardata[0].push(0);
-        } else {
-          $scope.bardata[0].push(data[i].data_value);
+      for (var i = 0; i < $scope.bardatalength; i++) {
+        if (data[i] != undefined) {
+          console.log(data[i]);
+          if (data[i].data_value == null) {
+            $scope.bardata[0].unshift(0);
+          } else {
+            $scope.bardata[0].unshift(data[i].data_value);
+          }
+        }
+        else {
+          $scope.bardata[0].unshift(0);
         }
       }
     } else {
       console.log('derecha');
       $scope.bardata[1] = [];
-      for (var i = length-1; i >= 0; i--) {
-        if (data[i].data_value == null) {
-          $scope.bardata[1].push(0);
-        } else {
-          $scope.bardata[1].push(data[i].data_value);
+      for (var i = 0; i < $scope.bardatalength; i++) {
+        if (data[i] != undefined) {
+          console.log(data[i]);
+          if (data[i].data_value == null) {
+            $scope.bardata[1].unshift(0);
+          } else {
+            $scope.bardata[1].unshift(data[i].data_value);
+          }
+        }
+        else {
+          $scope.bardata[1].unshift(0);
         }
       }
     }
@@ -1457,12 +1474,11 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
   $scope.createBarChart = function() {
     $scope.spinnerbar = true;
     $scope.barselected = false;
-    if ($scope.bar == undefined) {
-      $scope.bar;
-      $scope.barlabels = [];
-      $scope.barseries = [];
-      $scope.bardata = [[],[]];
-    }
+    $scope.bardatalength = 0;
+    $scope.bar;
+    $scope.barlabels = [];
+    $scope.barseries = [];
+    $scope.bardata = [[],[]];
 
     ionicToast.show('Cargando tabla comparativa.', 'bottom', false, 3000);
     $scope.changeBarComponents();
