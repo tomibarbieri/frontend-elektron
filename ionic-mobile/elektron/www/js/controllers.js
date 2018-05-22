@@ -1,6 +1,6 @@
-angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datetime-picker','ionic-toast','ionic'])
+angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datetime-picker','ionic-toast','ionic','satellizer'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout, $location, $ionicPopup) {
+.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout, $location, $ionicPopup, $auth ) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -27,25 +27,34 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
 	 };
 })
 
-.controller('LoginCtrl', function($scope, $location, $http, $websocket, LoginService) {
+.controller('LoginCtrl', function($state,$scope, $location, $http, $websocket, LoginService, $auth) {
+
     $scope.login = function(user) {
-      if(typeof(user)=='undefined'){
-        $scope.showAlert('Completá el usuario y contraseña, por favor.');
-        return false;
-      };
-      if(LoginService.login(user.username, user.password)){
-        $location.path('/app/dashboard');
-      } else {
-        console.log("Failed in password or username");
-        $scope.showAlert('Error de Usuario o contraseña.');
+
+      var credentials = {
+        email: user.username,
+        password: user.password
       }
+
+      // Use Satellizer's $auth service to login
+			$auth.login(credentials).then(function(data) {
+				// If login is successful, redirect to the users state
+				$state.go('app.dashboard');
+			}, function(error) {
+        $scope.showAlert('Error de Usuario o contraseña.');
+				console.log(error);
+			});
+
     };
 })
 
-.controller('LogoutCtrl', function($scope, LoginService, $location) {
-    LoginService.logout();
-    console.log("entro");
-    setTimeout(function(){ $location.path('/app/login'); }, 1500);
+.controller('LogoutCtrl', function($scope, ionicToast, $state, $auth, $timeout) {
+    $auth.removeToken();
+    console.log("Logout");
+    $timeout( function(){
+            $state.go('app.login');
+            ionicToast.show('Sesión cerrada con éxito', 'bottom', false, 8000);
+        }, 4000 );
 })
 
 .controller('RegisterCtrl', function($scope) {
@@ -391,7 +400,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
               $scope.monitorerror = true;
               $scope.errormessage = "No hay componentes habilitados para mostrar datos en tiempo real";
               $scope.spinnermonitor = false;
-              ionicToast.show('No hay componentes habilitados para mostrar datos en tiempo real.', 'bottom', false, 5000);              
+              ionicToast.show('No hay componentes habilitados para mostrar datos en tiempo real.', 'bottom', false, 5000);
             }
 
         }, function(response){

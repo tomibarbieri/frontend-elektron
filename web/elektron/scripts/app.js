@@ -4,63 +4,22 @@ angular
     'theme.demos',
     'ngWebSocket',
     'ui.bootstrap',
-    'ngCookies'
+    'ngCookies',
+    'satellizer',
+    'ui.router'
+
   ])
 
-  // For sessions
-
-  /*
-  .provider('myCSRF',[function(){
-    var headerName = 'X-CSRFToken';
-    var cookieName = 'csrftoken';
-    var allowedMethods = ['GET'];
-
-    this.setHeaderName = function(n) {
-      headerName = n;
-    }
-    this.setCookieName = function(n) {
-      cookieName = n;
-    }
-    this.setAllowedMethods = function(n) {
-      allowedMethods = n;
-    }
-    this.$get = ['$cookies', function($cookies){
-      return {
-        'request': function(config) {
-          if(allowedMethods.indexOf(config.method) === -1) {
-            // do something on success
-            config.headers[headerName] = $cookies[cookieName];
-          }
-          return config;
-        }
-      }
-    }];
-  }])*/
-
-
-  .run(['$http', '$rootScope', '$window', '$location', '$cookies', 'LoginService', function ($http, $rootScope, $window, $location, $cookies, LoginService) {
-
-    //$http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
+  .run(['$http', '$rootScope', '$window', '$location', '$cookies', 'LoginService', '$auth', function ($http, $rootScope, $window, $location, $cookies, LoginService, $auth) {
 
     var ip_server = '158.69.223.78';
     var url_server = 'http://158.69.223.78:8000';
-    $rootScope.ws = undefined;//$websocket('ws://' + ip_server +':8888/websocket');
 
-    $rootScope.$on('$routeChangeStart', function($event, next, current) {
+    $rootScope.ws = undefined;
 
-      /*if (!LoginService.isAuthenticated()) {
-          console.log('Acceso no autorizado');
-          $location.path('/login');
-      }
-      else {
-          console.log('Todo ok');
-          if (next.params.templateFile == undefined){
-            $location.path('/');
-          }
-      }*/
+    $rootScope.$on('$routeChangeSuccess', function(event, next, current) {
 
-      console.log("statechange");
-      console.log($rootScope.ws);
+    console.log('$stateChangeSuccess');
 
       try {
         if ($rootScope.ws != undefined) {
@@ -79,28 +38,29 @@ angular
       }
     });
 
-  }])
-  /*.run(['$rootScope', '$location', 'LoginService', function ($rootScope, $location, LoginService) {
-    $rootScope.$on('$routeChangeStart', function (event, next) {
-        if (!LoginService.isAuthenticated()) {
-            console.log('Acceso no autorizado');
-            $location.path('/login');
-        }
-        else {
-            console.log('Todo ok');
-            if (next.params.templateFile == undefined){
-              $location.path('/');
-            }
-        }
+    $rootScope.$on("$routeChangeStart", function(event, next, current){
+      //$rootScope.authStatus = toState.authStatus;
+      console.log('$stateChangeStart');
+      console.log(next);
+      if(!$auth.isAuthenticated()){
+        if(next.params.templateFile === 'login') return;
+        console.log('yendo al login porque no esta logueado');
+        $location.path('/login');
+      }
+      else {
+        if(next.params.templateFile === 'app.login') {
+          $location.path('/dashboard');
+        };
+      }
     });
-  }])*/
 
-  .config(['$provide', '$httpProvider', '$routeProvider', function($provide, $httpProvider, $routeProvider) {
+  }])
+
+  .config(['$provide', '$httpProvider', '$routeProvider', '$authProvider', function($provide, $httpProvider, $routeProvider, $authProvider) {
     'use strict';
-    //$httpProvider.defaults.withCredentials = true;
-    //$httpProvider.interceptors.push('myCSRF');
-    //$httpProvider.defaults.xsrfCookieName = 'csrftoken';
-    //$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+    $authProvider.loginUrl = 'http://158.69.223.78:8000/elektronusers/login';
+
     $routeProvider
       .when('/', {
         redirectTo: '/index'
@@ -113,8 +73,6 @@ angular
       })
       .when('#', {
         redirectTo: '/#/index'
-        //templateUrl: 'views/index.html',
-        //controller: 'DashboardController'
       })
       .otherwise({
         redirectTo: '/index'

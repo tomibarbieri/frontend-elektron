@@ -125,7 +125,7 @@
 
 .logout-spinner{
   text-align: center;
-  margin-top: 10px;
+  margin-top: 40px;
 }
 
 .button-paginado {
@@ -167,9 +167,9 @@
 }
 
 .logout-spinner-text{
-  color: white;
+  color: black;
   font-weight: lighter;
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .label-elektron {

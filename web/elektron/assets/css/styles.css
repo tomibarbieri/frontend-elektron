@@ -119,6 +119,17 @@
   margin-top: 10%;
 }
 
+.spinner-container-cerrandosesion {
+  min-height: 150px;
+  margin-left: 45%;
+  margin-top: 60%;
+}
+
+.cerrandosession-container {
+  text-align: center;
+}
+
+
 .spinner-container {
   min-height: 200px;
   text-align: center;

@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services', 'satellizer', 'ui.router'])
 
-.run(function($ionicPlatform , $http, $rootScope, $timeout, $location, $window, $state, $websocket, LoginService) {
+.run(function($ionicPlatform , $http, $rootScope, $timeout, $location, $window, $state, $websocket, $auth) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -22,19 +22,18 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   });
 
-  //$rootScope.authStatus = LoginService.isAuthenticated() || false;
 
   var ip_server = '158.69.223.78';
   var url_server = 'http://158.69.223.78:8000';
   $rootScope.ws = undefined;//$websocket('ws://' + ip_server +':8888/websocket');
 
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-    console.log($rootScope.ws);
+    //console.log($rootScope.ws);
     try {
       if ($rootScope.ws != undefined) {
         $rootScope.ws.close();
         $rootScope.ws = undefined;
-        console.log("closing ws");
+        //console.log("closing ws");
       }
     }
     catch(err) {
@@ -46,47 +45,38 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services'])
     }
   });
 
-  // CORS
-  //$http.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-
-  //console.log("Is Authenticated: "+ LoginService.isAuthenticated());
-
-  /*
-  if(LoginService.isAuthenticated()) {
-    $location.path('/app/dashboard');
-  } else {
-    $location.path('/app/login');
-  };*/
-
-  //stateChange event
-  /*
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-    $rootScope.authStatus = toState.authStatus;
-    if($rootScope.authStatus){}
-  });
+    //$rootScope.authStatus = toState.authStatus;
 
-  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-		console.log("URL : "+toState.url);
-    console.log("Is Authenticated: "+ LoginService.isAuthenticated());
-    if(toState.url=='/dashboard'){
-			console.log("match : "+toState.url);
-			$timeout(function(){
-				angular.element(document.querySelector('#leftMenu' )).removeClass("hide");
-			},1000);
-		}
-	});
-  */
+    console.log(toState);
+    if(!$auth.isAuthenticated()){
+      if(toState.name === 'app.login') return;
+      $state.go('app.login');
+      event.preventDefault();
+    }
+    else {
+      if(toState.name === 'app.dashboard') {
+        $timeout(function(){
+          angular.element(document.querySelector('#leftMenu' )).removeClass("hide");
+        },1000);
+      };
+      if(toState.name === 'app.login') {
+        $state.go('app.dashboard');
+        event.preventDefault();
+      };
+    }
+  });
 
 })
 
-
-.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider, $authProvider) {
 
   $httpProvider.defaults.useXDomain = true;
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-  $stateProvider
+  $authProvider.loginUrl = 'http://158.69.223.78:8000/elektronusers/login';
 
+  $stateProvider
   .state('app', {
     url: '/app',
     abstract: true,

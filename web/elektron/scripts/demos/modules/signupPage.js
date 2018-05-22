@@ -2,7 +2,7 @@ angular
   .module('theme.demos.signup_page', [
     'theme.core.services'
   ])
-  .controller('SignupPageController', ['$scope', '$theme', 'LoginService', '$route', '$location', '$cookies', function($scope, $theme, LoginService, $route, $location,$cookies) {
+  .controller('SignupPageController', ['$scope', '$theme', 'LoginService', '$route', '$location', '$auth', function($scope, $theme, LoginService, $route, $location, $auth) {
     'use strict';
 
     $scope.alerts = [];
@@ -28,20 +28,23 @@ angular
     };
 
     $scope.formSubmit = function() {
-      LoginService.login($scope.username, $scope.password);
-      setTimeout(function(){
-        console.log("setTimeout");
-        if(LoginService.isAuthenticated()) {
-          console.log($cookies);
-          $location.path('/index');
-          $route.reload();
-        } else {
-          $scope.alerts.push($scope.userPassError);
-          $scope.$apply();
-          //$scope.error = 'usuario o contraseña incorrecta';
-          console.log("Incorrect username/password !");
-        }
-      },5000);
+
+      var credentials = {
+        email: $scope.username,
+        password: $scope.password
+      }
+
+      // Use Satellizer's $auth service to login
+      $auth.login(credentials).then(function(data) {
+        // If login is successful, redirect to the users state
+        $location.path('/index');
+      }, function(error) {
+        $scope.alerts.push($scope.userPassError);
+        console.log(error);
+      });
+
+      $scope.$apply();
+
     };
 
   }]);

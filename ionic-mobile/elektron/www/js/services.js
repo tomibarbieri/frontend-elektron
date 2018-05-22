@@ -1,6 +1,6 @@
-angular.module('starter.services', ["ngResource"])
+angular.module('starter.services', ['ngResource', 'satellizer'])
 
-.factory('LoginService', function($rootScope) {
+.factory('LoginService', function($rootScope,$auth) {
     //var admin = 'admin';
     //var pass = 'pass';
     // 192.168.0.25

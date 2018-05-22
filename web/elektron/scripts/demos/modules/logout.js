@@ -3,7 +3,7 @@ angular
     'theme.core.services'
   ])
 
-  .controller('LogoutController', ['$scope', '$theme', 'LoginService', '$route', function($scope, $theme, LoginService, $route) {
+  .controller('LogoutController', ['$scope', '$theme', '$location', '$auth', '$timeout', function($scope, $theme, $location, $auth, $timeout) {
     'use strict';
 
     $theme.set('fullscreen', true);
@@ -12,10 +12,10 @@ angular
       $theme.set('fullscreen', false);
     });
 
-    setTimeout(function(){
-      LoginService.logout();
-      console.log("logout");
-      $route.reload();
-    },1000);
+    $auth.removeToken();
+
+    $timeout( function(){
+            $location.path('/login');
+        }, 4000 );
 
   }]);
