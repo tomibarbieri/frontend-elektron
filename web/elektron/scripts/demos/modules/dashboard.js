@@ -238,12 +238,12 @@ angular.module('theme.demos.dashboard', [
         var url_websocket = "ws://" + ip_server + ":8888/websocket";
         $rootScope.ws = new WebSocket(url_websocket);
         console.log("nuevo ws");
+        Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente elegido inicialmente.");
       }
       else {
         console.log("recuperando ws");
+        Notifier.simpleInfo("Reiniciando conexion en tiempo real", "Para el componente elegido inicialmente.");
       }
-
-      Notifier.simpleInfo("Iniciando conexion en tiempo real", "Para el componente elegido inicialmente.");
 
       //var url_websocket = "ws://" + ip_server + ":8888/websocket";
       //$scope.ws = new WebSocket(url_websocket);
@@ -270,6 +270,10 @@ angular.module('theme.demos.dashboard', [
       $rootScope.ws.onmessage = function(message) {
 
           var data = JSON.parse(message.data);
+
+          if ($scope.websocketStatus == false) {
+            $scope.websocketStatus == true;
+          }
 
           // chequea que el dato sea del componente elegido y lo muestra
           if ($scope.current_component) {

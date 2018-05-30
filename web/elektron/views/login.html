@@ -18,7 +18,7 @@
 				</div>
 				<div class="clearfix">
 				</div>
-				<a class="btn btn-success btn-block" ng-click="formSubmit()" data-pulsate="{reach:10, pause: 2000}">Ingresar</a>
+				<button type="submit" class="btn btn-success btn-block" ng-click="formSubmit()" data-pulsate="{reach:10, pause: 2000}">Ingresar</button>
         <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)"><span ng-bind-html="alert.msg | safe_html"></span></alert>			</form>
 		</div>
 		<!--
