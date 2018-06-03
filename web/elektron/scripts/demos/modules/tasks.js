@@ -178,7 +178,7 @@ angular.module('theme.demos.tasks', [])
         'repeats': $scope.currentDataTask.repeats,
         'data_value': $scope.currentDataTask.max_value,
         'comparator': $scope.currentDataTask.comparator,
-        'device_mac': selectedComponent.device_mac
+        'device_mac': $scope.currentDataTask.device_mac
       }
 
       console.log(data_params);
@@ -264,6 +264,7 @@ angular.module('theme.demos.tasks', [])
               $scope.getDataTasks();
           }, function(response){
               $scope.deletedatataskloading = false;
+              $scope.$apply();
               console.log("problemas de conexion");
               Notifier.simpleError('Error al borrar','Su tarea no se pudo borrar por problemas de conexión');
           });

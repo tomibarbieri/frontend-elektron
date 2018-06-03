@@ -29,7 +29,7 @@
 							<span class="glyphicon glyphicon-refresh"></span>
 						</button>
 					</div>
-					<div ng-show="nodatataskinserver == true" class="no-task-container">
+					<div ng-show="(spinnerDataTask == false) && (nodatataskinserver == true)" class="no-task-container">
 						<span>No hay tareas por consumo creadas. </span>
 					</div>
 				  <table ng-show="(spinnerDataTask == false) && (datataskerror == false) && (nodatataskinserver == false)" class="table table-bordered table-condensed">
@@ -211,13 +211,13 @@
 					<div class="spinner-container-components" ng-show="spinnerDateTime == true">
 						<div class="loader-spinner"></div>
 					</div>
-					<div ng-show="datetimetaskerror == true" class="task-error-container">
+					<div ng-show="(deletedatataskloading == false) && (datetimetaskerror == true)" class="task-error-container">
 						<span>Error de conexion en el servidor </span>
 						<button ng-click="reloadpage()" class="error-button btn btn-sm btn-default">
 							<span class="glyphicon glyphicon-refresh"></span>
 						</button>
 					</div>
-					<div ng-show="nodatetimetaskinserver == true" class="no-task-container">
+					<div ng-show="(spinnerDateTime == false) && (deletedatataskloading == false) && (nodatetimetaskinserver == true)" class="no-task-container">
 						<span>No hay tareas por fecha y hora creadas. </span>
 					</div>
 				  <table ng-show="(spinnerDateTime == false) && (datetimetaskerror == false) && (nodatetimetaskinserver == false)" class="table table-bordered table-condensed">
@@ -299,7 +299,8 @@
 					  </td>
 					</tr>
 	        </table>
-	        <a ng-show="datetimetaskerror == false" ng-click="addBoxDateTimeTask()" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha y hora</a>
+	        <a ng-show="datetimetaskerror == false" ng-click="addBoxDateTimeTask()" class="btn btn-success">
+						<span class="glyphicon glyphicon-plus-sign"></span> Agregar tarea por fecha y hora</a>
 				</panel>
 
       <panel id="panelDateTimeTask" ng-show="blockdatetimetaskdiv == false" panel-class="panel-primary" data-heading="{{dateTimeTaskDiv}}">

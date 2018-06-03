@@ -1,7 +1,7 @@
 {
-  "name": "ost-login-kit-v1.0",
+  "name": "Elektron-v1.0",
   "version": "1.0.0",
-  "description": "ost-login-kit-v1.0: An Ionic project",
+  "description": "Elektron-v1.0: Sensado de consumo eléctico",
   "dependencies": {
     "angular-chart.js": "^1.1.1",
     "cordova-plugin-x-toast": "git+https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",

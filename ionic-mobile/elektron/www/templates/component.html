@@ -1,17 +1,17 @@
-<ion-view view-title="{{component_server.label || 'Componente'}}">
+<ion-view view-title="{{'Componente ' + component_server.id }}">
   <ion-content>
     <div ng-show="(componenterror == false)" class="card">
-      <div class="item">
+      <div class="component-title-item item">
         <ion-toggle  ng-model="component_status" class="toogle-assertive"
                     ng-change="changeStatus()"
                    ng-checked="component_status">
-                   <span>Detalle de <b>{{component_server.label}}</b></span>
+                   <span>Detalle de componente</span>
         </ion-toggle>
       </div>
       <div class="item item-divider text-center">
-        <span>Último consumo</span>
+        <span><b>{{component_server.label}}</b></span>
       </div>
-      <div class="item item-text-wrap">
+      <div class="graphic-item item-text-wrap">
         <div ng-show="(spinner == true) && (datamessage == false)" class="center-spinner">
           <ion-spinner icon="android" class="spinner-dark"></ion-spinner>
         </div>
@@ -57,7 +57,7 @@
       <div class="item-divider">
 
       </div>
-      <ion-toggle  ng-model="component_activate"
+      <ion-toggle toggle-class="component-toggle-active" ng-model="component_activate"
                     ng-change="activateComponent()"
                    ng-checked="component_activate">
                    <span><b class="badge-letter">Activo:</b></span>

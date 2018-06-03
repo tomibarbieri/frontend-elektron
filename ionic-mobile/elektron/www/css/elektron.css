@@ -64,6 +64,19 @@
   font-size: 0.8em;
 }
 
+.component-title {
+  font-size: 0.8em;
+}
+
+.component-toggle-active {
+  right: 35px !important;
+}
+
+.list-components-div {
+  font-size: 0.8em;
+  line-height: normal;
+}
+
 .icon-menu {
   margin-right: 7px;
   font-size: 1.3em;
@@ -251,3 +264,67 @@
   width: 20px;
   height: 20px;
 }
+
+/* ---- Compoenent ---- */
+
+.component-title-item {
+  padding: 3px;
+}
+
+/* ---- /Compoenent ---- */
+
+
+
+/* ---- Statistics ---- */
+
+
+
+
+
+
+
+/* ---- /Statistics ---- */
+
+
+
+/* ---- Data history ---- */
+
+.graphic-item {
+  padding: 15px 6px 0px 6px !important;
+}
+
+.button-bar-history a {
+  margin: 4px;
+  padding: 0 8px !important;
+  border-radius: 8px !important;
+}
+
+.button-bar-history-a1 {
+}
+
+.button-bar-history-a2 {
+  min-width: 21% !important;
+  font-size: 0.9em;
+}
+
+.button-bar-history-a3 {
+  min-width: 21% !important;
+  font-size: 0.9em;
+}
+
+.button-bar-history-a4 {
+}
+
+.button-bar-history select {
+  min-width: 21%;
+  padding: 0 8px !important;
+  margin: 4px;
+  font-weight: bold;
+  border-radius: 8px !important;
+}
+
+
+
+
+
+/* ---- /Data history ---- */

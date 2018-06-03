@@ -28,11 +28,11 @@
       </div>
       <div class="card" ng-repeat="component in components_server_enabled">
           <div class="item item-divider item-icon-right">
-            Componente: <b>{{component.label}}</b>
+            <b>{{component.label}}</b>
             <i ng-if="components_charts[component.device_mac].status == true" class="monitor-icon icon ion-link balanced"></i>
             <i ng-if="components_charts[component.device_mac].status == false" class="monitor-icon icon ion-link assertive"></i>
           </div>
-          <div class="item item-text-wrap">
+          <div class="graphic-item item-text-wrap">
             <canvas id="{{component.device_mac}}" class="chart chart-line" chart-data="line[component.device_mac].data" chart-labels="line[component.device_mac].labels"
             chart-series="line[component.device_mac].series"></canvas>
           </div>
