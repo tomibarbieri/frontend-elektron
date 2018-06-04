@@ -41,13 +41,13 @@
                     <div class="spinner-container" ng-show="spinner == true">
                       <div class="loader-spinner"></div>
                     </div>
-                    <div ng-show="historyerror == true" class="error-container">
+                    <div ng-show="historynodataerror == true" class="error-container">
                       <span>{{errormessage}}</span>
                       <button ng-click="reloadpage()" class="error-button btn btn-sm btn-default">
                         <span class="glyphicon glyphicon-refresh"></span>
                       </button>
                     </div>
-                    <canvas ng-show="(spinner == false) && (historyerror == false)" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
+                    <canvas ng-show="(spinner == false) && (historyerror == false) && (historynodataerror == false)" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels"
                       chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
                     </canvas>
                   </div>
@@ -108,7 +108,7 @@
                       <div class="text-center">Total de consumo período</div>
                   </div>
                   <div class="boxes-body">
-                      <div class="text-center">{{total_watts/1000 || 0 | number:1}} Kw</div>
+                      <div class="text-center">{{data_sum_period/1000 || 0 | number:4}} Kw</div>
                   </div>
                 </a>
               </div>
@@ -129,16 +129,16 @@
                           <td style="width:18%">Dispositivo
                             <span ng-show="selectedComponent.label != undefined" class="text-success float-right glyphicon glyphicon-ok"></span>
                           </td>
-                          <td style="width:15%">Fecha desde
+                          <td style="width:18%">Fecha desde (mm/dd/yyyy)
                             <span ng-show="configuration.dateFrom != undefined" class="text-success float-right glyphicon glyphicon-ok"></span>
                           </td>
-                          <td style="width:15%">Hora desde
+                          <td style="width:12%">Hora desde
                             <span ng-show="configuration.timeFrom != undefined" class="text-success float-right glyphicon glyphicon-ok"></span>
                           </td>
-                          <td style="width:15%">Fecha hasta
+                          <td style="width:18%">Fecha hasta (mm/dd/yyyy)
                             <span ng-show="configuration.dateTo != undefined" class="text-success float-right glyphicon glyphicon-ok"></span>
                           </td>
-                          <td style="width:15%">Hora hasta
+                          <td style="width:12%">Hora hasta
                             <span ng-show="configuration.timeTo != undefined" class="text-success float-right glyphicon glyphicon-ok"></span>
                           </td>
                           <td style="width:12%">Precision

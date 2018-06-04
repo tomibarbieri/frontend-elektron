@@ -27,6 +27,7 @@ angular.module('theme.demos.history', [
     $scope.selectedComponent = {};
     $scope.components = [];
     $scope.historyerror = false;
+    $scope.historynodataerror = false;
 
     $scope.costo_estimado = 1245;
 
@@ -44,12 +45,6 @@ angular.module('theme.demos.history', [
         'label':'Por dia',
         'id':'perday'
       }];
-
-    /*$scope.selectedPrecision = {
-      'label':'Por hora',
-      'id':'perday'
-    }*/
-
 
     $scope.reloadpage = function () {
       $window.location.reload();
@@ -76,13 +71,6 @@ angular.module('theme.demos.history', [
       var selected = $filter('filter')($scope.precisions, {id: $scope.selectedPrecision.id});
       return ($scope.selectedPrecision.label && selected.length) ? selected[0].label : 'Not set';
     }
-
-    // guarda la variable del chart para luego hacer update
-    /*
-    $scope.$on('chart-create', function (evt, chart) {
-      console.log(chart);
-      $scope.chart = chart;
-    });*/
 
     // Variables para el paginado
     $scope.nextbutton = true;
@@ -189,6 +177,7 @@ angular.module('theme.demos.history', [
 
           if ($scope.data.length > 0) {
             $scope.total_data = response.data.total_data;
+            $scope.data_sum_period = response.data.data_sum_period;
             $scope.calculatePages();
             $scope.graficate();
             Notifier.simpleSuccess("Datos del período seleccionado", "Cargados con éxito");
@@ -196,7 +185,7 @@ angular.module('theme.demos.history', [
           else {
             Notifier.simpleError("No hay datos para el periodo seleccionado", "Problemas de conexion");
             $scope.errormessage = "No hay datos para ese periodo";
-            $scope.historyerror = true;
+            $scope.historynodataerror = true;
             $scope.spinner = false;
           }
       }, function(response){
@@ -317,199 +306,6 @@ angular.module('theme.demos.history', [
       }
     }
 
-    // Funcione viejas pero que pueden servir
-
-    /*
-    // Busca los datos de una fecha determinada
-    $scope.loadDay = function(day_p) {
-
-    //$scope.showDynamic();
-
-
-    var day = $filter('date')(day_p._d, "dd/MM/yyyy")
-    Notifier.simpleInfo('Cargando datos para dia', day);
-    console.log(day);
-
-    $http({
-    method:'GET',
-    url: url_server + '/data/' + day + '/',
-    headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  }
-  }).then(function(response){
-
-  //Notifier.simpleSuccess('Datos cargados con exito','Se han traido ' + response.data.data.length + ' datos.')
-
-  //console.log(response.data.data);
-  //console.log(response.data);
-  $scope.currentData = response.data.data;
-  Notifier.simpleSuccess('Datos cargados con éxito', 'Los datos (' + response.data.data + ') fueron obtenidos con éxito y se estan ubicando en el gráfico');
-  $scope.graficate(response.data.data);
-
-  }, function(response){
-  console.log("problemas de conexion");
-  Notifier.simpleError("Error al traer los datos", "Problemas de conexion");
-  });
-  }
-
-    // Busca los datos entre dos fechas
-    $scope.loadDayToDay = function(day_from, day_to) {
-
-    var dayf = $filter('date')(day_from._d, "dd/MM/yyyy")
-    var dayt = $filter('date')(day_to._d, "dd/MM/yyyy")
-
-    Notifier.simpleInfo('Cargando datos entre los dias', dayf + ' y ' + dayt);
-
-    $http({
-    method:'GET',
-    url: url_server + '/data/' + dayf + '/' + dayt + '/',
-    headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-    }
-    }).then(function(response){
-
-    //Notifier.simpleSuccess('Datos cargados con exito','Se han traido ' + response.data.data.length + ' datos.')
-    //console.log(response.data.data);
-    console.log(response.data);
-    $scope.currentData = response.data.data;
-    $scope.graficate(response.data.data);
-
-    }, function(response){
-    console.log("Problemas de conexion", "No se pudo estableces la conexion con el servidor");
-    Notifier.simpleError("Error al traer los datos", "Problemas de conexion");
-    });
-    }
-
-    // funcion generica para traer data
-    $scope.loadAllData = function(dateFrom, timeFrom, dateTo, timeTo) {
-    console.log("Loading data from all components...");
-
-    var capelequeque = '';
-    if (dateFrom) {
-    capelequeque += $filter('date')(dateFrom, "dd/MM/yyyy") + '/';
-    if (timeFrom) {
-    capelequeque += $filter('date')(timeFrom, "HH") + '/';
-    if (dateTo) {
-    capelequeque += $filter('date')(dateTo, "dd/MM/yyyy") + '/';
-    if (timeTo) {
-    capelequeque += $filter('date')(timeTo, "HH") + '/';
-    }
-    }
-    }
-    }
-
-    console.log(capelequeque);
-
-    var final_url = url_server + '/data/' + capelequeque;
-
-    $http({
-    method:'GET',
-    url: final_url,
-    headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-    }
-    }).then(function(response){
-
-    //console.log(response.data.data);
-    //console.log(response.data);
-    $scope.currentData = response.data.data;
-    $scope.graficate(response.data.data);
-
-    }, function(response){
-    console.log("problemas de conexion");
-    });
-    }
-
-    // Funcion generica para traer la data de un componente determinado
-    $scope.loadOneData = function(componentId, dateFrom, timeFrom, dateTo, timeTo) {
-    console.log("Loading data from one component");
-
-    // armado de la ruta
-    var capelequeque = '';
-
-    if (dateFrom) {
-    capelequeque += $filter('date')(dateFrom, "dd/MM/yyyy") + '/';
-    if (timeFrom) {
-    capelequeque += $filter('date')(timeFrom, "HH") + '/';
-    if (dateTo) {
-    capelequeque += $filter('date')(dateTo, "dd/MM/yyyy") + '/';
-    if (timeTo) {
-    capelequeque += $filter('date')(timeTo, "HH") + '/';
-    }
-    }
-    }
-    }
-
-    var final_url = url_server + '/devices/' + componentId + '/data/' + capelequeque;
-
-    $http({
-    method:'GET',
-    url: final_url,
-    headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-    }
-    }).then(function(response){
-
-    console.log(response.data.data);
-    //console.log(response.data);
-    $scope.currentData = response.data.data;
-    if (response.data.data > 0) {
-    $scope.graficate(response.data.data);
-    } else {
-    Notifier.simpleError('No hay datos','No hay datos para el componente seleccionado. ');
-    }
-
-    }, function(response){
-    console.log("problemas de conexion");
-    });
-    }
-
-    // funcion para avanzar a la siguiente pagina
-    $scope.nextPage = function() {
-
-      console.log("Next page ..."); // {{(currentData.length <= 20 && currentDataIndex >= currentData.length) ? true : false }}
-      console.log($scope.currentData);
-      console.log($scope.currentDataIndex);
-      console.log($scope.currentData.length);
-      if ($scope.currentDataIndex + 20 <= $scope.currentData.length - 20) {
-        $scope.currentDataIndex = $scope.currentDataIndex + 20;
-      } else {
-        $scope.currentDataIndex = $scope.currentData.length - 20;
-      }
-      console.log($scope.currentDataIndex);
-
-      var copy_array = $scope.currentData.slice();
-      console.log(copy_array);
-      console.log($scope.currentData);
-      var data = copy_array.slice($scope.currentDataIndex, $scope.currentDataIndex + 20);
-      console.log(data);
-      $scope.graficate(data,true);
-
-    }
-
-    // funcion para ir a la pagina anterior
-    $scope.previousPage = function() {
-
-      console.log("Previous page ..."); // {{currentDataIndex == 0 ? true : false}}
-      console.log($scope.currentData);
-      console.log($scope.currentDataIndex);
-      console.log($scope.currentData.length);
-      (($scope.currentDataIndex <= 20) ? $scope.currentDataIndex = 0 : $scope.currentDataIndex -= 20);
-      console.log($scope.currentDataIndex);
-
-      var copy_array = $scope.currentData.slice();
-      console.log(copy_array);
-      console.log($scope.currentData);
-      var data = copy_array.slice($scope.currentDataIndex, $scope.currentDataIndex + 20);
-      console.log(data);
-      $scope.graficate(data,true);
-
-    }
-
-    */
-
-    // INICIO
-
     // funcion luego de elegir los campos del form de history
     $scope.updateChart = function (){
 
@@ -528,6 +324,7 @@ angular.module('theme.demos.history', [
 
       if (validate) {
         Notifier.simpleInfo('Cargando datos para el pedido seleccionado','Esperando respuesta del servidor');
+        $scope.historynodataerror = false;
         $scope.loadUrl();
         $scope.loadData();
         $scope.selectedperiod = true;
@@ -540,44 +337,6 @@ angular.module('theme.demos.history', [
       }
     }
 
-
-    /*$scope.updateChart = function(date_config) {
-      var selected = $filter('filter')($scope.components, {id: date_config.component});
-      $scope.selectedComponent = ($scope.selectedComponent.label && selected.length) ? selected[0] : 'Not set';
-      console.log($scope.selectedComponent);
-      console.log(date_config);
-      if (date_config.component == 0) {
-        $scope.loadAllData(date_config.dateFrom, date_config.timeFrom, date_config.dateTo, date_config.timeTo);
-      } else {
-        $scope.loadOneData(date_config.component, date_config.dateFrom, date_config.timeFrom, date_config.dateTo, date_config.timeTo);
-      }
-
-    }*/
-
-    // funcion para el select
-    /*$scope.changeCurrentPeriod = function(ids) {
-      console.log(ids);
-      var selected = $filter('filter')($scope.periods, {id: ids})[0];
-      console.log(selected);
-      $scope.current_period = selected;
-    };
-
-    */
-
-
-    // periodos predeterminados para seleccionar - revisar
-    $scope.periods = [
-      {id: '1', name: 'Hoy', function: $scope.loadDay, date: moment() },
-      {id: '2', name: 'Ayer', function: $scope.loadDay, date: moment().subtract(1, 'days') },
-      {id: '3', name: 'Últimos 7 días', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(7, 'days') },
-      {id: '4', name: 'Últimos 14 días', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(14, 'days')},
-      {id: '5', name: 'Último mes', function: $scope.loadDayToDay, date: moment().subtract(1, 'month'), dateTo: moment().subtract(2, 'month')},
-      {id: '6', name: 'Este mes', function: $scope.loadDayToDay, date: moment(), dateTo: moment().subtract(1, 'month')},
-    ]
-
-    // MAIN PROGRAM
-    $scope.current_period = $scope.periods[3];
     $scope.loadComponents();
-
 
   }]);
