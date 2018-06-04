@@ -519,7 +519,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         //$scope.task = task;
         $scope.task = {
             'state': task.taskstate.id + '',
-            'function': task.taskfunction.id + '',
+            'function': task.taskfunction.name + '',
             'label': task.label,
             'description': task.description,
             'owner':'root',
@@ -650,7 +650,7 @@ angular.module('starter.controllers', ['angular-websocket','chart.js','ion-datet
         //$scope.task = task;
         $scope.task = {
             'state': task.taskstate.id,
-            'function': task.taskfunction.id,
+            'function': task.taskfunction.name,
             'label': task.label,
             'description': task.description,
             'owner':'root',

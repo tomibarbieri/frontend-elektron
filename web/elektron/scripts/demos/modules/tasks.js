@@ -95,8 +95,8 @@ angular.module('theme.demos.tasks', [])
 
     // Reemplazar por Ajax
     $scope.taskfunction = [
-      {value: '1', text: 'Apagar'},
-      {value: '2', text: 'Encender'}
+      {value: 'turnon', text: 'Apagar'},
+      {value: 'shutdown', text: 'Encender'}
     ];
 
     $scope.taskstate = [
@@ -111,7 +111,7 @@ angular.module('theme.demos.tasks', [])
 
     // Data task select
     $scope.showDataFunction = function($index) {
-      var selected = $filter('filter')($scope.taskfunction, {value: $scope.datatasks_server[$index].taskfunction.id});
+      var selected = $filter('filter')($scope.taskfunction, {value: $scope.datatasks_server[$index].taskfunction.name});
       return ($scope.datatasks_server[$index].taskfunction.id && selected.length) ? selected[0].text : 'Not set';
     };
 
@@ -123,7 +123,7 @@ angular.module('theme.demos.tasks', [])
 
     // Data time task select
     $scope.showDateTimeFunction = function($index) {
-      var selected = $filter('filter')($scope.taskfunction, {value: $scope.datetimetasks_server[$index].taskfunction.id});
+      var selected = $filter('filter')($scope.taskfunction, {value: $scope.datetimetasks_server[$index].taskfunction.name});
       return ($scope.datetimetasks_server[$index].taskfunction.id && selected.length) ? selected[0].text : 'Not set';
     };
 

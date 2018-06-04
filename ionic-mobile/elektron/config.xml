@@ -41,5 +41,4 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <plugin name="cordova-plugin-x-toast" spec="git+https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git" />
-    <engine name="android" spec="~7.0.0" />
 </widget>
