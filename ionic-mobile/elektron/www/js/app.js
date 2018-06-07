@@ -48,6 +48,7 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services', 
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
     //$rootScope.authStatus = toState.authStatus;
 
+
     console.log(toState);
     if(!$auth.isAuthenticated()){
       if(toState.name === 'app.login') return;
@@ -71,8 +72,13 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services', 
 
 .config(function($stateProvider, $urlRouterProvider, $httpProvider, $authProvider) {
 
+  //$httpProvider.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+  //$httpProvider.defaults.useXDomain = true;
+  //delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
   $httpProvider.defaults.useXDomain = true;
-  delete $httpProvider.defaults.headers.common['X-Requested-With'];
+  //$httpProvider.defaults.withCredentials = true;
+  //$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 
   $authProvider.loginUrl = 'http://158.69.223.78:8000/elektronusers/login';
 
