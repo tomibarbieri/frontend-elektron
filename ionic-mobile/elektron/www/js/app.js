@@ -1,11 +1,5 @@
-// Ionic Starter App
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.controllers' is found in controllers.js
-
-angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services', 'satellizer', 'ui.router'])
+angular.module('elektron', ['ionic', 'elektron.controllers', 'satellizer', 'ui.router'])
 
 .run(function($ionicPlatform , $http, $rootScope, $timeout, $location, $window, $state, $websocket, $auth) {
   $ionicPlatform.ready(function() {
@@ -48,7 +42,6 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services', 
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
     //$rootScope.authStatus = toState.authStatus;
 
-
     console.log(toState);
     if(!$auth.isAuthenticated()){
       if(toState.name === 'app.login') return;
@@ -72,11 +65,10 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services', 
 
 .config(function($stateProvider, $urlRouterProvider, $httpProvider, $authProvider) {
 
+  $httpProvider.defaults.useXDomain = true;
   //$httpProvider.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
   //$httpProvider.defaults.useXDomain = true;
   //delete $httpProvider.defaults.headers.common['X-Requested-With'];
-
-  $httpProvider.defaults.useXDomain = true;
   //$httpProvider.defaults.withCredentials = true;
   //$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 
@@ -114,18 +106,6 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services', 
     cache: false
   })
 
-  .state('app.signup', {
-    url: '/signup',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/tab-signup.html',
-        controller: 'RegisterCtrl'
-      }
-    },
-    authStatus: false,
-    cache: false
-  })
-
   .state('app.dashboard', {
     url: '/dashboard',
     views: {
@@ -150,16 +130,6 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services', 
     cache: false
   })
 
-  .state('app.profiles', {
-    url: '/profiles',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/profiles.html',
-        controller: 'ProfilesCtrl'
-      }
-    },
-    cache: false
-  })
 
   .state('app.components', {
     url: '/components',
@@ -255,17 +225,6 @@ angular.module('starter', ['ionic', 'starter.controllers' , 'starter.services', 
       'menuContent': {
         templateUrl: 'templates/datetimetask.html',
         controller: 'DatetimetaskCtrl'
-      }
-    },
-    cache: false
-  })
-
-  .state('app.profile', {
-    url: '/profile/:profileId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/profile-detail.html',
-        controller: 'ProfileCtrl'
       }
     },
     cache: false

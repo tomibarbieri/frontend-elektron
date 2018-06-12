@@ -18,8 +18,6 @@ angular.module('theme.demos.history', [
     $scope.total_datos = 322;
     $scope.currentData = [];
     $scope.currentDataIndex = 0;
-    $scope.previousPageDisable = false;
-    $scope.nextPageDisable = false;
     $scope.spinner = false;
     $scope.current_period;
     $scope.configuration = {};
@@ -28,6 +26,7 @@ angular.module('theme.demos.history', [
     $scope.components = [];
     $scope.historyerror = false;
     $scope.historynodataerror = false;
+    $scope.historyerrornocomponents = false;
 
     $scope.costo_estimado = 1245;
 
@@ -73,10 +72,11 @@ angular.module('theme.demos.history', [
     }
 
     // Variables para el paginado
+    $scope.selectpagebutton = true;
     $scope.nextbutton = true;
     $scope.indexbutton = true;
-    $scope.previousbutton = false;
-    $scope.lastbutton = false;
+    $scope.previousbutton = true;
+    $scope.lastbutton = true;
     $scope.inLastPage = false;
     $scope.inFirstPage = true;
 
@@ -89,6 +89,11 @@ angular.module('theme.demos.history', [
       if ($scope.number_pages.length <= 1) {
         $scope.previousbutton = true;
         $scope.lastbutton = true;
+      }
+      else {
+        $scope.previousbutton = false;
+        $scope.lastbutton = false;
+        $scope.selectpagebutton = false;
       }
     }
 
@@ -108,11 +113,11 @@ angular.module('theme.demos.history', [
             console.log($scope.components);
           }
           else {
-            $scope.historyerror = true;
+            $scope.historyerrornocomponents = true;
             $scope.historyerrormessage = "No hay componentes en el sistema";
           }
       }, function(response){
-        $scope.historyerror = true;
+        $scope.historyerrornocomponents = true;
         $scope.historyerrormessage = "Error de conexion en el servidor";
         console.log("problemas de conexion");
         Notifier.simpleError("Error al traer los componentes", "Problemas de conexion");

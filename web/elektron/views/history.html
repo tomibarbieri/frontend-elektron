@@ -11,15 +11,15 @@
               <panel-controls>
                   <panel-control-collapse></panel-control-collapse>
                   <form class="pull-right mr10">
-                    <button ng-disabled="lastbutton" ng-disabled="previousPageDisable" ng-click="loadPage('last')" class="btn btn-sm btn-info">
+                    <button ng-disabled="lastbutton" ng-click="loadPage('last')" class="btn btn-sm btn-info">
                       Final
                     </button>
-                    <button ng-disabled="previousbutton" ng-disabled="previousPageDisable" ng-click="loadPage(current_page + 1)" class="btn btn-sm btn-info">
+                    <button ng-disabled="previousbutton" ng-click="loadPage(current_page + 1)" class="btn btn-sm btn-info">
                       20 anteriores
                     </button>
                     <div class="btn-group" dropdown>
-                      <button type="button" class="btn btn-sm btn-info">{{ current_page || 0 }}</button>
-                      <button type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
+                      <button ng-disabled="selectpagebutton" type="button" class="btn btn-sm btn-info">{{ current_page || 0 }}</button>
+                      <button ng-disabled="selectpagebutton" type="button" class="button-refresh btn btn-sm btn-info dropdown-toggle" dropdown-toggle>
                         <i class="caret"></i>
                       </button>
                       <ul class="dropdown-menu pull-right">
@@ -28,10 +28,10 @@
                         </li>
                       </ul>
                     </div>
-                    <button ng-disabled="nextbutton" ng-disabled="nextPageDisable" ng-click="loadPage(current_page - 1)" class="btn btn-sm btn-info">
+                    <button ng-disabled="nextbutton" ng-click="loadPage(current_page - 1)" class="btn btn-sm btn-info">
                       20 siguientes
                     </button>
-                    <button ng-disabled="indexbutton" ng-disabled="nextPageDisable" ng-click="loadPage(1)" class="btn btn-sm btn-info">
+                    <button ng-disabled="indexbutton" ng-click="loadPage(1)" class="btn btn-sm btn-info">
                       Inicio
                     </button>
                   </form>
@@ -41,7 +41,7 @@
                     <div class="spinner-container" ng-show="spinner == true">
                       <div class="loader-spinner"></div>
                     </div>
-                    <div ng-show="historynodataerror == true" class="error-container">
+                    <div ng-show="(historynodataerror == true) || (historyerror == true)" class="error-container">
                       <span>{{errormessage}}</span>
                       <button ng-click="reloadpage()" class="error-button btn btn-sm btn-default">
                         <span class="glyphicon glyphicon-refresh"></span>
@@ -115,7 +115,7 @@
           </div>
         </div>
 
-        <div ng-show="(historyerror == false)" class="col-md-12 animated-content">
+        <div ng-show="(historyerrornocomponents == false)" class="col-md-12 animated-content">
           <panel panel-class="panel-default no-padding" heading="Configurar periodo de datos historicos">
               <panel-controls>
                   <panel-control-collapse></panel-control-collapse>
@@ -243,7 +243,7 @@
           <span class="glyphicon glyphicon-circle-arrow-up"></span>
         </div>
 
-        <div ng-show="(historyerror == true)" class="error-container">
+        <div ng-show="(historyerrornocomponents == true)" class="error-container">
           <span> {{historyerrormessage}} </span>
           <button ng-click="reloadpage()" class="error-button btn btn-sm btn-default">
             <span class="glyphicon glyphicon-refresh"></span>
