@@ -330,6 +330,7 @@ angular.module('theme.demos.history', [
       if (validate) {
         Notifier.simpleInfo('Cargando datos para el pedido seleccionado','Esperando respuesta del servidor');
         $scope.historynodataerror = false;
+        $scope.historyerror = false;
         $scope.loadUrl();
         $scope.loadData();
         $scope.selectedperiod = true;
