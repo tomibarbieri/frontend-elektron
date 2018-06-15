@@ -73,7 +73,7 @@
 }
 
 .list-components-div {
-  font-size: 0.8em;
+  font-size: 0.9em;
   line-height: normal;
 }
 
@@ -160,16 +160,7 @@
   text-align: right;
 }
 
-.text-center-statistics {
-  text-align: center;
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
-}
 
-.idem-padding-statistics {
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
-}
 
 .badge-statistics-last {
   font-size: 0.73em !important;
@@ -277,9 +268,29 @@
 
 /* ---- Statistics ---- */
 
+.font-size-stat-comp {
+  font-size: 0.8em;
+}
 
+.item-padding-stats {
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
 
+.text-center-statistics {
+  font-size: 0.9em;
+  text-align: center;
+  padding-top: 1% !important;
+  padding-bottom: 1% !important;
+}
 
+.letter-normal {
+  font-size: 1.1em;
+}
+
+.letter-9 {
+  font-size: 0.9em;
+}
 
 
 
@@ -300,6 +311,14 @@
 }
 
 .button-bar-history-a1 {
+}
+
+.button-color-tom {
+  background-color: #38444e !important;
+}
+
+.icon-color-tom, .text-color-tom {
+  color:#38444e;
 }
 
 .button-bar-history-a2 {

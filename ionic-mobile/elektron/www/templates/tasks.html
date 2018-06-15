@@ -2,10 +2,10 @@
   <ion-content>
     <div class="item">
       <div class="button-bar task-font">
-        <a class="button button-dark" ng-show="porconsumo == true">Por consumo</a>
+        <a class="button button-color-tom button-dark" ng-show="porconsumo == true">Por consumo</a>
         <a class="button" ng-show="porconsumo == false" ng-click="changeToConsume()">Por consumo</a>
         <a class="button" ng-show="porconsumo == true" ng-click="changeToDate()">Por fecha y hora</a>
-        <a class="button button-dark" ng-show="porconsumo == false">Por fecha y hora</a>
+        <a class="button button-color-tom button-dark" ng-show="porconsumo == false">Por fecha y hora</a>
       </div>
     </div>
     <!-- Por Consumo -->
@@ -61,7 +61,7 @@
               <a ng-click="deleteTask(task.id,'datatasks')" class="task-float-right task-float-right-first button button-small button-assertive">
                 <i class="icon ion-trash-b"></i>
               </a>
-              <a ng-click="editDataTask(task)" class="task-float-right button button-small button-dark">
+              <a ng-click="editDataTask(task)" class="task-float-right button button-color-tom button-small button-dark">
                 <i class="icon ion-edit"></i>
               </a>
             </div>

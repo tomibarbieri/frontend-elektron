@@ -2,10 +2,10 @@
     <ion-content >
       <div class="item">
         <div class="button-bar task-font">
-          <a class="button button-dark" ng-show="listado == true">Listado</a>
+          <a class="button button-color-tom button-dark" ng-show="listado == true">Listado</a>
           <a class="button" ng-show="listado == false" ng-click="changeToList()">Listado</a>
           <a class="button" ng-show="listado == true" ng-click="changeToCharts()">Gráficos</a>
-          <a class="button button-dark" ng-show="listado == false">Gráficos</a>
+          <a class="button button-color-tom button-dark" ng-show="listado == false">Gráficos</a>
         </div>
       </div>
 
@@ -20,11 +20,11 @@
       <div ng-show="(listado == true) && (spinner == false) && (statisticserror == false)" class="card" ng-repeat="component in components_statistics">
 
         <div class="item item-divider">
-            <b>Componente:</b> {{component.device.label}}
+            <b class="text-color-tom">Componente:</b> <span class="font-size-stat-comp">{{component.device.label}}</span>
             <span ng-if="component.device.devicestate.name == 'on'" class="badge-component badge badge-balanced"><i class="icon ion-power"></i></span>
             <span ng-if="component.device.devicestate.name == 'off'" class="badge-component badge badge-assertive"><i class="icon ion-power"></i></span>
         </div>
-            <div class="item ">
+            <div class="item item-padding-stats">
                 <div class="row">
                   <div class="col">
                     <span class="badge-letter">Consumo: <b>{{component.device_data_sum / 1000 | number:0 }} Kw ({{ component.device_percent || 0 | number:1 }}% del total)</b></span>
@@ -34,10 +34,10 @@
                   </div>
                 </div>
               </div>
-            <div class="item text-center-statistics">
+            <div class="item letter-normal text-center-statistics">
               <span>Último período</span>
             </div>
-            <div class="item">
+            <div class="item item-padding-stats">
               <div class="row">
                 <div class="col">
                   <span class="badge-letter elipsis"><b>Desde</b> {{ component.state_period_from | date:'dd/MM/yyyy HH:mm' }}<br><b>Hasta</b> {{ component.state_period_to | date:'dd/MM/yyyy HH:mm' }}.</span>
@@ -65,7 +65,7 @@
       <div ng-show="(listado == false) && (spinner == false) && (statisticserror == false)">
         <div class="card">
           <div class="item item-divider">
-              <b>Porcentaje de consumo de componentes</b>
+              <b class="text-color-tom letter-9">Porcentaje de consumo de componentes</b>
           </div>
           <div class="item">
             <canvas id="doughnut" height="150" class="chart chart-doughnut"
@@ -90,7 +90,7 @@
         </div>
         <div class="card">
           <div class="item item-divider">
-              <b>Gráfico comparativo de componentes</b>
+              <b class="letter-9 text-color-tom">Gráfico comparativo de componentes</b>
               <ion-spinner class="spinner-header spinner-balanced" ng-show="spinnerbar == true" icon="spiral"></ion-spinner>
           </div>
           <div class="item">

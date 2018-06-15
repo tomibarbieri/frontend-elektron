@@ -5,7 +5,7 @@
         <div class="list">
               <div class="row item-divider item item-icon-right">
                 <div class="col col-50 title-components">
-                  <b>Monitor de componentes</b>
+                  <b class="text-color-tom">Monitor de componentes</b>
                 </div>
                 <div class="col col-50">
                   <i title="Conexion activada" ng-if="(websocketplay == true) && (spinnermonitor == false) && (monitorerror == false)" ng-click="pauseWebsocket()" class="icon ion-pause dark icon-letter play-pause-icon"></i>
@@ -28,7 +28,7 @@
       </div>
       <div class="card" ng-repeat="component in components_server_enabled">
           <div class="item item-divider item-icon-right">
-            <b>{{component.label}}</b>
+            <b class="text-color-tom">{{component.label}}</b>
             <i ng-if="components_charts[component.device_mac].status == true" class="monitor-icon icon ion-link balanced"></i>
             <i ng-if="components_charts[component.device_mac].status == false" class="monitor-icon icon ion-link assertive"></i>
           </div>
