@@ -139,7 +139,6 @@ angular.module('theme.demos.history', [
       }
 
       var dateF = day + "/" + month + "/" + year + '/' + hourfrom;
-      $scope.configuration.dateFrom = $filter('date')(new Date($scope.configuration.dateFrom), 'dd/MM/yyyy');
 
       // Proceso la fecha y hora hasta
       var month = $filter('date')(new Date($scope.configuration.dateTo), 'MM');
@@ -151,7 +150,6 @@ angular.module('theme.demos.history', [
       }
 
       var dateT = day + "/" + month + "/" + year + '/' + hourto;
-      $scope.configuration.dateTo = $filter('date')(new Date($scope.configuration.dateTo), 'dd/MM/yyyy');
 
       if ($scope.configuration.precision.id == 'normal') {
         var precision = '';
@@ -298,14 +296,19 @@ angular.module('theme.demos.history', [
       var data_sense = $scope.data;
       console.log(data_sense);
 
-      for (var i = data_sense.length - 1; i >= 0; i--) {
+      for (var i = 0; i < data_sense.length; i++) {
         var hora = $filter('date')(data_sense[i].date, "HH:mm");
         var dia = $filter('date')(data_sense[i].date, 'dd');
         var mes = $filter('date')(data_sense[i].date, 'MM');
 
         var data_2 = data_sense[i].data_value;
 
-        var label = '(' + dia + '/' + mes + ') ' + hora;
+        if ($scope.selectedPrecision.label == 'perhour') {
+          var label = '(' + dia + '/' + mes + ') ' + hora;
+        } else {
+          var label = dia + '/' + mes;
+        }
+
         $scope.line.labels.push(label);
         $scope.line.data[0].push(data_2);
       }

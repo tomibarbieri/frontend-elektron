@@ -1311,12 +1311,25 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
     var year_to = $filter('date')(new Date(), 'yyyy');
     var hour_to = $filter('date')(new Date(), 'hh');
 
+    console.log(new Day());
+
     var date_to = '' + day_to + '/' + month_to + '/' + year_to + '/' + hour_to + '/';
 
-    var month_from = $filter('date')(new Date(selectedComponent.created), 'MM');
-    var day_from = $filter('date')(new Date(selectedComponent.created), 'dd');
-    var year_from = $filter('date')(new Date(selectedComponent.created), 'yyyy');
-    var hour_from = $filter('date')(new Date(selectedComponent.created), 'hh');
+    // ultimo mes o creacion
+    var ultimo_mes = new Date();
+    ultimo_mes.setDate(ultimo_mes.getDate() - 30);
+    if ($filter('date')(selectedComponent.created, 'dd/MM/yyyy HH:mm') > $filter('date')(ultimo_mes, 'dd/MM/yyyy HH:mm')) {
+      var date_from = selectedComponent.created;
+    }
+    else {
+      console.log('mes');
+      var date_from = ultimo_mes;
+    }
+
+    var month_from = $filter('date')(new Date(date_from), 'MM');
+    var day_from = $filter('date')(new Date(date_from), 'dd');
+    var year_from = $filter('date')(new Date(date_from), 'yyyy');
+    var hour_from = $filter('date')(new Date(date_from), 'hh');
 
     var date_from = '' + day_from + '/' + month_from + '/' + year_from + '/' + hour_from + '/';
 
@@ -1717,7 +1730,7 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
     $scope.line.labels = [];
     $scope.line.data = [[]];
 
-    for (var i = $scope.data.length-1; i >= 0; i--) {
+    for (var i = 0; i < $scope.data.length; i++) {
 
       if ($scope.precision == 'perday') {
         var label = '' + $filter('date')($scope.data[i].date, 'dd') + '/' + $filter('date')($scope.data[i].date, 'MM');
@@ -1726,7 +1739,7 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
         var label = '' + $filter('date')($scope.data[i].date, "HH:mm");
       }
       $scope.line.labels.push(label)
-      $scope.line.data[0].push($scope.data[i].data_value/1000)
+      $scope.line.data[0].push($scope.data[i].data_value)
 
     }
   }
