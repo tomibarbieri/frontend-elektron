@@ -58,10 +58,10 @@
                 {{task.last_run | date: "shortDate"}} ({{task.last_run | date: "shortTime"}})
               </span>
 
-              <a ng-click="deleteTask(task.id,'datatasks')" class="task-float-right task-float-right-first button button-small button-assertive">
+              <a ng-click="deleteTask(task.id,'datatasks')" class="task-margin-buttons task-float-right task-float-right-first button button-small button-assertive">
                 <i class="icon ion-trash-b"></i>
               </a>
-              <a ng-click="editDataTask(task)" class="task-float-right button button-color-tom button-small button-dark">
+              <a ng-click="editDataTask(task)" class=" task-margin-buttons task-float-right button button-color-tom button-small button-dark">
                 <i class="icon ion-edit"></i>
               </a>
             </div>
@@ -105,10 +105,10 @@
             <div class="item">
               <span class="badge-letter"><b>Repeticiones:</b> {{task.repeats}}</span>
 
-              <a ng-click="deleteTask(task.id,'datetimetasks')" class="task-float-right task-float-right-first button button-small button-assertive">
+              <a ng-click="deleteTask(task.id,'datetimetasks')" class="task-margin-buttons-2 task-float-right task-float-right-first button button-small button-assertive">
                 <i class="icon ion-trash-b"></i>
               </a>
-              <a ng-click="editDateTimeTask(task)" class="task-float-right button button-small button-dark">
+              <a ng-click="editDateTimeTask(task)" class="task-margin-buttons-2 task-float-right button button-small button-dark">
                 <i class="icon ion-edit"></i>
               </a>
 

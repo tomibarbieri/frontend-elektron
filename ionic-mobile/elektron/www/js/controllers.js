@@ -285,7 +285,7 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
           json = JSON.parse(message.data);
           console.log(json);
 
-          if ($scope.current_component && $scope.websocketplay == true) {
+          if ($scope.chart && $scope.current_component && $scope.websocketplay == true) {
 
             if (json.device_mac == $scope.current_component.device_mac) {
 

@@ -15,10 +15,10 @@
         </div>
         <canvas ng-show="spinner == false" id="line" class="chart chart-line" chart-data="line.data" chart-labels="line.labels" chart-series="line.series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
       </div>
-      <div class="button-bar-history button-bar bar-dark">
+      <div class="button-bar-history button-bar bar-stable">
         <a ng-disabled="lastbutton" ng-click="loadPage('last')" class="button-bar-history-a1 button button-small icon-left ion-chevron-left"></a>
         <a ng-disabled="previousbutton" ng-click="loadPage(current_page + 1)" class="button-bar-history-a2 button button-small icon-left ion-chevron-left">10</a>
-        <select class="button button-small" ng-model="current_page" ng-change="loadPage(current_page)"
+        <select class="button button button-small" ng-model="current_page" ng-change="loadPage(current_page)"
                 ng-options="page for page in number_pages" >
         </select>
         <a ng-disabled="nextbutton" ng-click="loadPage(current_page - 1)" class="button-bar-history-a3 button button-small icon-right ion-chevron-right">10</a>

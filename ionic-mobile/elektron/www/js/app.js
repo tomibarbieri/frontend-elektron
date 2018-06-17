@@ -87,7 +87,7 @@ angular.module('elektron', ['ionic', 'elektron.controllers', 'satellizer', 'ui.r
     url: '/login',
     views: {
       'menuContent': {
-        templateUrl: 'templates/tab-signin.html',
+        templateUrl: 'templates/login.html',
         controller: 'LoginCtrl'
       }
     },
@@ -170,17 +170,6 @@ angular.module('elektron', ['ionic', 'elektron.controllers', 'satellizer', 'ui.r
       'menuContent': {
         templateUrl: 'templates/history.html',
         controller: 'HistoryCtrl'
-      }
-    },
-    cache: false
-  })
-
-  .state('app.configuration', {
-    url: '/configuration',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/configuration.html',
-        controller: 'ConfigurationCtrl'
       }
     },
     cache: false

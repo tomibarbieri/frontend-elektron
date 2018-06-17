@@ -272,7 +272,8 @@ angular.module('theme.demos.dashboard', [
           var data = JSON.parse(message.data);
 
           if ($scope.websocketStatus == false) {
-            $scope.websocketStatus == true;
+            $scope.websocketStatus = true;
+            $scope.$apply();
           }
 
           // chequea que el dato sea del componente elegido y lo muestra

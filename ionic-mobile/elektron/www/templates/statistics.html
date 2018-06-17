@@ -78,7 +78,7 @@
 
               </div>
               <div class="col">
-                <div ng-repeat="value in doughnut.config.data.labels" style="min-width: 160px;color: white; font-weight: bold; margin-bottom:3px; text-align:center; font-size:0.65em; border-radius: 25px;background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
+                <div ng-repeat="value in doughnut.config.data.labels" style="min-width: 180px;color: white; font-weight: bold; margin-bottom:3px; text-align:center; font-size:0.65em; border-radius: 25px;background-color:{{doughnut.config.data.datasets[0].backgroundColor[$index]}};">
                   <span>{{ value }}</span>
                 </div>
               </div>
@@ -95,7 +95,7 @@
           </div>
           <div class="item">
             <label class="item item-input item-select">
-              <div class="input-label">
+              <div class="item-statistics-select input-label">
                 Componente 1
               </div>
               <select ng-model="barOptions.componentLeft" >
@@ -103,7 +103,7 @@
               </select>
             </label>
             <label class="item item-input item-select">
-              <div class="input-label">
+              <div class="item-statistics-select input-label">
                 Componente 2
               </div>
               <select ng-model="barOptions.componentRight" >
@@ -112,25 +112,28 @@
             </label>
 
             <label class="item item-input item-select">
-              <div class="input-label">
+              <div class="item-statistics-select input-label">
                 Precisión
               </div>
               <select ng-model="barOptions.precisionSelected" >
                 <option ng-repeat="prec in barPrecision" value="{{prec.url}}" >{{prec.label}}</option>
               </select>
             </label>
-            <div class="item align-center">
-              <button ng-disabled="(barOptions.precisionSelected == undefined) || (barOptions.componentLeft == undefined) || (barOptions.componentRight == undefined)" ng-click="createBarChart()" class="button button-calm">
+            <div class="item">
+              <button ng-disabled="(barOptions.precisionSelected == undefined) || (barOptions.componentLeft == undefined) || (barOptions.componentRight == undefined)" ng-click="createBarChart()" class="button button-table-tom button-block button-stable">
                 Ver tabla
               </button>
             </div>
+          </div>
+          <div ng-show="barselected == true" class="item item-divider">
+              <b class="letter-9 text-color-tom">Valores en gráfico de barras</b>
           </div>
           <div ng-show="barselected == true" class="item">
             <canvas id="bar" class="chart chart-bar"
               chart-data="bardata" chart-labels="barlabels" chart-series="barseries">
             </canvas>
           </div>
-          <div ng-show="barselected == true" class="button-bar-history button-bar bar-calm">
+          <div ng-show="barselected == true" class="button-bar-history button-bar bar-stable">
             <a ng-disabled="lastbutton" ng-click="loadPage('last')" class="button-bar-history-a1 button button-small icon-left ion-chevron-left"></a>
             <a ng-disabled="previousbutton" ng-click="loadPage(current_page + 1)" class="button-bar-history-a2 button button-small icon-left ion-chevron-left">5</a>
             <select class="button button-small" ng-model="current_page" ng-change="loadPage(current_page)"
