@@ -7,7 +7,7 @@
     <author email="tomi.barbieri@gmail.com" href="">
       Tomson y Agus
     </author>
-    <content original-src="index.html" src="http://192.168.0.179:8101" />
+    <content src="index.html" />
     <access origin="*" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
