@@ -1451,7 +1451,7 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
           time = $filter('date')(data[i].date, 'dd/MM');
         } else {
           if ($scope.barOptions.precisionSelected == 'perhour') {
-            time = $filter('date')(data[i].date, 'shortTime')
+            time = $filter('date')(data[i].date, 'shortTime', 'UTC')
           } else {
             console.log('chicharitoo');
           }
@@ -1736,7 +1736,7 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
         var label = '' + $filter('date')($scope.data[i].date, 'dd') + '/' + $filter('date')($scope.data[i].date, 'MM');
       }
       else {
-        var label = '' + $filter('date')($scope.data[i].date, "HH:mm");
+        var label = '' + $filter('date')($scope.data[i].date, "HH:mm", 'UTC');
       }
       $scope.line.labels.push(label)
       $scope.line.data[0].push($scope.data[i].data_value)

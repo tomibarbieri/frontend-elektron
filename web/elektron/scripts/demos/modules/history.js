@@ -297,13 +297,14 @@ angular.module('theme.demos.history', [
       console.log(data_sense);
 
       for (var i = 0; i < data_sense.length; i++) {
-        var hora = $filter('date')(data_sense[i].date, "HH:mm");
-        var dia = $filter('date')(data_sense[i].date, 'dd');
-        var mes = $filter('date')(data_sense[i].date, 'MM');
+        console.log($filter('date')(data_sense[i].date, 'dd-M-yyyy H:mm Z', 'UTC'));
+        var hora = $filter('date')(data_sense[i].date, "HH:mm", 'UTC');
+        var dia = $filter('date')(data_sense[i].date, 'dd', 'UTC');
+        var mes = $filter('date')(data_sense[i].date, 'MM', 'UTC');
 
         var data_2 = data_sense[i].data_value;
 
-        if ($scope.selectedPrecision.label == 'perhour') {
+        if ($scope.configuration.precision.id == 'perhour') {
           var label = '(' + dia + '/' + mes + ') ' + hora;
         } else {
           var label = dia + '/' + mes;
