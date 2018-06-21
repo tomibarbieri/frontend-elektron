@@ -1445,7 +1445,7 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
 
     if ($scope.barlabels.length == 0) {
       console.log('preparando footer');
-      for (var i = $scope.bardatalength-1; i >= 0; i--) {
+      for (var i = 0; i < $scope.bardatalength; i++) {
         var time;
         if ($scope.barOptions.precisionSelected == 'perday') {
           time = $filter('date')(data[i].date, 'dd/MM');

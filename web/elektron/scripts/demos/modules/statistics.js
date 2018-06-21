@@ -191,7 +191,7 @@ angular
       }
 
       if ($scope.barlabels.length == 0) {
-        for (var i = $scope.bardatalength-1; i >= 0; i--) {
+        for (var i = 0; i < $scope.bardatalength; i++) {
           var time;
           if ($scope.currentPrecision.url == 'perday') {
             time = $filter('date')(data[i].date, 'shortDate');
