@@ -1552,6 +1552,7 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
   $scope.inFirstPage = true;
 
   $scope.historyerror = false;
+  $scope.historynodataerror = false;
 
   $scope.reloadpage = function () {
     $window.location.reload();
@@ -1629,8 +1630,8 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
           console.log($scope.current_page);
         }
         else {
-          ionicToast.show('No hay datos para ese período seleccionado.', 'top', false, 5000);
           $scope.showiconloading = false;
+          ionicToast.show('No hay datos para ese período seleccionado.', 'top', false, 5000);
         }
     }, function(response){
         console.log("problemas");
@@ -1708,13 +1709,18 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
           $scope.loadChart();
         }
         else {
-          ionicToast.show('No hay datos para ese período seleccionado.', 'top', false, 5000);
+          ionicToast.show('No hay datos para ese período seleccionado.', 'bottom', false, 5000);
+          $scope.showiconloading = false;
+          $scope.historynodataerror = true;
+          $scope.lastbutton = true;
+          $scope.previousbutton = true;
+          $scope.selectPages = true;
         }
     }, function(response){
         console.log("problemas");
         $scope.spinner = false;
         $scope.historyerror = true;
-        $scope.historyerrormessage = "Error al traer los datos historicos del componente";
+        $scope.historyerrormessage = "No hay datos para ese período seleccionado";
         ionicToast.show('Error al traer los datos historicos del componente', 'bottom', false, 5000);
     });
   }

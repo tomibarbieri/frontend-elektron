@@ -95,8 +95,8 @@ angular.module('theme.demos.tasks', [])
 
     // Reemplazar por Ajax
     $scope.taskfunction = [
-      {value: 'turnon', text: 'Apagar'},
-      {value: 'shutdown', text: 'Encender'}
+      {value: 'shutdown', text: 'Apagar'},
+      {value: 'turnon', text: 'Encender'}
     ];
 
     $scope.taskstate = [

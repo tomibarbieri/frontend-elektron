@@ -27,9 +27,9 @@
             <div class="item item-padding-stats">
                 <div class="row">
                   <div class="col">
-                    <span class="badge-letter">Consumo: <b>{{component.device_data_sum / 1000 | number:0 }} Kw ({{ component.device_percent || 0 | number:1 }}% del total)</b></span>
-                    <br><span class="badge-letter">Costo: <b>$ {{component.total_tarifa | number:0}}</b></span>
-                    <span class="second-span badge-letter">Co2: <b>{{ component.total_co2 | number:0 }} Kg</b></span>
+                    <span class="badge-letter">Consumo: <b>{{component.device_data_sum / 1000 | number:1 }} Kw ({{ component.device_percent || 0 | number:1 }}% del total)</b></span>
+                    <br><span class="badge-letter">Costo: <b>$ {{component.device_tarifa | number:1}}</b></span>
+                    <span class="second-span badge-letter">Co2: <b>{{ component.device_co2 | number:1 }} Kg</b></span>
                     <br><span class="badge-letter">Último dato medido: <b>{{ component.last_data.value || 0 }} w</b></span>
                   </div>
                 </div>
