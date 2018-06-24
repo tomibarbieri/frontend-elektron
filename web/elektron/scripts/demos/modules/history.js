@@ -137,7 +137,7 @@ angular.module('theme.demos.history', [
       if (hourfrom.length < 2) {
         hourfrom = '0' + hourfrom;
       }
-
+      $scope.dateF = day + "/" + month + "/" + year;
       var dateF = day + "/" + month + "/" + year + '/' + hourfrom;
 
       // Proceso la fecha y hora hasta
@@ -148,7 +148,7 @@ angular.module('theme.demos.history', [
       if (hourto.length < 2) {
         hourto = '0' + hourto;
       }
-
+      $scope.dateT = day + "/" + month + "/" + year;
       var dateT = day + "/" + month + "/" + year + '/' + hourto;
 
       if ($scope.configuration.precision.id == 'normal') {
@@ -297,10 +297,10 @@ angular.module('theme.demos.history', [
       console.log(data_sense);
 
       for (var i = 0; i < data_sense.length; i++) {
-        console.log($filter('date')(data_sense[i].date, 'dd-M-yyyy H:mm Z', 'UTC'));
-        var hora = $filter('date')(data_sense[i].date, "HH:mm", 'UTC');
-        var dia = $filter('date')(data_sense[i].date, 'dd', 'UTC');
-        var mes = $filter('date')(data_sense[i].date, 'MM', 'UTC');
+        console.log($filter('date')(data_sense[i].date, 'dd-M-yyyy H:mm Z')); // , 'UTC'
+        var hora = $filter('date')(data_sense[i].date, "HH:mm");
+        var dia = $filter('date')(data_sense[i].date, 'dd');
+        var mes = $filter('date')(data_sense[i].date, 'MM');
 
         var data_2 = data_sense[i].data_value;
 

@@ -197,7 +197,7 @@ angular
             time = $filter('date')(data[i].date, 'shortDate');
           } else {
             if ($scope.currentPrecision.url == 'perhour') {
-              time = $filter('date')(data[i].date, 'shortTime', 'UTC')
+              time = $filter('date')(data[i].date, 'shortTime')
             } else {
               console.log('chicharitoo');
             }
