@@ -113,6 +113,8 @@ angular
         }
       }
       $scope.current_page = 1;
+      console.log($scope.number_pages);
+      console.log(undefined <= 1);
       if ($scope.number_pages.length <= 1) {
         $scope.previousbutton = true;
         $scope.lastbutton = true;
@@ -144,27 +146,25 @@ angular
 
       var date_to = '' + day_to + '/' + month_to + '/' + year_to + '/' + hour_to + '/';
 
-      // Ver si es ultimo mes
-      var ultimo_mes = new Date();
-      ultimo_mes.setDate(ultimo_mes.getDate() - 30);
-      if ($filter('date')(c.created, 'dd/MM/yyyy HH:mm') > $filter('date')(ultimo_mes, 'dd/MM/yyyy HH:mm')) {
-        var date_from = c.created;
-      }
-      else {
-        console.log('mes');
-        var date_from = ultimo_mes;
-      }
-
-      var month_from = $filter('date')(new Date(date_from), 'MM');
-      var day_from = $filter('date')(new Date(date_from), 'dd');
-      var year_from = $filter('date')(new Date(date_from), 'yyyy');
-      var hour_from = $filter('date')(new Date(date_from), 'HH');
+      var month_from = $filter('date')(new Date(c.created), 'MM');
+      var day_from = $filter('date')(new Date(c.created), 'dd');
+      var year_from = $filter('date')(new Date(c.created), 'yyyy');
+      var hour_from = $filter('date')(new Date(c.created), 'HH');
 
       var date_from = '' + day_from + '/' + month_from + '/' + year_from + '/' + hour_from + '/';
 
+      if ($scope.url1) {
+        $scope.url2 = url_server + '/devices/' + c.id + '/data/' + date_from + date_to + $scope.currentPrecision.url;
+        var url= $scope.url2;
+      }
+      else {
+        $scope.url1 = url_server + '/devices/' + c.id + '/data/' + date_from + date_to + $scope.currentPrecision.url;
+        var url= $scope.url1;
+      }
+
       $http({
           method:'GET',
-          url: url_server + '/devices/' + c.id + '/data/' + date_from + date_to + $scope.currentPrecision.url + offset // modificar la URL /devices/id/data/perhour
+          url: url + offset // modificar la URL /devices/id/data/perhour
       }).then(function(response){
           console.log(response.data.data);
           $scope.pagesdata = response.data;
@@ -214,12 +214,12 @@ angular
         for (var i = 0; i < $scope.bardatalength; i++) {
           if (data[i] != undefined) {
             if (data[i].data_value == null) {
-              $scope.bardata[0].unshift(0);
+              $scope.bardata[0].push(0);
             } else {
-              $scope.bardata[0].unshift(data[i].data_value);
+              $scope.bardata[0].push(data[i].data_value);
             }
           } else {
-            $scope.bardata[0].unshift(0);
+            $scope.bardata[0].push(0);
           }
 
         }
@@ -231,13 +231,13 @@ angular
         for (var i = 0; i < $scope.bardatalength; i++) {
           if (data[i] != undefined) {
             if (data[i].data_value == null) {
-              $scope.bardata[1].unshift(0);
+              $scope.bardata[1].push(0);
             } else {
-              $scope.bardata[1].unshift(data[i].data_value);
+              $scope.bardata[1].push(data[i].data_value);
             }
           }
           else {
-            $scope.bardata[1].unshift(0);
+            $scope.bardata[1].push(0);
           }
         }
       }
@@ -254,7 +254,7 @@ angular
         if ($scope.current_page != $scope.pagesdata.pages) {
           var offset = '' + (($scope.pagesdata.pages -1) * 5 + 1) + '/' + ($scope.pagesdata.total_data) + '/1/' ;
           console.log(offset);
-          $scope.loadDataPage('right',$scope.current,offset,true,false,$scope.pagesdata.pages);
+          $scope.loadDataPage('right',$scope.currentBarRigth,offset,true,false,$scope.pagesdata.pages);
           $scope.loadDataPage('left',$scope.currentBarLeft,offset,true,false,$scope.pagesdata.pages);
         }
       }
@@ -291,21 +291,14 @@ angular
     $scope.loadDataPage = function(side,component,offset,previousbutton,nextbutton,page_id) {
       console.log('loadDataPage');
 
-      var month_to = $filter('date')(new Date(), 'MM');
-      var day_to = $filter('date')(new Date(), 'dd');
-      var year_to = $filter('date')(new Date(), 'yyyy');
-      var hour_to = $filter('date')(new Date(), 'hh');
+      if (side == 'left') {
+        var url = $scope.url1;
+      }
+      else {
+        var url = $scope.url2;
+      }
 
-      var date_to = '' + day_to + '/' + month_to + '/' + year_to + '/' + hour_to + '/';
-
-      var month_from = $filter('date')(new Date(component.created), 'MM');
-      var day_from = $filter('date')(new Date(component.created), 'dd');
-      var year_from = $filter('date')(new Date(component.created), 'yyyy');
-      var hour_from = $filter('date')(new Date(component.created), 'hh');
-
-      var date_from = '' + day_from + '/' + month_from + '/' + year_from + '/' + hour_from + '/';
-
-      var url_ = url_server + '/devices/' + component.id + '/data/' + date_from + date_to + $scope.currentPrecision.url + '/' + offset;
+      var url_ = url + '/' + offset;
 
       $http({
           method:'GET',
@@ -342,7 +335,12 @@ angular
       $scope.nocomponentsselected = false;
       $scope.loadingbarc1 = true;
       $scope.loadingbarc2 = true;
+      $scope.previousbutton = false;
+      $scope.lastbutton = false;
       $scope.pagesdata = 0;
+      $scope.number_pages = undefined;
+      $scope.url1 = undefined;
+      $scope.url2 = undefined;
       $scope.bardatalength = 0;
       $scope.barlabels = [];
       $scope.getComponentData('left',$scope.currentBarLeft);

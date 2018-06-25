@@ -1326,6 +1326,9 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
       var date_from = ultimo_mes;
     }
 
+    console.log('date from');
+    console.log(date_from);
+
     var month_from = $filter('date')(new Date(date_from), 'MM');
     var day_from = $filter('date')(new Date(date_from), 'dd');
     var year_from = $filter('date')(new Date(date_from), 'yyyy');
@@ -1410,6 +1413,8 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
 
     var date_to = '' + day_to + '/' + month_to + '/' + year_to + '/' + hour_to + '/';
 
+    console.log(selectedComponent.created);
+
     var month_from = $filter('date')(new Date(selectedComponent.created), 'MM');
     var day_from = $filter('date')(new Date(selectedComponent.created), 'dd');
     var year_from = $filter('date')(new Date(selectedComponent.created), 'yyyy');
@@ -1467,13 +1472,13 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
         if (data[i] != undefined) {
           console.log(data[i]);
           if (data[i].data_value == null) {
-            $scope.bardata[0].unshift(0);
+            $scope.bardata[0].push(0);
           } else {
-            $scope.bardata[0].unshift(data[i].data_value);
+            $scope.bardata[0].push(data[i].data_value);
           }
         }
         else {
-          $scope.bardata[0].unshift(0);
+          $scope.bardata[0].push(0);
         }
       }
     } else {
@@ -1483,13 +1488,13 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
         if (data[i] != undefined) {
           console.log(data[i]);
           if (data[i].data_value == null) {
-            $scope.bardata[1].unshift(0);
+            $scope.bardata[1].push(0);
           } else {
-            $scope.bardata[1].unshift(data[i].data_value);
+            $scope.bardata[1].push(data[i].data_value);
           }
         }
         else {
-          $scope.bardata[1].unshift(0);
+          $scope.bardata[1].push(0);
         }
       }
     }
