@@ -281,6 +281,10 @@
   margin-top: 9px;
 }
 
+.list-dash span {
+  font-size: 0.9em;
+}
+
 .small-font {
   font-size: 0.9em;
 }
