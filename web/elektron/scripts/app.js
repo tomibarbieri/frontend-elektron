@@ -19,8 +19,6 @@ angular
 
     $rootScope.$on('$routeChangeSuccess', function(event, next, current) {
 
-    console.log('$stateChangeSuccess');
-
       try {
         if ($rootScope.ws != undefined) {
           $rootScope.ws.close();
@@ -39,12 +37,9 @@ angular
     });
 
     $rootScope.$on("$routeChangeStart", function(event, next, current){
-      //$rootScope.authStatus = toState.authStatus;
-      console.log('$stateChangeStart');
-      console.log(next);
+
       if(!$auth.isAuthenticated()){
         if(next.params.templateFile === 'login') return;
-        console.log('yendo al login porque no esta logueado');
         $location.path('/login');
       }
       else {

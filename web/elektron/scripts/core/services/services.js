@@ -86,7 +86,6 @@ angular
     .service('Notifier',['pinesNotifications', function (pinesNotifications) {
 
       this.simpleInfo = function(title,text) {
-        console.log("notificando");
         pinesNotifications.notify({
           title: title,
           text: text,

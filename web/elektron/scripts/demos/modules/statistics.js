@@ -3,8 +3,6 @@ angular
   .controller('StatisticsController', ['$scope', '$http', '$filter', 'Notifier', '$timeout', '$window', function($scope, $http, $filter, Notifier, $timeout, $window) {
     'use strict';
 
-    console.log("Statistics");
-
     var url_server = 'http://158.69.223.78:8000';
 
     $scope.doughnut;
@@ -25,9 +23,6 @@ angular
     $scope.indexbutton = true;
 
     $scope.$on('chart-create', function (evt, chart) {
-      console.log(chart);
-      console.log(chart.config.type);
-      console.log(chart.config.data);
       if (chart.config.type == 'doughnut') {
         $scope.doughnut = chart;
       }
@@ -69,7 +64,6 @@ angular
 
         Notifier.simpleSuccess('Componentes cargados con exito','Desde el servidor con los datos.')
         $scope.components_statistics = response.data.devices;
-        console.log($scope.components_statistics);
         $scope.spinnerstatistics = false;
         $scope.createDoughnutChart();
 
@@ -113,8 +107,6 @@ angular
         }
       }
       $scope.current_page = 1;
-      console.log($scope.number_pages);
-      console.log(undefined <= 1);
       if ($scope.number_pages.length <= 1) {
         $scope.previousbutton = true;
         $scope.lastbutton = true;
@@ -184,8 +176,6 @@ angular
     $scope.graficateComponentBar = function(data, side) {
 
       $scope.spinnerbar = false;
-      console.log($scope.bardatalength);
-      console.log(data);
       if ($scope.bardatalength == 0) {
         $scope.bardatalength = (data.length >= 5) ? 5 : data.length;
       }
