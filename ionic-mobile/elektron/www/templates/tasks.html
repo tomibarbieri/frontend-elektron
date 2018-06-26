@@ -26,7 +26,7 @@
       <div class="card" ng-repeat="task in datatasks_server">
         <div class="list">
             <div class="item item-divider">
-                <b>Tarea:</b> {{task.label}}
+                <b>Tarea:</b> <span class="small-font-9">{{task.label}}</span>
                 <span ng-show="task.taskstate.name == 'done'" class="badge badge-assertive badge-letter">Terminada</span>
                 <span ng-show="task.taskstate.name == 'ready'" class="badge badge-balanced badge-letter">Lista</span>
             </div>
@@ -87,7 +87,7 @@
       <div class="card" ng-repeat="task in datetimetasks_server">
         <div class="list">
             <div class="item item-divider">
-                <b>Tarea:</b> {{task.label}}
+                <b>Tarea:</b> <span class="small-font-9">{{task.label}}</span>
                 <span ng-show="task.taskstate.name == 'done'" class="badge badge-assertive badge-letter">Terminada</span>
                 <span ng-show="task.taskstate.name == 'ready'" class="badge badge-balanced badge-letter">Lista</span>
             </div>

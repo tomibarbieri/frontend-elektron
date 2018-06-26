@@ -7,7 +7,7 @@
       <div ng-show="(spinner == false) && (componentserror == false)" class="list list-components ">
           <div class="list-components-div item item-button-right" ng-repeat="component in components_server">
             <div>
-              <b>{{component.label}}</b><br>
+              <b class="large-font-1-1">{{component.label}}</b><br>
               <span class="mac-components">({{component.device_mac}})</span>
               <span ng-if="component.devicestate.name == 'on'" class="badge-component badge badge-balanced"><i class="icon ion-power"></i></span>
               <span ng-if="component.devicestate.name == 'off'" class="badge-component badge badge-assertive"><i class="icon ion-power"></i></span>

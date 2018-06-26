@@ -20,7 +20,7 @@
       <div ng-show="(listado == true) && (spinner == false) && (statisticserror == false)" class="card" ng-repeat="component in components_statistics">
 
         <div class="item item-divider">
-            <b class="text-color-tom">Componente:</b> <span class="font-size-stat-comp">{{component.device.label}}</span>
+            <b class="text-color-tom small-font-9">Componente:</b> <span class="font-size-stat-comp">{{component.device.label}}</span>
             <span ng-if="component.device.devicestate.name == 'on'" class="badge-statistics badge badge-balanced"><i class="icon ion-power"></i></span>
             <span ng-if="component.device.devicestate.name == 'off'" class="badge-statistics badge badge-assertive"><i class="icon ion-power"></i></span>
         </div>
@@ -35,7 +35,7 @@
                 </div>
               </div>
             <div class="item letter-normal text-center-statistics">
-              <span>Último período</span>
+              <span class="small-font-9">Último período</span>
             </div>
             <div class="item item-padding-stats">
               <div class="row">

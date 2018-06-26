@@ -289,6 +289,14 @@
   font-size: 0.9em;
 }
 
+.small-font-9 {
+  font-size: 0.8em;
+}
+
+.large-font-1-1 {
+  font-size: 1.1em;
+}
+
 .task-font a {
   font-size: 0.75em;
   border-width: 1px 1px 1px 1px !important;
