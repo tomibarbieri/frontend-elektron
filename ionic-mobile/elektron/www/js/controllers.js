@@ -1299,44 +1299,14 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
 
   $scope.loadDataPage = function(side,component,offset,previousbutton,nextbutton,page_id) {
 
-    console.log('loadDataPage');
-    console.log(component);
-    console.log(page_id);
-
-    var selected = $filter('filter')($scope.components_server, {id: component});
-    var selectedComponent = (component.toString() && selected.length) ? selected[0] : 'Not set';
-
-    var month_to = $filter('date')(new Date(), 'MM');
-    var day_to = $filter('date')(new Date(), 'dd');
-    var year_to = $filter('date')(new Date(), 'yyyy');
-    var hour_to = $filter('date')(new Date(), 'hh');
-
-    console.log(new Day());
-
-    var date_to = '' + day_to + '/' + month_to + '/' + year_to + '/' + hour_to + '/';
-
-    // ultimo mes o creacion
-    var ultimo_mes = new Date();
-    ultimo_mes.setDate(ultimo_mes.getDate() - 30);
-    if ($filter('date')(selectedComponent.created, 'dd/MM/yyyy HH:mm') > $filter('date')(ultimo_mes, 'dd/MM/yyyy HH:mm')) {
-      var date_from = selectedComponent.created;
+    if (side == 'left') {
+      var url = $scope.url1;
     }
     else {
-      console.log('mes');
-      var date_from = ultimo_mes;
+      var url = $scope.url2;
     }
 
-    console.log('date from');
-    console.log(date_from);
-
-    var month_from = $filter('date')(new Date(date_from), 'MM');
-    var day_from = $filter('date')(new Date(date_from), 'dd');
-    var year_from = $filter('date')(new Date(date_from), 'yyyy');
-    var hour_from = $filter('date')(new Date(date_from), 'hh');
-
-    var date_from = '' + day_from + '/' + month_from + '/' + year_from + '/' + hour_from + '/';
-
-    var url_ = url_server + '/devices/' + component + '/data/' + date_from + date_to + $scope.barOptions.precisionSelected + '/' + offset;
+    var url_ = url + '/' + offset;
 
     $http({
         method:'GET',
@@ -1422,9 +1392,18 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
 
     var date_from = '' + day_from + '/' + month_from + '/' + year_from + '/' + hour_from + '/';
 
+    if ($scope.url1) {
+      $scope.url2 = url_server + '/devices/' + selectedComponent.id + '/data/' + date_from + date_to + $scope.barOptions.precisionSelected;
+      var url= $scope.url2;
+    }
+    else {
+      $scope.url1 = url_server + '/devices/' + selectedComponent.id + '/data/' + date_from + date_to + $scope.barOptions.precisionSelected;
+      var url= $scope.url1;
+    }
+
     $http({
         method:'GET',
-        url: url_server + '/devices/' + component + '/data/' + date_from + date_to + $scope.barOptions.precisionSelected + offset
+        url: url + offset
     }).then(function(response){
         console.log(response.data);
         $scope.pagesdata = response.data;
@@ -1509,6 +1488,8 @@ angular.module('elektron.controllers', ['angular-websocket','chart.js','ion-date
     $scope.barlabels = [];
     $scope.barseries = [];
     $scope.bardata = [[],[]];
+    $scope.url1 = undefined;
+    $scope.url2 = undefined;
 
     ionicToast.show('Cargando tabla comparativa.', 'bottom', false, 3000);
     $scope.changeBarComponents();
